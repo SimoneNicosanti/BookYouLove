@@ -6,10 +6,8 @@ import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.adapter.EndedAdapter
 import it.simone.bookyoulove.database.entity.Book
@@ -23,6 +21,7 @@ class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListene
     private lateinit var binding: FragmentEndedBinding
 
     private val endedVM : EndedViewModel by activityViewModels()
+    private lateinit var endedBookArray : Array<Book>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,7 +59,8 @@ class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListene
                 //binding.endedRecyclerView.layoutParams = RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
             }
 
-            binding.endedRecyclerView.adapter = EndedAdapter(it)
+            endedBookArray = it
+            binding.endedRecyclerView.adapter = EndedAdapter(it, this)
 
         }
         endedVM.currentReadList.observe(viewLifecycleOwner, currentReadListObserver)
@@ -76,9 +76,9 @@ class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListene
 
     }
 
-    override fun onRecyclerViewItemSelected(selectedBook: Book) {
+    override fun onRecyclerViewItemSelected(position: Int) {
+        val selectedBook : Book = endedBookArray[position]
         Toast.makeText(requireContext(), "Seleceted ${selectedBook.title}", Toast.LENGTH_SHORT).show()
     }
-
 
 }
