@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/readingFragment">
+
+    <fragment
+        android:id="@+id/readingFragment"
+        android:name="it.simone.bookyoulove.view.ReadingFragment"
+        android:label="@string/reading_string"
+        tools:layout="@layout/fragment_reading">
+        <action
+            android:id="@+id/action_readingFragment_to_newReadingBookFragment"
+            app:destination="@id/newReadingBookFragment" />
+        <action
+            android:id="@+id/action_readingFragment_to_detailReadingFragment"
+            app:destination="@id/detailReadingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="it.simone.bookyoulove.view.SettingsFragment"
+        android:label="@string/settings_string"
+        tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/tbrFragment"
+        android:name="it.simone.bookyoulove.view.TbrFragment"
+        android:label="@string/tbr_string"
+        tools:layout="@layout/fragment_tbr" />
+    <fragment
+        android:id="@+id/chartsFragment"
+        android:name="it.simone.bookyoulove.view.ChartsFragment"
+        android:label="@string/charts_string"
+        tools:layout="@layout/fragment_charts" />
+    <fragment
+        android:id="@+id/newReadingBookFragment"
+        android:name="it.simone.bookyoulove.view.NewReadingBookFragment"
+        tools:layout="@layout/fragment_new_reading_book"/>
+    <fragment
+        android:id="@+id/coverLinkPickerFragment"
+        android:name="it.simone.bookyoulove.view.dialog.CoverLinkPickerFragment"
+        android:label="fragment_cover_link_picker"
+        tools:layout="@layout/fragment_cover_link_picker" />
+    <fragment
+        android:id="@+id/datePickerFragment"
+        android:name="it.simone.bookyoulove.view.dialog.DatePickerFragment"
+        android:label="DatePickerFragment" />
+    <fragment
+        android:id="@+id/pagesPickerFragment"
+        android:name="it.simone.bookyoulove.view.dialog.PagesPickerFragment"
+        android:label="fragment_pages_picker"
+        tools:layout="@layout/fragment_pages_picker" />
+    <fragment
+        android:id="@+id/readListFragment"
+        android:name="it.simone.bookyoulove.view.EndedFragment"
+        android:label="@string/read_string"
+        tools:layout="@layout/fragment_ended" />
+    <action
+        android:id="@+id/action_global_readingFragment"
+        app:destination="@id/readingFragment"
+        app:launchSingleTop="false"
+        app:popUpTo="@id/nav_graph"
+        app:popUpToInclusive="false" />
+    <action
+        android:id="@+id/action_global_readListFragment"
+        app:destination="@id/readListFragment"
+        app:launchSingleTop="true"
+        app:popUpTo="@id/nav_graph" />
+    <action
+        android:id="@+id/action_global_tbrFragment"
+        app:destination="@id/tbrFragment"
+        app:popUpTo="@id/nav_graph" />
+    <action
+        android:id="@+id/action_global_chartsFragment"
+        app:destination="@id/chartsFragment"
+        app:popUpTo="@id/nav_graph" />
+    <action
+        android:id="@+id/action_global_settingsFragment"
+        app:destination="@id/settingsFragment"
+        app:popUpTo="@id/nav_graph" /><action android:id="@+id/action_global_pagesPickerFragment" app:destination="@id/pagesPickerFragment"/><action android:id="@+id/action_global_coverLinkPickerFragment" app:destination="@id/coverLinkPickerFragment"/><action android:id="@+id/action_global_datePickerFragment" app:destination="@id/datePickerFragment"/>
+    <fragment
+        android:id="@+id/detailReadingFragment"
+        android:name="it.simone.bookyoulove.view.DetailReadingFragment"
+        android:label="DetailReadingFragment" >
+        <argument
+            android:name="detailTitle"
+            app:argType="string" />
+        <argument
+            android:name="detailAuthor"
+            app:argType="string" />
+        <argument
+            android:name="detailTime"
+            app:argType="integer" />
+    </fragment>
+</navigation>

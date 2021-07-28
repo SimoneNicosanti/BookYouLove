@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navViewMenuQuotesItem"
+        android:icon="@drawable/ic_round_quotes_bottom_bar"
+        android:title="@string/quotes_string" />
+    <item
+        android:id="@+id/navViewMenuChartsItem"
+        android:icon="@drawable/ic_round_charts_bottom_bar"
+        android:title="@string/charts_string" />
+    <item
+        android:id="@+id/navViewMenuSettingsItem"
+        android:icon="@drawable/ic_round_settings_bottom_bar"
+        android:title="@string/settings_string" />
+</menu>

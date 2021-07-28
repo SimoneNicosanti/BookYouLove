@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="reading_image_view_width">280dp</dimen>
+    <dimen name="reading_image_view_height">420dp</dimen>
+    <dimen name="reading_image_view_vert_margin">25dp</dimen>
+    <dimen name="arrow_image_dim">50dp</dimen>
+    <dimen name="reading_arrow_hor_margin">20dp</dimen>
+    <dimen name="cover_link_picker_msg_text_size">24sp</dimen>
+    <dimen name="cover_link_picker_text_margin">25dp</dimen>
+    <dimen name="reading_title_text_margin">60dp</dimen>
+    <dimen name="reading_title_text_size">22sp</dimen>
+
+    //3:2 ratio
+    <dimen name="new_book_cover_width">180dp</dimen>
+    <dimen name="new_book_cover_height">270dp</dimen>
+    <dimen name="new_book_cover_margin">20dp</dimen>
+    <dimen name="new_book_input_margin">20dp</dimen>
+    <dimen name="new_book_title_input_width">350dp</dimen>
+    <dimen name="new_book_title_input_height">70dp</dimen>
+    <dimen name="new_book_date_text_size">18sp</dimen>
+    <dimen name="new_book_date_width">160dp</dimen>
+    <dimen name="new_book_input_margin_hor">15dp</dimen>
+    <dimen name="new_book_pages_width">160dp</dimen>
+    <dimen name="card_view_cover_margin">15dp</dimen>
+    <dimen name="read_grid_cover_width">140dp</dimen>
+    <dimen name="read_grid_cover_height">210dp</dimen>
+    <dimen name="end_book_dialog_margin_vert">25dp</dimen>
+    <dimen name="end_book_dialog_margin_hor">25dp</dimen>
+    <dimen name="ended_grid_title_hor_marg">5dp</dimen>
+</resources>

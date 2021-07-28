@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navViewMenuReadingItem"
+        android:icon="@drawable/ic_round_reading_bottom_bar"
+        android:title="@string/reading_string" />
+    <item
+        android:id="@+id/navViewMenuReadItem"
+        android:icon="@drawable/ic_round_terminated_book_bottom_bar"
+        android:title="@string/read_string" />
+    <item
+        android:id="@+id/navViewMenuTbrItem"
+        android:icon="@drawable/ic_round_tbr_bottom_bar"
+        android:title="@string/tbr_string" />
+    <item
+        android:id="@+id/navViewOthersItem"
+        android:icon="@drawable/ic_round_others_bottom_bar"
+        android:title="@string/others_string" />
+</menu>

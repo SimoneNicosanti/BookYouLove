@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="1dp"
+    tools:context=".view.NewReadingBookFragment">
+
+    <ScrollView
+        android:id="@+id/scrollView3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/detailReadingCoverImageView"
+                android:layout_width="@dimen/new_book_cover_width"
+                android:layout_height="@dimen/new_book_cover_height"
+                android:layout_marginHorizontal="@dimen/new_book_cover_margin"
+                android:layout_marginVertical="@dimen/new_book_cover_margin"
+                android:clickable="true"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@tools:sample/avatars" />
+
+            <LinearLayout
+                android:id="@+id/newBookTitleContainer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/new_book_input_margin_hor"
+                android:layout_marginVertical="@dimen/new_book_input_margin"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/detailReadingCoverImageView">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_string" />
+
+                <MultiAutoCompleteTextView
+                    android:id="@+id/detailReadingTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/newBookAuthorContainer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/new_book_input_margin"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="@+id/newBookTitleContainer"
+                app:layout_constraintStart_toStartOf="@+id/newBookTitleContainer"
+                app:layout_constraintTop_toBottomOf="@+id/newBookTitleContainer">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/author_string" />
+
+                <AutoCompleteTextView
+                    android:id="@+id/detailReadingAuthor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/newBookStartDateConatiner"
+                android:layout_width="@dimen/new_book_date_width"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/new_book_input_margin"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="@+id/newBookAuthorContainer"
+                app:layout_constraintStart_toStartOf="@+id/newBookAuthorContainer"
+                app:layout_constraintTop_toBottomOf="@+id/newBookAuthorContainer">
+
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/start_date_string" />
+
+                <TextView
+                    android:id="@+id/detailReadingStartDateText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:singleLine="false"
+                    android:textSize="@dimen/new_book_date_text_size" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/newBookSupportContainer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/new_book_input_margin_hor"
+                android:layout_marginVertical="@dimen/new_book_input_margin"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/newBookStartDateConatiner">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/reading_support_string" />
+
+                <LinearLayout
+                    android:layout_width="319dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/detailReadingPaperCheckbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/paper_string" />
+
+                    <CheckBox
+                        android:id="@+id/detailReadingEbookCheckbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/ebook_string" />
+
+                    <CheckBox
+                        android:id="@+id/detailReadingAudiobookCheckbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/audiobook_string" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="@dimen/new_book_pages_width"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/new_book_input_margin_hor"
+                android:layout_marginVertical="@dimen/new_book_input_margin"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/newBookSupportContainer">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/pages_string" />
+
+                <TextView
+                    android:id="@+id/detailReadingPages"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:isScrollContainer="true"
+                    android:textSize="@dimen/new_book_date_text_size" />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
