@@ -3,7 +3,9 @@ package it.simone.bookyoulove.view
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
@@ -16,11 +18,11 @@ import it.simone.bookyoulove.view.dialog.LoadingDialogFragment
 import it.simone.bookyoulove.viewmodel.EndedViewModel
 
 
-class EndedFragment : Fragment() {
+class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListener{
 
     private lateinit var binding: FragmentEndedBinding
 
-    private val endedVM : EndedViewModel by viewModels()
+    private val endedVM : EndedViewModel by activityViewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +37,8 @@ class EndedFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentEndedBinding.inflate(inflater, container, false)
 
-
+        binding.endedRecyclerView.setOnClickListener {
+        }
         setObservers()
         return binding.root
     }
@@ -49,15 +52,16 @@ class EndedFragment : Fragment() {
         val currentReadListObserver = Observer<Array<Book>> {
             //In base ad orientameno del dispositivo cambio il numero di elementi mostrati su una riga, nel caso si stia usando una griglia
             if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-                binding.readRecyclerView.layoutManager = GridLayoutManager(requireContext(), resources.getInteger(R.integer.ended_grid_row_item_count_portr))
-                binding.readRecyclerView.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT)
+                binding.endedRecyclerView.layoutManager = GridLayoutManager(requireContext(), resources.getInteger(R.integer.ended_grid_row_item_count_portr))
+                //binding.endedRecyclerView.layoutParams = RecyclerView.LayoutParams(RecyclerView.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT)
             }
             else {
-                binding.readRecyclerView.layoutManager = GridLayoutManager(requireContext(), resources.getInteger((R.integer.ended_grid_row_item_count_land)))
-                binding.readRecyclerView.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                binding.endedRecyclerView.layoutManager = GridLayoutManager(requireContext(), resources.getInteger((R.integer.ended_grid_row_item_count_land)))
+                //binding.endedRecyclerView.layoutParams = RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
             }
-            
-            binding.readRecyclerView.adapter = EndedAdapter(it)
+
+            binding.endedRecyclerView.adapter = EndedAdapter(it)
+
         }
         endedVM.currentReadList.observe(viewLifecycleOwner, currentReadListObserver)
 
@@ -71,4 +75,10 @@ class EndedFragment : Fragment() {
         inflater.inflate(R.menu.ended_fragment_menu, menu)
 
     }
+
+    override fun onRecyclerViewItemSelected(selectedBook: Book) {
+        Toast.makeText(requireContext(), "Seleceted ${selectedBook.title}", Toast.LENGTH_SHORT).show()
+    }
+
+
 }
