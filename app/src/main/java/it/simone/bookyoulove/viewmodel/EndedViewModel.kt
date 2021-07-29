@@ -25,7 +25,8 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
     fun getReadList(){
         isAccessingDatabase.value = true
         viewModelScope.launch {
-            currentReadList.value = readModel.loadReadList(ENDED_BOOK_STATE)
+            val notSortedArray = readModel.loadReadList(ENDED_BOOK_STATE)
+            currentReadList.value = readModel.sortByStartDate(notSortedArray)
             isAccessingDatabase.value = false
         }
     }

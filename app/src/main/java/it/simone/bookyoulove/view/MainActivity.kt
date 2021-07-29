@@ -34,6 +34,9 @@ const val PAPER_SUPPORT = "Paper"
 const val EBOOK_SUPPORT = "eBook"
 const val AUDIOBOOK_SUPPORT = "AudioBook"
 
+const val SORT_START_DATE = 0
+const val SORT_END_DATE = 1
+
 
 class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItemSelectedListener, PopupMenu.OnMenuItemClickListener{
 
