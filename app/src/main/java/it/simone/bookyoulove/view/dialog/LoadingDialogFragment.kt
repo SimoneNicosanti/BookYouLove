@@ -9,10 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import it.simone.bookyoulove.R
-import it.simone.bookyoulove.viewmodel.DetailReadingViewModel
-import it.simone.bookyoulove.viewmodel.NewReadingBookViewModel
-import it.simone.bookyoulove.viewmodel.EndedViewModel
-import it.simone.bookyoulove.viewmodel.ReadingViewModel
+import it.simone.bookyoulove.viewmodel.*
 
 
 class LoadingDialogFragment : DialogFragment() {
@@ -21,6 +18,7 @@ class LoadingDialogFragment : DialogFragment() {
     private val readingVM : ReadingViewModel by activityViewModels()
     private val detailReadingVM : DetailReadingViewModel by viewModels({requireParentFragment()})
     private val endedVM : EndedViewModel by activityViewModels()
+    private val endedDetailVM : DetailEndedViewModel by viewModels({requireParentFragment()})
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -39,6 +37,7 @@ class LoadingDialogFragment : DialogFragment() {
         readingVM.isAccessingDatabase.observe(viewLifecycleOwner, isUpdatingObserver)
         detailReadingVM.isAccessingDatabase.observe(viewLifecycleOwner, isUpdatingObserver)
         endedVM.isAccessingDatabase.observe(viewLifecycleOwner, isUpdatingObserver)
+        endedDetailVM.isAccessingDatabase.observe(viewLifecycleOwner, isUpdatingObserver)
     }
 
 }

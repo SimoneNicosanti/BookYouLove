@@ -1,6 +1,7 @@
 package it.simone.bookyoulove.view
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,8 @@ import com.squareup.picasso.Picasso
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.databinding.FragmentEndedDetailBinding
+import it.simone.bookyoulove.view.dialog.LoadingDialogFragment
+import it.simone.bookyoulove.viewmodel.DetailEndedViewModel
 import it.simone.bookyoulove.viewmodel.DetailReadingViewModel
 import it.simone.bookyoulove.viewmodel.EndedViewModel
 
@@ -19,11 +22,12 @@ import it.simone.bookyoulove.viewmodel.EndedViewModel
 class EndedDetailFragment : Fragment() {
 
     private lateinit var binding : FragmentEndedDetailBinding
-    private val endedDetailVM : DetailReadingViewModel by viewModels()
+    private val endedDetailVM : DetailEndedViewModel by viewModels()
     private val endedVM : EndedViewModel by activityViewModels()
 
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
 
         binding = FragmentEndedDetailBinding.inflate(inflater, container, false)
 
@@ -34,27 +38,40 @@ class EndedDetailFragment : Fragment() {
 
     private fun setObservers() {
 
-        val currentSelectedObserver = Observer<Book> {
-            showSelectedBook(it)
+        val isAccessingDatabaseObserver = Observer<Boolean> { isAccessing ->
+            if (isAccessing) LoadingDialogFragment().show(childFragmentManager, "Load Dialog")
         }
-        endedVM.currentSelectedBook.observe(viewLifecycleOwner, currentSelectedObserver)
+        endedDetailVM.isAccessingDatabase.observe(viewLifecycleOwner, isAccessingDatabaseObserver)
 
-        val currentShowedObserver = Observer<Book> {
-            showSelectedBook(it)
+        val requestedBookObserver = Observer<Book?> { requestedBook ->
+            if (!endedDetailVM.loadedOnce) {
+                endedDetailVM.loadedOnce = true
+                endedDetailVM.showedBook = requestedBook
+                endedDetailVM.setShowedBook()
+            }
         }
-        //endedDetailVM.currentShowedBook.observe(viewLifecycleOwner, currentShowedObserver)
+        endedVM.currentSelectedBook.observe(viewLifecycleOwner, requestedBookObserver)
+
+        val currentBookObserver = Observer<Book>  { currentBook ->
+            binding.endedDetailTitle.text = currentBook.title
+            binding.endedDetailAuthor.text = currentBook.author
+
+            if (currentBook.coverName != "") Picasso.get().load(currentBook.coverName).into(binding.endedDetailCoverImageView)
+            else Picasso.get().load(R.mipmap.book_cover_placeholder).into(binding.endedDetailCoverImageView)
+
+            binding.endedDetailPagesTextView.text = currentBook.pages.toString()
+            binding.endedDetailRatingBar.rating = currentBook.rate!!
+        }
+        endedDetailVM.currentBook.observe(viewLifecycleOwner, currentBookObserver)
+
+        val isEditingObserver = Observer<Boolean> { isEditing ->
+            setUserInterface(isEditing)
+        }
     }
 
-    private fun showSelectedBook(selectedBook: Book?) {
+    private fun setUserInterface(active: Boolean) {
+        binding.endedDetailCoverImageView.isClickable = !active
 
-        if (selectedBook != null) {
-            if (selectedBook.coverName != "") Picasso.get().load(selectedBook.coverName).into(binding.endedCoverImageView)
-            else Picasso.get().load(R.mipmap.book_cover_placeholder).into(binding.endedCoverImageView)
 
-            binding.endedDetailTitle.text = selectedBook.title
-            binding.endedDetailAuthor.text = selectedBook.author
-
-        }
     }
-
 }
