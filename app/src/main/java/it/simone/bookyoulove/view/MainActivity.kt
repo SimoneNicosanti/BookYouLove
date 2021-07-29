@@ -1,11 +1,13 @@
 package it.simone.bookyoulove.view
 
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Gravity
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.PopupMenu
+import androidx.annotation.RequiresApi
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.*
@@ -62,6 +64,7 @@ class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItem
                 || super.onSupportNavigateUp()
     }*/
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         val navController = findNavController(R.id.navHostFragment)
         return when(item.itemId) {
@@ -76,7 +79,7 @@ class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItem
             }
 
             R.id.navViewMenuReadItem -> {
-                if (navController.currentDestination?.id != R.id.readListFragment) {
+                if (navController.currentDestination?.id != R.id.endedFragment) {
                     val action = EndedFragmentDirections.actionGlobalReadListFragment()
                     navController.navigate(action)
                 }
@@ -99,7 +102,9 @@ class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItem
                 inflater.inflate(R.menu.navigation_view_others, popupMenu.menu)
                 popupMenu.setOnMenuItemClickListener(this)
                 popupMenu.gravity = Gravity.RIGHT
-                popupMenu.setForceShowIcon(true)
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                    popupMenu.setForceShowIcon(true)
+                }
                 popupMenu.show()
                 true
             }

@@ -27,4 +27,14 @@
     <dimen name="end_book_dialog_margin_vert">25dp</dimen>
     <dimen name="end_book_dialog_margin_hor">25dp</dimen>
     <dimen name="ended_grid_title_hor_marg">5dp</dimen>
+
+    <dimen name="ended_detail_title_size">18sp</dimen>
+    <dimen name="ended_detail_scroll_vert_marg">10dp</dimen>
+    <dimen name="ended_detail_title_hor_margin">15dp</dimen>
+    <dimen name="ended_detail_author_vert_margin">10dp</dimen>
+    <dimen name="ended_detail_date_size">20sp</dimen>
+    <dimen name="ended_detail_date_vert_marg">25dp</dimen>
+    <dimen name="ended_detail_date_date_width">250dp</dimen>
+    <dimen name="ended_detail_pages_text_size">18sp</dimen>
+    <dimen name="ended_detail_card_radius">10dp</dimen>
 </resources>

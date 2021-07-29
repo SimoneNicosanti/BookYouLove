@@ -19,6 +19,7 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
 
     val currentReadList = MutableLiveData<Array<Book>>()
     val changedEndedList = MutableLiveData<Boolean>(true)
+    val currentSelectedBook = MutableLiveData<Book>()
 
 
     fun getReadList(){
@@ -31,5 +32,9 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
 
     fun setEndedListChanged(changed : Boolean) {
         changedEndedList.value = changed
+    }
+
+    fun setSelectedBook(selectedBook: Book) {
+        currentSelectedBook.value = selectedBook
     }
 }

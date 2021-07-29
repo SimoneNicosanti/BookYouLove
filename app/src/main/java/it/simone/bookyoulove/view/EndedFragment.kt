@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.adapter.EndedAdapter
@@ -78,7 +79,11 @@ class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListene
 
     override fun onRecyclerViewItemSelected(position: Int) {
         val selectedBook : Book = endedBookArray[position]
-        Toast.makeText(requireContext(), "Seleceted ${selectedBook.title}", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(requireContext(), "Selected ${selectedBook.title}", Toast.LENGTH_SHORT).show()
+        endedVM.setSelectedBook(selectedBook)
+        val navController = findNavController()
+        val action = EndedFragmentDirections.actionEndedFragmentToEndedDetailFragment()
+        navController.navigate(action)
     }
 
 }
