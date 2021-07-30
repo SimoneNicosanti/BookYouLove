@@ -25,6 +25,8 @@ class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListene
     private val endedVM : EndedViewModel by activityViewModels()
     private lateinit var endedBookArray : Array<Book>
 
+    private var loadingDialog = LoadingDialogFragment()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,8 +48,16 @@ class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListene
 
     private fun setObservers() {
         val isAccessingDatabaseObserver = Observer<Boolean> {
-            Log.i("Nicosanti", "accessing")
-            if (it) LoadingDialogFragment().show(childFragmentManager, "Loading Fragment")
+            if (it) {
+                Log.i("Nicosanti", "accessing")
+                loadingDialog.show(childFragmentManager, "Loading Fragment")
+            }
+            else {
+                if (loadingDialog.isAdded) {
+                    loadingDialog.dismiss()
+                    loadingDialog = LoadingDialogFragment()
+                }
+            }
         }
         endedVM.isAccessingDatabase.observe(viewLifecycleOwner, isAccessingDatabaseObserver)
 

@@ -27,6 +27,7 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             val notSortedArray = readModel.loadReadList(ENDED_BOOK_STATE)
             currentReadList.value = readModel.sortByStartDate(notSortedArray)
+            //currentReadList.value = notSortedArray
             isAccessingDatabase.value = false
         }
     }
@@ -38,4 +39,6 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
     fun setSelectedBook(selectedBook: Book) {
         currentSelectedBook.value = selectedBook
     }
+
+
 }

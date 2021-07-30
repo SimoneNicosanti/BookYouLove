@@ -1,6 +1,7 @@
 package it.simone.bookyoulove.view.dialog
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,35 +10,21 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import it.simone.bookyoulove.R
+import it.simone.bookyoulove.databinding.FragmentLoadingDialogFragmentBinding
 import it.simone.bookyoulove.viewmodel.*
 
 
 class LoadingDialogFragment : DialogFragment() {
 
-    private val newReadingVM : NewReadingBookViewModel by viewModels ({requireParentFragment()})
-    private val readingVM : ReadingViewModel by activityViewModels()
-    private val detailReadingVM : DetailReadingViewModel by viewModels({requireParentFragment()})
-    private val endedVM : EndedViewModel by activityViewModels()
-    private val endedDetailVM : DetailEndedViewModel by viewModels({requireParentFragment()})
+    private lateinit var binding : FragmentLoadingDialogFragmentBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
         // Inflate the layout for this fragment
-        // Make Dialog Incancellable: This dialog is used in order to wait a daabase operation
+        // Make Dialog Incancellable: This dialog is used in order to wait a long time operation
         isCancelable = false
-        setObservers()
-        return inflater.inflate(R.layout.fragment_loading_dialog_fragment, container, false)
-    }
-
-    private fun setObservers() {
-        val isUpdatingObserver = Observer<Boolean> { newUpdating ->
-            if (newUpdating == false) dialog?.cancel()
-        }
-        newReadingVM.isAccessingDatabase.observe(viewLifecycleOwner, isUpdatingObserver)
-        readingVM.isAccessingDatabase.observe(viewLifecycleOwner, isUpdatingObserver)
-        detailReadingVM.isAccessingDatabase.observe(viewLifecycleOwner, isUpdatingObserver)
-        endedVM.isAccessingDatabase.observe(viewLifecycleOwner, isUpdatingObserver)
-        endedDetailVM.isAccessingDatabase.observe(viewLifecycleOwner, isUpdatingObserver)
+        binding = FragmentLoadingDialogFragmentBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
 }

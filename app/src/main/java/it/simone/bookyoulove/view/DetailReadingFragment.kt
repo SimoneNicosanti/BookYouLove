@@ -35,6 +35,8 @@ class DetailReadingFragment : Fragment() , View.OnClickListener {
 
     private val args : DetailReadingFragmentArgs by navArgs()
 
+    private var loadingDialog = LoadingDialogFragment()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -111,7 +113,17 @@ class DetailReadingFragment : Fragment() , View.OnClickListener {
 
 
     private fun setObservers() {
-        val accessingDBObserver = Observer<Boolean> { showProgressBar() }
+        val accessingDBObserver = Observer<Boolean> { isAccessing ->
+            if (isAccessing) {
+                loadingDialog.show(childFragmentManager, "Loading Dialog")
+            }
+            else {
+                if (loadingDialog.isAdded) {
+                    loadingDialog.dismiss()
+                    loadingDialog = LoadingDialogFragment()
+                }
+            }
+        }
         detailReadingVM.isAccessingDatabase.observe(viewLifecycleOwner, accessingDBObserver)
 
         /*
@@ -157,11 +169,6 @@ class DetailReadingFragment : Fragment() , View.OnClickListener {
             if (isUpdated) readingVM.readingUpdated(true)
         }
         detailReadingVM.updatedDatabase.observe(viewLifecycleOwner, updatedDatabaseObserver)
-    }
-
-
-    private fun showProgressBar() {
-        LoadingDialogFragment().show(childFragmentManager, "Loading Dialog")
     }
 
 

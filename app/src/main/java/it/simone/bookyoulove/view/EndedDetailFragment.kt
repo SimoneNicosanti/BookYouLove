@@ -25,6 +25,8 @@ class EndedDetailFragment : Fragment() {
     private val endedDetailVM : DetailEndedViewModel by viewModels()
     private val endedVM : EndedViewModel by activityViewModels()
 
+    private var loadingDialog = LoadingDialogFragment()
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -38,8 +40,16 @@ class EndedDetailFragment : Fragment() {
 
     private fun setObservers() {
 
-        val isAccessingDatabaseObserver = Observer<Boolean> { isAccessing ->
-            if (isAccessing) LoadingDialogFragment().show(childFragmentManager, "Load Dialog")
+        val isAccessingDatabaseObserver = Observer<Boolean> {
+            if (it) {
+                loadingDialog.show(childFragmentManager, "Loading Dialog")
+            }
+            else {
+                if (loadingDialog.isAdded) {
+                    loadingDialog.dismiss()
+                    loadingDialog = LoadingDialogFragment()
+                }
+            }
         }
         endedDetailVM.isAccessingDatabase.observe(viewLifecycleOwner, isAccessingDatabaseObserver)
 

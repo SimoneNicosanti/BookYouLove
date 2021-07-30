@@ -1,7 +1,6 @@
 package it.simone.bookyoulove.viewmodel
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -54,10 +53,10 @@ class ReadingViewModel(application: Application) : AndroidViewModel(application)
 
     fun loadReadingBookList() {
         isAccessingDatabase.value = true
-        Log.i("SIMONE_NICOSANTI", "ReadingVM : Lettura Lista da DB")
         viewModelScope.launch {
             currentReadingBookArray = readingModel.getReadingBookArray()
             isAccessingDatabase.value = false
+            changedReadingList.value = false
             setShowedBook()
         }
     }
@@ -81,7 +80,6 @@ class ReadingViewModel(application: Application) : AndroidViewModel(application)
 
 
     fun readingUpdated(updated: Boolean) {
-        Log.i("Nicosanti", " Nuovo stato $updated")
         changedReadingList.value = updated
     }
 

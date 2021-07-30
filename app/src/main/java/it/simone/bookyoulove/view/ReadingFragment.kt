@@ -1,7 +1,6 @@
 package it.simone.bookyoulove.view
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -43,6 +42,8 @@ class ReadingFragment : Fragment() , View.OnClickListener{
 
     //Variabile che mantiene le informazioni del libro da mostrare
     private var showBookInfo : Book? = null
+
+    private var loadingDialog = LoadingDialogFragment()
 
     private val readingVM: ReadingViewModel by activityViewModels()
     private val endedVM: EndedViewModel by activityViewModels()
@@ -118,29 +119,32 @@ class ReadingFragment : Fragment() , View.OnClickListener{
     }
 
 
-    private fun showProgressBar() {
-        LoadingDialogFragment().show(childFragmentManager, "Loading Dialog")
-    }
-
-
     private fun setObservers() {
 
         val readingListStateObserver = Observer<Boolean> { changed ->
             //Se la lista nel DB è aggiornata
-            Log.i("Nicosanti", "ReadingFrag : Ricevuto Stato Aggiornato $changed")
             if (changed) {
                 //Invoco la lettura
                 readingVM.restartShowedBook()
                 //Dopo la lettura, la lista che possiedo combacia con quella in DB
-                readingVM.readingUpdated(false)
+                //readingVM.readingUpdated(false)
             }
         }
         readingVM.changedReadingList.observe(viewLifecycleOwner, readingListStateObserver)
 
-        val isAccessingDatabaseObserver = Observer<Boolean> { newValue ->
-            if (newValue) {
-                //Log.i("SIMONE_NICOSANTI", "ReadingFrag : Leggendo DB")
-                showProgressBar()
+        val isAccessingDatabaseObserver = Observer<Boolean> { isAccessing ->
+            if (isAccessing) {
+                loadingDialog.show(childFragmentManager, null)
+            }
+            else {
+                /*
+                https://stackoverflow.com/questions/11201022/how-to-correctly-dismiss-a-dialogfragment
+                Dopo dismiss devo ricreare subito il Fragment, altrimenti rischio di invocare la show su un fragment che non esiste più : vedi appunti
+                 */
+                     if (loadingDialog.isAdded) {
+                        loadingDialog.dismiss()
+                        loadingDialog = LoadingDialogFragment()
+                    }
             }
         }
         readingVM.isAccessingDatabase.observe(viewLifecycleOwner, isAccessingDatabaseObserver)
@@ -163,6 +167,7 @@ class ReadingFragment : Fragment() , View.OnClickListener{
         val markedAsEndedObserver = Observer<Boolean> { marked ->
             if (marked) endedVM.setEndedListChanged(true)
             readingVM.changeNotified()
+            TODO("Sistema Questa Cosa")
         }
 
     }
@@ -188,33 +193,6 @@ class ReadingFragment : Fragment() , View.OnClickListener{
 
             binding.prevBookButton -> { this.readingVM.getPrevBook() }
 
-            /*  Gestione Bottoni che ho poi incorporato nel menu contestuale
-            binding.readingCoverImageView -> {
-                if (showBookInfo != null) {
-                    val detailBookTitle = showBookInfo!!.title
-                    val detailBookAuthor = showBookInfo!!.author
-                    val detailBookTime = showBookInfo!!.readTime
-                    val action = ReadingFragmentDirections.actionReadingFragmentToDetailReadingFragment(detailBookTitle, detailBookAuthor, detailBookTime)
-                    navController.navigate(action)
-                }
-                else {
-                    //Mostro lo Snackbar al di sopra della barra di navigazione
-                    val newSnackbar = Snackbar.make(requireView(), getString(R.string.reading_empty_list), Snackbar.LENGTH_SHORT)
-                    newSnackbar.setAnchorView(R.id.bottomNavigationView)
-                    newSnackbar.show()
-                }
-            }
-
-
-            binding.readingTerminateBtn -> {
-                if (showBookInfo != null) {
-                    val minDate = showBookInfo!!.startDate
-                    val args = bundleOf("minDay" to minDate!!.startDay, "minMonth" to minDate.startMonth, "minYear" to minDate.startYear)
-                    val endBookDialog = EndBookDialogFragment()
-                    endBookDialog.arguments = args
-                    endBookDialog.show(childFragmentManager, "End Book")
-                }
-            }*/
 
             binding.readingTakeNoteBtn -> {
                 TODO("Creazione Note")

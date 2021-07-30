@@ -19,7 +19,6 @@ import it.simone.bookyoulove.view.dialog.LoadingDialogFragment
 import it.simone.bookyoulove.view.dialog.PagesPickerFragment
 import it.simone.bookyoulove.viewmodel.NewReadingBookViewModel
 import it.simone.bookyoulove.viewmodel.ReadingViewModel
-import it.simone.bookyoulove.viewmodel.UpdatedDatabaseViewModel
 
 
 class NewReadingBookFragment : Fragment() , View.OnClickListener {
@@ -28,6 +27,8 @@ class NewReadingBookFragment : Fragment() , View.OnClickListener {
 
     private val newBookViewModel: NewReadingBookViewModel by viewModels({this})
     private val readingVM: ReadingViewModel by activityViewModels()
+
+    private var loadingDialog = LoadingDialogFragment()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -102,8 +103,16 @@ class NewReadingBookFragment : Fragment() , View.OnClickListener {
         }
         newBookViewModel.currentAuthorArray.observe(viewLifecycleOwner, authorListObserver)
 
-        val updatingDatabaseObserver = Observer<Boolean> { newUpdating ->
-            showProgressBar()
+        val updatingDatabaseObserver = Observer<Boolean> { isAccessing ->
+            if (isAccessing) {
+                loadingDialog.show(childFragmentManager, "Loading Dialog")
+            }
+            else {
+                if (loadingDialog.isAdded) {
+                    loadingDialog.dismiss()
+                    loadingDialog = LoadingDialogFragment()
+                }
+            }
         }
         newBookViewModel.isAccessingDatabase.observe(viewLifecycleOwner, updatingDatabaseObserver)
 
@@ -118,10 +127,6 @@ class NewReadingBookFragment : Fragment() , View.OnClickListener {
     }
 
 
-    private fun showProgressBar() {
-        Log.i("Nicosanti", "Progress")
-        LoadingDialogFragment().show(childFragmentManager, "Loading Fragment")
-    }
 
 
     override fun onClick(view: View?) {
