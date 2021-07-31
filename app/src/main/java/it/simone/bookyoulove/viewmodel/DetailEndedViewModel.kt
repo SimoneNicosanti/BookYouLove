@@ -28,7 +28,7 @@ class DetailEndedViewModel(application: Application) : AndroidViewModel(applicat
         showBothDates()
     }
 
-    fun showBothDates() {
+    private fun showBothDates() {
 
     }
 }

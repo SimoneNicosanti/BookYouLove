@@ -58,6 +58,9 @@
         <action
             android:id="@+id/action_endedFragment_to_endedDetailFragment"
             app:destination="@id/endedDetailFragment" />
+        <action
+            android:id="@+id/action_endedFragment_to_newEnded"
+            app:destination="@id/newEnded" />
     </fragment>
     <action
         android:id="@+id/action_global_readingFragment"
@@ -95,10 +98,18 @@
         <argument
             android:name="detailTime"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_detailReadingFragment_to_newReadingBookFragment"
+            app:destination="@id/newReadingBookFragment" />
     </fragment>
     <fragment
         android:id="@+id/endedDetailFragment"
         android:name="it.simone.bookyoulove.view.EndedDetailFragment"
         android:label="fragment_ended_detail"
-        tools:layout="@layout/fragment_ended_detail" />
+        tools:layout="@layout/fragment_ended_detail" >
+        <action
+            android:id="@+id/action_endedDetailFragment_to_newEnded"
+            app:destination="@id/newEnded" />
+    </fragment>
+    <fragment android:id="@+id/newEnded" />
 </navigation>

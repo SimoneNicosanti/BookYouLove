@@ -18,6 +18,7 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
     private val myAppDatabase = AppDatabase.getDatabaseInstance(application.applicationContext)
     private val readModel = EndedModel(myAppDatabase)
     private val myApp : Application = application
+    private lateinit var loadedArray : Array<Book>
 
     var changedEndedArrayOrder : Boolean = true
 
@@ -31,9 +32,9 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
     fun getEndedList() {
         isAccessingDatabase.value = true
         viewModelScope.launch {
-            val notSortedArray = readModel.loadReadList(ENDED_BOOK_STATE)
+            loadedArray = readModel.loadReadList(ENDED_BOOK_STATE)
             isAccessingDatabase.value = false
-            sortBookArray(notSortedArray)
+            sortBookArray(loadedArray)
         }
     }
 
@@ -46,7 +47,8 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
         currentSelectedBook.value = selectedBook
     }
 
-    suspend fun sortBookArray(notSortedArray: Array<Book>? = currentReadList.value) {
+
+    suspend fun sortBookArray(notSortedArray: Array<Book>? = loadedArray) {
 
         isAccessingDatabase.value = true
         //delay(5000)
@@ -63,10 +65,30 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
 
                 else -> notSortedArray
             }
-
+            loadedArray = sortedArray
             currentReadList.value = sortedArray
         }
 
         isAccessingDatabase.value = false
+    }
+
+    fun filterArray(newText : String?) {
+        if (newText == null) {
+            currentReadList.value = loadedArray
+        }
+        else {
+            Log.i("Nicosanti", "Ricerca")
+            /*
+                Mi serve il casting perché la filter ritorna una List anziché un Array.
+                Poiché il filtraggio può essere un'operazione lunga, lancio una coroutine e nel mentre
+                blocco l'interfaccia usando il Loading Dialog
+             */
+            isAccessingDatabase.value = true
+            viewModelScope.launch {
+                currentReadList.value = (loadedArray.filter { it.title.toLowerCase().contains(newText) }).toTypedArray()
+                isAccessingDatabase.value = false
+            }
+
+        }
     }
 }

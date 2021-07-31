@@ -34,6 +34,7 @@ class EndedDetailFragment : Fragment() {
         binding = FragmentEndedDetailBinding.inflate(inflater, container, false)
 
         setObservers()
+
         return binding.root
     }
 
@@ -71,12 +72,14 @@ class EndedDetailFragment : Fragment() {
 
             binding.endedDetailPagesTextView.text = currentBook.pages.toString()
             binding.endedDetailRatingBar.rating = currentBook.rate!!
+
+            binding.endedDetailPaperCheckBox.isChecked = currentBook.support?.paperSupport ?: false
+            binding.endedDetailEbookCheckBox.isChecked = currentBook.support?.ebookSupport ?: false
+            binding.endedDetailAudiobookCheckBox.isChecked = currentBook.support?.audiobookSupport ?: false
         }
         endedDetailVM.currentBook.observe(viewLifecycleOwner, currentBookObserver)
 
-        val isEditingObserver = Observer<Boolean> { isEditing ->
-            setUserInterface(isEditing)
-        }
+
     }
 
     private fun setUserInterface(active: Boolean) {

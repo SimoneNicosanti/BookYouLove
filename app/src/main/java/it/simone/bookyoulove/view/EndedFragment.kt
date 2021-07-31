@@ -3,6 +3,7 @@ package it.simone.bookyoulove.view
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.*
+import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -16,7 +17,7 @@ import it.simone.bookyoulove.view.dialog.LoadingDialogFragment
 import it.simone.bookyoulove.viewmodel.EndedViewModel
 
 
-class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListener{
+class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListener, SearchView.OnQueryTextListener{
 
     private lateinit var binding: FragmentEndedBinding
 
@@ -87,6 +88,10 @@ class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListene
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.ended_fragment_menu, menu)
 
+        //Imposto il listener per la SearchView
+        val searchView = menu.getItem(0).actionView as SearchView
+        searchView.setOnQueryTextListener(this)
+
     }
 
     override fun onRecyclerViewItemSelected(position: Int) {
@@ -97,5 +102,16 @@ class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListene
         val action = EndedFragmentDirections.actionEndedFragmentToEndedDetailFragment()
         navController.navigate(action)
     }
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        return true
+    }
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        endedVM.filterArray(newText)
+        return true
+    }
+
+
 
 }

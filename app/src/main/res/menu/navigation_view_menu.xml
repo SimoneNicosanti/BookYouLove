@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/navViewMenuReadingItem"
-        android:icon="@drawable/ic_round_reading_bottom_bar"
+        android:icon="@drawable/ic_round_reading2_bottom_bar"
         android:title="@string/reading_string" />
     <item
         android:id="@+id/navViewMenuReadItem"

@@ -8,4 +8,19 @@
         android:title="@string/search_string"
         app:actionViewClass="android.widget.SearchView"
         app:showAsAction="ifRoom" />
+    <group
+        android:checkableBehavior="single"
+        android:enabled="true"
+        android:menuCategory="alternative">
+        <item
+            android:checked="true"
+            android:title="@string/title_string"
+            app:showAsAction="never"></item>
+        <item
+            android:title="@string/author_string"
+            app:showAsAction="never" />
+        <item
+            android:title="@string/your_rate_string"
+            app:showAsAction="never" />
+    </group>
 </menu>
