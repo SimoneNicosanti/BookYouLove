@@ -35,7 +35,7 @@ class EndedAdapter(private val bookSet: Array<Book>, private val onRecyclerViewI
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.read_list_grid_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.ended_list_grid_item, parent, false)
 
         return ViewHolder(view, onRecyclerViewItemSelectedListener)
     }
@@ -43,8 +43,8 @@ class EndedAdapter(private val bookSet: Array<Book>, private val onRecyclerViewI
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        if (bookSet[position].coverName != "") Picasso.get().load(bookSet[position].coverName).into(holder.coverImageView)
-        else Picasso.get().load(R.mipmap.book_cover_placeholder).into(holder.coverImageView)
+        if (bookSet[position].coverName != "") Picasso.get().load(bookSet[position].coverName).placeholder(R.drawable.book_cover_place_holder).error(R.drawable.cover_not_found).into(holder.coverImageView)
+        else Picasso.get().load(R.drawable.book_cover_place_holder).into(holder.coverImageView)
 
         holder.titleTextView.text = bookSet[position].title
     }

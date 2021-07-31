@@ -4,7 +4,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="cover_image_view_descriptor">Book Cover</string>
     <string name="reading_string">Reading</string>
-    <string name="read_string">Read</string>
+    <string name="read_string">Ended</string>
     <string name="tbr_string">To Be Read</string>
     <string name="charts_string">Charts</string>
     <string name="settings_string">Settings</string>
@@ -38,7 +38,7 @@
     <string name="edit_string">Edit</string>
     <string name="loading_string">Loading...</string>
     <string name="not_inserted_string">Not Inserted</string>
-    <string name="read_settings_string">Read Settings</string>
+    <string name="read_settings_string">Ended Settings</string>
     <string name="grid_setting_string">Grid Layout</string>
     <string name="tbr_settings_screen">TBR settings</string>
     <string name="widget_settings_string">Widget Settings</string>
@@ -50,4 +50,6 @@
     <string name="terminate_string">Terminate</string>
     <string name="detai_string">Detail</string>
     <string name="search_string">Search</string>
+    <string name="ended_order_preference_string">Order</string>
+
 </resources>

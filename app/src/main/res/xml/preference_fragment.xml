@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="@string/read_settings_string">
 
         <SwitchPreference
             android:defaultValue="false"
             android:key="readGridLayout"
             android:title="@string/grid_setting_string" />
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/ended_order_array_entries"
+            android:entryValues="@array/ended_order_array_entry_values"
+            android:key="endedOrderPreference"
+            android:title="@string/ended_order_preference_string"
+            app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/tbr_settings_screen">
 
@@ -14,7 +22,5 @@
             android:key="tbrGridLayout"
             android:title="@string/grid_setting_string" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/widget_settings_string">
-
-    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/widget_settings_string"/>
 </PreferenceScreen>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="ended_order_array_entries">
+        <item>@string/start_date_string</item>
+        <item>@string/end_date_string</item>
+        <item>@string/title_string</item>
+        <item>@string/author_string</item>
+    </string-array>
+</resources>

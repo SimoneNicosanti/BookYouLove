@@ -19,6 +19,7 @@ class DetailReadingModel(private val myAppDatabase: AppDatabase) {
     }
 
     suspend fun removeBookFromDatabase(toDeleteBook : Book) {
+        Log.i("Nicosanti", "Deleting")
         withContext(Dispatchers.IO) {
             val deleteIndex = myAppDatabase.bookDao().deleteBooks(toDeleteBook)
             Log.i("Nicosanti", "Deleted $deleteIndex")
@@ -45,6 +46,7 @@ class DetailReadingModel(private val myAppDatabase: AppDatabase) {
     suspend fun updateBookInDatabase(toUpdateBook: Book) {
         withContext(Dispatchers.IO) {
             myAppDatabase.bookDao().updateBooks(toUpdateBook)
+            Log.i("Nicosanti", "Model Updating")
         }
     }
 

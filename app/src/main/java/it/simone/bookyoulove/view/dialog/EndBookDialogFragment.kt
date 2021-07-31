@@ -2,11 +2,13 @@ package it.simone.bookyoulove.view.dialog
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
 import android.widget.TextView
 import androidx.core.os.bundleOf
+import androidx.core.view.marginBottom
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
@@ -65,12 +67,15 @@ class EndBookDialogFragment : DialogFragment() , View.OnClickListener {
 
             val builder = AlertDialog.Builder(it)
             builder.setTitle(R.string.end_book_dialog_title)
-            /* Customizzazione del titolo: Per centrarlo
+             //Customizzazione del titolo: Per centrarlo
+            /*
             val titleTextView = TextView(requireContext())
             titleTextView.gravity = Gravity.CENTER
             titleTextView.text = getString(R.string.end_book_dialog_title)
-            builder.setCustomTitle(titleTextView)
-            */
+            titleTextView.textSize = 20F
+            titleTextView.typeface = Typeface.DEFAULT_BOLD
+            builder.setCustomTitle(titleTextView)*/
+
             builder.setView(binding.root)
 
             builder.setPositiveButton(R.string.confirm_string) { dialog, _ ->

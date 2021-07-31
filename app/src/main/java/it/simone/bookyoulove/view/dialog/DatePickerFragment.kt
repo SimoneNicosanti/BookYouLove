@@ -7,6 +7,7 @@ import android.widget.DatePicker
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
+import it.simone.bookyoulove.view.END_DATE_SETTER
 import it.simone.bookyoulove.view.START_DATE_SETTER
 import java.util.*
 
@@ -18,10 +19,11 @@ class DatePickerFragment: DialogFragment(), DatePickerDialog.OnDateSetListener {
         callMode = arguments?.getInt("caller") ?: -1
         //Toast.makeText(requireContext(), "$callMode", Toast.LENGTH_SHORT).show()
 
-        val calendar = Calendar.getInstance()
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
+        val cal = Calendar.getInstance()
+        val day = cal.get(Calendar.DAY_OF_MONTH)
+        val month = cal.get(Calendar.MONTH)
+        val year = cal.get(Calendar.YEAR)
+
 
         val datePickerDialog = DatePickerDialog(requireContext(), this, year, month, day)
 
@@ -44,11 +46,12 @@ class DatePickerFragment: DialogFragment(), DatePickerDialog.OnDateSetListener {
             Utilizzo questa funzione per impostare la data minima: evito che venga impostata una data di fine < data inizio.
             Devo utilizzare il -1 perché la startDate è salvata con i mesi a partire da 1, mentre la Calendar li considera a partire da 0
          */
-
         val calendar = Calendar.getInstance()
-        if (arguments?.getInt("minDay") != null) {
+        if (callMode == END_DATE_SETTER && arguments?.getInt("minDay") != null) {
             calendar.set(arguments?.getInt("minYear")!!, arguments?.getInt("minMonth")!! - 1, arguments?.getInt(("minDay"))!!)
             datePickerDialog.datePicker.minDate = calendar.timeInMillis
         }
     }
+
+
 }

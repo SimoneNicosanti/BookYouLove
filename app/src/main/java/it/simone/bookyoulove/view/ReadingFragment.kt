@@ -134,7 +134,7 @@ class ReadingFragment : Fragment() , View.OnClickListener{
 
         val isAccessingDatabaseObserver = Observer<Boolean> { isAccessing ->
             if (isAccessing) {
-                loadingDialog.show(childFragmentManager, null)
+                loadingDialog.showNow(childFragmentManager, null)
             }
             else {
                 /*
@@ -151,12 +151,12 @@ class ReadingFragment : Fragment() , View.OnClickListener{
 
         val showedBookObserver = Observer<Book?> { newShowBook ->
             if (newShowBook != null) {
-                if(newShowBook.coverName != "") Picasso.get().load(newShowBook.coverName).into(binding.readingCoverImageView)
-                else Picasso.get().load(R.mipmap.book_cover_placeholder).into(binding.readingCoverImageView)
+                if(newShowBook.coverName != "") Picasso.get().load(newShowBook.coverName).placeholder(R.drawable.book_cover_place_holder).error(R.drawable.cover_not_found).into(binding.readingCoverImageView)
+                else Picasso.get().load(R.drawable.book_cover_place_holder).into(binding.readingCoverImageView)
                 binding.readingTitle.text = newShowBook.title
             }
             else {
-                Picasso.get().load(R.mipmap.book_cover_placeholder).into(binding.readingCoverImageView)
+                Picasso.get().load(R.drawable.book_cover_place_holder).into(binding.readingCoverImageView)
                 binding.readingTitle.text = ""
             }
             showBookInfo = newShowBook
@@ -165,10 +165,12 @@ class ReadingFragment : Fragment() , View.OnClickListener{
         readingVM.currentShowBook.observe(viewLifecycleOwner, showedBookObserver)
 
         val markedAsEndedObserver = Observer<Boolean> { marked ->
-            if (marked) endedVM.setEndedListChanged(true)
-            readingVM.changeNotified()
-            TODO("Sistema Questa Cosa")
+            if (marked) {
+                endedVM.setEndedListChanged(true)
+                readingVM.changeNotified()
+            }
         }
+        readingVM.markedAsEnded.observe(viewLifecycleOwner, markedAsEndedObserver)
 
     }
 

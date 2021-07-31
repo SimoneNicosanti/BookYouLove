@@ -2,9 +2,7 @@ package it.simone.bookyoulove.view
 
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -49,8 +47,7 @@ class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListene
     private fun setObservers() {
         val isAccessingDatabaseObserver = Observer<Boolean> {
             if (it) {
-                Log.i("Nicosanti", "accessing")
-                loadingDialog.show(childFragmentManager, "Loading Fragment")
+                loadingDialog.showNow(childFragmentManager, "Loading Fragment")
             }
             else {
                 if (loadingDialog.isAdded) {
@@ -79,7 +76,10 @@ class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListene
         endedVM.currentReadList.observe(viewLifecycleOwner, currentReadListObserver)
 
         val changedEndedListObserver = Observer<Boolean> { isChanged ->
-            if (isChanged) endedVM.getReadList()
+            if (isChanged) {
+                endedVM.getEndedList()
+                endedVM.setEndedListChanged(false)
+            }
         }
         endedVM.changedEndedList.observe(viewLifecycleOwner, changedEndedListObserver)
     }

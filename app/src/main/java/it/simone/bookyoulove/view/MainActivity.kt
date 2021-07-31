@@ -37,6 +37,9 @@ const val AUDIOBOOK_SUPPORT = "AudioBook"
 const val SORT_START_DATE = 0
 const val SORT_END_DATE = 1
 
+const val SORT_BY_TITLE = 0
+const val SORT_BY_AUTHOR = 1
+
 
 class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItemSelectedListener, PopupMenu.OnMenuItemClickListener{
 

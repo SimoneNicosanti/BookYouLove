@@ -122,7 +122,6 @@ class DetailReadingViewModel(application : Application) : AndroidViewModel(appli
                 CoroutineScope(Dispatchers.Main).launch {
                     //Poiché è cambiata la chiave, elimino la riga precedente del libro dal DB
                     val deleteBook = Book(loadedTitle, loadedAuthor, loadedTime, null, null, null, "", null, null, null, READING_BOOK_STATE)
-                    Log.i("Nicosanti", "${deleteBook.title} ${deleteBook.author} ${deleteBook.readTime}")
                     detailReadingModel.removeBookFromDatabase(deleteBook)
                     detailReadingModel.addBookInDatabase(it)
                     isAccessingDatabase.value = false

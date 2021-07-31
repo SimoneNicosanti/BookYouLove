@@ -2,6 +2,7 @@ package it.simone.bookyoulove.view
 
 import android.os.Bundle
 import android.text.InputType
+import android.util.Log
 import android.view.*
 import android.widget.CheckBox
 import androidx.core.os.bundleOf
@@ -115,7 +116,12 @@ class DetailReadingFragment : Fragment() , View.OnClickListener {
     private fun setObservers() {
         val accessingDBObserver = Observer<Boolean> { isAccessing ->
             if (isAccessing) {
-                loadingDialog.show(childFragmentManager, "Loading Dialog")
+                /*
+                    Mi permette di forzare la show immediata del fragment, in modo che quando invocata la verifica su isAdded
+                    questa mi ritorna true: infatti l'aggiunta di fragment al back stack è fatta in modo asincrono e quindi si
+                    può verificare la situazione per cui viene invocata la rimozione, ma il fragment non è stato ancora aggiunto
+                 */
+                loadingDialog.showNow(childFragmentManager, "Loading Dialog")
             }
             else {
                 if (loadingDialog.isAdded) {
@@ -126,12 +132,6 @@ class DetailReadingFragment : Fragment() , View.OnClickListener {
         }
         detailReadingVM.isAccessingDatabase.observe(viewLifecycleOwner, accessingDBObserver)
 
-        /*
-        val exitObserver = Observer<Boolean> { canExit ->
-            if (canExit) requireActivity().onBackPressed()
-        }
-        detailReadingVM.canExit.observe(viewLifecycleOwner, exitObserver)
-         */
 
         val loadedOnceObserver = Observer<Boolean> { loaded ->
             if (!loaded) detailReadingVM.getRequestedBook(args.detailTitle, args.detailAuthor, args.detailTime)
@@ -150,8 +150,8 @@ class DetailReadingFragment : Fragment() , View.OnClickListener {
         detailReadingVM.currentBook.observe(viewLifecycleOwner, bookObserver)
 
         val currentCoverObserver = Observer<String> { newCoverLink ->
-            if (newCoverLink != "") Picasso.get().load(newCoverLink).into(binding.detailReadingCoverImageView)
-            else Picasso.get().load(R.mipmap.book_cover_placeholder).into(binding.detailReadingCoverImageView)
+            if (newCoverLink != "") Picasso.get().load(newCoverLink).placeholder(R.drawable.book_cover_place_holder).error(R.drawable.cover_not_found).into(binding.detailReadingCoverImageView)
+            else Picasso.get().load(R.drawable.book_cover_place_holder).into(binding.detailReadingCoverImageView)
         }
         detailReadingVM.currentCover.observe(viewLifecycleOwner, currentCoverObserver)
 

@@ -92,8 +92,8 @@ class NewReadingBookFragment : Fragment() , View.OnClickListener {
         newBookViewModel.currentPages.observe(viewLifecycleOwner, pagesObserver)
 
         val linkObserver = Observer<String> { newLink ->
-            if (newLink != "") Picasso.get().load(newLink).error(R.mipmap.error_cover_image).into(binding.newBookCoverImageView)
-            else Picasso.get().load(R.mipmap.book_cover_placeholder).into(binding.newBookCoverImageView)
+            if (newLink != "") Picasso.get().load(newLink).placeholder(R.drawable.book_cover_place_holder).error(R.drawable.cover_not_found).into(binding.newBookCoverImageView)
+            else Picasso.get().load(R.drawable.book_cover_place_holder).into(binding.newBookCoverImageView)
         }
         newBookViewModel.currentLink.observe(viewLifecycleOwner, linkObserver)
 
@@ -105,7 +105,7 @@ class NewReadingBookFragment : Fragment() , View.OnClickListener {
 
         val updatingDatabaseObserver = Observer<Boolean> { isAccessing ->
             if (isAccessing) {
-                loadingDialog.show(childFragmentManager, "Loading Dialog")
+                loadingDialog.showNow(childFragmentManager, "Loading Dialog")
             }
             else {
                 if (loadingDialog.isAdded) {

@@ -42,7 +42,7 @@ class EndedDetailFragment : Fragment() {
 
         val isAccessingDatabaseObserver = Observer<Boolean> {
             if (it) {
-                loadingDialog.show(childFragmentManager, "Loading Dialog")
+                loadingDialog.showNow(childFragmentManager, "Loading Dialog")
             }
             else {
                 if (loadingDialog.isAdded) {
@@ -66,8 +66,8 @@ class EndedDetailFragment : Fragment() {
             binding.endedDetailTitle.text = currentBook.title
             binding.endedDetailAuthor.text = currentBook.author
 
-            if (currentBook.coverName != "") Picasso.get().load(currentBook.coverName).into(binding.endedDetailCoverImageView)
-            else Picasso.get().load(R.mipmap.book_cover_placeholder).into(binding.endedDetailCoverImageView)
+            if (currentBook.coverName != "") Picasso.get().load(currentBook.coverName).placeholder(R.drawable.book_cover_place_holder).error(R.drawable.cover_not_found).into(binding.endedDetailCoverImageView)
+            else Picasso.get().load(R.drawable.book_cover_place_holder).into(binding.endedDetailCoverImageView)
 
             binding.endedDetailPagesTextView.text = currentBook.pages.toString()
             binding.endedDetailRatingBar.rating = currentBook.rate!!

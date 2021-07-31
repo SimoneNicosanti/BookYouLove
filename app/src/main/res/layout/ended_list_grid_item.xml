@@ -8,7 +8,10 @@
     <androidx.cardview.widget.CardView
         android:layout_width="179dp"
         android:layout_height="317dp"
+        android:layout_marginHorizontal="5dp"
+        android:layout_marginVertical="5dp"
         android:foregroundGravity="center"
+        app:cardCornerRadius="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,11 +27,11 @@
                 android:layout_height="@dimen/read_grid_cover_height"
                 android:layout_marginHorizontal="@dimen/card_view_cover_margin"
                 android:layout_marginVertical="@dimen/card_view_cover_margin"
+                android:contentDescription="TODO"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:srcCompat="@tools:sample/avatars"
-                android:contentDescription="TODO" />
+                tools:srcCompat="@tools:sample/avatars" />
 
             <TextView
                 android:id="@+id/readTitleTextView"

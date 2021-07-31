@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="cover_image_view_descriptor">Book Cover</string>
-    <string name="nav_view_menu_reading_item">Reading</string>
-    <string name="nav_view_menu_tbr_item" />
-</resources>
