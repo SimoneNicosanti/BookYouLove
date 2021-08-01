@@ -72,8 +72,8 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
         isAccessingDatabase.value = false
     }
 
-    fun filterArray(newText : String?) {
-        if (newText == null) {
+    fun filterArray(newText : String?, filterParam : Int) {
+        if (newText == null || newText == "") {
             currentReadList.value = loadedArray
         }
         else {
@@ -85,10 +85,19 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
              */
             isAccessingDatabase.value = true
             viewModelScope.launch {
-                currentReadList.value = (loadedArray.filter { it.title.toLowerCase().contains(newText) }).toTypedArray()
+                when (filterParam) {
+                    SEARCH_BY_TITLE -> currentReadList.value = (loadedArray.filter { it.title.toLowerCase().contains(newText) }).toTypedArray()
+                    SEARCH_BY_AUTHOR -> currentReadList.value = (loadedArray.filter {it.author.toLowerCase().contains(newText)}).toTypedArray()
+                    else -> {
+                        val searchRate = newText.toFloat()
+                        currentReadList.value = (loadedArray.filter {it.rate == searchRate}).toTypedArray()
+                    }
+                }
                 isAccessingDatabase.value = false
             }
 
         }
     }
+
+
 }

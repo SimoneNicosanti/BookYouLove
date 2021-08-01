@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">BookYouLove</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="cover_image_view_descriptor">Book Cover</string>
     <string name="reading_string">Reading</string>
     <string name="read_string">Ended</string>
@@ -51,5 +51,10 @@
     <string name="detai_string">Detail</string>
     <string name="search_string">Search</string>
     <string name="ended_order_preference_string">Order</string>
+    <string name="search_off_string">Search Off</string>
+    <string name="delete_string">Delete</string>
+    <string name="modify_string">Modify</string>
+    <string name="alert_delete_string">Do you really want to delete this book??</string>
+    <string name="linear_setting_string">Linear Layout</string>
 
 </resources>

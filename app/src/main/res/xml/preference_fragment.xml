@@ -5,8 +5,8 @@
 
         <SwitchPreference
             android:defaultValue="false"
-            android:key="readGridLayout"
-            android:title="@string/grid_setting_string" />
+            android:key="endedLinearLayout"
+            android:title="@string/linear_setting_string" />
         <ListPreference
             android:defaultValue="1"
             android:entries="@array/ended_order_array_entries"

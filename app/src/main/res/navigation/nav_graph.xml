@@ -71,7 +71,6 @@
     <action
         android:id="@+id/action_global_readListFragment"
         app:destination="@id/endedFragment"
-        app:launchSingleTop="true"
         app:popUpTo="@id/nav_graph" />
     <action
         android:id="@+id/action_global_tbrFragment"

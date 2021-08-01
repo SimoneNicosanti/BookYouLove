@@ -1,11 +1,8 @@
 package it.simone.bookyoulove.view
 
 import android.os.Bundle
-import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -13,9 +10,9 @@ import com.squareup.picasso.Picasso
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.databinding.FragmentEndedDetailBinding
+import it.simone.bookyoulove.view.dialog.ConfirmDeleteDialogFragment
 import it.simone.bookyoulove.view.dialog.LoadingDialogFragment
 import it.simone.bookyoulove.viewmodel.DetailEndedViewModel
-import it.simone.bookyoulove.viewmodel.DetailReadingViewModel
 import it.simone.bookyoulove.viewmodel.EndedViewModel
 
 
@@ -26,6 +23,16 @@ class EndedDetailFragment : Fragment() {
     private val endedVM : EndedViewModel by activityViewModels()
 
     private var loadingDialog = LoadingDialogFragment()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        childFragmentManager.setFragmentResultListener("deleteKey", this) { requestKey, bundle ->
+            if (bundle.getBoolean("deleteConfirm")) endedDetailVM.deleteCurrentBook()
+        }
+
+        setHasOptionsMenu(true)
+    }
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -79,12 +86,36 @@ class EndedDetailFragment : Fragment() {
         }
         endedDetailVM.currentBook.observe(viewLifecycleOwner, currentBookObserver)
 
-
+        val deleteCompletedObserver = Observer<Boolean> { completed ->
+            if (completed) {
+                endedVM.setEndedListChanged(true)
+                requireActivity().onBackPressed()
+            }
+        }
+        endedDetailVM.deleteCompleted.observe(viewLifecycleOwner, deleteCompletedObserver)
     }
 
-    private fun setUserInterface(active: Boolean) {
-        binding.endedDetailCoverImageView.isClickable = !active
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.ended_detail_fragment_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        return when (item.itemId) {
+
+            R.id.endedDetailMenuDeleteItem -> {
+                ConfirmDeleteDialogFragment().show(childFragmentManager, "Delete Confirm")
+                true
+            }
+
+            R.id.endedDetailMenuEditItem -> {
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
 
     }
 }

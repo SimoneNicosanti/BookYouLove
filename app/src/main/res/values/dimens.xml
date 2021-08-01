@@ -37,4 +37,5 @@
     <dimen name="ended_detail_date_date_width">250dp</dimen>
     <dimen name="ended_detail_pages_text_size">18sp</dimen>
     <dimen name="ended_detail_card_radius">10dp</dimen>
+    <dimen name="ended_search_vert_margin">25dp</dimen>
 </resources>

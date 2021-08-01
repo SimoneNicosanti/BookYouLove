@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="0dp"
+        android:id="@+id/cardView"
+        android:layout_width="375dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="10dp"
+        app:cardCornerRadius="@dimen/ended_detail_card_radius"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,7 +22,7 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@id/linearEndedCoverImageView"
                 android:layout_width="199dp"
                 android:layout_height="285dp"
                 android:layout_marginHorizontal="@dimen/card_view_cover_margin"
@@ -30,15 +33,29 @@
                 tools:srcCompat="@tools:sample/avatars" />
 
             <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
+                android:id="@+id/linearEndedTitle"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:gravity="center"
+                android:singleLine="false"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.512"
-                app:layout_constraintStart_toEndOf="@+id/imageView2"
+                app:layout_constraintStart_toEndOf="@+id/linearEndedCoverImageView"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <RatingBar
+                android:id="@+id/linearEndedRate"
+                style="@style/Widget.AppCompat.RatingBar.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:isIndicator="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/linearEndedCoverImageView"
+                app:layout_constraintTop_toBottomOf="@+id/linearEndedTitle" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

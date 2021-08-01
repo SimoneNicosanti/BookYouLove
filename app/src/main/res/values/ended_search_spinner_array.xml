@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="ended_search_spinner_array">
+        <item>@string/title_string</item>
+        <item>@string/author_string</item>
+        <item>@string/your_rate_string</item>
+    </string-array>
+</resources>

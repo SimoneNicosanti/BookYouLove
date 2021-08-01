@@ -40,6 +40,10 @@ const val SORT_END_DATE = 1
 const val SORT_BY_TITLE = 0
 const val SORT_BY_AUTHOR = 1
 
+const val SEARCH_BY_TITLE = 0
+const val SEARCH_BY_AUTHOR = 1
+const val SEARCH_BY_RATE = 2
+
 
 class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItemSelectedListener, PopupMenu.OnMenuItemClickListener{
 

@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">BookYouLove</string>
+    <string name="cover_image_view_descriptor">Copertina</string>
+    <string name="reading_string">In Lettura</string>
+    <string name="read_string">Terminati</string>
+    <string name="tbr_string">Da Leggere</string>
+    <string name="charts_string">Grafici</string>
+    <string name="settings_string">Impostazioni</string>
+    <string name="book_cover_string">Copertina</string>
 </resources>
