@@ -17,6 +17,14 @@ data class EndDate (
     @ColumnInfo var endYear: Int
 )
 
+data class Rate (
+    var totalRate : Float,
+    var styleRate : Float,
+    var emotionRate : Float,
+    var plotRate : Float,
+    var characterRate : Float
+    )
+
 data class BookSupport (
     @ColumnInfo var paperSupport: Boolean,
     @ColumnInfo var ebookSupport: Boolean,
@@ -39,9 +47,11 @@ data class Book (
 
     var pages: Int?,
 
-    var rate: Float?,
+    @Embedded var rate: Rate?,
 
-    var labels: String?,
+    //var labels: String?,
+
+    var finalThought : String,
 
     var readState: Int
     )

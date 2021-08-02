@@ -45,11 +45,9 @@ class EndedModel(private val myAppDatabase: AppDatabase) {
 
             for (formattedBook in supportArray) {
                 sortedBookArray = sortedBookArray.plus(formattedBook.book)
-                Log.i("Nicosanti", "Libro ${formattedBook.book.title}")
             }
             //I libri più vecchi sono quelli che stanno per primi --> Inverto l'array
             sortedBookArray.reverse()
-            Log.i("Nicosanti", "sorting")
         }
         return sortedBookArray
     }

@@ -134,7 +134,9 @@ class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListene
             return true
         }
 
-        Snackbar.make(requireView(), "Search Options", Snackbar.LENGTH_SHORT).show()
+        val mySnackbar = Snackbar.make(requireView(), "Search Options", Snackbar.LENGTH_SHORT)
+        mySnackbar.setAnchorView(R.id.bottomNavigationView)
+        mySnackbar.show()
         return super.onOptionsItemSelected(item)
     }
 
@@ -143,6 +145,7 @@ class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListene
         val selectedBook : Book = endedBookArray[position]
         //Toast.makeText(requireContext(), "Selected ${selectedBook.title}", Toast.LENGTH_SHORT).show()
         endedVM.setSelectedBook(selectedBook)
+        endedVM.currentSelectedPosition = position
         val navController = findNavController()
         val action = EndedFragmentDirections.actionEndedFragmentToEndedDetailFragment()
         navController.navigate(action)

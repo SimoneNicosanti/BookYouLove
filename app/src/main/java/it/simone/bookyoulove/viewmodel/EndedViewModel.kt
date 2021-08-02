@@ -10,8 +10,11 @@ import it.simone.bookyoulove.database.AppDatabase
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.model.EndedModel
 import it.simone.bookyoulove.view.*
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.util.*
+import kotlin.collections.ArrayList
 
 class EndedViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -27,7 +30,7 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
     val currentReadList = MutableLiveData<Array<Book>>()
     val changedEndedList = MutableLiveData<Boolean>(true)
     val currentSelectedBook = MutableLiveData<Book>()
-
+    var currentSelectedPosition : Int = -1
 
     fun getEndedList() {
         isAccessingDatabase.value = true
@@ -48,28 +51,32 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-    suspend fun sortBookArray(notSortedArray: Array<Book>? = loadedArray) {
+    fun sortBookArray(notSortedArray: Array<Book>? = loadedArray) {
 
         isAccessingDatabase.value = true
         //delay(5000)
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(myApp.applicationContext)
-        val order = sharedPreferences.getString("endedOrderPreference", "start_date")
-        Log.i("Nicosanti", "$order")
 
-        if (notSortedArray != null) {
-            val sortedArray = when (order) {
-                "start_date" -> readModel.sortByDate(notSortedArray, SORT_START_DATE)
-                "end_date" -> readModel.sortByDate(notSortedArray, SORT_START_DATE)
-                "title" -> readModel.sortByTitleOrAuthor(notSortedArray, SORT_BY_TITLE)
-                "author" -> readModel.sortByTitleOrAuthor(notSortedArray, SORT_BY_AUTHOR)
+        viewModelScope.launch {
+            val sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(myApp.applicationContext)
+            val order = sharedPreferences.getString("endedOrderPreference", "start_date")
+            Log.i("Nicosanti", "$order")
 
-                else -> notSortedArray
+            if (notSortedArray != null) {
+                val sortedArray = when (order) {
+                    "start_date" -> readModel.sortByDate(notSortedArray, SORT_START_DATE)
+                    "end_date" -> readModel.sortByDate(notSortedArray, SORT_START_DATE)
+                    "title" -> readModel.sortByTitleOrAuthor(notSortedArray, SORT_BY_TITLE)
+                    "author" -> readModel.sortByTitleOrAuthor(notSortedArray, SORT_BY_AUTHOR)
+
+                    else -> notSortedArray
+                }
+                loadedArray = sortedArray
+                currentReadList.value = sortedArray
             }
-            loadedArray = sortedArray
-            currentReadList.value = sortedArray
-        }
 
-        isAccessingDatabase.value = false
+            isAccessingDatabase.value = false
+        }
     }
 
     fun filterArray(newText : String?, filterParam : Int) {
@@ -86,8 +93,13 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
             isAccessingDatabase.value = true
             viewModelScope.launch {
                 when (filterParam) {
-                    SEARCH_BY_TITLE -> currentReadList.value = (loadedArray.filter { it.title.toLowerCase().contains(newText) }).toTypedArray()
-                    SEARCH_BY_AUTHOR -> currentReadList.value = (loadedArray.filter {it.author.toLowerCase().contains(newText)}).toTypedArray()
+                    SEARCH_BY_TITLE -> currentReadList.value = (loadedArray.filter {
+                        it.title.toLowerCase(
+                            Locale.getDefault()).contains(newText) }).toTypedArray()
+
+                    SEARCH_BY_AUTHOR -> currentReadList.value = (loadedArray.filter {it.author.toLowerCase(
+                        Locale.getDefault()
+                    ).contains(newText)}).toTypedArray()
                     else -> {
                         val searchRate = newText.toFloat()
                         currentReadList.value = (loadedArray.filter {it.rate == searchRate}).toTypedArray()
@@ -96,6 +108,26 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
                 isAccessingDatabase.value = false
             }
 
+        }
+    }
+
+
+    fun notifyArrayItemChanged(finalBook: Book) {
+        //L'unico elemento che può essere cambiato è quello selezionato correntemente
+        loadedArray[currentSelectedPosition] = finalBook
+        currentSelectedBook.value = finalBook
+        sortBookArray(loadedArray)
+        //Dopo il riordino non so la posizione in cui è andato il libro, quindi resetto il il selectedPosition
+        currentSelectedPosition = -1
+    }
+
+    fun notifyArrayItemDelete() {
+        //L'unico che può essere eliminato è il corrente
+        viewModelScope.launch { Dispatchers.Default
+            val support = loadedArray.toMutableList()
+            support.removeAt(currentSelectedPosition)
+            loadedArray = support.toTypedArray()
+            sortBookArray()
         }
     }
 

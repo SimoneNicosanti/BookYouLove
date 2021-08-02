@@ -32,10 +32,24 @@
     <dimen name="ended_detail_scroll_vert_marg">10dp</dimen>
     <dimen name="ended_detail_title_hor_margin">15dp</dimen>
     <dimen name="ended_detail_author_vert_margin">10dp</dimen>
-    <dimen name="ended_detail_date_size">20sp</dimen>
+    <dimen name="ended_detail_date_size">18sp</dimen>
     <dimen name="ended_detail_date_vert_marg">25dp</dimen>
     <dimen name="ended_detail_date_date_width">250dp</dimen>
     <dimen name="ended_detail_pages_text_size">18sp</dimen>
     <dimen name="ended_detail_card_radius">10dp</dimen>
     <dimen name="ended_search_vert_margin">25dp</dimen>
+
+    <dimen name="ended_modify_cover_width">180dp</dimen>
+    <dimen name="ended_modify_cover_height">270dp</dimen>
+    <dimen name="ended_modify_cover_margin_vert">15dp</dimen>
+    <dimen name="ended_modify_title_card_vert_marg">30dp</dimen>
+    <dimen name="ended_modify_title_card_hor_margin">10dp</dimen>
+    <dimen name="ended_modify_title_margin_vert">5dp</dimen>
+    <dimen name="ended_modify_author_card_margin_vert">10dp</dimen>
+    <dimen name="ended_modify_title_text_size">18sp</dimen>
+    <dimen name="ended_modify_date_card_margin_vert">20dp</dimen>
+    <dimen name="ending_fragment_other_rates_vert_margin">5dp</dimen>
+    <dimen name="ending_fragment_rate_name_hor_margin">20dp</dimen>
+    <dimen name="ending_card_vert_margin">50dp</dimen>
+    <dimen name="ending_card_hor_margin">15dp</dimen>
 </resources>

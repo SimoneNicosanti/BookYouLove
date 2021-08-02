@@ -31,12 +31,8 @@ class DetailEndedViewModel(application: Application) : AndroidViewModel(applicat
 
     fun setShowedBook() {
         currentBook.value = showedBook
-        showBothDates()
     }
 
-    private fun showBothDates() {
-
-    }
 
     fun deleteCurrentBook() {
         isAccessingDatabase.value = true

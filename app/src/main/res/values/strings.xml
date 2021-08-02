@@ -56,5 +56,11 @@
     <string name="modify_string">Modify</string>
     <string name="alert_delete_string">Do you really want to delete this book??</string>
     <string name="linear_setting_string">Linear Layout</string>
+    <string name="total_rate_string">Total Rate</string>
+    <string name="style_string">Style</string>
+    <string name="emotions_string">Emotions</string>
+    <string name="plot_string">Plot</string>
+    <string name="characters_string">Characters</string>
+    <string name="final_thought_string">Final Thouht</string>
 
 </resources>

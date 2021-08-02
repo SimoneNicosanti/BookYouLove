@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_readingFragment_to_detailReadingFragment"
             app:destination="@id/detailReadingFragment" />
+        <action
+            android:id="@+id/action_readingFragment_to_endingFragment"
+            app:destination="@id/endingFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -37,20 +40,6 @@
         android:name="it.simone.bookyoulove.view.NewReadingBookFragment"
         tools:layout="@layout/fragment_new_reading_book"/>
     <fragment
-        android:id="@+id/coverLinkPickerFragment"
-        android:name="it.simone.bookyoulove.view.dialog.CoverLinkPickerFragment"
-        android:label="fragment_cover_link_picker"
-        tools:layout="@layout/fragment_cover_link_picker" />
-    <fragment
-        android:id="@+id/datePickerFragment"
-        android:name="it.simone.bookyoulove.view.dialog.DatePickerFragment"
-        android:label="DatePickerFragment" />
-    <fragment
-        android:id="@+id/pagesPickerFragment"
-        android:name="it.simone.bookyoulove.view.dialog.PagesPickerFragment"
-        android:label="fragment_pages_picker"
-        tools:layout="@layout/fragment_pages_picker" />
-    <fragment
         android:id="@+id/endedFragment"
         android:name="it.simone.bookyoulove.view.EndedFragment"
         android:label="@string/read_string"
@@ -59,8 +48,8 @@
             android:id="@+id/action_endedFragment_to_endedDetailFragment"
             app:destination="@id/endedDetailFragment" />
         <action
-            android:id="@+id/action_endedFragment_to_newEnded"
-            app:destination="@id/newEnded" />
+            android:id="@+id/action_endedFragment_to_modifyEndedFragment"
+            app:destination="@id/modifyEndedFragment" />
     </fragment>
     <action
         android:id="@+id/action_global_readingFragment"
@@ -83,7 +72,7 @@
     <action
         android:id="@+id/action_global_settingsFragment"
         app:destination="@id/settingsFragment"
-        app:popUpTo="@id/nav_graph" /><action android:id="@+id/action_global_pagesPickerFragment" app:destination="@id/pagesPickerFragment"/><action android:id="@+id/action_global_coverLinkPickerFragment" app:destination="@id/coverLinkPickerFragment"/><action android:id="@+id/action_global_datePickerFragment" app:destination="@id/datePickerFragment"/>
+        app:popUpTo="@id/nav_graph" />
     <fragment
         android:id="@+id/detailReadingFragment"
         android:name="it.simone.bookyoulove.view.DetailReadingFragment"
@@ -107,8 +96,17 @@
         android:label="fragment_ended_detail"
         tools:layout="@layout/fragment_ended_detail" >
         <action
-            android:id="@+id/action_endedDetailFragment_to_newEnded"
-            app:destination="@id/newEnded" />
+            android:id="@+id/action_endedDetailFragment_to_modifyEndedFragment"
+            app:destination="@id/modifyEndedFragment" />
     </fragment>
-    <fragment android:id="@+id/newEnded" />
+    <fragment
+        android:id="@+id/modifyEndedFragment"
+        android:name="it.simone.bookyoulove.view.ModifyEndedFragment"
+        android:label="fragment_modify_ended"
+        tools:layout="@layout/fragment_modify_ended" />
+    <fragment
+        android:id="@+id/endingFragment"
+        android:name="it.simone.bookyoulove.view.EndingFragment"
+        android:label="fragment_ending"
+        tools:layout="@layout/fragment_ending" />
 </navigation>

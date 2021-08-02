@@ -28,6 +28,7 @@ class DatePickerFragment: DialogFragment(), DatePickerDialog.OnDateSetListener {
         val datePickerDialog = DatePickerDialog(requireContext(), this, year, month, day)
 
         setMinDate(datePickerDialog)
+        setMaxDate(datePickerDialog)
 
         return datePickerDialog
     }
@@ -47,11 +48,19 @@ class DatePickerFragment: DialogFragment(), DatePickerDialog.OnDateSetListener {
             Devo utilizzare il -1 perché la startDate è salvata con i mesi a partire da 1, mentre la Calendar li considera a partire da 0
          */
         val calendar = Calendar.getInstance()
-        if (callMode == END_DATE_SETTER && arguments?.getInt("minDay") != null) {
+        if (callMode == END_DATE_SETTER && arguments?.getInt("minDay", -1) != -1) {
             calendar.set(arguments?.getInt("minYear")!!, arguments?.getInt("minMonth")!! - 1, arguments?.getInt(("minDay"))!!)
             datePickerDialog.datePicker.minDate = calendar.timeInMillis
         }
     }
 
+
+    private fun setMaxDate(datePickerDialog: DatePickerDialog) {
+        val calendar = Calendar.getInstance()
+        if (callMode == START_DATE_SETTER && arguments?.getInt("maxDay", -1) != -1) {
+            calendar.set(arguments?.getInt("maxYear")!!, arguments?.getInt("maxMonth")!! - 1, arguments?.getInt(("maxDay"))!!)
+            datePickerDialog.datePicker.maxDate = calendar.timeInMillis
+        }
+    }
 
 }

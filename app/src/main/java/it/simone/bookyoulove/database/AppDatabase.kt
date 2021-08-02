@@ -6,8 +6,9 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import it.simone.bookyoulove.database.DAO.BookDao
 import it.simone.bookyoulove.database.entity.Book
+import it.simone.bookyoulove.database.entity.Quote
 
-@Database(entities = [Book::class], version = 1)
+@Database(entities = [Book::class, Quote::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun bookDao(): BookDao

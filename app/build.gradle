@@ -38,6 +38,11 @@ android {
         jvmTarget = '1.8'
     }
 
+    repositories {
+        //MPAndroidChart
+        maven { url 'https://jitpack.io' }
+    }
+
 }
 
 dependencies {
@@ -103,4 +108,19 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.2.1")
     implementation("androidx.recyclerview:recyclerview-selection:1.1.0")
 
+    //Text Recognition
+    def ml_kit_version = "16.3.0"
+    implementation "com.google.android.gms:play-services-mlkit-text-recognition:$ml_kit_version"
+    //Aggiunto anche dipendednza nel manifest
+
+    //CameraX
+    def camerax_version = "1.0.1"
+    implementation("androidx.camera:camera-core:${camerax_version}")
+    implementation("androidx.camera:camera-camera2:${camerax_version}")
+    implementation("androidx.camera:camera-lifecycle:${camerax_version}")
+    implementation("androidx.camera:camera-view:1.0.0-alpha27")
+    implementation("androidx.camera:camera-extensions:1.0.0-alpha27")
+
+    //MPAndroidCharts
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 }

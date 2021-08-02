@@ -54,12 +54,14 @@
                         android:id="@+id/textView14"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center"
                         android:text="@string/start_date_string" />
 
                     <TextView
                         android:id="@+id/endedDetailStartDateTextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center"
                         android:textSize="@dimen/ended_detail_date_size" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -85,12 +87,14 @@
                         android:id="@+id/textView20"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center"
                         android:text="@string/end_date_string" />
 
                     <TextView
                         android:id="@+id/endedDetailEndDateTextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center"
                         android:textSize="@dimen/ended_detail_date_size" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
