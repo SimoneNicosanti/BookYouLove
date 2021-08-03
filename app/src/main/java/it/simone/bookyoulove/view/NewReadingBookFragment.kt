@@ -4,13 +4,19 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.*
+import androidx.core.os.bundleOf
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.compose.navArgument
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import it.simone.bookyoulove.R
+import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.database.entity.StartDate
 import it.simone.bookyoulove.databinding.FragmentNewReadingBookBinding
 import it.simone.bookyoulove.view.dialog.CoverLinkPickerFragment
@@ -19,14 +25,19 @@ import it.simone.bookyoulove.view.dialog.LoadingDialogFragment
 import it.simone.bookyoulove.view.dialog.PagesPickerFragment
 import it.simone.bookyoulove.viewmodel.NewReadingBookViewModel
 import it.simone.bookyoulove.viewmodel.ReadingViewModel
+import java.time.Month
+import java.time.format.TextStyle
+import java.util.*
 
 
 class NewReadingBookFragment : Fragment() , View.OnClickListener {
 
     private lateinit var binding: FragmentNewReadingBookBinding
 
-    private val newBookViewModel: NewReadingBookViewModel by viewModels({this})
+    private val newReadingVM: NewReadingBookViewModel by viewModels()
     private val readingVM: ReadingViewModel by activityViewModels()
+
+    private val args : NewReadingBookFragmentArgs by navArgs()
 
     private var loadingDialog = LoadingDialogFragment()
 
@@ -36,21 +47,30 @@ class NewReadingBookFragment : Fragment() , View.OnClickListener {
 
         childFragmentManager.setFragmentResultListener("startDateKey", this) { _, bundle ->
             val startDateResult = StartDate(bundle.getInt("day"), bundle.getInt("month"), bundle.getInt("year"))
-            newBookViewModel.newBookStartDate = startDateResult
-            newBookViewModel.updateStartDate()
+            newReadingVM.updateStartDate(startDateResult)
+            binding.newBookStartDateText.text = computeStartDateString(startDateResult)
         }
 
         childFragmentManager.setFragmentResultListener("coverLinkKey",this)  { _, bundle ->
             val coverLinkResult : String? = bundle.getString("settedCoverLink")
-            newBookViewModel.newBookCoverLink = coverLinkResult!!
-            newBookViewModel.updateLink()
+
+            if (coverLinkResult != "") Picasso.get().load(coverLinkResult).placeholder(R.drawable.book_cover_place_holder).error(
+                R.drawable.cover_not_found).into(binding.newBookCoverImageView)
+            else Picasso.get().load(R.drawable.book_cover_place_holder).into(binding.newBookCoverImageView)
+
+            newReadingVM.updateCoverLink(coverLinkResult!!)
         }
 
         childFragmentManager.setFragmentResultListener("pagesKey", this) { _, bundle ->
             val pagesResult : Int = bundle.getInt("settedPages")
-            newBookViewModel.newBookPages = pagesResult
-            newBookViewModel.updatePages()
+            binding.newBookPagesInput.text = pagesResult.toString()
+            newReadingVM.updatePages(pagesResult)
         }
+
+        if (args.readingModifyTitle != null) {
+            newReadingVM.loadReadingBookToModify(args.readingModifyTitle!!, args.readingModifyAuthor!!, args.readingModifyTime)
+        }
+        newReadingVM.loadAuthorArray()
     }
 
 
@@ -71,39 +91,26 @@ class NewReadingBookFragment : Fragment() , View.OnClickListener {
 
         setObservers()
 
-        newBookViewModel.updateStartDate()
-        newBookViewModel.updatePages()
-        newBookViewModel.updateLink()
-        newBookViewModel.updateAuthorList()
+        binding.newBookTitleInput.doOnTextChanged { text, start, before, count ->
+            newReadingVM.updateTitle(text)
+        }
+        binding.newBookAuthorInput.doOnTextChanged { text, start, before, count ->
+            newReadingVM.updateAuthor(text)
+        }
 
         return binding.root
     }
 
 
     private fun setObservers() {
-        val startDateObserver = Observer<String> { newStartDateString ->
-            binding.newBookStartDateText.text = newStartDateString
-        }
-        newBookViewModel.currentStartDateString.observe(viewLifecycleOwner, startDateObserver)
-
-        val pagesObserver = Observer<Int> { newPagesValue ->
-            binding.newBookPagesInput.text = newPagesValue.toString()
-        }
-        newBookViewModel.currentPages.observe(viewLifecycleOwner, pagesObserver)
-
-        val linkObserver = Observer<String> { newLink ->
-            if (newLink != "") Picasso.get().load(newLink).placeholder(R.drawable.book_cover_place_holder).error(R.drawable.cover_not_found).into(binding.newBookCoverImageView)
-            else Picasso.get().load(R.drawable.book_cover_place_holder).into(binding.newBookCoverImageView)
-        }
-        newBookViewModel.currentLink.observe(viewLifecycleOwner, linkObserver)
 
         val authorListObserver = Observer<Array<String>> { newAuthorList ->
             val authorAdapter = ArrayAdapter<String>(requireContext(), android.R.layout.simple_dropdown_item_1line, newAuthorList)
             binding.newBookAuthorInput.setAdapter(authorAdapter)
         }
-        newBookViewModel.currentAuthorArray.observe(viewLifecycleOwner, authorListObserver)
+        newReadingVM.currentAuthorArray.observe(viewLifecycleOwner, authorListObserver)
 
-        val updatingDatabaseObserver = Observer<Boolean> { isAccessing ->
+        val isAccessingDatabaseObserver = Observer<Boolean> { isAccessing ->
             if (isAccessing) {
                 loadingDialog.showNow(childFragmentManager, "Loading Dialog")
             }
@@ -114,16 +121,38 @@ class NewReadingBookFragment : Fragment() , View.OnClickListener {
                 }
             }
         }
-        newBookViewModel.isAccessingDatabase.observe(viewLifecycleOwner, updatingDatabaseObserver)
+        newReadingVM.isAccessingDatabase.observe(viewLifecycleOwner, isAccessingDatabaseObserver)
 
+        //TODO("Rivedi aggiornamento reading list : Problema non so se chi ha chiamato lo ha fatto da detail o da new --> nel dubbio posso fare upload totale")
         val exitObserver = Observer<Boolean> { canExit ->
             if (canExit) {
                 readingVM.readingUpdated(true)
-                Log.i("Nicosanti", "NewReadingFragment : Exit & Updated")
-                requireActivity().onBackPressed()
+
+                val navController = findNavController()
+                val action = NewReadingBookFragmentDirections.actionGlobalReadingFragment()
+                navController.navigate(action)
             }
         }
-        newBookViewModel.canExit.observe(viewLifecycleOwner, exitObserver)
+        newReadingVM.canExit.observe(viewLifecycleOwner, exitObserver)
+
+
+        val currentBookObserver = Observer<Book> { currentBook ->
+            if (currentBook.coverName != "") Picasso.get().load(currentBook.coverName).placeholder(R.drawable.book_cover_place_holder).error(
+                R.drawable.cover_not_found).into(binding.newBookCoverImageView)
+            else Picasso.get().load(R.drawable.book_cover_place_holder).into(binding.newBookCoverImageView)
+
+            binding.newBookTitleInput.setText(currentBook.title)
+            binding.newBookAuthorInput.setText(currentBook.author)
+
+            binding.newBookStartDateText.text = computeStartDateString(currentBook.startDate)
+
+            binding.newBookPaperCheckbox.isChecked = currentBook.support?.paperSupport ?: false
+            binding.newBookEbookCheckbox.isChecked = currentBook.support?.ebookSupport ?: false
+            binding.newBookAudiobookCheckbox.isChecked = currentBook.support?.audiobookSupport ?: false
+
+            binding.newBookPagesInput.text = currentBook.pages.toString()
+        }
+        newReadingVM.currentBook.observe(viewLifecycleOwner, currentBookObserver)
     }
 
 
@@ -144,18 +173,19 @@ class NewReadingBookFragment : Fragment() , View.OnClickListener {
 
             binding.newBookStartDateText -> {
                 val newDatePicker = DatePickerFragment()
-                val args = Bundle()
-                args.putInt("caller", START_DATE_SETTER)
-                newDatePicker.arguments = args
-
+                newDatePicker.arguments = bundleOf("caller" to START_DATE_SETTER)
                 newDatePicker.show(childFragmentManager, "Start Date Picker")
             }
 
-            binding.newBookPaperCheckbox -> newBookViewModel.newBookSupport[PAPER_SUPPORT] = (view as CheckBox).isChecked
+            binding.newBookPaperCheckbox, binding.newBookEbookCheckbox, binding.newBookAudiobookCheckbox -> {
+                view as CheckBox
+                val paperSupport = binding.newBookPaperCheckbox.isChecked
+                val ebookSupport = binding.newBookEbookCheckbox.isChecked
+                val audiobookSupport = binding.newBookAudiobookCheckbox.isChecked
+                val supportMap = mapOf<String, Boolean>(PAPER_SUPPORT to paperSupport, EBOOK_SUPPORT to ebookSupport, AUDIOBOOK_SUPPORT to audiobookSupport)
+                newReadingVM.updateSupport(supportMap)
+            }
 
-            binding.newBookEbookCheckbox -> newBookViewModel.newBookSupport[EBOOK_SUPPORT] = (view as CheckBox).isChecked
-
-            binding.newBookAudiobookCheckbox -> newBookViewModel.newBookSupport[AUDIOBOOK_SUPPORT] = (view as CheckBox).isChecked
 
             binding.newBookSaveButton -> {
                 val titleName = binding.newBookTitleInput.text.toString()
@@ -171,10 +201,18 @@ class NewReadingBookFragment : Fragment() , View.OnClickListener {
                 }
 
                 else {
-                    newBookViewModel.addNewBook(binding.newBookTitleInput.text.toString(), binding.newBookAuthorInput.text.toString())
+                    newReadingVM.addNewBook()
                 }
             }
         }
+    }
+
+
+    private fun computeStartDateString(startDate: StartDate?): String {
+        return "${startDate!!.startDay} ${
+            Month.of(startDate.startMonth).getDisplayName(
+                TextStyle.FULL, Locale.getDefault()).capitalize(Locale.getDefault())
+        } ${startDate.startYear}"
     }
 
 }

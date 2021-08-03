@@ -43,7 +43,7 @@
     <string name="tbr_settings_screen">TBR settings</string>
     <string name="widget_settings_string">Widget Settings</string>
     <string name="your_rate_string">Your Rate</string>
-    <string name="end_book_dialog_title">"&#128293; Congratulations!!\n You Ended This Book &#128293;"</string>
+    <string name="end_book_dialog_title">"&#128293; Congratulations!! You Ended This Book &#128293;"</string>
     <string name="others_string">Others</string>
     <string name="quotes_string">Quotes</string>
     <string name="invalid_date_string">Inserted Date Not Valid</string>

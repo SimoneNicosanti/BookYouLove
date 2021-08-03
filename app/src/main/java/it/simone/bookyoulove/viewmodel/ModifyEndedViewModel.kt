@@ -3,7 +3,9 @@ package it.simone.bookyoulove.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import it.simone.bookyoulove.database.AppDatabase
+import it.simone.bookyoulove.database.DAO.ShowedBookInfo
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.database.entity.EndDate
 import it.simone.bookyoulove.database.entity.StartDate
@@ -20,9 +22,7 @@ class ModifyEndedViewModel(application : Application) : AndroidViewModel(applica
     private val myAppDatabase = AppDatabase.getDatabaseInstance(application.applicationContext)
     private val modifyEndedModel = ModifyEndedModel(myAppDatabase)
 
-    var receivedOnce : Boolean = false
-
-    lateinit var selectedBook : Book
+    var loadedOnce : Boolean = false
 
     val currentBook = MutableLiveData<Book>()
     val canExit = MutableLiveData<Boolean>(false)
@@ -33,16 +33,8 @@ class ModifyEndedViewModel(application : Application) : AndroidViewModel(applica
 
     private var modified = false
 
-    var finalBook : Book? = null
+    lateinit var finalBook : ShowedBookInfo
 
-    fun postSelectedBook() {
-        /*
-            Utilizzo Una copia perché i dati sono passati per riferimento!! se non lo facessi, qualora l'utente
-            uscisse senza aver salvato le modifiche se le ritorverebbe comunque nella lista dei visualizzati
-         */
-        currentBook.value = selectedBook.copy()
-        currentStartDate = currentBook.value!!.startDate!!
-    }
 
     fun modifyStartDate(newStartDate : StartDate) {
         if (!modified) modified = true
@@ -75,7 +67,7 @@ class ModifyEndedViewModel(application : Application) : AndroidViewModel(applica
 
     fun modifyRate(newRate: Float) {
         if (!modified) modified = true
-        currentBook.value?.rate = newRate
+        currentBook.value?.rate?.totalRate = newRate
     }
 
 
@@ -85,12 +77,31 @@ class ModifyEndedViewModel(application : Application) : AndroidViewModel(applica
             sia caricato nel DB affinché compaia nella lista, posso evitare l'udo di isAccessing
          */
         if (modified) {
-            finalBook = currentBook.value
+            val modifiedBook = currentBook.value!!
+            finalBook = ShowedBookInfo(modifiedBook.title, modifiedBook.author, modifiedBook.readTime, modifiedBook.coverName, modifiedBook.startDate, modifiedBook.endDate, modifiedBook.rate?.totalRate)
             //isAccessingDatabase.value = true
             CoroutineScope(Dispatchers.Main).launch {
                 modifyEndedModel.saveChangedBook(currentBook.value!!)
                 //isAccessingDatabase.value = false
-                canExit.value = true
+            }
+            canExit.value = true
+        }
+    }
+
+
+    fun setBookToModify(modifyEndedTitle: String, modifyEndedAuthor: String, modifyEndedTime: Int) {
+        if (!loadedOnce) {
+            isAccessingDatabase.value = true
+            viewModelScope.launch {
+                currentBook.value = modifyEndedModel.loadEndedBookToModify(
+                    modifyEndedTitle,
+                    modifyEndedAuthor,
+                    modifyEndedTime
+                )
+                currentStartDate = currentBook.value!!.startDate!!
+                currentEndDate = currentBook.value!!.endDate!!
+                loadedOnce = true
+                isAccessingDatabase.value = false
             }
         }
     }

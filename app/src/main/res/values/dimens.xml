@@ -50,6 +50,7 @@
     <dimen name="ended_modify_date_card_margin_vert">20dp</dimen>
     <dimen name="ending_fragment_other_rates_vert_margin">5dp</dimen>
     <dimen name="ending_fragment_rate_name_hor_margin">20dp</dimen>
-    <dimen name="ending_card_vert_margin">50dp</dimen>
+    <dimen name="ending_card_vert_margin">25dp</dimen>
     <dimen name="ending_card_hor_margin">15dp</dimen>
+    <dimen name="ending_end_date_text_size">16sp</dimen>
 </resources>

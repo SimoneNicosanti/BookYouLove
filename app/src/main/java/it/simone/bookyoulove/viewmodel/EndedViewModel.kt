@@ -7,29 +7,28 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
 import it.simone.bookyoulove.database.AppDatabase
+import it.simone.bookyoulove.database.DAO.ShowedBookInfo
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.model.EndedModel
 import it.simone.bookyoulove.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.util.*
-import kotlin.collections.ArrayList
 
 class EndedViewModel(application: Application) : AndroidViewModel(application) {
 
     private val myAppDatabase = AppDatabase.getDatabaseInstance(application.applicationContext)
     private val readModel = EndedModel(myAppDatabase)
     private val myApp : Application = application
-    private lateinit var loadedArray : Array<Book>
+    private lateinit var loadedArray : Array<ShowedBookInfo>
 
     var changedEndedArrayOrder : Boolean = true
 
     val isAccessingDatabase =  MutableLiveData<Boolean>()
 
-    val currentReadList = MutableLiveData<Array<Book>>()
+    val currentReadList = MutableLiveData<Array<ShowedBookInfo>>()
     val changedEndedList = MutableLiveData<Boolean>(true)
-    val currentSelectedBook = MutableLiveData<Book>()
+    val currentSelectedBook = MutableLiveData<ShowedBookInfo>()
     var currentSelectedPosition : Int = -1
 
     fun getEndedList() {
@@ -46,12 +45,12 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
         changedEndedList.value = changed
     }
 
-    fun setSelectedBook(selectedBook: Book) {
+    fun setSelectedBook(selectedBook: ShowedBookInfo) {
         currentSelectedBook.value = selectedBook
     }
 
 
-    fun sortBookArray(notSortedArray: Array<Book>? = loadedArray) {
+    fun sortBookArray(notSortedArray: Array<ShowedBookInfo> = loadedArray) {
 
         isAccessingDatabase.value = true
         //delay(5000)
@@ -102,7 +101,7 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
                     ).contains(newText)}).toTypedArray()
                     else -> {
                         val searchRate = newText.toFloat()
-                        currentReadList.value = (loadedArray.filter {it.rate == searchRate}).toTypedArray()
+                        currentReadList.value = (loadedArray.filter {it.totalRate == searchRate}).toTypedArray()
                     }
                 }
                 isAccessingDatabase.value = false
@@ -112,10 +111,9 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-    fun notifyArrayItemChanged(finalBook: Book) {
+    fun notifyArrayItemChanged(finalBook: ShowedBookInfo) {
         //L'unico elemento che può essere cambiato è quello selezionato correntemente
         loadedArray[currentSelectedPosition] = finalBook
-        currentSelectedBook.value = finalBook
         sortBookArray(loadedArray)
         //Dopo il riordino non so la posizione in cui è andato il libro, quindi resetto il il selectedPosition
         currentSelectedPosition = -1

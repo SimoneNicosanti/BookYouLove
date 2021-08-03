@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 
-data class StartDate(
+data class StartDate (
         @ColumnInfo var startDay: Int,
         @ColumnInfo var startMonth: Int,
         @ColumnInfo var startYear: Int

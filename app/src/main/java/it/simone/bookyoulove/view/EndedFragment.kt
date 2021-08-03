@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.adapter.EndedAdapter
-import it.simone.bookyoulove.database.entity.Book
+import it.simone.bookyoulove.database.DAO.ShowedBookInfo
 import it.simone.bookyoulove.databinding.FragmentEndedBinding
 import it.simone.bookyoulove.view.dialog.LoadingDialogFragment
 import it.simone.bookyoulove.viewmodel.EndedViewModel
@@ -27,7 +27,7 @@ class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListene
     private lateinit var binding: FragmentEndedBinding
 
     private val endedVM : EndedViewModel by activityViewModels()
-    private lateinit var endedBookArray : Array<Book>
+    private lateinit var endedBookArray : Array<ShowedBookInfo>
 
     private var loadingDialog = LoadingDialogFragment()
 
@@ -68,7 +68,7 @@ class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListene
         }
         endedVM.isAccessingDatabase.observe(viewLifecycleOwner, isAccessingDatabaseObserver)
 
-        val currentReadListObserver = Observer<Array<Book>> {
+        val currentReadListObserver = Observer<Array<ShowedBookInfo>> {
             //In base ad orientameno del dispositivo cambio il numero di elementi mostrati su una riga, nel caso si stia usando una griglia
 
             val linearIndicator = PreferenceManager.getDefaultSharedPreferences(requireContext()).getBoolean("endedLinearLayout", false)
@@ -142,12 +142,12 @@ class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListene
 
 
     override fun onRecyclerViewItemSelected(position: Int) {
-        val selectedBook : Book = endedBookArray[position]
+        val selectedBook : ShowedBookInfo = endedBookArray[position]
         //Toast.makeText(requireContext(), "Selected ${selectedBook.title}", Toast.LENGTH_SHORT).show()
         endedVM.setSelectedBook(selectedBook)
         endedVM.currentSelectedPosition = position
         val navController = findNavController()
-        val action = EndedFragmentDirections.actionEndedFragmentToEndedDetailFragment()
+        val action = EndedFragmentDirections.actionEndedFragmentToEndedDetailFragment(selectedBook.title, selectedBook.author, selectedBook.readTime)
         navController.navigate(action)
     }
 

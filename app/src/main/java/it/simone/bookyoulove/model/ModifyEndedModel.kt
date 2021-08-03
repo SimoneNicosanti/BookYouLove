@@ -12,4 +12,16 @@ class ModifyEndedModel(private val myAppDatabase: AppDatabase) {
             myAppDatabase.bookDao().updateBooks(changedBook)
         }
     }
+
+    suspend fun loadEndedBookToModify(
+        title: String,
+        author: String,
+        readTime: Int
+    ): Book {
+        val loadedBook : Book
+        withContext(Dispatchers.IO) {
+            loadedBook = myAppDatabase.bookDao().loadSpecificBook(title, author, readTime)
+        }
+        return loadedBook
+    }
 }

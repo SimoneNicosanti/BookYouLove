@@ -9,8 +9,9 @@
 
     <TextView
         android:id="@+id/endingFragmentTitleTextView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/ending_card_hor_margin"
         android:gravity="center"
         android:text="@string/end_book_dialog_title"
         android:textSize="24sp"
@@ -19,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView2"
+        android:id="@+id/endingEndDateCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/ending_card_hor_margin"
@@ -44,7 +45,9 @@
             <TextView
                 android:id="@+id/endingEndDateText"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="@dimen/ending_end_date_text_size" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -54,9 +57,10 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/ending_card_hor_margin"
         android:layout_marginVertical="@dimen/ending_card_vert_margin"
+        android:animateLayoutChanges="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView2">
+        app:layout_constraintTop_toBottomOf="@+id/endingEndDateCard">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -91,6 +95,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:isIndicator="false"
                     android:numStars="5" />
             </LinearLayout>
 
@@ -129,6 +134,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:isIndicator="false"
                         android:numStars="5" />
 
                 </LinearLayout>
@@ -153,6 +159,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:isIndicator="false"
                         android:numStars="5" />
 
                 </LinearLayout>
@@ -177,6 +184,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:isIndicator="false"
                         android:numStars="5" />
                 </LinearLayout>
 
@@ -200,6 +208,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:isIndicator="false"
                         android:numStars="5" />
                 </LinearLayout>
             </LinearLayout>
@@ -209,7 +218,7 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginHorizontal="@dimen/ending_card_hor_margin"
         android:layout_marginVertical="@dimen/ending_card_vert_margin"
         app:layout_constraintBottom_toTopOf="@+id/endingSaveButton"
@@ -217,28 +226,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardView3">
 
-        <TextView
-            android:id="@+id/textView27"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/final_thought_string" />
+            android:orientation="vertical">
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/textView27"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:text="@string/final_thought_string" />
 
-                <EditText
-                    android:id="@+id/textView28"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:singleLine="false" />
-            </LinearLayout>
-        </ScrollView>
+            <EditText
+                android:id="@+id/endingFinalThoughtInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:hapticFeedbackEnabled="false"
+                android:isScrollContainer="true"
+                android:maxLines="10"
+                android:singleLine="false" />
+        </LinearLayout>
+
     </androidx.cardview.widget.CardView>
 
     <Button

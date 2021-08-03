@@ -2,35 +2,24 @@ package it.simone.bookyoulove.view
 
 import android.os.Bundle
 import android.view.*
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import it.simone.bookyoulove.R
+import it.simone.bookyoulove.database.DAO.ShowedBookInfo
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.database.entity.EndDate
 import it.simone.bookyoulove.database.entity.StartDate
 import it.simone.bookyoulove.databinding.FragmentReadingBinding
-import it.simone.bookyoulove.view.dialog.EndBookDialogFragment
 import it.simone.bookyoulove.view.dialog.LoadingDialogFragment
 import it.simone.bookyoulove.viewmodel.EndedViewModel
 import it.simone.bookyoulove.viewmodel.ReadingViewModel
 
-/*
-    La lista viene ricaricata da DB ogni volta che la schermata viene creata: il motivo di ciò è che
-    il VM è legato al fragment. Se esco dal fragment, il viewModel muore con lui; quando ci rientro, anche
-    se la lista non è stata modificata da nessuno, il viewModel viene reistanziato e la lista viene riletta.
-    Un modo semplice per risolvere è associare il VM non al fragment, ma all'activity: in questo modo il ViewModel
-    non viene deistanziato e quando il fragment si riattiva, se la lista non è stata modificata, allora i libri che il
-    viewmodel dice di mostrare sono sempre quelli, altimenti saranno cambiati
-    --> ASSOCIA readingViewModel ad Activity
-    A quel punto, dopo averla associata all'activity, si può anche rimuovere updatedDatabaseVM e portare le variabili
-    sull'aggiornamento nei singoli viewModel legati all'activity
- */
 
 //TODO("Inserire meccanismo di cancelazione del libro")
 
@@ -41,7 +30,7 @@ class ReadingFragment : Fragment() , View.OnClickListener{
     private lateinit var navController: NavController
 
     //Variabile che mantiene le informazioni del libro da mostrare
-    private var showBookInfo : Book? = null
+    private var showBookInfo : ShowedBookInfo? = null
 
     private var loadingDialog = LoadingDialogFragment()
 
@@ -52,31 +41,6 @@ class ReadingFragment : Fragment() , View.OnClickListener{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-
-        childFragmentManager.setFragmentResultListener("endBookInfo", this) { _, bundle ->
-            val settedRate = bundle.getFloat("settedRate")
-            val endDay = bundle.getInt("endDay")
-            val endMonth = bundle.getInt("endMonth")
-            val endYear = bundle.getInt("endYear")
-
-            val endDate = EndDate(endDay, endMonth, endYear)
-
-            val startDate : StartDate = (showBookInfo?.startDate!!)
-
-            var newSnackbar : Snackbar? = null
-            if (endDate.endYear < startDate.startYear) newSnackbar = Snackbar.make(requireView(), R.string.invalid_date_string, Snackbar.LENGTH_SHORT)
-            if (endDate.endYear == startDate.startYear && endDate.endMonth < startDate.startMonth) newSnackbar = Snackbar.make(requireView(), R.string.invalid_date_string, Snackbar.LENGTH_SHORT)
-            if (endDate.endYear == startDate.startYear && endDate.endMonth == startDate.startMonth && endDate.endDay < startDate.startDay) newSnackbar = Snackbar.make(requireView(), R.string.invalid_date_string, Snackbar.LENGTH_SHORT)
-
-            if (newSnackbar != null) {
-                newSnackbar.setAnchorView(R.id.bottomNavigationView)
-                newSnackbar.show()
-            }
-
-            else {
-                readingVM.terminateBook(endDate, settedRate)
-            }
-        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -85,8 +49,6 @@ class ReadingFragment : Fragment() , View.OnClickListener{
 
         binding.nextBookButton.setOnClickListener(this)
         binding.prevBookButton.setOnClickListener(this)
-        //binding.readingCoverImageView.setOnClickListener(this)
-        //binding.readingTerminateBtn.setOnClickListener(this)
 
         registerForContextMenu(binding.readingCoverImageView)
 
@@ -111,7 +73,8 @@ class ReadingFragment : Fragment() , View.OnClickListener{
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.readingNewItem -> {
-                val action = ReadingFragmentDirections.actionReadingFragmentToNewReadingBookFragment()
+                //Quando creo un nuovo libro, i parametri per detail sono nulli
+                val action = ReadingFragmentDirections.actionReadingFragmentToNewReadingBookFragment(null, null, 0)
                 navController.navigate(action)
             }
         }
@@ -149,7 +112,7 @@ class ReadingFragment : Fragment() , View.OnClickListener{
         }
         readingVM.isAccessingDatabase.observe(viewLifecycleOwner, isAccessingDatabaseObserver)
 
-        val showedBookObserver = Observer<Book?> { newShowBook ->
+        val showedBookObserver = Observer<ShowedBookInfo?> { newShowBook ->
             if (newShowBook != null) {
                 if(newShowBook.coverName != "") Picasso.get().load(newShowBook.coverName).placeholder(R.drawable.book_cover_place_holder).error(R.drawable.cover_not_found).into(binding.readingCoverImageView)
                 else Picasso.get().load(R.drawable.book_cover_place_holder).into(binding.readingCoverImageView)
@@ -222,11 +185,9 @@ class ReadingFragment : Fragment() , View.OnClickListener{
         return when (item.itemId) {
 
             R.id.readingContextMenuTerminateItem -> {
-                val minDate = showBookInfo!!.startDate
-                val args = bundleOf("minDay" to minDate!!.startDay, "minMonth" to minDate.startMonth, "minYear" to minDate.startYear)
-                val endBookDialog = EndBookDialogFragment()
-                endBookDialog.arguments = args
-                endBookDialog.show(childFragmentManager, "End Book")
+                val navController = findNavController()
+                val action = ReadingFragmentDirections.actionReadingFragmentToEndingFragment(showBookInfo!!.title, showBookInfo!!.author, showBookInfo!!.readTime)
+                navController.navigate(action)
                 true
             }
 

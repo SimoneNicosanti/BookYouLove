@@ -38,7 +38,19 @@
     <fragment
         android:id="@+id/newReadingBookFragment"
         android:name="it.simone.bookyoulove.view.NewReadingBookFragment"
-        tools:layout="@layout/fragment_new_reading_book"/>
+        tools:layout="@layout/fragment_new_reading_book">
+        <argument
+            android:name="readingModifyTitle"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="readingModifyAuthor"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="readingModifyTime"
+            app:argType="integer" />
+    </fragment>
     <fragment
         android:id="@+id/endedFragment"
         android:name="it.simone.bookyoulove.view.EndedFragment"
@@ -98,15 +110,46 @@
         <action
             android:id="@+id/action_endedDetailFragment_to_modifyEndedFragment"
             app:destination="@id/modifyEndedFragment" />
+        <argument
+            android:name="endedDetailTitle"
+            app:argType="string" />
+        <argument
+            android:name="endedDetailAuthor"
+            app:argType="string" />
+        <argument
+            android:name="endedDetailTime"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/modifyEndedFragment"
         android:name="it.simone.bookyoulove.view.ModifyEndedFragment"
         android:label="fragment_modify_ended"
-        tools:layout="@layout/fragment_modify_ended" />
+        tools:layout="@layout/fragment_modify_ended" >
+        <argument
+            android:name="modifyEndedTitle"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="modifyEndedAuthor"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="modifyEndedTime"
+            app:argType="integer" />
+    </fragment>
     <fragment
         android:id="@+id/endingFragment"
         android:name="it.simone.bookyoulove.view.EndingFragment"
         android:label="fragment_ending"
-        tools:layout="@layout/fragment_ending" />
+        tools:layout="@layout/fragment_ending" >
+        <argument
+            android:name="endingTitle"
+            app:argType="string" />
+        <argument
+            android:name="endingAuthor"
+            app:argType="string" />
+        <argument
+            android:name="endingTime"
+            app:argType="integer" />
+    </fragment>
 </navigation>

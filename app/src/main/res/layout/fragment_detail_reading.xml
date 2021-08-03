@@ -50,7 +50,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/title_string" />
 
-                <MultiAutoCompleteTextView
+                <TextView
                     android:id="@+id/detailReadingTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -72,7 +72,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/author_string" />
 
-                <AutoCompleteTextView
+                <TextView
                     android:id="@+id/detailReadingAuthor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

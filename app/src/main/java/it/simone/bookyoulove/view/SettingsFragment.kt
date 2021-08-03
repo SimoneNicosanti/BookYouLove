@@ -4,7 +4,6 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.activityViewModels
-import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.viewmodel.EndedViewModel

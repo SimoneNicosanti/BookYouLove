@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import it.simone.bookyoulove.R
+import it.simone.bookyoulove.database.DAO.ShowedBookInfo
 import it.simone.bookyoulove.database.entity.Book
 
 //https://www.youtube.com/watch?v=69C1ljfDvl0
@@ -16,7 +17,7 @@ import it.simone.bookyoulove.database.entity.Book
     Rivedi Video youtube per capire bene quello che succede!!
  */
 
-class EndedAdapter(private val bookSet: Array<Book>,
+class EndedAdapter(private val bookSet: Array<ShowedBookInfo>,
                    private val onRecyclerViewItemSelectedListener : OnRecyclerViewItemSelectedListener,
                    private val linearLayoutIndicator : Boolean) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -90,7 +91,7 @@ class EndedAdapter(private val bookSet: Array<Book>,
             else Picasso.get().load(R.drawable.book_cover_place_holder).into(holder.coverImageView)
 
             holder.titleTextView.text = bookSet[position].title
-            holder.ratingBar.rating = bookSet[position].rate!!
+            //holder.ratingBar.rating = bookSet[position].totalRate!!
         }
 
     }

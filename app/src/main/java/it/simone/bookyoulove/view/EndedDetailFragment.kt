@@ -7,6 +7,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.squareup.picasso.Picasso
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.entity.Book
@@ -28,12 +29,16 @@ class EndedDetailFragment : Fragment() {
 
     private var loadingDialog = LoadingDialogFragment()
 
+    private val args : EndedDetailFragmentArgs by navArgs()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         childFragmentManager.setFragmentResultListener("deleteKey", this) { requestKey, bundle ->
             if (bundle.getBoolean("deleteConfirm")) endedDetailVM.deleteCurrentBook()
         }
+
+        endedDetailVM.loadEndedDetailBook(args.endedDetailTitle, args.endedDetailAuthor, args.endedDetailTime)
 
         setHasOptionsMenu(true)
     }
@@ -65,15 +70,6 @@ class EndedDetailFragment : Fragment() {
         }
         endedDetailVM.isAccessingDatabase.observe(viewLifecycleOwner, isAccessingDatabaseObserver)
 
-        val requestedBookObserver = Observer<Book?> { requestedBook ->
-            if (!endedDetailVM.loadedOnce) {
-                endedDetailVM.loadedOnce = true
-                endedDetailVM.showedBook = requestedBook
-                endedDetailVM.setShowedBook()
-            }
-        }
-        endedVM.currentSelectedBook.observe(viewLifecycleOwner, requestedBookObserver)
-
         val currentBookObserver = Observer<Book>  { currentBook ->
             binding.endedDetailTitle.text = currentBook.title
             binding.endedDetailAuthor.text = currentBook.author
@@ -82,16 +78,22 @@ class EndedDetailFragment : Fragment() {
             else Picasso.get().load(R.drawable.book_cover_place_holder).into(binding.endedDetailCoverImageView)
 
             binding.endedDetailPagesTextView.text = currentBook.pages.toString()
-            binding.endedDetailRatingBar.rating = currentBook.rate!!
+            binding.endedDetailRatingBar.rating = currentBook.rate?.totalRate!!
 
             binding.endedDetailPaperCheckBox.isChecked = currentBook.support?.paperSupport ?: false
             binding.endedDetailEbookCheckBox.isChecked = currentBook.support?.ebookSupport ?: false
             binding.endedDetailAudiobookCheckBox.isChecked = currentBook.support?.audiobookSupport ?: false
 
-            val startDateText = "${currentBook.startDate?.startDay} ${Month.of(currentBook.startDate!!.startMonth).getDisplayName(TextStyle.FULL, Locale.getDefault()).capitalize()} ${currentBook.startDate?.startYear}"
+            val startDateText = "${currentBook.startDate?.startDay} ${Month.of(currentBook.startDate!!.startMonth).getDisplayName(TextStyle.FULL, Locale.getDefault()).capitalize(
+                Locale.ROOT
+            )
+            } ${currentBook.startDate?.startYear}"
             binding.endedDetailStartDateTextView.text = startDateText
 
-            val endDateText = "${currentBook.endDate?.endDay} ${Month.of(currentBook.endDate!!.endMonth).getDisplayName(TextStyle.FULL, Locale.getDefault()).capitalize()} ${currentBook.endDate?.endYear}"
+            val endDateText = "${currentBook.endDate?.endDay} ${Month.of(currentBook.endDate!!.endMonth).getDisplayName(TextStyle.FULL, Locale.getDefault()).capitalize(
+                Locale.ROOT
+            )
+            } ${currentBook.endDate?.endYear}"
             binding.endedDetailEndDateTextView.text = endDateText
         }
         endedDetailVM.currentBook.observe(viewLifecycleOwner, currentBookObserver)
@@ -122,7 +124,7 @@ class EndedDetailFragment : Fragment() {
 
             R.id.endedDetailMenuEditItem -> {
                 val navController = findNavController()
-                val action = EndedDetailFragmentDirections.actionEndedDetailFragmentToModifyEndedFragment()
+                val action = EndedDetailFragmentDirections.actionEndedDetailFragmentToModifyEndedFragment(args.endedDetailTitle, args.endedDetailAuthor, args.endedDetailTime)
                 navController.navigate(action)
                 true
             }

@@ -1,87 +1,42 @@
 package it.simone.bookyoulove.model
 
-import android.content.Context
-import android.widget.Toast
 import it.simone.bookyoulove.database.AppDatabase
+import it.simone.bookyoulove.database.DAO.NotFormattedShowedBookInfo
 import it.simone.bookyoulove.database.entity.Book
-import it.simone.bookyoulove.database.entity.BookSupport
-import it.simone.bookyoulove.database.entity.StartDate
-import it.simone.bookyoulove.view.AUDIOBOOK_SUPPORT
-import it.simone.bookyoulove.view.EBOOK_SUPPORT
-import it.simone.bookyoulove.view.PAPER_SUPPORT
+import it.simone.bookyoulove.view.READING_BOOK_STATE
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.util.*
 
-class NewReadingBookModel(val context: Context){
+class NewReadingBookModel(val myAppDatabase : AppDatabase){
 
-    val appDatabase = AppDatabase.getDatabaseInstance(context)
-
-
-    suspend fun addBookToDatabase(
-        title: String,
-        author: String,
-        startDate: StartDate,
-        coverLink: String,
-        support: MutableMap<String, Boolean>,
-        bookPages: Int,
-        readState: Int
-    ) {
-        //Mi permette di verificare se vengono fatte copie duplicate dello stesso libro nello stesso stato: Importante per Reading e TBR, mentre per Read è concesso
-        val presented : Boolean = checkPresenceByState(title, author, readState)
-        //Trova modo per non riptere due volte l'operazione di prelievo di same book
-        if (!presented) {
-            val computedSupport = computeSupport(support)
-            val readTime = computeReadTime(title, author, appDatabase)
-
-            val newBook = Book(title,
-                    author,
-                    readTime,
-                    startDate,
-                    null,
-                    computedSupport,
-                    coverLink,
-                    bookPages,
-                    null,
-                    null,
-                    readState
-            )
-
-            withContext(Dispatchers.IO) {
-                appDatabase.bookDao().insertBooks(newBook)
-            }
-        }
-    }
 
     private suspend fun checkPresenceByState(title: String, author: String, readState: Int): Boolean {
-        val sameBookArray: Array<Book>
+        val sameBookArray: Array<NotFormattedShowedBookInfo>
+        var isPresent = false
         withContext(Dispatchers.IO) {
-            sameBookArray = appDatabase.bookDao().loadSameBook(title, author)
-            //withContext(Dispatchers.Default) {
-                //}
-            }
-        //LAVORO POSSIBILMENTE PESANTE FATTO NEL MAIN THREAD
-        for (book in sameBookArray) {
-            if (book.readState == readState) return true
+            sameBookArray = myAppDatabase.bookDao().loadShowedBookInfoByState(readState)
         }
+        //Me li vedo tutti ma non dovrebbero essere molti
+        withContext(Dispatchers.Default) {
+            for (book in sameBookArray) {
+                if (book.title == title && book.author == author) isPresent = true
+            }
+        }
+        return isPresent
         //TODO("Trova un modo per ritornare valori dall'interno di un withContext")
-        return false
     }
 
 
-
-    private fun computeSupport(supportMap: MutableMap<String, Boolean>) : BookSupport {
-        return BookSupport(supportMap[PAPER_SUPPORT]!!, supportMap[EBOOK_SUPPORT]!!, supportMap[AUDIOBOOK_SUPPORT]!!)
-    }
-
-
-    private suspend fun computeReadTime(title: String, author: String, appDatabase: AppDatabase) : Int {
-        val sameBookList: Array<Book>
+    private suspend fun computeReadTime(title: String, author: String) : Int {
+        val sameBookArray: Array<Book>
         var maxReadTime = 0
         withContext(Dispatchers.IO) {
-            sameBookList = appDatabase.bookDao().loadSameBook(title, author)
-            val readTimeArray: Array<Int>
-            for (book in sameBookList) {
-                if (book.readTime > maxReadTime) maxReadTime = book.readTime
+            sameBookArray = myAppDatabase.bookDao().loadSameBook(title, author)
+            withContext(Dispatchers.Default) {
+                for (book in sameBookArray) {
+                    if (book.readTime > maxReadTime) maxReadTime = book.readTime
+                }
             }
         }
         return maxReadTime + 1
@@ -89,21 +44,54 @@ class NewReadingBookModel(val context: Context){
 
 
     private fun capitalizeAll(string: String) : String {
-        return string.split(" ").joinToString(" ") { it.toLowerCase().capitalize() }
+        return string.split(" ").joinToString(" ") { it.toLowerCase(Locale.getDefault()).capitalize(
+            Locale.getDefault()
+        )
+        }
     }
 
 
-    suspend fun getAuthorList() : Array<String> {
+    suspend fun loadAuthorArrayFromDatabase() : Array<String> {
         val authorArray : Array<String>
         withContext(Dispatchers.IO) {
-            authorArray = AppDatabase.getDatabaseInstance(context).bookDao().loadAuthorsList()
+            authorArray = myAppDatabase.bookDao().loadAuthorsList()
         }
         val filteredAuthorList : Array<String>
         withContext(Dispatchers.Default) {
             filteredAuthorList = authorArray.distinct().toTypedArray()
         }
-        Toast.makeText(context, "Coroutine", Toast.LENGTH_SHORT).show()
         return filteredAuthorList
+    }
+
+
+    suspend fun loadReadingBookToModifyFromDatabase(title: String, author: String, readingTime: Int): Book {
+        val loadedBook : Book
+        withContext(Dispatchers.IO) {
+            loadedBook = myAppDatabase.bookDao().loadSpecificBook(title, author, readingTime)
+        }
+        return loadedBook
+    }
+
+
+    suspend fun removeBookFromDatabase(bookToRemove: Book) {
+        withContext(Dispatchers.IO) {
+            myAppDatabase.bookDao().deleteBooks(bookToRemove)
+        }
+    }
+
+    suspend fun addNewBookInDatabase(newReadingBook : Book) {
+        if (!checkPresenceByState(newReadingBook.title, newReadingBook.author, READING_BOOK_STATE)) {
+            newReadingBook.readTime = computeReadTime(newReadingBook.title, newReadingBook.author)
+            withContext(Dispatchers.IO) {
+                myAppDatabase.bookDao().insertBooks(newReadingBook)
+            }
+        }
+    }
+
+    suspend fun updateReadingBookInDatabase(bookToUpdate: Book) {
+        withContext(Dispatchers.IO) {
+            myAppDatabase.bookDao().updateBooks(bookToUpdate)
+        }
     }
 
 }

@@ -2,6 +2,10 @@ package it.simone.bookyoulove.database.DAO
 
 import androidx.room.*
 import it.simone.bookyoulove.database.entity.Book
+import it.simone.bookyoulove.database.entity.EndDate
+import it.simone.bookyoulove.database.entity.StartDate
+
+
 
 
 @Dao
@@ -26,14 +30,14 @@ interface BookDao {
     @Query("SELECT * FROM Book WHERE title LIKE :requestedTitle AND author LIKE :requestedAuthor")
     fun loadSameBook(requestedTitle: String, requestedAuthor: String): Array<Book>
 
-    @Query("SELECT * FROM Book WHERE rate > :requestedRate")
+    @Query("SELECT * FROM Book WHERE totalRate > :requestedRate")
     fun loadBookByRate(requestedRate: Float) : Array<Book>
 
     @Query("SELECT author FROM Book")
     fun loadAuthorsList(): Array<String>
 
     @Query("SELECT * FROM Book WHERE readState LIKE :requestedState")
-    fun loadBookArrayByState(requestedState: Int) : Array<Book>
+    fun loadShowedBookInfoByState(requestedState: Int) : Array<NotFormattedShowedBookInfo>
 
     @Query("SELECT * FROM Book WHERE title LIKE :requestedTitle AND author LIKE :requestedAuthor AND readTime LIKE :requestedTime")
     fun loadSpecificBook(requestedTitle: String, requestedAuthor: String, requestedTime: Int) : Book

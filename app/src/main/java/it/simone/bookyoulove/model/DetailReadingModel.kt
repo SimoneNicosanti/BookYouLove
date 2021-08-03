@@ -9,53 +9,13 @@ import kotlinx.coroutines.withContext
 
 class DetailReadingModel(private val myAppDatabase: AppDatabase) {
 
-
-    suspend fun getBookFromDatabase(title: String, author: String, readTime: Int): Book {
-        val requestedBook: Book
+    suspend fun loadDetailReadingBookFromDatabase(detailTitle: String, detailAuthor: String, detailTime: Int): Book? {
+        val readingBook : Book
         withContext(Dispatchers.IO) {
-            requestedBook = myAppDatabase.bookDao().loadSpecificBook(title, author, readTime)
+            readingBook = myAppDatabase.bookDao().loadSpecificBook(detailTitle, detailAuthor, detailTime)
         }
-        return requestedBook
+        return readingBook
     }
 
-    suspend fun removeBookFromDatabase(toDeleteBook : Book) {
-        Log.i("Nicosanti", "Deleting")
-        withContext(Dispatchers.IO) {
-            val deleteIndex = myAppDatabase.bookDao().deleteBooks(toDeleteBook)
-            Log.i("Nicosanti", "Deleted $deleteIndex")
-        }
-    }
-
-    suspend fun addBookInDatabase(toAddBook: Book) {
-        val sameBookArray : Array<Book>
-        withContext(Dispatchers.IO) {
-            sameBookArray = myAppDatabase.bookDao().loadSameBook(toAddBook.title, toAddBook.author)
-
-            val presented : Boolean = checkPresence(sameBookArray, toAddBook.readState)
-
-            if (!presented) {
-                val newReadTime = sameBookArray.size + 1
-                toAddBook.readTime = newReadTime
-
-                myAppDatabase.bookDao().insertBooks(toAddBook)
-            }
-        }
-    }
-
-
-    suspend fun updateBookInDatabase(toUpdateBook: Book) {
-        withContext(Dispatchers.IO) {
-            myAppDatabase.bookDao().updateBooks(toUpdateBook)
-            Log.i("Nicosanti", "Model Updating")
-        }
-    }
-
-
-    private fun checkPresence(sameBookArray: Array<Book>, readState: Int): Boolean {
-        for (book in sameBookArray) {
-            if (book.readState == readState) return true
-        }
-        return false
-    }
 }
 

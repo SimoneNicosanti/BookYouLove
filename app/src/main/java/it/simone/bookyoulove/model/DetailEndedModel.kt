@@ -12,4 +12,12 @@ class DetailEndedModel(val myAppDatabase: AppDatabase) {
             myAppDatabase.bookDao().deleteBooks(toDeleteBook)
         }
     }
+
+    suspend fun loadEndedDetailBook(endedDetailTitle: String, endedDetailAuthor: String, endedDetailTime: Int): Book {
+        val endedBook : Book
+        withContext(Dispatchers.IO) {
+            endedBook = myAppDatabase.bookDao().loadSpecificBook(endedDetailTitle, endedDetailAuthor, endedDetailTime)
+        }
+        return endedBook
+    }
 }

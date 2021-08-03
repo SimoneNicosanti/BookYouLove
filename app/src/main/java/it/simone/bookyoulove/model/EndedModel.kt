@@ -1,26 +1,42 @@
 package it.simone.bookyoulove.model
 
-import android.util.Log
 import it.simone.bookyoulove.database.AppDatabase
+import it.simone.bookyoulove.database.DAO.NotFormattedShowedBookInfo
+import it.simone.bookyoulove.database.DAO.ShowedBookInfo
 import it.simone.bookyoulove.database.entity.Book
+import it.simone.bookyoulove.database.entity.EndDate
+import it.simone.bookyoulove.database.entity.StartDate
 import it.simone.bookyoulove.view.SORT_BY_TITLE
 import it.simone.bookyoulove.view.SORT_START_DATE
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 
 class EndedModel(private val myAppDatabase: AppDatabase) {
 
-    suspend fun loadReadList(requestedState : Int) : Array<Book> {
-        val loadedList : Array<Book>
+    suspend fun loadReadList(requestedState : Int) : Array<ShowedBookInfo> {
+        var loadedList : Array<ShowedBookInfo>
         withContext(Dispatchers.IO) {
-            loadedList = myAppDatabase.bookDao().loadBookArrayByState(requestedState)
+            loadedList = formatLoadedBookInfo(myAppDatabase.bookDao().loadShowedBookInfoByState(requestedState))
         }
         return loadedList
     }
 
-    suspend fun sortByDate(bookArray : Array<Book>, sortType : Int): Array<Book> {
-        var sortedBookArray = arrayOf<Book>()
+    private fun formatLoadedBookInfo(loadedArray: Array<NotFormattedShowedBookInfo>): Array<ShowedBookInfo> {
+        val supportList : MutableList<ShowedBookInfo> = mutableListOf()
+        for (elem in loadedArray) {
+
+            val startDate = if (elem.startDay != null) StartDate(elem.startDay!!, elem.startMonth!!, elem.startYear!!) else null
+            val endDate = if (elem.endDay != null) EndDate(elem.endDay!!, elem.endMonth!!, elem.endYear!!) else null
+
+            val newElem = ShowedBookInfo(elem.title, elem.author, elem.readTime, elem.coverName, startDate, endDate, elem.totalRate)
+
+            supportList.add(newElem)
+        }
+        return supportList.toTypedArray()
+    }
+
+    suspend fun sortByDate(bookArray: Array<ShowedBookInfo>, sortType: Int): Array<ShowedBookInfo> {
+        var sortedBookArray = arrayOf<ShowedBookInfo>()
         withContext(Dispatchers.Default) {
             var supportArray = arrayOf<FormattedBook>()
             for (book in bookArray) {
@@ -52,7 +68,7 @@ class EndedModel(private val myAppDatabase: AppDatabase) {
         return sortedBookArray
     }
 
-    suspend fun sortByTitleOrAuthor(notSortedArray: Array<Book>, sortType: Int): Array<Book> {
+    suspend fun sortByTitleOrAuthor(notSortedArray: Array<ShowedBookInfo>, sortType: Int): Array<ShowedBookInfo> {
         withContext(Dispatchers.Default) {
             if (sortType == SORT_BY_TITLE) notSortedArray.sortBy{ it.title }
             else notSortedArray.sortBy { it.author }
@@ -61,5 +77,5 @@ class EndedModel(private val myAppDatabase: AppDatabase) {
     }
 }
 
-class FormattedBook(val book: Book, var formattedDate: String) {
+class FormattedBook(val book: ShowedBookInfo, var formattedDate: String) {
 }

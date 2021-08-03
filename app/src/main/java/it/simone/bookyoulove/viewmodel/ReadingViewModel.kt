@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import it.simone.bookyoulove.database.DAO.ShowedBookInfo
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.database.entity.EndDate
 import it.simone.bookyoulove.model.ReadingModel
@@ -19,12 +20,12 @@ class ReadingViewModel(application: Application) : AndroidViewModel(application)
     private val readingModel = ReadingModel(myApp.applicationContext)
 
     //Gestione Lista dei Libri in Lettura
-    private lateinit var currentReadingBookArray : Array<Book>
+    private lateinit var currentReadingBookArray : Array<ShowedBookInfo>
     private var currentBookIndex : Int = 0
 
     //Gestione Visualizzazione
     val isAccessingDatabase = MutableLiveData<Boolean>()                            //Permette di mostrare un DialogFragment con una rotella che gira nel caso di operazioni di accesso a DB
-    val currentShowBook = MutableLiveData<Book?>()                             //Info relative al libro mostrato attualmente
+    val currentShowBook = MutableLiveData<ShowedBookInfo?>()                             //Info relative al libro mostrato attualmente
     var changedReadingList = MutableLiveData<Boolean>(true)                   //Comunicazione al fragment che la lista di libri in lettura è stata modificata da qualche altro fragment
     val markedAsEnded = MutableLiveData<Boolean>(false)                         //Mi permette di dire al fragment di marcare come modificata la lista degli ended, in modo che quando l'endedFragment la legge la richiede in DB
 
@@ -61,6 +62,7 @@ class ReadingViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
+    /*
     fun terminateBook(endDate : EndDate, settedRate : Float) {
         isAccessingDatabase.value = true
         CoroutineScope(Dispatchers.Main).launch {
@@ -68,7 +70,7 @@ class ReadingViewModel(application: Application) : AndroidViewModel(application)
                 val bookInfo = currentShowBook.value!!
                 val termBook = readingModel.loadTermBook(bookInfo)
                 termBook.endDate = endDate
-                termBook.rate = settedRate
+                termBook.rate?.totalRate = settedRate
                 termBook.readState = ENDED_BOOK_STATE
                 readingModel.saveTerminatedBook(termBook)
             }
@@ -76,7 +78,7 @@ class ReadingViewModel(application: Application) : AndroidViewModel(application)
             changedReadingList.value = true
             markedAsEnded.value = true
         }
-    }
+    }*/
 
 
     fun readingUpdated(updated: Boolean) {
@@ -85,6 +87,23 @@ class ReadingViewModel(application: Application) : AndroidViewModel(application)
 
     fun changeNotified() {
         markedAsEnded.value = false
+    }
+
+    fun notifyBookTerminated() {
+        /*
+            L'unico libro che può essere segnato come terminato è il corrente!!
+            Quando viene chiamata dall'ending fragment, viene rimosso l'elemento corrente nell'array,
+            elemento che nel mentre viene salvato come terminato nel DB, si reimposta l'indice e si invoca
+            la showedBook.
+            Si modifica anche il valore di markedAsEnded, il quale invia un segnale al ReadingFragment che
+            setterà la variabile di ricarica della lista dell' EndedViewModel
+         */
+        val supportList = currentReadingBookArray.toMutableList()
+        supportList.removeAt(currentBookIndex)
+        currentBookIndex = 0
+        currentReadingBookArray = supportList.toTypedArray()
+        markedAsEnded.value = true
+        setShowedBook()
     }
 
 }

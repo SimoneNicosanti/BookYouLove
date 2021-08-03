@@ -11,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.squareup.picasso.Picasso
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.entity.Book
@@ -37,12 +38,17 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
 
     private var loadingDialog = LoadingDialogFragment()
 
+    private val args: ModifyEndedFragmentArgs by navArgs()
+
+    private lateinit var currentStartDate : StartDate
+    private lateinit var currentEndDate : EndDate
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         childFragmentManager.setFragmentResultListener("startDateKey", this, { _, bundle ->
             val newStartDate = StartDate(bundle.getInt("day"), bundle.getInt("month"), bundle.getInt("year"))
+            currentStartDate = newStartDate
 
             binding.modifyEndedStartDateText.text = findStartDateString(newStartDate)
 
@@ -51,6 +57,7 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
 
         childFragmentManager.setFragmentResultListener("endDateKey", this, { _, bundle ->
             val newEndDate = EndDate(bundle.getInt("day"), bundle.getInt("month"), bundle.getInt("year"))
+            currentEndDate = newEndDate
 
             binding.modifyEndedEndDateText.text = findEndDateString(newEndDate)
 
@@ -72,6 +79,9 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
 
             modifyEndedVM.modifyCover(newLink!!)
         })
+
+        //Controllo se non null perché nel caso in cui si faccia direttamente l'aggiunta di un libro Ended il parametro è null
+        if (args.modifyEndedTitle != null) modifyEndedVM.setBookToModify(args.modifyEndedTitle!!, args.modifyEndedAuthor!!, args.modifyEndedTime)
     }
 
 
@@ -100,18 +110,6 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
 
     private fun setObservers() {
 
-        val currentSelectedObserver = Observer<Book> { selectedBook ->
-            if (!modifyEndedVM.receivedOnce) {
-                modifyEndedVM.selectedBook = selectedBook
-                modifyEndedVM.postSelectedBook()
-                modifyEndedVM.receivedOnce = true
-                modifyEndedVM.currentStartDate = selectedBook.startDate!!
-                modifyEndedVM.currentEndDate = selectedBook.endDate!!
-            }
-        }
-        endedVM.currentSelectedBook.observe(viewLifecycleOwner, currentSelectedObserver)
-
-
         val currentBookObserver = Observer<Book> { currentBook ->
             binding.modifyEndedTitleText.text = currentBook.title
             binding.modifyEndedAuthorText.text = currentBook.author
@@ -121,15 +119,16 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
             else Picasso.get().load(R.drawable.book_cover_place_holder).into(binding.modifyEndedCoverImageView)
 
             binding.modifyEndedPagesText.text = currentBook.pages.toString()
-            binding.modifyEndedRate.rating = currentBook.rate!!
+            binding.modifyEndedRate.rating = currentBook.rate?.totalRate!!
 
             binding.modifyEndedPaperCheck.isChecked = currentBook.support?.paperSupport ?: false
             binding.modifyEndedEbookCheck.isChecked = currentBook.support?.ebookSupport ?: false
             binding.modifyEndedAudiobookCheck.isChecked = currentBook.support?.audiobookSupport ?: false
 
-
+            currentStartDate = currentBook.startDate!!
             binding.modifyEndedStartDateText.text = findStartDateString(currentBook.startDate)
 
+            currentEndDate = currentBook.endDate!!
             binding.modifyEndedEndDateText.text = findEndDateString(currentBook.endDate)
         }
         modifyEndedVM.currentBook.observe(viewLifecycleOwner, currentBookObserver)
@@ -168,18 +167,18 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
             binding.modifyEndedStartDateCard -> {
                 val datePickerDialog = DatePickerFragment()
                 datePickerDialog.arguments = bundleOf("caller" to START_DATE_SETTER,
-                "maxDay" to modifyEndedVM.currentEndDate.endDay,
-                "maxMonth" to modifyEndedVM.currentEndDate.endMonth,
-                "maxYear" to modifyEndedVM.currentEndDate.endYear)
+                "maxDay" to currentEndDate.endDay,
+                "maxMonth" to currentEndDate.endMonth,
+                "maxYear" to currentEndDate.endYear)
                 datePickerDialog.show(childFragmentManager, "Start Date Picker")
             }
 
             binding.modifyEndedEndDateCard -> {
                 val datePickerDialog = DatePickerFragment()
                 datePickerDialog.arguments = bundleOf("caller" to END_DATE_SETTER,
-                    "minDay" to modifyEndedVM.currentStartDate.startDay,
-                    "minMonth" to modifyEndedVM.currentStartDate.startMonth,
-                    "minYear" to modifyEndedVM.currentStartDate.startYear)
+                    "minDay" to currentStartDate.startDay,
+                    "minMonth" to currentStartDate.startMonth,
+                    "minYear" to currentStartDate.startYear)
                 datePickerDialog.show(childFragmentManager, "End Date Picker")
             }
 

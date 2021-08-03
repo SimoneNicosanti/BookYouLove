@@ -19,6 +19,7 @@ class DatePickerFragment: DialogFragment(), DatePickerDialog.OnDateSetListener {
         callMode = arguments?.getInt("caller") ?: -1
         //Toast.makeText(requireContext(), "$callMode", Toast.LENGTH_SHORT).show()
 
+
         val cal = Calendar.getInstance()
         val day = cal.get(Calendar.DAY_OF_MONTH)
         val month = cal.get(Calendar.MONTH)
