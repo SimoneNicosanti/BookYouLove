@@ -21,6 +21,7 @@ import java.time.format.TextStyle
 import java.util.*
 
 
+
 class EndedDetailFragment : Fragment() {
 
     private lateinit var binding : FragmentEndedDetailBinding
@@ -31,10 +32,12 @@ class EndedDetailFragment : Fragment() {
 
     private val args : EndedDetailFragmentArgs by navArgs()
 
+    private lateinit var endedFinalThought : String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        childFragmentManager.setFragmentResultListener("deleteKey", this) { requestKey, bundle ->
+        childFragmentManager.setFragmentResultListener("deleteKey", this) { _, bundle ->
             if (bundle.getBoolean("deleteConfirm")) endedDetailVM.deleteCurrentBook()
         }
 
@@ -48,6 +51,12 @@ class EndedDetailFragment : Fragment() {
                               savedInstanceState: Bundle?): View {
 
         binding = FragmentEndedDetailBinding.inflate(inflater, container, false)
+
+        binding.endedDetailFinalThoughtButton.setOnClickListener {
+            val navController = findNavController()
+            val action = EndedDetailFragmentDirections.actionEndedDetailFragmentToEndedThoughtFragment(endedFinalThought, args.endedDetailTitle, args.endedDetailAuthor, args.endedDetailTime)
+            navController.navigate(action)
+        }
 
         setObservers()
 
@@ -78,7 +87,12 @@ class EndedDetailFragment : Fragment() {
             else Picasso.get().load(R.drawable.book_cover_place_holder).into(binding.endedDetailCoverImageView)
 
             binding.endedDetailPagesTextView.text = currentBook.pages.toString()
-            binding.endedDetailRatingBar.rating = currentBook.rate?.totalRate!!
+
+            binding.endedDetailTotalRate.rating = currentBook.rate?.totalRate!!
+            binding.endedDetailStyleRate.rating = currentBook.rate?.styleRate!!
+            binding.endedDetailEmotionsRate.rating = currentBook.rate?.emotionRate!!
+            binding.endedDetailPlotRate.rating = currentBook.rate?.plotRate!!
+            binding.endedDetailCharactersRate.rating = currentBook.rate?.characterRate!!
 
             binding.endedDetailPaperCheckBox.isChecked = currentBook.support?.paperSupport ?: false
             binding.endedDetailEbookCheckBox.isChecked = currentBook.support?.ebookSupport ?: false
@@ -95,6 +109,10 @@ class EndedDetailFragment : Fragment() {
             )
             } ${currentBook.endDate?.endYear}"
             binding.endedDetailEndDateTextView.text = endDateText
+
+            endedFinalThought = currentBook.finalThought
+
+            //setRadarChart(currentBook.rate!!)
         }
         endedDetailVM.currentBook.observe(viewLifecycleOwner, currentBookObserver)
 
@@ -106,6 +124,7 @@ class EndedDetailFragment : Fragment() {
         }
         endedDetailVM.deleteCompleted.observe(viewLifecycleOwner, deleteCompletedObserver)
     }
+
 
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

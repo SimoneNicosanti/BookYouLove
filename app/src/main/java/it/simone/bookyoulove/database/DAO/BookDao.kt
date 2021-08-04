@@ -42,4 +42,8 @@ interface BookDao {
     @Query("SELECT * FROM Book WHERE title LIKE :requestedTitle AND author LIKE :requestedAuthor AND readTime LIKE :requestedTime")
     fun loadSpecificBook(requestedTitle: String, requestedAuthor: String, requestedTime: Int) : Book
 
+
+    @Query("UPDATE Book SET finalThought = :newFinalThought WHERE title LIKE :requestedTitle AND author LIKE :requestedAuthor AND readTime LIKE :requestedTime")
+    fun updateFinalThoughtByKey(requestedTitle: String, requestedAuthor: String, requestedTime: Int, newFinalThought : String)
+
 }

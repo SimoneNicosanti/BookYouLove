@@ -32,7 +32,7 @@ class EndingViewModel(application: Application) : AndroidViewModel(application) 
         loadedBook.rate = Rate(0F,0F,0F,0F,0F)
 
         val cal = Calendar.getInstance()
-        loadedBook.endDate = EndDate(cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR))
+        loadedBook.endDate = EndDate(cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.YEAR))
         loadedBook.finalThought = ""
         terminateBook.value = loadedBook
     }

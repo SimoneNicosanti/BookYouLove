@@ -99,8 +99,13 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
         binding.modifyEndedEbookCheck.setOnClickListener(this)
         binding.modifyEndedAudiobookCheck.setOnClickListener(this)
         binding.modifyEndedPagesCard.setOnClickListener(this)
-        binding.modifyEndedRate.onRatingBarChangeListener = this
         binding.modifyEndedSaveButton.setOnClickListener(this)
+
+        binding.endedModifyTotalRate.onRatingBarChangeListener = this
+        binding.endedModifyStyleRate.onRatingBarChangeListener = this
+        binding.endedModifyEmotionsRate.onRatingBarChangeListener = this
+        binding.endedModifyPlotRate.onRatingBarChangeListener = this
+        binding.endedModifyCharactersRate.onRatingBarChangeListener = this
 
         setObservers()
 
@@ -119,7 +124,12 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
             else Picasso.get().load(R.drawable.book_cover_place_holder).into(binding.modifyEndedCoverImageView)
 
             binding.modifyEndedPagesText.text = currentBook.pages.toString()
-            binding.modifyEndedRate.rating = currentBook.rate?.totalRate!!
+
+            binding.endedModifyTotalRate.rating = currentBook.rate?.totalRate!!
+            binding.endedModifyStyleRate.rating = currentBook.rate?.totalRate!!
+            binding.endedModifyEmotionsRate.rating = currentBook.rate?.totalRate!!
+            binding.endedModifyPlotRate.rating = currentBook.rate?.totalRate!!
+            binding.endedModifyCharactersRate.rating = currentBook.rate?.totalRate!!
 
             binding.modifyEndedPaperCheck.isChecked = currentBook.support?.paperSupport ?: false
             binding.modifyEndedEbookCheck.isChecked = currentBook.support?.ebookSupport ?: false
@@ -208,7 +218,15 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
 
 
     override fun onRatingChanged(ratingBar: RatingBar?, rating: Float, fromUser: Boolean) {
-        modifyEndedVM.modifyRate(rating)
+        var modifiedRate = 0
+        when (ratingBar) {
+            binding.endedModifyTotalRate -> modifiedRate = 0
+            binding.endedModifyStyleRate -> modifiedRate = 1
+            binding.endedModifyEmotionsRate -> modifiedRate = 2
+            binding.endedModifyPlotRate -> modifiedRate = 3
+            binding.endedModifyCharactersRate -> modifiedRate = 4
+        }
+        modifyEndedVM.modifyRate(rating, modifiedRate)
     }
 
 

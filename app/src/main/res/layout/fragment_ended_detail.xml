@@ -103,6 +103,7 @@
                 android:id="@+id/button3"
                 android:layout_width="12dp"
                 android:layout_height="1034dp"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -272,7 +273,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="@dimen/ended_detail_date_vert_marg"
                 app:cardCornerRadius="@dimen/ended_detail_card_radius"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/endedDetailPagesCard">
@@ -290,15 +290,156 @@
                         android:gravity="center"
                         android:text="@string/your_rate_string" />
 
-                    <RatingBar
-                        android:id="@+id/endedDetailRatingBar"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/textView9"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingHorizontal="15dp"
+                            android:text="@string/total_rate_string" />
+
+                        <RatingBar
+                            android:id="@+id/endedDetailTotalRate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:isIndicator="true" />
+                    </LinearLayout>
+
+                    <ImageButton
+                        android:id="@+id/endedDetailRateCardFlipButton"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:isIndicator="true"
-                        android:numStars="5" />
+                        android:src="@drawable/ic_round_arrow_drop_up"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:id="@+id/endedDetailOtherRatesLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:clipToPadding="true"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:paddingVertical="@dimen/ended_detail_style_rate_vert_oadding">
+
+                            <TextView
+                                android:id="@+id/textView21"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:paddingHorizontal="@dimen/ended_detail_other_rates_text_hor_padding"
+                                android:text="@string/style_string" />
+
+                            <RatingBar
+                                android:id="@+id/endedDetailStyleRate"
+                                style="@android:style/Widget.Material.Light.RatingBar.Small"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:isIndicator="true"
+                                android:numStars="5" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:paddingVertical="@dimen/ended_detail_style_rate_vert_oadding">
+
+                            <TextView
+                                android:id="@+id/textView28"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:paddingHorizontal="@dimen/ended_detail_other_rates_text_hor_padding"
+                                android:text="@string/emotions_string" />
+
+                            <RatingBar
+                                android:id="@+id/endedDetailEmotionsRate"
+                                style="@android:style/Widget.Material.Light.RatingBar.Small"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:isIndicator="true"
+                                android:numStars="5" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:paddingVertical="@dimen/ended_detail_style_rate_vert_oadding">
+
+                            <TextView
+                                android:id="@+id/textView30"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:paddingHorizontal="@dimen/ended_detail_other_rates_text_hor_padding"
+                                android:text="@string/plot_string" />
+
+                            <RatingBar
+                                android:id="@+id/endedDetailPlotRate"
+                                style="@android:style/Widget.Material.Light.RatingBar.Small"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:numStars="5" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:paddingVertical="@dimen/ended_detail_style_rate_vert_oadding">
+
+                            <TextView
+                                android:id="@+id/textView29"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:paddingHorizontal="@dimen/ended_detail_other_rates_text_hor_padding"
+                                android:text="@string/characters_string" />
+
+                            <RatingBar
+                                android:id="@+id/endedDetailCharactersRate"
+                                style="@android:style/Widget.Material.Light.RatingBar.Small"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:isIndicator="true"
+                                android:numStars="5" />
+                        </LinearLayout>
+                    </LinearLayout>
+
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
+
+            <Button
+                android:id="@+id/endedDetailFinalThoughtButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/ended_detail_date_vert_marg"
+                android:text="@string/final_thought_string"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/endedDetailRateCard" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

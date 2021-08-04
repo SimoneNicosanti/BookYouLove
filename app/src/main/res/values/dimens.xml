@@ -53,4 +53,9 @@
     <dimen name="ending_card_vert_margin">25dp</dimen>
     <dimen name="ending_card_hor_margin">15dp</dimen>
     <dimen name="ending_end_date_text_size">16sp</dimen>
+    <dimen name="ended_thought_text_size">18sp</dimen>
+    <dimen name="ended_thought_card_margin">10dp</dimen>
+    <dimen name="ended_thought_title_size">16dp</dimen>
+    <dimen name="ended_detail_style_rate_vert_oadding">5dp</dimen>
+    <dimen name="ended_detail_other_rates_text_hor_padding">30dp</dimen>
 </resources>

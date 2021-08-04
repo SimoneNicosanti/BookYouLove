@@ -65,9 +65,17 @@ class ModifyEndedViewModel(application : Application) : AndroidViewModel(applica
         currentBook.value?.support?.audiobookSupport = newSupportMap[AUDIOBOOK_SUPPORT]!!
     }
 
-    fun modifyRate(newRate: Float) {
+    fun modifyRate(newRate: Float, modifiedRate: Int) {
         if (!modified) modified = true
-        currentBook.value?.rate?.totalRate = newRate
+
+        when (modifiedRate) {
+            0 -> currentBook.value?.rate?.totalRate = newRate
+            1 -> currentBook.value?.rate?.styleRate = newRate
+            2 -> currentBook.value?.rate?.emotionRate = newRate
+            3 -> currentBook.value?.rate?.plotRate = newRate
+            4 -> currentBook.value?.rate?.characterRate = newRate
+        }
+
     }
 
 
@@ -105,4 +113,7 @@ class ModifyEndedViewModel(application : Application) : AndroidViewModel(applica
             }
         }
     }
+
+
+
 }

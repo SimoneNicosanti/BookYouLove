@@ -135,6 +135,14 @@ class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItem
                 //binding.drawerLayout.closeDrawers()
                 true
             }
+
+            R.id.chartsFragment -> {
+                if (navController.currentDestination?.id != R.id.chartsFragment) {
+                    val action = ChartsFragmentDirections.actionGlobalChartsFragment()
+                    navController.navigate(action)
+                }
+                true
+            }
             else -> false
 
 

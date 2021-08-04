@@ -119,6 +119,9 @@
         <argument
             android:name="endedDetailTime"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_endedDetailFragment_to_endedThoughtFragment"
+            app:destination="@id/endedThoughtFragment" />
     </fragment>
     <fragment
         android:id="@+id/modifyEndedFragment"
@@ -150,6 +153,24 @@
             app:argType="string" />
         <argument
             android:name="endingTime"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/endedThoughtFragment"
+        android:name="it.simone.bookyoulove.view.EndedThoughtFragment"
+        android:label="fragment_ended_thought"
+        tools:layout="@layout/fragment_ended_thought" >
+        <argument
+            android:name="endedFinalThought"
+            app:argType="string" />
+        <argument
+            android:name="endedDetailTitle"
+            app:argType="string" />
+        <argument
+            android:name="endedDetailAuthor"
+            app:argType="string" />
+        <argument
+            android:name="endedDetailTime"
             app:argType="integer" />
     </fragment>
 </navigation>
