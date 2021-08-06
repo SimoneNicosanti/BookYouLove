@@ -58,4 +58,8 @@
     <dimen name="ended_thought_title_size">16dp</dimen>
     <dimen name="ended_detail_style_rate_vert_oadding">5dp</dimen>
     <dimen name="ended_detail_other_rates_text_hor_padding">30dp</dimen>
+    <dimen name="chartsTotalTextSize">18sp</dimen>
+    <dimen name="charts_total_support_pie_chart_dim">250dp</dimen>
+    <dimen name="charts_total_vert_support_chart_vert_margin">25dp</dimen>
+    <dimen name="charts_total_text_margin">50dp</dimen>
 </resources>

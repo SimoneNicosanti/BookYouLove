@@ -97,6 +97,7 @@ class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItem
                 true
             }
 
+            /*
             R.id.navViewMenuSettingsItem -> {
                 if (navController.currentDestination?.id != R.id.settingsFragment) {
                     val action = SettingsFragmentDirections.actionGlobalSettingsFragment()
@@ -104,7 +105,7 @@ class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItem
                 }
                 //binding.drawerLayout.closeDrawers()
                 true
-            }
+            }*/
 
             R.id.navViewOthersItem -> {
                 val popupMenu = PopupMenu(this, binding.bottomNavigationView)
@@ -132,11 +133,10 @@ class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItem
                     val action = SettingsFragmentDirections.actionGlobalSettingsFragment()
                     navController.navigate(action)
                 }
-                //binding.drawerLayout.closeDrawers()
                 true
             }
 
-            R.id.chartsFragment -> {
+            R.id.navViewMenuChartsItem -> {
                 if (navController.currentDestination?.id != R.id.chartsFragment) {
                     val action = ChartsFragmentDirections.actionGlobalChartsFragment()
                     navController.navigate(action)

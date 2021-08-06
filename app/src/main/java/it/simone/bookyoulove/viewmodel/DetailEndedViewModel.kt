@@ -1,6 +1,7 @@
 package it.simone.bookyoulove.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -45,5 +46,10 @@ class DetailEndedViewModel(application: Application) : AndroidViewModel(applicat
                 isAccessingDatabase.value = false
             }
         }
+    }
+
+    fun changeThought(newThought: String) {
+        currentBook.value?.finalThought = newThought
+
     }
 }

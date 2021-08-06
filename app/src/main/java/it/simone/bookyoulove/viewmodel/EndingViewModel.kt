@@ -89,5 +89,4 @@ class EndingViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-
 }

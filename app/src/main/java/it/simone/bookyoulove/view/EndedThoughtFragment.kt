@@ -1,19 +1,18 @@
 package it.simone.bookyoulove.view
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.text.InputType
 import android.view.*
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.squareup.picasso.Picasso
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.databinding.FragmentEndedThoughtBinding
-import it.simone.bookyoulove.databinding.FragmentEndingBinding
+import it.simone.bookyoulove.viewmodel.DetailEndedViewModel
 import it.simone.bookyoulove.viewmodel.EndedThoughtViewModel
-import it.simone.bookyoulove.viewmodel.ModifyEndedViewModel
+import java.util.*
 
 
 class EndedThoughtFragment : Fragment() {
@@ -26,7 +25,7 @@ class EndedThoughtFragment : Fragment() {
 
     private var isEditing : Boolean = false
 
-    private lateinit var fragmentMenu : Menu
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,17 +33,22 @@ class EndedThoughtFragment : Fragment() {
         setHasOptionsMenu(true)
     }
 
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         // Inflate the layout for this fragment
+
         binding = FragmentEndedThoughtBinding.inflate(inflater, container, false)
 
         binding.endedThoughtEditText.setText(args.endedFinalThought)
+        endedThoughtVM.updateThought(args.endedFinalThought)
+
         binding.endedThoughtTitleTextView.text = args.endedDetailTitle + "\n${getString(R.string.final_thought_string)}"
         setUI(isEditing)
 
         binding.endedThoughtEditText.doOnTextChanged { text, _, _, _ ->
             endedThoughtVM.updateThought(text.toString())
+
         }
 
         return binding.root
@@ -52,10 +56,9 @@ class EndedThoughtFragment : Fragment() {
 
 
     private fun setUI(editing: Boolean) {
-        binding.endedThoughtEditText.isClickable = editing
-        binding.endedThoughtEditText.isLongClickable = editing
-        binding.endedThoughtEditText.isFocusable = editing
-        binding.endedThoughtEditText.isFocusableInTouchMode = editing
+        binding.endedThoughtEditText.isEnabled = editing
+        //TODO("Sistemare colori in night mode")
+
     }
 
 
@@ -68,7 +71,6 @@ class EndedThoughtFragment : Fragment() {
         super.onPrepareOptionsMenu(menu)
         if (isEditing) menu.findItem(R.id.endedFinalThoughtEdit).setIcon(R.drawable.ic_round_save_new_reading_book)
         else menu.findItem(R.id.endedFinalThoughtEdit).setIcon(R.drawable.ic_round_edit_reading_details)
-        fragmentMenu = menu
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -78,6 +80,7 @@ class EndedThoughtFragment : Fragment() {
                 if (isEditing) {
                     item.setIcon(R.drawable.ic_round_edit_reading_details)
                     endedThoughtVM.saveNewThought(args.endedDetailTitle, args.endedDetailAuthor, args.endedDetailTime)
+                    findNavController().previousBackStackEntry?.savedStateHandle?.set("changedFinalThoughtKey", binding.endedThoughtEditText.text.toString())
                 }
                 else {
                     item.setIcon(R.drawable.ic_round_save_new_reading_book)

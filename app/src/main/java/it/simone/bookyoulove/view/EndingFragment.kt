@@ -20,6 +20,8 @@ import it.simone.bookyoulove.database.entity.StartDate
 import it.simone.bookyoulove.databinding.FragmentEndingBinding
 import it.simone.bookyoulove.view.dialog.DatePickerFragment
 import it.simone.bookyoulove.view.dialog.LoadingDialogFragment
+import it.simone.bookyoulove.viewmodel.ChartsViewModel
+import it.simone.bookyoulove.viewmodel.EndedViewModel
 import it.simone.bookyoulove.viewmodel.EndingViewModel
 import it.simone.bookyoulove.viewmodel.ReadingViewModel
 import java.time.Month
@@ -32,6 +34,8 @@ class EndingFragment : Fragment(), View.OnClickListener, RatingBar.OnRatingBarCh
     private lateinit var binding : FragmentEndingBinding
     private val endingVM : EndingViewModel by viewModels()
     private val readingVM : ReadingViewModel by activityViewModels()
+    private val endedVM : EndedViewModel by activityViewModels()
+    private val chartsViewModel : ChartsViewModel by activityViewModels()
 
     private val args : EndingFragmentArgs by navArgs()
 
@@ -88,6 +92,8 @@ class EndingFragment : Fragment(), View.OnClickListener, RatingBar.OnRatingBarCh
         val canExitObserver = Observer<Boolean> { canExit ->
             if (canExit) {
                 readingVM.notifyBookTerminated()
+                endedVM.setEndedListChanged(true)
+                chartsViewModel.changeLoadedStatus()        //Comunico il cambiamento nella lista di libri letti di modo che venga ricaricata da charts
                 requireActivity().onBackPressed()
             }
         }

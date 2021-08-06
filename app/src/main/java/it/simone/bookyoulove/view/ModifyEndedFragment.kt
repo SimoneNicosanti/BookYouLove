@@ -22,6 +22,7 @@ import it.simone.bookyoulove.view.dialog.CoverLinkPickerFragment
 import it.simone.bookyoulove.view.dialog.DatePickerFragment
 import it.simone.bookyoulove.view.dialog.LoadingDialogFragment
 import it.simone.bookyoulove.view.dialog.PagesPickerFragment
+import it.simone.bookyoulove.viewmodel.ChartsViewModel
 import it.simone.bookyoulove.viewmodel.EndedViewModel
 import it.simone.bookyoulove.viewmodel.ModifyEndedViewModel
 import java.time.Month
@@ -34,6 +35,7 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
     private lateinit var binding : FragmentModifyEndedBinding
 
     private val endedVM : EndedViewModel by activityViewModels()
+    private val chartsVM : ChartsViewModel by activityViewModels()
     private val modifyEndedVM : ModifyEndedViewModel by viewModels()
 
     private var loadingDialog = LoadingDialogFragment()
@@ -147,6 +149,7 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
             if (canExit) {
                 //Notifico il cambiamento del SINGOLO item della lista
                 if (modifyEndedVM.finalBook != null) endedVM.notifyArrayItemChanged(modifyEndedVM.finalBook!!)
+                chartsVM.changeLoadedStatus()
                 //requireActivity().onBackPressed()
                 val navController = findNavController()
                 val action = ModifyEndedFragmentDirections.actionGlobalReadListFragment()

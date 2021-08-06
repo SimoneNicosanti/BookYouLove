@@ -38,6 +38,7 @@
                 android:background="@android:color/transparent"
                 android:foregroundGravity="top"
                 android:gravity="clip_horizontal"
+                android:hapticFeedbackEnabled="false"
                 android:isScrollContainer="true"
                 android:scrollbars="vertical"
                 android:text="ddd"

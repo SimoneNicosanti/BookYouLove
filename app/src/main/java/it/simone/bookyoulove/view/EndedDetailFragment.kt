@@ -1,6 +1,7 @@
 package it.simone.bookyoulove.view
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -8,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.PagerSnapHelper
 import com.squareup.picasso.Picasso
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.entity.Book
@@ -20,7 +22,7 @@ import java.time.Month
 import java.time.format.TextStyle
 import java.util.*
 
-
+//
 
 class EndedDetailFragment : Fragment() {
 
@@ -63,6 +65,13 @@ class EndedDetailFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<String>("changedFinalThoughtKey")?.observe(viewLifecycleOwner) { changedFinalThought ->
+            endedFinalThought = changedFinalThought
+            endedDetailVM.changeThought(changedFinalThought)
+        }
+    }
 
     private fun setObservers() {
 
@@ -80,6 +89,7 @@ class EndedDetailFragment : Fragment() {
         endedDetailVM.isAccessingDatabase.observe(viewLifecycleOwner, isAccessingDatabaseObserver)
 
         val currentBookObserver = Observer<Book>  { currentBook ->
+            Log.i("Nicosanti", "Current Book")
             binding.endedDetailTitle.text = currentBook.title
             binding.endedDetailAuthor.text = currentBook.author
 

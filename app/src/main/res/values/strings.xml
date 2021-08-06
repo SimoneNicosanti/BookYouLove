@@ -62,5 +62,11 @@
     <string name="plot_string">Plot</string>
     <string name="characters_string">Characters</string>
     <string name="final_thought_string">Final Thouht</string>
+    <string name="total_string">Total</string>
+    <string name="books_string">Books</string>
+    <string name="rates_string">Rates</string>
+    <string name="support_string">Support</string>
+    <string name="total_books_string">Total Books</string>
+    <string name="total_pages_string">Total Pages</string>
 
 </resources>

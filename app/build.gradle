@@ -126,4 +126,8 @@ dependencies {
 
     //ViewPager2
     implementation("androidx.viewpager2:viewpager2:1.0.0")
+
+    //CardSlider per ReadingFragment
+    implementation 'com.github.IslamKhSh:CardSlider:1.0.1'
+
 }

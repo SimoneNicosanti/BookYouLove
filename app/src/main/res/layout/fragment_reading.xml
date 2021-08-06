@@ -7,58 +7,18 @@
     tools:context=".view.ReadingFragment">
 
 
-    <ImageView
-        android:id="@+id/readingCoverImageView"
-        android:layout_width="@dimen/reading_image_view_width"
-        android:layout_height="@dimen/reading_image_view_height"
-        android:layout_marginVertical="@dimen/reading_image_view_vert_margin"
-        android:contentDescription="@string/book_cover_string"
+    <view
+        android:id="@+id/cardSlider"
+        class="com.github.islamkhsh.CardSliderViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardSlider_otherPagesWidth="25dp"
+        app:cardSlider_pageMargin="10dp"
+        app:cardSlider_smallScaleFactor="0.9"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageButton
-        android:id="@+id/nextBookButton"
-        android:layout_width="@dimen/arrow_image_dim"
-        android:layout_height="@dimen/arrow_image_dim"
-        android:layout_marginHorizontal="@dimen/reading_arrow_hor_margin"
-        android:contentDescription="TODO"
-        android:src="@drawable/ic_round_arrow_forward"
-        app:layout_constraintBottom_toBottomOf="@+id/prevBookButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/prevBookButton" />
-
-    <ImageButton
-        android:id="@+id/prevBookButton"
-        android:layout_width="@dimen/arrow_image_dim"
-        android:layout_height="@dimen/arrow_image_dim"
-        android:layout_marginHorizontal="@dimen/reading_arrow_hor_margin"
-        android:layout_marginVertical="150dp"
-        android:contentDescription="TODO"
-        android:src="@drawable/ic_round_arrow_back"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/readingTitle" />
-
-    <Button
-        android:id="@+id/readingTakeNoteBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/take_note_string"
-        app:icon="@drawable/ic_round_edit_note"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/readingTitle" />
-
-    <TextView
-        android:id="@+id/readingTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/reading_title_text_margin"
-        android:textSize="@dimen/reading_title_text_size"
-        app:layout_constraintEnd_toStartOf="@+id/nextBookButton"
-        app:layout_constraintStart_toEndOf="@+id/prevBookButton"
-        app:layout_constraintTop_toBottomOf="@+id/readingCoverImageView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

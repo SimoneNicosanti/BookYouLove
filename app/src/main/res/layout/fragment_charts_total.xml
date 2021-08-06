@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.charts.ChartsTotalFragment" >
+
+    <LinearLayout
+        android:id="@+id/linearLayout9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/charts_total_text_margin"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/total_books_string"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/chartsTotalTotalBooksTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/chartsTotalTextSize" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/charts_total_text_margin"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView31"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/total_pages_string"
+            android:textSize="@dimen/chartsTotalTextSize" />
+
+        <TextView
+            android:id="@+id/chartsTotalTotalPagesTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/chartsTotalTextSize" />
+    </LinearLayout>
+
+    <view
+        android:id="@+id/chartsTotalSupportPieChart"
+        class="com.github.mikephil.charting.charts.PieChart"
+        android:layout_width="@dimen/charts_total_support_pie_chart_dim"
+        android:layout_height="@dimen/charts_total_support_pie_chart_dim"
+        android:layout_marginVertical="@dimen/charts_total_vert_support_chart_vert_margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout10" />
+
+    <view
+        android:id="@+id/chartsTotalRateBarCharts"
+        class="com.github.mikephil.charting.charts.BarChart"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        android:layout_marginHorizontal="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chartsTotalSupportPieChart" />
+</androidx.constraintlayout.widget.ConstraintLayout>
