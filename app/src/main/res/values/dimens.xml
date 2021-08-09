@@ -59,7 +59,20 @@
     <dimen name="ended_detail_style_rate_vert_oadding">5dp</dimen>
     <dimen name="ended_detail_other_rates_text_hor_padding">30dp</dimen>
     <dimen name="chartsTotalTextSize">18sp</dimen>
-    <dimen name="charts_total_support_pie_chart_dim">250dp</dimen>
+    <dimen name="charts_total_support_pie_chart_dim">350dp</dimen>
     <dimen name="charts_total_vert_support_chart_vert_margin">25dp</dimen>
     <dimen name="charts_total_text_margin">50dp</dimen>
+    <dimen name="charts_year_spinner_margin">50dp</dimen>
+    <dimen name="charts_year_scroll_vert_margin">25dp</dimen>
+    <dimen name="charts_year_books_bar_chart_hor_margin">15dp</dimen>
+    <dimen name="charts_year_books_bar_chart_vert_margin">25dp</dimen>
+    <dimen name="charts_year_books_bar_chart_height">250dp</dimen>
+    <dimen name="charts_year_card_margin">15dp</dimen>
+    <dimen name="charts_year_books_per_month_width">350dp</dimen>
+    <dimen name="charts_year_books_per_month_height">400dp</dimen>
+    <dimen name="modify_quote_card_hor_margin">10dp</dimen>
+    <dimen name="modify_quote_pages_hor_margin">10dp</dimen>
+    <dimen name="modify_quote_pages_vert_margin">5dp</dimen>
+    <dimen name="modify_quote_chapter_card_vert_margin">20dp</dimen>
+    <dimen name="modify_quote_save_button_vert_margin">50dp</dimen>
 </resources>

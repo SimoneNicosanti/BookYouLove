@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ModifyQuoteFragment" >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/button4"
+                android:layout_width="15dp"
+                android:layout_height="1071dp"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/modify_quote_card_hor_margin"
+                android:layout_marginVertical="@dimen/modify_quote_chapter_card_vert_margin"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="@dimen/modify_quote_pages_hor_margin"
+                    android:layout_marginVertical="@dimen/modify_quote_pages_vert_margin"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/quote_chapter_string" />
+
+                    <EditText
+                        android:id="@+id/modifyQuoteChapterEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autofillHints=""
+                        android:inputType="text" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/modify_quote_card_hor_margin"
+                android:layout_marginVertical="@dimen/modify_quote_chapter_card_vert_margin"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardView2">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="@dimen/modify_quote_pages_hor_margin"
+                    android:layout_marginVertical="@dimen/modify_quote_pages_vert_margin"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView34"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/quote_page_string" />
+
+                    <EditText
+                        android:id="@+id/modifyQuotePagesEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:importantForAutofill="no"
+                        android:inputType="number"
+                        android:maxLength="5" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/modify_quote_card_hor_margin"
+                android:layout_marginVertical="@dimen/modify_quote_chapter_card_vert_margin"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardView4">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="@dimen/modify_quote_pages_hor_margin"
+                    android:layout_marginVertical="@dimen/modify_quote_pages_vert_margin"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/quote_text_string" />
+
+                    <EditText
+                        android:id="@+id/modifyQuoteQuoteEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autofillHints=""
+                        android:background="@android:color/transparent"
+                        android:inputType="textMultiLine|text"
+                        android:scrollbars="vertical"
+                        android:singleLine="false" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/modify_quote_card_hor_margin"
+                android:layout_marginVertical="@dimen/modify_quote_chapter_card_vert_margin"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardView5">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="@dimen/modify_quote_pages_hor_margin"
+                    android:layout_marginVertical="@dimen/modify_quote_pages_vert_margin"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView36"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/quote_thought_string" />
+
+                    <EditText
+                        android:id="@+id/modifyQuoteThoughtEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:inputType="textMultiLine|text" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <Button
+                android:id="@+id/modifyQuoteSaveButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/modify_quote_save_button_vert_margin"
+                android:text="@string/save_string"
+                app:cornerRadius="20dp"
+                app:icon="@drawable/ic_round_save_new_reading_book"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardView6" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

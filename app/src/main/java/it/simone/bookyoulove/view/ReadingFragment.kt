@@ -211,9 +211,8 @@ class ReadingFragment : Fragment() , ReadingAdapter.OnReadingItemMenuItemClickLi
         return when (item?.itemId) {
 
             R.id.readingContextMenuTakeNoteItem -> {
+                findNavController().navigate(ReadingFragmentDirections.actionGlobalModifyQuoteFragment(bookArray[position].title, bookArray[position].author))
                 true
-                TODO("Take Note")
-
             }
 
             R.id.readingContextMenuDetailItem -> {

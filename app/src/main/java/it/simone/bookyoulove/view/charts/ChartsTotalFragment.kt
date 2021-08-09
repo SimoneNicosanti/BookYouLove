@@ -12,6 +12,7 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.utils.ColorTemplate
+import it.simone.bookyoulove.R
 import it.simone.bookyoulove.databinding.FragmentChartsTotalBinding
 import it.simone.bookyoulove.model.ChartsBookData
 import it.simone.bookyoulove.viewmodel.ChartsTotalViewModel
@@ -51,12 +52,12 @@ class ChartsTotalFragment : Fragment() {
             binding.chartsTotalTotalPagesTextView.text = it.totalPages.toString()
 
             val supportPieEntries = ArrayList<PieEntry>()
-            supportPieEntries.add(0, PieEntry(it.totalPaperSupport.toFloat(), "Paper"))
-            supportPieEntries.add(1, PieEntry(it.totalEbookSupport.toFloat(), "eBook"))
-            supportPieEntries.add(2, PieEntry(it.totalAudiobookSupport.toFloat(), "AudioBook"))
+            supportPieEntries.add(PieEntry(it.totalPaperSupport, getString(R.string.paper_string)))
+            supportPieEntries.add(PieEntry(it.totalEbookSupport, getString(R.string.ebook_string)))
+            supportPieEntries.add(PieEntry(it.totalAudiobookSupport, getString(R.string.audiobook_string)))
 
-            val set = PieDataSet(supportPieEntries, "")
-            set.colors = ColorTemplate.COLORFUL_COLORS.toList()
+            val set = PieDataSet(supportPieEntries, getString(R.string.total_support_string))
+            set.colors = ColorTemplate.MATERIAL_COLORS.toList()
             binding.chartsTotalSupportPieChart.setData(PieData(set))
             binding.chartsTotalSupportPieChart.invalidate()
         }

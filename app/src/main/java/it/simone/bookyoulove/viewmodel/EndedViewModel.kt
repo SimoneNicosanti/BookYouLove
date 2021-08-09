@@ -20,7 +20,8 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
     private val myAppDatabase = AppDatabase.getDatabaseInstance(application.applicationContext)
     private val readModel = EndedModel(myAppDatabase)
     private val myApp : Application = application
-    private lateinit var loadedArray : Array<ShowedBookInfo>
+    //Lo preimposto in modo da non avere mai un null, ma al massimo un array vuoto
+    private var loadedArray : Array<ShowedBookInfo> = arrayOf()
 
     var changedEndedArrayOrder : Boolean = true
 
@@ -61,18 +62,16 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
             val order = sharedPreferences.getString("endedOrderPreference", "start_date")
             Log.i("Nicosanti", "$order")
 
-            if (notSortedArray != null) {
-                val sortedArray = when (order) {
-                    "start_date" -> readModel.sortByDate(notSortedArray, SORT_START_DATE)
-                    "end_date" -> readModel.sortByDate(notSortedArray, SORT_START_DATE)
-                    "title" -> readModel.sortByTitleOrAuthor(notSortedArray, SORT_BY_TITLE)
-                    "author" -> readModel.sortByTitleOrAuthor(notSortedArray, SORT_BY_AUTHOR)
+            val sortedArray = when (order) {
+                "start_date" -> readModel.sortByDate(notSortedArray, SORT_START_DATE)
+                "end_date" -> readModel.sortByDate(notSortedArray, SORT_END_DATE)
+                "title" -> readModel.sortByTitleOrAuthor(notSortedArray, SORT_BY_TITLE)
+                "author" -> readModel.sortByTitleOrAuthor(notSortedArray, SORT_BY_AUTHOR)
 
-                    else -> notSortedArray
-                }
-                loadedArray = sortedArray
-                currentReadList.value = sortedArray
+                else -> notSortedArray
             }
+            loadedArray = sortedArray
+            currentReadList.value = sortedArray
 
             isAccessingDatabase.value = false
         }

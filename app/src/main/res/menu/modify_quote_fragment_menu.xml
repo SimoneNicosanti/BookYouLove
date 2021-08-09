@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/modifyQuoteMenuFavoriteItem"
+        android:icon="@drawable/ic_round_modify_quote_favorite_off"
+        android:title="@string/favourite_string"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/modifyQuoteMenuAddWithCameraItem"
+        android:icon="@drawable/ic_round_modify_quote_add_with_camera"
+        android:title="@string/add_with_camera_string"
+        app:showAsAction="ifRoom" />
+</menu>

@@ -5,6 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import it.simone.bookyoulove.database.DAO.BookDao
+import it.simone.bookyoulove.database.DAO.QuoteDao
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.database.entity.Quote
 
@@ -12,6 +13,7 @@ import it.simone.bookyoulove.database.entity.Quote
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun bookDao(): BookDao
+    abstract fun quoteDao() : QuoteDao
 
     companion object {
         private var appDatabase : AppDatabase? = null

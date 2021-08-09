@@ -68,5 +68,14 @@
     <string name="support_string">Support</string>
     <string name="total_books_string">Total Books</string>
     <string name="total_pages_string">Total Pages</string>
+    <string name="total_support_string">Total Supports</string>
+    <string name="year_string">Year</string>
+    <string name="favourite_string">Favourite</string>
+    <string name="add_with_camera_string">Add With Camera</string>
+    <string name="quote_page_string">Quote Page</string>
+    <string name="quote_chapter_string">Quote Chapter</string>
+    <string name="quote_text_string">Quote Text</string>
+    <string name="quote_thought_string">Your Thought</string>
+    <string name="obligatory_quote_text_string">Obligatory Quote Text</string>
 
 </resources>

@@ -16,8 +16,8 @@ interface QuoteDao {
     fun deleteQuote(vararg deleteQuote : Quote)
 
     @Query("SELECT * FROM Quote")
-    fun loadAllQuotes() : ArrayList<Quote>
+    fun loadAllQuotes() : Array<Quote>
 
     @Query("SELECT * FROM Quote WHERE bookTitle LIKE :requestedTitle AND bookAuthor LIKE :requestedAuthor")
-    fun loadByTitleAndAuthor(requestedTitle: String, requestedAuthor: String)
+    fun loadByTitleAndAuthor(requestedTitle: String, requestedAuthor: String) : Array<Quote>
 }

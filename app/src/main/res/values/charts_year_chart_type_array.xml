@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="charts_year_chart_type_array">
+        <item>@string/book_per_month_chart_type</item>
+        <item>@string/pages_per_month_chart_type</item>
+        <item>@string/supports_per_year_type</item>
+        <item>@string/rates_per_year_type</item>
+    </string-array>
+    <string name="book_per_month_chart_type">Books Per Month</string>
+    <string name="pages_per_month_chart_type">Pages Per Month</string>
+    <string name="supports_per_year_type">Supports Per Year</string>
+    <string name="rates_per_year_type">Rates Per Year</string>
+</resources>

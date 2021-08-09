@@ -32,7 +32,16 @@ class EndingViewModel(application: Application) : AndroidViewModel(application) 
         loadedBook.rate = Rate(0F,0F,0F,0F,0F)
 
         val cal = Calendar.getInstance()
-        loadedBook.endDate = EndDate(cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.YEAR))
+        /*
+            Imposto la data di fine iniziale coincidente con la data di inizio.
+            Questo mi permette di evitare situazioni patologiche sulle date, che si verificherebbero se impostassi
+            a data odierna. Se ad esempio fosse messo come data di inizio una data successiva a quella odierna e poi si
+            andasse a terminazione la data di fine sarebbe per default quella odierna: se questa non viene impostata da
+            utente, ottengo endDate < startDate che è assurdo. Questo mi permette di evitarlo. Comunque il Picker parte da data
+            odierna, quindi all'utente basta aprirlo per impostare la data di fine a quella del giorno corrente
+
+         */
+        loadedBook.endDate = EndDate(loadedBook.startDate!!.startDay, loadedBook.startDate!!.startMonth, loadedBook.startDate!!.startYear)
         loadedBook.finalThought = ""
         terminateBook.value = loadedBook
     }

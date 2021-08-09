@@ -16,6 +16,7 @@ import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.databinding.FragmentEndedDetailBinding
 import it.simone.bookyoulove.view.dialog.ConfirmDeleteDialogFragment
 import it.simone.bookyoulove.view.dialog.LoadingDialogFragment
+import it.simone.bookyoulove.viewmodel.ChartsViewModel
 import it.simone.bookyoulove.viewmodel.DetailEndedViewModel
 import it.simone.bookyoulove.viewmodel.EndedViewModel
 import java.time.Month
@@ -29,6 +30,7 @@ class EndedDetailFragment : Fragment() {
     private lateinit var binding : FragmentEndedDetailBinding
     private val endedDetailVM : DetailEndedViewModel by viewModels()
     private val endedVM : EndedViewModel by activityViewModels()
+    private val chartsVM : ChartsViewModel by activityViewModels()
 
     private var loadingDialog = LoadingDialogFragment()
 
@@ -40,7 +42,11 @@ class EndedDetailFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         childFragmentManager.setFragmentResultListener("deleteKey", this) { _, bundle ->
-            if (bundle.getBoolean("deleteConfirm")) endedDetailVM.deleteCurrentBook()
+            if (bundle.getBoolean("deleteConfirm")) {
+                endedDetailVM.deleteCurrentBook()
+                //Notifico la cancellazione per il grafico dei charts
+                chartsVM.changeLoadedStatus()
+            }
         }
 
         endedDetailVM.loadEndedDetailBook(args.endedDetailTitle, args.endedDetailAuthor, args.endedDetailTime)

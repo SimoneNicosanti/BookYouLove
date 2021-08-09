@@ -173,4 +173,24 @@
             android:name="endedDetailTime"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/modifyQuoteFragment"
+        android:name="it.simone.bookyoulove.view.ModifyQuoteFragment"
+        android:label="ModifyQuoteFragment" >
+        <argument
+            android:name="bookTitle"
+            app:argType="string" />
+        <argument
+            android:name="bookAuthor"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_modifyQuoteFragment_to_quoteWithCameraFragment"
+            app:destination="@id/quoteWithCameraFragment" />
+    </fragment>
+    <action android:id="@+id/action_global_modifyQuoteFragment" app:destination="@id/modifyQuoteFragment" />
+    <fragment
+        android:id="@+id/quoteWithCameraFragment"
+        android:name="it.simone.bookyoulove.view.QuoteWithCameraFragment"
+        android:label="fragment_quote_with_camera"
+        tools:layout="@layout/fragment_quote_with_camera" />
 </navigation>

@@ -1,6 +1,7 @@
 package it.simone.bookyoulove.viewmodel
 
 import android.os.Bundle
+import android.util.Log
 import androidx.core.os.bundleOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -31,9 +32,9 @@ class ChartsTotalViewModel : ViewModel() {
             totalChartData.value = TotalChartData(
                 currentDataArray.size,
                 totalInfo.getInt("totalPages"),
-                totalInfo.getInt(PAPER_SUPPORT),
-                totalInfo.getInt(EBOOK_SUPPORT),
-                totalInfo.getInt(AUDIOBOOK_SUPPORT),
+                totalInfo.getFloat(PAPER_SUPPORT),
+                totalInfo.getFloat(EBOOK_SUPPORT),
+                totalInfo.getFloat(AUDIOBOOK_SUPPORT),
                 totalInfo.getFloat("averageFinalRate")
             )
         }
@@ -54,10 +55,11 @@ class ChartsTotalViewModel : ViewModel() {
                 totalFinalRate += info.rate.totalRate
             }
         }
+        val totalSupport = totalPaperSupport + totalEbookSupport + totalAudiobookSupport
         return bundleOf("totalPages" to totalPages,
-            PAPER_SUPPORT to totalPaperSupport,
-            EBOOK_SUPPORT to totalEbookSupport,
-            AUDIOBOOK_SUPPORT to totalAudiobookSupport,
+            PAPER_SUPPORT to if (totalSupport != 0) (totalPaperSupport / totalSupport.toFloat()) * 100 else 0,
+            EBOOK_SUPPORT to if (totalSupport != 0) (totalEbookSupport / totalSupport.toFloat()) * 100 else 0,
+            AUDIOBOOK_SUPPORT to if (totalSupport != 0) (totalAudiobookSupport / totalSupport.toFloat()) * 100 else 0,
             "averageFinalRate" to (if (currentDataArray.isNotEmpty()) totalFinalRate / currentDataArray.size else 0F))
     }
 
@@ -66,9 +68,9 @@ class ChartsTotalViewModel : ViewModel() {
 data class TotalChartData(
     var totalBooks : Int,
     var totalPages : Int,
-    var totalPaperSupport : Int,
-    var totalEbookSupport : Int,
-    var totalAudiobookSupport : Int,
+    var totalPaperSupport : Float,
+    var totalEbookSupport : Float,
+    var totalAudiobookSupport : Float,
     var totalFinalRateAverage : Float,
     //Non considero gli altri perché non è detto che siano campi compilati : un saggio non ha trama o personaggi
 )

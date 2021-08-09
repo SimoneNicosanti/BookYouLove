@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import it.simone.bookyoulove.R
@@ -16,7 +17,7 @@ import it.simone.bookyoulove.view.charts.*
 import it.simone.bookyoulove.view.dialog.LoadingDialogFragment
 import it.simone.bookyoulove.viewmodel.ChartsViewModel
 
-private const val CHARTS_FRAGMENTS_COUNT = 5
+private const val CHARTS_FRAGMENTS_COUNT = 2
 
 
 class ChartsFragment : Fragment() {
@@ -48,12 +49,16 @@ class ChartsFragment : Fragment() {
         TabLayoutMediator(chartsTabLayout, binding.chartsViewPager) { tab, position ->
             when (position) {
                 0 -> tab.text = getString(R.string.total_string)
-                1 -> tab.text = getString(R.string.books_string)
-                2 -> tab.text = getString(R.string.pages_string)
-                3 -> tab.text = getString(R.string.support_string)
-                4 -> tab.text = getString(R.string.rates_string)
+                1 -> tab.text = getString(R.string.year_string)
+
             }
         }.attach()
+
+        /*
+            Disabilita lo Swiping del ViewPager. Il Motivo per cui lo faccio è che questo può andare ad interferire
+            quando l'utente fa lo scroll dei grafici nella pagina successiva
+         */
+        binding.chartsViewPager.isUserInputEnabled = false
     }
 
     private fun setObservers() {
@@ -81,10 +86,7 @@ class ChartsCollectionAdapter(chartsFragment: Fragment) : FragmentStateAdapter(c
     override fun createFragment(position: Int): Fragment {
 
         return when (position) {
-            1 -> ChartsBooksFragment()
-            2 -> ChartsPagesFragment()
-            3 -> ChartsSupportFragment()
-            4 -> ChartsRatesFragment()
+            1 -> ChartsYearFragment()
             else -> ChartsTotalFragment()
         }
     }
