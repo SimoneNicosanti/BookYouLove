@@ -75,4 +75,5 @@
     <dimen name="modify_quote_pages_vert_margin">5dp</dimen>
     <dimen name="modify_quote_chapter_card_vert_margin">20dp</dimen>
     <dimen name="modify_quote_save_button_vert_margin">50dp</dimen>
+    <dimen name="quote_with_camera_analyzer_image_height">500dp</dimen>
 </resources>

@@ -1,6 +1,7 @@
 package it.simone.bookyoulove.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import it.simone.bookyoulove.database.AppDatabase
@@ -18,6 +19,7 @@ class ModifyQuoteViewModel(application: Application) : AndroidViewModel(applicat
     private val modifyQuoteModel = ModifyQuoteModel(myAppDatabase)
 
     val currentQuote = MutableLiveData<Quote>()
+    val currentTextScanned = MutableLiveData<String?>()
 
     init {
         val cal = Calendar.getInstance()
@@ -47,7 +49,8 @@ class ModifyQuoteViewModel(application: Application) : AndroidViewModel(applicat
     }
 
     fun changeQuoteText(newQuoteText: String) {
-        currentQuote.value!!.quoteText = newQuoteText
+        currentQuote.value?.quoteText = newQuoteText
+        Log.i("Nicosanti", currentQuote.value!!.quoteText)
     }
 
     fun changeQuoteThought(newQuoteThought: String) {
@@ -66,9 +69,14 @@ class ModifyQuoteViewModel(application: Application) : AndroidViewModel(applicat
         currentQuote.value!!.favourite = isFavorite
     }
 
+    fun onTextScanned(scannedQuote: String?) {
+        currentTextScanned.value = scannedQuote
+    }
+
     fun saveQuote() {
         CoroutineScope(Dispatchers.Main).launch {
             modifyQuoteModel.insertQuoteInDatabase(currentQuote.value!!)
         }
+
     }
 }

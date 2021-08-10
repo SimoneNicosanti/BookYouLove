@@ -192,5 +192,14 @@
         android:id="@+id/quoteWithCameraFragment"
         android:name="it.simone.bookyoulove.view.QuoteWithCameraFragment"
         android:label="fragment_quote_with_camera"
-        tools:layout="@layout/fragment_quote_with_camera" />
+        tools:layout="@layout/fragment_quote_with_camera" >
+        <action
+            android:id="@+id/action_quoteWithCameraFragment_to_quoteWithCameraAnalyzerFragment"
+            app:destination="@id/quoteWithCameraAnalyzerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/quoteWithCameraAnalyzerFragment"
+        android:name="it.simone.bookyoulove.view.QuoteWithCameraAnalyzerFragment"
+        android:label="fragment_quote_with_camera_analyzer"
+        tools:layout="@layout/fragment_quote_with_camera_analyzer" />
 </navigation>

@@ -3,7 +3,7 @@
     package="it.simone.bookyoulove">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -12,8 +12,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BookYouLove">
-        <activity   android:name=".view.MainActivity"
-                    android:windowSoftInputMode="adjustPan">        //Permette di evitare che la bottomBar vada sopra la tastiera
+        <activity android:name=".view.QuoteWithCameraActivity"></activity>
+        <activity
+            android:name=".view.MainActivity"
+            android:windowSoftInputMode="adjustPan">
+            //Permette di evitare che la bottomBar vada sopra la tastiera
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,9 +27,6 @@
         <meta-data
             android:name="com.google.mlkit.vision.DEPENDENCIES"
             android:value="ocr" />
-
     </application>
-
-
 
 </manifest>
