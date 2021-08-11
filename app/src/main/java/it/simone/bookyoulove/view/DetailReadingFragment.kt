@@ -1,28 +1,18 @@
 package it.simone.bookyoulove.view
 
 import android.os.Bundle
-import android.text.InputType
-import android.util.Log
 import android.view.*
-import android.widget.CheckBox
-import androidx.core.os.bundleOf
-import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.*
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.database.entity.StartDate
 import it.simone.bookyoulove.databinding.FragmentDetailReadingBinding
-import it.simone.bookyoulove.view.dialog.CoverLinkPickerFragment
-import it.simone.bookyoulove.view.dialog.DatePickerFragment
 import it.simone.bookyoulove.view.dialog.LoadingDialogFragment
-import it.simone.bookyoulove.view.dialog.PagesPickerFragment
 import it.simone.bookyoulove.viewmodel.DetailReadingViewModel
-import it.simone.bookyoulove.viewmodel.ReadingViewModel
 import java.time.Month
 import java.time.format.TextStyle
 import java.util.*
@@ -43,7 +33,7 @@ class DetailReadingFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        detailReadingVM.loadDetailReadingBook(args.detailTitle, args.detailAuthor, args.detailTime)
+        detailReadingVM.loadDetailReadingBook(args.detailKeyTitle, args.detailKeyAuthor, args.detailTime)
     }
 
 
@@ -105,7 +95,7 @@ class DetailReadingFragment : Fragment() {
         return when (item.itemId) {
             R.id.detailReadingMenuEdit -> {
                 val navController = findNavController()
-                val action = DetailReadingFragmentDirections.actionDetailReadingFragmentToNewReadingBookFragment(args.detailTitle, args.detailAuthor, args.detailTime)
+                val action = DetailReadingFragmentDirections.actionDetailReadingFragmentToNewReadingBookFragment(args.detailKeyTitle, args.detailKeyAuthor, args.detailTime)
                 navController.navigate(action)
                 true
             }

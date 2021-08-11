@@ -17,11 +17,12 @@ class ReadingModel(context: Context) {
     suspend fun getReadingBookArray(): Array<ShowedBookInfo> {
         val array: Array<ShowedBookInfo>
         withContext(Dispatchers.IO) {
-            array = formatLoadedBookInfo(myAppDatabase.bookDao().loadShowedBookInfoByState(READING_BOOK_STATE))
+            array = myAppDatabase.bookDao().loadShowedBookInfoByState(READING_BOOK_STATE)
         }
         return array
     }
 
+    /*
     private fun formatLoadedBookInfo(loadedArray: Array<NotFormattedShowedBookInfo>): Array<ShowedBookInfo> {
         val supportList : MutableList<ShowedBookInfo> = mutableListOf()
         for (elem in loadedArray) {
@@ -35,5 +36,6 @@ class ReadingModel(context: Context) {
         }
         return supportList.toTypedArray()
     }
+     */
 
 }

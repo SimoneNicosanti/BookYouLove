@@ -1,25 +1,20 @@
-package it.simone.bookyoulove.view
+package it.simone.bookyoulove.view.quotes
 
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.text.Editable
-import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
-import androidx.core.widget.doAfterTextChanged
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.navigation.navGraphViewModels
 import com.google.common.util.concurrent.ListenableFuture
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.entity.Quote
@@ -30,7 +25,7 @@ import it.simone.bookyoulove.viewmodel.ModifyQuoteViewModel
 class ModifyQuoteFragment : Fragment(), View.OnClickListener {
 
     private lateinit var binding : FragmentModifyQuoteBinding
-    private val modifyQuoteVM : ModifyQuoteViewModel by activityViewModels()
+    private val modifyQuoteVM : ModifyQuoteViewModel by viewModels()
 
     private val args : ModifyQuoteFragmentArgs by navArgs()
 
@@ -51,6 +46,7 @@ class ModifyQuoteFragment : Fragment(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         modifyQuoteVM.changeQuoteTitle(args.bookTitle)
         modifyQuoteVM.changeQuoteAuthor(args.bookAuthor)
+        modifyQuoteVM.changeQuoteReadTime(args.readTime)
 
         cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
     }
@@ -72,13 +68,18 @@ class ModifyQuoteFragment : Fragment(), View.OnClickListener {
         }
         binding.modifyQuoteQuoteEditText.doOnTextChanged { text, _ , _ , _ ->
             modifyQuoteVM.changeQuoteText(text.toString())
-            Log.i("Nicosanti", "Do on Text ${text.toString()}")
         }
         binding.modifyQuoteThoughtEditText.doOnTextChanged {text, _, _, _ ->
             modifyQuoteVM.changeQuoteThought(text.toString())
         }
 
         binding.modifyQuoteSaveButton.setOnClickListener(this)
+
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<String>("scannedQuoteKey")?.observe(viewLifecycleOwner) {
+            //Triggera la doOnTextChange che salva la quote nell'istanza di quote salvata in VM
+            binding.modifyQuoteQuoteEditText.setText(it)
+            findNavController().currentBackStackEntry?.savedStateHandle?.remove<String>("scannedQuoteKey")
+        }
 
         return binding.root
     }
@@ -94,20 +95,10 @@ class ModifyQuoteFragment : Fragment(), View.OnClickListener {
 
     private fun setObservers() {
         val currentQuoteObserver = Observer<Quote> { newQuote ->
-            Log.i("Nicosanti", "Observer")
             isSettedFavorite = newQuote.favourite
-
-            Log.i("Nicosanti", newQuote.quoteText)
         }
         modifyQuoteVM.currentQuote.observe(viewLifecycleOwner, currentQuoteObserver)
 
-        val currentScannedText = Observer<String?> { newScannedString ->
-            if (newScannedString != null) {
-                binding.modifyQuoteQuoteEditText.text = Editable.Factory.getInstance().newEditable(newScannedString)
-                modifyQuoteVM.onTextScanned(null)
-            }
-        }
-        modifyQuoteVM.currentTextScanned.observe(viewLifecycleOwner, currentScannedText)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

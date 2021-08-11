@@ -83,7 +83,7 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
         })
 
         //Controllo se non null perché nel caso in cui si faccia direttamente l'aggiunta di un libro Ended il parametro è null
-        if (args.modifyEndedTitle != null) modifyEndedVM.setBookToModify(args.modifyEndedTitle!!, args.modifyEndedAuthor!!, args.modifyEndedTime)
+        if (args.modifyEndedKeyTitle != null) modifyEndedVM.setBookToModify(args.modifyEndedKeyTitle!!, args.modifyEndedKeyAuthor!!, args.modifyEndedTime)
     }
 
 
@@ -208,7 +208,7 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
                 val ebookCheck = binding.modifyEndedEbookCheck.isChecked
                 val audiobookCheck = binding.modifyEndedAudiobookCheck.isChecked
 
-                val supportMap = mapOf<String, Boolean>(PAPER_SUPPORT to paperCheck , EBOOK_SUPPORT to ebookCheck, AUDIOBOOK_SUPPORT to audiobookCheck)
+                val supportMap = mapOf(PAPER_SUPPORT to paperCheck , EBOOK_SUPPORT to ebookCheck, AUDIOBOOK_SUPPORT to audiobookCheck)
 
                 modifyEndedVM.modifySupport(supportMap)
             }

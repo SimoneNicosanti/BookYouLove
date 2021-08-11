@@ -24,10 +24,6 @@ class NewReadingBookViewModel(application: Application): AndroidViewModel(applic
     private val newReadingBookModel = NewReadingBookModel(AppDatabase.getDatabaseInstance(application.applicationContext))
 
 
-    private var loadedTitle : String? = null
-    private var loadedAuthor : String? = null
-    private var loadedTime : Int = 0
-
     val currentBook = MutableLiveData<Book>()
     val currentAuthorArray = MutableLiveData<Array<String>>()
     val isAccessingDatabase = MutableLiveData<Boolean>()
@@ -46,6 +42,8 @@ class NewReadingBookViewModel(application: Application): AndroidViewModel(applic
         currentBook.value = Book("",
             "",
             0,
+            title = "",
+            author = "",
             startDate,
             null,
             BookSupport(paperSupport = false, ebookSupport = false, audiobookSupport = false),
@@ -73,25 +71,19 @@ class NewReadingBookViewModel(application: Application): AndroidViewModel(applic
         isAccessingDatabase.value = true
 
         CoroutineScope(Dispatchers.Main).launch {
-            if (loadedTitle != null) {
+            if (currentBook.value!!.keyTitle != "") {
                 //Sto in caso di modifica di un libro precedente
-                if (loadedTitle != currentBook.value?.title || loadedAuthor != currentBook.value?.author) {
-                    val bookToRemove = Book(
-                        loadedTitle!!, loadedAuthor!!, loadedTime,
-                        null,
-                        null,
-                        null,
-                        "",
-                        0,
-                        null,
-                        "",
-                        READING_BOOK_STATE
-                    )
-                    newReadingBookModel.removeBookFromDatabase(bookToRemove)
-                    newReadingBookModel.addNewBookInDatabase(currentBook.value!!)
+                if (currentBook.value!!.keyTitle != newReadingBookModel.formatKeyInfo(currentBook.value?.title!!) ||
+                    currentBook.value!!.keyAuthor != newReadingBookModel.formatKeyInfo(currentBook.value?.author!!)) {
+                        //Sono stati modificati titolo e autore in qualcosa che modifica la chiave!!
+
+                    newReadingBookModel.removeBookFromDatabase(currentBook.value!!)
+                    newReadingBookModel.addNewBookInDatabase(currentBook.value!!.copy())
+                    newReadingBookModel.changeQuotesInfoInDatabase(currentBook.value!!)
                 }
 
                 else {
+                    // Anche se modificati titole e autore la chiave rimane uguale
                     newReadingBookModel.updateReadingBookInDatabase(currentBook.value!!)
                 }
             }
@@ -106,13 +98,10 @@ class NewReadingBookViewModel(application: Application): AndroidViewModel(applic
     }
 
 
-    fun loadReadingBookToModify(readingModifyTitle: String, readingModifyAuthor: String, readingModifyTime: Int) {
+    fun loadReadingBookToModify(readingModifyKeyTitle: String, readingModifyKeyAuthor: String, readingModifyTime: Int) {
         isAccessingDatabase.value = true
-        loadedTitle = readingModifyTitle
-        loadedAuthor = readingModifyAuthor
-        loadedTime = readingModifyTime
         viewModelScope.launch {
-            currentBook.value = newReadingBookModel.loadReadingBookToModifyFromDatabase(readingModifyTitle, readingModifyAuthor, readingModifyTime)
+            currentBook.value = newReadingBookModel.loadReadingBookToModifyFromDatabase(readingModifyKeyTitle, readingModifyKeyAuthor, readingModifyTime)
             isAccessingDatabase.value = false
         }
     }

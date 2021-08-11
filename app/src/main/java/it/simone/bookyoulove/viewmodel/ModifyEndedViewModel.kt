@@ -86,7 +86,16 @@ class ModifyEndedViewModel(application : Application) : AndroidViewModel(applica
          */
         if (modified) {
             val modifiedBook = currentBook.value!!
-            finalBook = ShowedBookInfo(modifiedBook.title, modifiedBook.author, modifiedBook.readTime, modifiedBook.coverName, modifiedBook.startDate, modifiedBook.endDate, modifiedBook.rate?.totalRate)
+            finalBook = ShowedBookInfo(
+                    modifiedBook.keyTitle,
+                    modifiedBook.keyAuthor,
+                    modifiedBook.readTime,
+                    modifiedBook.title,
+                    modifiedBook.author,
+                    modifiedBook.coverName,
+                    modifiedBook.startDate,
+                    modifiedBook.endDate,
+                    modifiedBook.rate?.totalRate)
             //isAccessingDatabase.value = true
             CoroutineScope(Dispatchers.Main).launch {
                 modifyEndedModel.saveChangedBook(currentBook.value!!)
@@ -97,13 +106,13 @@ class ModifyEndedViewModel(application : Application) : AndroidViewModel(applica
     }
 
 
-    fun setBookToModify(modifyEndedTitle: String, modifyEndedAuthor: String, modifyEndedTime: Int) {
+    fun setBookToModify(modifyEndedKeyTitle: String, modifyEndedKeyAuthor: String, modifyEndedTime: Int) {
         if (!loadedOnce) {
             isAccessingDatabase.value = true
             viewModelScope.launch {
                 currentBook.value = modifyEndedModel.loadEndedBookToModify(
-                    modifyEndedTitle,
-                    modifyEndedAuthor,
+                    modifyEndedKeyTitle,
+                    modifyEndedKeyAuthor,
                     modifyEndedTime
                 )
                 currentStartDate = currentBook.value!!.startDate!!

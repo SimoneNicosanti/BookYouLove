@@ -1,38 +1,23 @@
-package it.simone.bookyoulove.view
+package it.simone.bookyoulove.view.quotes
 
-import android.annotation.SuppressLint
-import android.app.ActivityOptions
 import android.content.pm.ActivityInfo
-import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.util.Log
-import android.util.Size
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.OrientationEventListener
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.addCallback
 import androidx.camera.core.*
-import androidx.camera.core.impl.utils.Exif
 import androidx.camera.core.impl.utils.executor.CameraXExecutors
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.commit
 import androidx.navigation.fragment.findNavController
 import com.google.common.util.concurrent.ListenableFuture
-import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.text.TextRecognition
-import com.google.mlkit.vision.text.TextRecognizerOptions
 import it.simone.bookyoulove.databinding.FragmentQuoteWithCameraBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.File
-import java.util.concurrent.Executor
-import java.util.concurrent.Executors
 
 
 class QuoteWithCameraFragment : Fragment() {

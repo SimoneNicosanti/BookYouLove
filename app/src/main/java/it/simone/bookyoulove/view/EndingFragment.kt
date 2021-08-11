@@ -46,13 +46,13 @@ class EndingFragment : Fragment(), View.OnClickListener, RatingBar.OnRatingBarCh
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        childFragmentManager.setFragmentResultListener("endDateKey", this, { key, bundle ->
+        childFragmentManager.setFragmentResultListener("endDateKey", this, { _, bundle ->
             val settedEndDate = EndDate(bundle.getInt("day"), bundle.getInt("month"), bundle.getInt("year"))
             binding.endingEndDateText.text = computeEndDateString(settedEndDate)
             endingVM.setEndDate(settedEndDate)
         })
 
-        endingVM.loadEndingBook(args.endingTitle, args.endingAuthor, args.endingTime)
+        endingVM.loadEndingBook(args.endingKeyTitle, args.endingKeyAuthor, args.endingTime)
     }
 
 

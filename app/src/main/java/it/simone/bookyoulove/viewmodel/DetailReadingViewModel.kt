@@ -28,13 +28,13 @@ class DetailReadingViewModel(application : Application) : AndroidViewModel(appli
     val isAccessingDatabase = MutableLiveData<Boolean>()
     val currentBook = MutableLiveData<Book>()
 
-    fun loadDetailReadingBook(detailTitle: String, detailAuthor: String, detailTime: Int) {
+    fun loadDetailReadingBook(detailKeyTitle: String, detailKeyAuthor: String, detailTime: Int) {
         if (!loadedOnce) {
             isAccessingDatabase.value = true
             viewModelScope.launch {
                 currentBook.value = detailReadingModel.loadDetailReadingBookFromDatabase(
-                    detailTitle,
-                    detailAuthor,
+                    detailKeyTitle,
+                    detailKeyAuthor,
                     detailTime
                 )
                 loadedOnce = true

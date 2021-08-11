@@ -19,4 +19,7 @@
         android:icon="@drawable/ic_round_edit_note"
         android:title="@string/take_note_string"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/readingContextMenuQuotesListItem"
+        android:title="@string/your_quotes_string" />
 </menu>

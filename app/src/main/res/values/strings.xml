@@ -78,5 +78,7 @@
     <string name="quote_thought_string">Your Thought</string>
     <string name="obligatory_quote_text_string">Obligatory Quote Text</string>
     <string name="rotate_string">Rotate</string>
+    <string name="your_quotes_string">Your Quotes</string>
+    <string name="begin_read_string">Begin Read</string>
 
 </resources>

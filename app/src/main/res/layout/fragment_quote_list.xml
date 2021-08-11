@@ -4,18 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center_horizontal"
-    tools:context=".view.EndedFragment">
+    tools:context=".view.quotes.QuoteListFragment" >
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/endedRecyclerView"
+        android:id="@+id/quotesListRecyclerView"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:foregroundGravity="center_horizontal"
-        app:layoutManager="GridLayoutManager"
+        app:layoutManager="StaggeredGridLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:spanCount="@integer/ended_grid_row_item_count_portr" />
+        app:spanCount="2" />
 </androidx.constraintlayout.widget.ConstraintLayout>

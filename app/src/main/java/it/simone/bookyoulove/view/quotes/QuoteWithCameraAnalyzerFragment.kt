@@ -1,4 +1,4 @@
-package it.simone.bookyoulove.view
+package it.simone.bookyoulove.view.quotes
 
 import android.annotation.SuppressLint
 import android.net.Uri
@@ -8,9 +8,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.camera.core.impl.utils.Exif
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.google.mlkit.vision.common.InputImage
@@ -32,7 +34,7 @@ import java.io.IOException
 class QuoteWithCameraAnalyzerFragment : Fragment() , View.OnClickListener{
 
     private lateinit var binding : FragmentQuoteWithCameraAnalyzerBinding
-    private val modifyQuoteVM : ModifyQuoteViewModel by activityViewModels()
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -67,15 +69,15 @@ class QuoteWithCameraAnalyzerFragment : Fragment() , View.OnClickListener{
 
                     var scannedQuote : String? = null
                     withContext(Dispatchers.Default) {
-                        Log.i("Nicosanti", "OCR")
                         if (image != null) {
                             val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
                             val resultQuote = recognizer.process(image)
                                 .addOnSuccessListener { visionText ->
                                     scannedQuote = visionText.text
                                     loadingDialog.dismiss()
-                                    modifyQuoteVM.changeQuoteText(if (scannedQuote != null) scannedQuote!! else "")
-                                    //Non si dovrebbe usare, ma questo mi evita di ripassare indietro per il fragment della camera
+
+                                    //Non dovrei utilizzare un riferimento diretto al fragment a cui devo andare... però vabbè
+                                    findNavController().getBackStackEntry(R.id.modifyQuoteFragment).savedStateHandle.set("scannedQuoteKey", scannedQuote)
                                     findNavController().popBackStack(R.id.modifyQuoteFragment, false)
                                 }
                                 .addOnFailureListener { e ->

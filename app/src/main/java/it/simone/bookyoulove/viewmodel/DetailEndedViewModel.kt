@@ -1,7 +1,6 @@
 package it.simone.bookyoulove.viewmodel
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -28,7 +27,6 @@ class DetailEndedViewModel(application: Application) : AndroidViewModel(applicat
     val deleteCompleted = MutableLiveData<Boolean>()
 
 
-
     fun deleteCurrentBook() {
         isAccessingDatabase.value = true
         CoroutineScope(Dispatchers.Main).launch {
@@ -38,11 +36,11 @@ class DetailEndedViewModel(application: Application) : AndroidViewModel(applicat
         }
     }
 
-    fun loadEndedDetailBook(endedDetailTitle: String, endedDetailAuthor: String, endedDetailTime: Int) {
+    fun loadEndedDetailBook(endedDetailKeyTitle: String, endedDetailKeyAuthor: String, endedDetailTime: Int) {
         if (!loadedOnce) {
             isAccessingDatabase.value = true
             viewModelScope.launch {
-                currentBook.value = detailEndedModel.loadEndedDetailBook(endedDetailTitle, endedDetailAuthor, endedDetailTime)
+                currentBook.value = detailEndedModel.loadEndedDetailBook(endedDetailKeyTitle, endedDetailKeyAuthor, endedDetailTime)
                 isAccessingDatabase.value = false
             }
         }
@@ -50,6 +48,5 @@ class DetailEndedViewModel(application: Application) : AndroidViewModel(applicat
 
     fun changeThought(newThought: String) {
         currentBook.value?.finalThought = newThought
-
     }
 }

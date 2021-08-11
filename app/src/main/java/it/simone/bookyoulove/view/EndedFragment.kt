@@ -143,11 +143,10 @@ class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListene
 
     override fun onRecyclerViewItemSelected(position: Int) {
         val selectedBook : ShowedBookInfo = endedBookArray[position]
-        //Toast.makeText(requireContext(), "Selected ${selectedBook.title}", Toast.LENGTH_SHORT).show()
         endedVM.setSelectedBook(selectedBook)
         endedVM.currentSelectedPosition = position
         val navController = findNavController()
-        val action = EndedFragmentDirections.actionEndedFragmentToEndedDetailFragment(selectedBook.title, selectedBook.author, selectedBook.readTime)
+        val action = EndedFragmentDirections.actionEndedFragmentToEndedDetailFragment(selectedBook.keyTitle, selectedBook.keyAuthor, selectedBook.readTime)
         navController.navigate(action)
     }
 

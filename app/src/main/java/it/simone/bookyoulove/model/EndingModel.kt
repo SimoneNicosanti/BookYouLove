@@ -16,11 +16,11 @@ class EndingModel(val myAppDatabase: AppDatabase) {
         }
     }
 
-    suspend fun loadEndingBook(endingTitle: String, endingAuthor: String, endingTime: Int): Book {
+    suspend fun loadEndingBook(endingKeyTitle: String, endingKeyAuthor: String, endingTime: Int): Book {
         //Non ritorno Book? perché se lo sto terminando sicuramente è in DB
         val endingBook : Book
         withContext(Dispatchers.IO) {
-            endingBook = myAppDatabase.bookDao().loadSpecificBook(endingTitle, endingAuthor, endingTime)
+            endingBook = myAppDatabase.bookDao().loadSpecificBook(endingKeyTitle, endingKeyAuthor, endingTime)
         }
         return  endingBook
     }

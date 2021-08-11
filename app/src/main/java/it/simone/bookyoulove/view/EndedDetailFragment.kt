@@ -9,7 +9,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.PagerSnapHelper
 import com.squareup.picasso.Picasso
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.entity.Book
@@ -38,6 +37,7 @@ class EndedDetailFragment : Fragment() {
 
     private lateinit var endedFinalThought : String
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -49,7 +49,7 @@ class EndedDetailFragment : Fragment() {
             }
         }
 
-        endedDetailVM.loadEndedDetailBook(args.endedDetailTitle, args.endedDetailAuthor, args.endedDetailTime)
+        endedDetailVM.loadEndedDetailBook(args.endedDetailKeyTitle, args.endedDetailKeyAuthor, args.endedDetailTime)
 
         setHasOptionsMenu(true)
     }
@@ -62,7 +62,7 @@ class EndedDetailFragment : Fragment() {
 
         binding.endedDetailFinalThoughtButton.setOnClickListener {
             val navController = findNavController()
-            val action = EndedDetailFragmentDirections.actionEndedDetailFragmentToEndedThoughtFragment(endedFinalThought, args.endedDetailTitle, args.endedDetailAuthor, args.endedDetailTime)
+            val action = EndedDetailFragmentDirections.actionEndedDetailFragmentToEndedThoughtFragment(endedFinalThought, args.endedDetailKeyTitle, args.endedDetailKeyAuthor, args.endedDetailTime)
             navController.navigate(action)
         }
 
@@ -159,7 +159,7 @@ class EndedDetailFragment : Fragment() {
 
             R.id.endedDetailMenuEditItem -> {
                 val navController = findNavController()
-                val action = EndedDetailFragmentDirections.actionEndedDetailFragmentToModifyEndedFragment(args.endedDetailTitle, args.endedDetailAuthor, args.endedDetailTime)
+                val action = EndedDetailFragmentDirections.actionEndedDetailFragmentToModifyEndedFragment(args.endedDetailKeyTitle, args.endedDetailKeyAuthor, args.endedDetailTime)
                 navController.navigate(action)
                 true
             }

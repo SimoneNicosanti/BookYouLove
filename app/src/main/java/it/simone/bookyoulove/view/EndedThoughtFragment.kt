@@ -43,12 +43,11 @@ class EndedThoughtFragment : Fragment() {
         binding.endedThoughtEditText.setText(args.endedFinalThought)
         endedThoughtVM.updateThought(args.endedFinalThought)
 
-        binding.endedThoughtTitleTextView.text = args.endedDetailTitle + "\n${getString(R.string.final_thought_string)}"
+        binding.endedThoughtTitleTextView.text = getString(R.string.final_thought_string)
         setUI(isEditing)
 
         binding.endedThoughtEditText.doOnTextChanged { text, _, _, _ ->
             endedThoughtVM.updateThought(text.toString())
-
         }
 
         return binding.root
@@ -58,7 +57,6 @@ class EndedThoughtFragment : Fragment() {
     private fun setUI(editing: Boolean) {
         binding.endedThoughtEditText.isEnabled = editing
         //TODO("Sistemare colori in night mode")
-
     }
 
 
@@ -79,7 +77,7 @@ class EndedThoughtFragment : Fragment() {
             R.id.endedFinalThoughtEdit -> {
                 if (isEditing) {
                     item.setIcon(R.drawable.ic_round_edit_reading_details)
-                    endedThoughtVM.saveNewThought(args.endedDetailTitle, args.endedDetailAuthor, args.endedDetailTime)
+                    endedThoughtVM.saveNewThought(args.endedDetailKeyTitle, args.endedDetailKeyAuthor, args.endedDetailTime)
                     findNavController().previousBackStackEntry?.savedStateHandle?.set("changedFinalThoughtKey", binding.endedThoughtEditText.text.toString())
                 }
                 else {

@@ -92,12 +92,9 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
             viewModelScope.launch {
                 when (filterParam) {
                     SEARCH_BY_TITLE -> currentReadList.value = (loadedArray.filter {
-                        it.title.toLowerCase(
-                            Locale.getDefault()).contains(newText) }).toTypedArray()
+                        it.keyTitle.contains(newText) }).toTypedArray()
 
-                    SEARCH_BY_AUTHOR -> currentReadList.value = (loadedArray.filter {it.author.toLowerCase(
-                        Locale.getDefault()
-                    ).contains(newText)}).toTypedArray()
+                    SEARCH_BY_AUTHOR -> currentReadList.value = (loadedArray.filter {it.keyAuthor.contains(newText)}).toTypedArray()
                     else -> {
                         val searchRate = newText.toFloat()
                         currentReadList.value = (loadedArray.filter {it.totalRate == searchRate}).toTypedArray()

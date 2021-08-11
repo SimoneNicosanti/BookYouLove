@@ -25,31 +25,8 @@ class ReadingViewModel(application: Application) : AndroidViewModel(application)
 
     //Gestione Visualizzazione
     val isAccessingDatabase = MutableLiveData<Boolean>()                            //Permette di mostrare un DialogFragment con una rotella che gira nel caso di operazioni di accesso a DB
-    //val currentShowBook = MutableLiveData<ShowedBookInfo?>()                             //Info relative al libro mostrato attualmente
     var changedReadingList = MutableLiveData<Boolean>(true)                   //Comunicazione al fragment che la lista di libri in lettura è stata modificata da qualche altro fragment
     val currentReadingBookArray = MutableLiveData<Array<ShowedBookInfo>>()
-
-    /*
-    fun getNextBook() {
-        currentBookIndex = (currentBookIndex + 1) % currentReadingBookArray.size
-        setShowedBook()
-    }
-
-    fun getPrevBook() {
-        currentBookIndex = (currentBookIndex - 1)
-        currentBookIndex = if (currentBookIndex < 0) (currentReadingBookArray.size - 1) else currentBookIndex
-        setShowedBook()
-    }
-
-    private fun setShowedBook() {
-        if (currentReadingBookArray.isEmpty()) currentShowBook.value = null
-        else currentShowBook.value = currentReadingBookArray[currentBookIndex]
-    }
-
-    fun restartShowedBook() {
-        currentBookIndex = 0
-        loadReadingBookList()
-    }*/
 
 
     fun loadReadingBookList() {
@@ -58,7 +35,6 @@ class ReadingViewModel(application: Application) : AndroidViewModel(application)
             currentReadingBookArray.value = readingModel.getReadingBookArray()
             isAccessingDatabase.value = false
             changedReadingList.value = false
-            //setShowedBook()
         }
     }
 
@@ -79,7 +55,6 @@ class ReadingViewModel(application: Application) : AndroidViewModel(application)
         supportList?.removeAt(currentBookIndex)
         currentBookIndex = 0
         currentReadingBookArray.value = supportList?.toTypedArray()
-        //setShowedBook()
     }
 
     fun setCurrentItemPosition(position: Int) {

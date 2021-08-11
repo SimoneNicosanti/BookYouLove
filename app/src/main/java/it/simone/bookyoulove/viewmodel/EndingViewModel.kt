@@ -31,7 +31,6 @@ class EndingViewModel(application: Application) : AndroidViewModel(application) 
     private fun prepareTerminateBook() {
         loadedBook.rate = Rate(0F,0F,0F,0F,0F)
 
-        val cal = Calendar.getInstance()
         /*
             Imposto la data di fine iniziale coincidente con la data di inizio.
             Questo mi permette di evitare situazioni patologiche sulle date, che si verificherebbero se impostassi
@@ -85,12 +84,12 @@ class EndingViewModel(application: Application) : AndroidViewModel(application) 
     }
 
 
-    fun loadEndingBook(endingTitle: String, endingAuthor: String, endingTime: Int) {
+    fun loadEndingBook(endingKeyTitle: String, endingKeyAuthor: String, endingTime: Int) {
         if (!loadedOnce) {
 
             isAccessingDatabase.value = true
             viewModelScope.launch {
-                loadedBook = endingModel.loadEndingBook(endingTitle, endingAuthor, endingTime)
+                loadedBook = endingModel.loadEndingBook(endingKeyTitle, endingKeyAuthor, endingTime)
                 loadedOnce = true
                 prepareTerminateBook()
                 isAccessingDatabase.value = false

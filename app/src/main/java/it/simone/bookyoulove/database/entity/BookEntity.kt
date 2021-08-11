@@ -32,12 +32,15 @@ data class BookSupport (
     )
 
 
-@Entity(primaryKeys = ["title", "author", "readTime"])
+@Entity(primaryKeys = ["keyTitle", "keyAuthor", "readTime"])
 data class Book (
 
-    var title: String,
-    var author: String,
+    var keyTitle: String,
+    var keyAuthor: String,
     var readTime: Int,
+
+    var title : String,
+    var author : String,
 
     @Embedded var startDate: StartDate?,
     @Embedded var endDate: EndDate?,

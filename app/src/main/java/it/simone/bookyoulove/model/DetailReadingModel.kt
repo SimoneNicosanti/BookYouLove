@@ -9,10 +9,10 @@ import kotlinx.coroutines.withContext
 
 class DetailReadingModel(private val myAppDatabase: AppDatabase) {
 
-    suspend fun loadDetailReadingBookFromDatabase(detailTitle: String, detailAuthor: String, detailTime: Int): Book? {
+    suspend fun loadDetailReadingBookFromDatabase(detailKeyTitle: String, detailKeyAuthor: String, detailTime: Int): Book {
         val readingBook : Book
         withContext(Dispatchers.IO) {
-            readingBook = myAppDatabase.bookDao().loadSpecificBook(detailTitle, detailAuthor, detailTime)
+            readingBook = myAppDatabase.bookDao().loadSpecificBook(detailKeyTitle, detailKeyAuthor, detailTime)
         }
         return readingBook
     }

@@ -19,7 +19,6 @@ class ModifyQuoteViewModel(application: Application) : AndroidViewModel(applicat
     private val modifyQuoteModel = ModifyQuoteModel(myAppDatabase)
 
     val currentQuote = MutableLiveData<Quote>()
-    val currentTextScanned = MutableLiveData<String?>()
 
     init {
         val cal = Calendar.getInstance()
@@ -27,15 +26,18 @@ class ModifyQuoteViewModel(application: Application) : AndroidViewModel(applicat
         val month = cal.get(Calendar.MONTH) + 1
         val year = cal.get(Calendar.YEAR)
         currentQuote.value = Quote(
-            quoteText = "",
-            bookTitle = "",
-            bookAuthor = "",
-            favourite = false,
-            toWidget = false,
-            quotePage = 0,
-            quoteChapter = "",
-            quoteThought = "",
-            date = StartDate(startDay = day, startMonth = month, startYear = year))
+                quoteText = "",
+                keyTitle = "",
+                readTime = 0,
+                keyAuthor = "",
+                bookTitle = "",
+                bookAuthor = "",
+                favourite = false,
+                toWidget = false,
+                quotePage = 0,
+                quoteChapter = "",
+                quoteThought = "",
+                date = StartDate(startDay = day, startMonth = month, startYear = year))
     }
 
 
@@ -58,25 +60,27 @@ class ModifyQuoteViewModel(application: Application) : AndroidViewModel(applicat
     }
 
     fun changeQuoteTitle(bookTitle: String) {
+        //Da titolo --> Chiave, ma non posso fare viceversa!!
         currentQuote.value!!.bookTitle = bookTitle
+        currentQuote.value!!.keyTitle = modifyQuoteModel.formatKeyInfo(bookTitle)
     }
 
     fun changeQuoteAuthor(bookAuthor: String) {
         currentQuote.value!!.bookAuthor = bookAuthor
+        currentQuote.value!!.keyAuthor = modifyQuoteModel.formatKeyInfo(bookAuthor)
     }
 
     fun changeQuoteFavorite(isFavorite : Boolean) {
         currentQuote.value!!.favourite = isFavorite
     }
 
-    fun onTextScanned(scannedQuote: String?) {
-        currentTextScanned.value = scannedQuote
-    }
-
     fun saveQuote() {
         CoroutineScope(Dispatchers.Main).launch {
             modifyQuoteModel.insertQuoteInDatabase(currentQuote.value!!)
         }
+    }
 
+    fun changeQuoteReadTime(readTime: Int) {
+        currentQuote.value!!.readTime = readTime
     }
 }

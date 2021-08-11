@@ -143,6 +143,12 @@ class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItem
                 }
                 true
             }
+
+            R.id.navViewMenuQuotesItem -> {
+                val action = ChartsFragmentDirections.actionGlobalQuoteListFragment(null, null, 0)
+                navController.navigate(action)
+                true
+            }
             else -> false
 
 

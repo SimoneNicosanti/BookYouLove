@@ -1,7 +1,9 @@
 package it.simone.bookyoulove.model
 
+import android.util.Log
 import it.simone.bookyoulove.database.AppDatabase
 import it.simone.bookyoulove.database.DAO.NotFormattedShowedBookInfo
+import it.simone.bookyoulove.database.DAO.ShowedBookInfo
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.view.READING_BOOK_STATE
 import kotlinx.coroutines.Dispatchers
@@ -11,8 +13,8 @@ import java.util.*
 class NewReadingBookModel(val myAppDatabase : AppDatabase){
 
 
-    private suspend fun checkPresenceByState(title: String, author: String, readState: Int): Boolean {
-        val sameBookArray: Array<NotFormattedShowedBookInfo>
+    private suspend fun checkPresenceByState(keyTitle: String, keyAuthor: String, readState: Int): Boolean {
+        val sameBookArray: Array<ShowedBookInfo>
         var isPresent = false
         withContext(Dispatchers.IO) {
             sameBookArray = myAppDatabase.bookDao().loadShowedBookInfoByState(readState)
@@ -20,7 +22,7 @@ class NewReadingBookModel(val myAppDatabase : AppDatabase){
         //Me li vedo tutti ma non dovrebbero essere molti
         withContext(Dispatchers.Default) {
             for (book in sameBookArray) {
-                if (book.title == title && book.author == author) isPresent = true
+                if (book.keyTitle == keyTitle && book.keyAuthor == keyAuthor) isPresent = true
             }
         }
         return isPresent
@@ -28,11 +30,11 @@ class NewReadingBookModel(val myAppDatabase : AppDatabase){
     }
 
 
-    private suspend fun computeReadTime(title: String, author: String) : Int {
+    private suspend fun computeReadTime(keyTitle: String, keyAuthor: String) : Int {
         val sameBookArray: Array<Book>
         var maxReadTime = 0
         withContext(Dispatchers.IO) {
-            sameBookArray = myAppDatabase.bookDao().loadSameBook(title, author)
+            sameBookArray = myAppDatabase.bookDao().loadSameBook(keyTitle, keyAuthor)
             withContext(Dispatchers.Default) {
                 for (book in sameBookArray) {
                     if (book.readTime > maxReadTime) maxReadTime = book.readTime
@@ -40,14 +42,6 @@ class NewReadingBookModel(val myAppDatabase : AppDatabase){
             }
         }
         return maxReadTime + 1
-    }
-
-
-    private fun capitalizeAll(string: String) : String {
-        return string.split(" ").joinToString(" ") { it.toLowerCase(Locale.getDefault()).capitalize(
-            Locale.getDefault()
-        )
-        }
     }
 
 
@@ -80,17 +74,50 @@ class NewReadingBookModel(val myAppDatabase : AppDatabase){
     }
 
     suspend fun addNewBookInDatabase(newReadingBook : Book) {
-        if (!checkPresenceByState(newReadingBook.title, newReadingBook.author, READING_BOOK_STATE)) {
-            newReadingBook.readTime = computeReadTime(newReadingBook.title, newReadingBook.author)
+        newReadingBook.keyTitle = formatKeyInfo(newReadingBook.title)
+        newReadingBook.keyAuthor = formatKeyInfo(newReadingBook.author)
+        if (!checkPresenceByState(newReadingBook.keyTitle, newReadingBook.keyAuthor, READING_BOOK_STATE)) {
+            newReadingBook.readTime = computeReadTime(newReadingBook.keyTitle, newReadingBook.keyAuthor)
             withContext(Dispatchers.IO) {
                 myAppDatabase.bookDao().insertBooks(newReadingBook)
             }
         }
     }
 
+    fun formatKeyInfo(notFormattedKey: String): String {
+        //Todo("Potrei ad esempio farla più complessa : togliere spazi e simboli superflui
+        var formattedKey = ""
+        for (char in notFormattedKey) {
+            formattedKey += char.toLowerCase()
+        }
+        return formattedKey
+    }
+
     suspend fun updateReadingBookInDatabase(bookToUpdate: Book) {
         withContext(Dispatchers.IO) {
             myAppDatabase.bookDao().updateBooks(bookToUpdate)
+        }
+    }
+
+    suspend fun changeQuotesInfoInDatabase(changedBook : Book) {
+
+        withContext(Dispatchers.IO) {
+            val oldQuotesArray = myAppDatabase.quoteDao().loadQuotesByBook(changedBook.keyTitle, changedBook.keyAuthor, changedBook.readTime)
+
+            val newKeyTitle = formatKeyInfo(changedBook.title)
+            val newKeyAuthor = formatKeyInfo(changedBook.author)
+            val newReadTime = computeReadTime(newKeyTitle, newKeyAuthor) - 1
+
+            for (quote in oldQuotesArray) {
+                myAppDatabase.quoteDao().deleteQuote(quote)
+                quote.keyTitle = newKeyTitle
+                quote.keyAuthor = newKeyAuthor
+                quote.readTime = newReadTime
+
+                quote.bookTitle = changedBook.title
+                quote.bookAuthor = changedBook.author
+                myAppDatabase.quoteDao().insertQuote(quote)
+            }
         }
     }
 

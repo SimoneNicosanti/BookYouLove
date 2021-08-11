@@ -14,10 +14,10 @@ class EndedThoughtViewModel(application: Application) : AndroidViewModel(applica
     val myAppDatabase = AppDatabase.getDatabaseInstance(application.applicationContext)
 
 
-    fun saveNewThought(title : String , author: String, time: Int) {
+    fun saveNewThought(keyTitle : String , keyAuthor: String, time: Int) {
         //Dovrebbe stare in Model con una chiamata
         CoroutineScope(Dispatchers.IO).launch {
-            myAppDatabase.bookDao().updateFinalThoughtByKey(title, author, time, currentThought)
+            myAppDatabase.bookDao().updateFinalThoughtByKey(keyTitle, keyAuthor, time, currentThought)
         }
     }
 

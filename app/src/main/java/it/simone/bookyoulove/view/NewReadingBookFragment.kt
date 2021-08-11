@@ -1,7 +1,6 @@
 package it.simone.bookyoulove.view
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.core.os.bundleOf
@@ -10,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.compose.navArgument
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
@@ -67,8 +65,8 @@ class NewReadingBookFragment : Fragment() , View.OnClickListener {
             newReadingVM.updatePages(pagesResult)
         }
 
-        if (args.readingModifyTitle != null) {
-            newReadingVM.loadReadingBookToModify(args.readingModifyTitle!!, args.readingModifyAuthor!!, args.readingModifyTime)
+        if (args.readingModifyKeyTitle != null) {
+            newReadingVM.loadReadingBookToModify(args.readingModifyKeyTitle!!, args.readingModifyKeyAuthor!!, args.readingModifyTime)
         }
         newReadingVM.loadAuthorArray()
     }
@@ -91,10 +89,10 @@ class NewReadingBookFragment : Fragment() , View.OnClickListener {
 
         setObservers()
 
-        binding.newBookTitleInput.doOnTextChanged { text, start, before, count ->
+        binding.newBookTitleInput.doOnTextChanged { text, _, _, _ ->
             newReadingVM.updateTitle(text)
         }
-        binding.newBookAuthorInput.doOnTextChanged { text, start, before, count ->
+        binding.newBookAuthorInput.doOnTextChanged { text, _, _, _ ->
             newReadingVM.updateAuthor(text)
         }
 
@@ -166,6 +164,7 @@ class NewReadingBookFragment : Fragment() , View.OnClickListener {
                 "Cover Link Picker"
             )
 
+            //TODO("Sostituire number picker con EditText che prende solo numeri : non ho problemi con tipo di input")
             binding.newBookPagesInput -> PagesPickerFragment().show(
                 childFragmentManager,
                 "Pages Picker"

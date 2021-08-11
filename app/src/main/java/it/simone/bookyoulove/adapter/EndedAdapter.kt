@@ -4,13 +4,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.RatingBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.DAO.ShowedBookInfo
-import it.simone.bookyoulove.database.entity.Book
 
 //https://www.youtube.com/watch?v=69C1ljfDvl0
 /*
@@ -22,13 +20,10 @@ class EndedAdapter(private val bookSet: Array<ShowedBookInfo>,
                    private val linearLayoutIndicator : Boolean) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     class GridViewHolder(view: View, private val onRecyclerViewItemSelectedListener: OnRecyclerViewItemSelectedListener) : RecyclerView.ViewHolder(view), View.OnClickListener {
-        val coverImageView : ImageView
-        val titleTextView : TextView
+        val coverImageView : ImageView = view.findViewById(R.id.readCoverImageView)
+        val titleTextView : TextView = view.findViewById(R.id.readTitleTextView)
 
         init {
-            coverImageView = view.findViewById(R.id.readCoverImageView)
-            titleTextView = view.findViewById(R.id.readTitleTextView)
-
             view.setOnClickListener(this)
         }
 
@@ -40,15 +35,11 @@ class EndedAdapter(private val bookSet: Array<ShowedBookInfo>,
 
 
     class LinearViewHolder(view: View, private val onRecyclerViewItemSelectedListener: OnRecyclerViewItemSelectedListener) : RecyclerView.ViewHolder(view), View.OnClickListener {
-        val coverImageView : ImageView
-        val titleTextView : TextView
-        val ratingBar : RatingBar
+        val coverImageView : ImageView = view.findViewById(R.id.linearEndedCoverImageView)
+        val titleTextView : TextView = view.findViewById(R.id.linearEndedTitle)
+        //val ratingBar : RatingBar = view.findViewById(R.id.linearEndedRate)
 
         init {
-            coverImageView = view.findViewById(R.id.linearEndedCoverImageView)
-            titleTextView = view.findViewById(R.id.linearEndedTitle)
-            ratingBar = view.findViewById(R.id.linearEndedRate)
-
             view.setOnClickListener(this)
         }
 
@@ -62,13 +53,13 @@ class EndedAdapter(private val bookSet: Array<ShowedBookInfo>,
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view : View
 
-        if (linearLayoutIndicator) {
+        return if (linearLayoutIndicator) {
             view = LayoutInflater.from(parent.context).inflate(R.layout.ended_list_row_item, parent, false)
-            return LinearViewHolder(view, onRecyclerViewItemSelectedListener)
+            LinearViewHolder(view, onRecyclerViewItemSelectedListener)
         }
         else {
             view = LayoutInflater.from(parent.context).inflate(R.layout.ended_list_grid_item, parent, false)
-            return GridViewHolder(view, onRecyclerViewItemSelectedListener)
+            GridViewHolder(view, onRecyclerViewItemSelectedListener)
         }
     }
 
