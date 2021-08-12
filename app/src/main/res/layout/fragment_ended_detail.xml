@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.EndedDetailFragment">
+    tools:context=".view.ended.EndedDetailFragment">
 
     <ImageView
         android:id="@+id/endedDetailCoverImageView"
@@ -103,7 +103,7 @@
                 android:id="@+id/button3"
                 android:layout_width="12dp"
                 android:layout_height="1034dp"
-                android:visibility="invisible"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -435,11 +435,23 @@
                 android:id="@+id/endedDetailFinalThoughtButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="@dimen/ended_detail_date_vert_marg"
+                android:layout_margin="@dimen/ended_detail_date_vert_marg"
                 android:text="@string/final_thought_string"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:icon="@drawable/ic_round_final_thought"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/endedDetailRateCard" />
+
+            <Button
+                android:id="@+id/endedDetailYourQuotesButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/ended_detail_date_vert_marg"
+                android:text="@string/your_quotes_string"
+                app:icon="@drawable/ic_round_quotes_bottom_bar"
+                app:iconGravity="textEnd"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/endedDetailFinalThoughtButton" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

@@ -1,4 +1,4 @@
-package it.simone.bookyoulove.view
+package it.simone.bookyoulove.view.reading
 
 import android.os.Bundle
 import android.view.*

@@ -7,11 +7,17 @@ import kotlinx.coroutines.withContext
 
 class QuoteDetailModel(private val myAppDatabase: AppDatabase) {
 
-    suspend fun loadSingleQuotFromDatabase(detailQuoteText: String, detailQuoteBookTitle: String, detailQuoteBookAuthor: String): Quote {
+    suspend fun loadSingleQuotFromDatabase(detailQuoteText: String, detailQuoteBookTitle: String, detailQuoteBookAuthor: String, detailQuoteReadTime : Int): Quote {
         val loadedQuote : Quote
         withContext(Dispatchers.IO) {
-            loadedQuote = myAppDatabase.quoteDao().loadSingleQuote(detailQuoteText, detailQuoteBookTitle, detailQuoteBookAuthor)
+            loadedQuote = myAppDatabase.quoteDao().loadSingleQuote(detailQuoteText, detailQuoteBookTitle, detailQuoteBookAuthor, detailQuoteReadTime)
         }
         return loadedQuote
+    }
+
+    suspend fun deleteCurrentQuote(quoteToDelete: Quote) {
+        withContext(Dispatchers.IO) {
+            myAppDatabase.quoteDao().deleteQuote(quoteToDelete)
+        }
     }
 }

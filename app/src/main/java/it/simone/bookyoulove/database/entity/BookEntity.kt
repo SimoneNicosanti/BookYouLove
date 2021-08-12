@@ -3,6 +3,7 @@ package it.simone.bookyoulove.database.entity
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
+import java.io.Serializable
 
 data class StartDate (
         @ColumnInfo var startDay: Int,
@@ -57,4 +58,4 @@ data class Book (
     var finalThought : String,
 
     var readState: Int
-    )
+    ) : Serializable

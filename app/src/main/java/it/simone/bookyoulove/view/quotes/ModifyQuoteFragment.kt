@@ -3,6 +3,7 @@ package it.simone.bookyoulove.view.quotes
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -19,6 +20,7 @@ import com.google.common.util.concurrent.ListenableFuture
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.entity.Quote
 import it.simone.bookyoulove.databinding.FragmentModifyQuoteBinding
+import it.simone.bookyoulove.view.dialog.LoadingDialogFragment
 import it.simone.bookyoulove.viewmodel.ModifyQuoteViewModel
 
 
@@ -30,6 +32,8 @@ class ModifyQuoteFragment : Fragment(), View.OnClickListener {
     private val args : ModifyQuoteFragmentArgs by navArgs()
 
     private var isSettedFavorite = false
+
+    private var loadingDialog = LoadingDialogFragment()
 
     private var requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
         if (isGranted) {
@@ -44,9 +48,17 @@ class ModifyQuoteFragment : Fragment(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        modifyQuoteVM.changeQuoteTitle(args.bookTitle)
-        modifyQuoteVM.changeQuoteAuthor(args.bookAuthor)
-        modifyQuoteVM.changeQuoteReadTime(args.readTime)
+
+        if (args.modifyQuote == null) {
+            //Aggiunta di Quote in libro
+            modifyQuoteVM.changeQuoteTitle(args.bookTitle!!)
+            modifyQuoteVM.changeQuoteAuthor(args.bookAuthor!!)
+            modifyQuoteVM.changeQuoteReadTime(args.bookReadTime)
+        }
+        else {
+            //Modifica di Quote esistente
+            modifyQuoteVM.setModifyQuote(args.modifyQuote!!)
+        }
 
         cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
     }
@@ -96,9 +108,36 @@ class ModifyQuoteFragment : Fragment(), View.OnClickListener {
     private fun setObservers() {
         val currentQuoteObserver = Observer<Quote> { newQuote ->
             isSettedFavorite = newQuote.favourite
+
+            binding.modifyQuoteChapterEditText.setText(newQuote.quoteChapter)
+            binding.modifyQuotePagesEditText.setText(newQuote.quotePage.toString())
+            binding.modifyQuoteQuoteEditText.setText(newQuote.quoteText)
+            binding.modifyQuoteThoughtEditText.setText(newQuote.quoteThought)
         }
         modifyQuoteVM.currentQuote.observe(viewLifecycleOwner, currentQuoteObserver)
 
+        val isAccessingDatabaseObserver = Observer<Boolean> { isAccessing ->
+            if (isAccessing) {
+                loadingDialog.showNow(childFragmentManager, "Loading Dialog")
+            }
+            else {
+                if (loadingDialog.isAdded) {
+                    loadingDialog.dismiss()
+                    loadingDialog = LoadingDialogFragment()
+                }
+            }
+        }
+        modifyQuoteVM.isAccessingDatabase.observe(viewLifecycleOwner, isAccessingDatabaseObserver)
+
+        val canExitWithQuoteObserver = Observer<Quote> {finalQuote ->
+            if (args.modifyQuote != null) {
+                //Chiamato da detail --> Devo comunicare la modifica del testo per permettere il reload
+                findNavController().previousBackStackEntry?.savedStateHandle?.set("modifiedQuote", finalQuote)
+            }
+            Log.i("Nicosanti", "Impostata Quote")
+            findNavController().popBackStack()
+        }
+        modifyQuoteVM.canExitWithQuote.observe(viewLifecycleOwner, canExitWithQuoteObserver)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -154,7 +193,6 @@ class ModifyQuoteFragment : Fragment(), View.OnClickListener {
                 }
                 else {
                     modifyQuoteVM.saveQuote()
-                    requireActivity().onBackPressed()
                 }
             }
         }

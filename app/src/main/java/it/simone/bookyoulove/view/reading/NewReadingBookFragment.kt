@@ -1,4 +1,4 @@
-package it.simone.bookyoulove.view
+package it.simone.bookyoulove.view.reading
 
 import android.os.Bundle
 import android.view.*
@@ -17,6 +17,7 @@ import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.database.entity.StartDate
 import it.simone.bookyoulove.databinding.FragmentNewReadingBookBinding
+import it.simone.bookyoulove.view.*
 import it.simone.bookyoulove.view.dialog.CoverLinkPickerFragment
 import it.simone.bookyoulove.view.dialog.DatePickerFragment
 import it.simone.bookyoulove.view.dialog.LoadingDialogFragment

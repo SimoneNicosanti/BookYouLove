@@ -8,12 +8,16 @@ import it.simone.bookyoulove.database.AppDatabase
 import it.simone.bookyoulove.database.entity.Quote
 import it.simone.bookyoulove.database.entity.StartDate
 import it.simone.bookyoulove.model.QuoteDetailModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class QuoteDetailViewModel(application : Application) : AndroidViewModel(application) {
 
     private val myAppDatabase = AppDatabase.getDatabaseInstance(application.applicationContext)
     private val quoteDetailModel = QuoteDetailModel(myAppDatabase)
+
+    private var loadedOnce = false
 
     val currentQuote = MutableLiveData( Quote (
             quoteText = "",
@@ -30,10 +34,24 @@ class QuoteDetailViewModel(application : Application) : AndroidViewModel(applica
             date = StartDate(0,0,0)
     ))
 
-    fun getSingleQuote(detailQuoteText: String, detailQuoteBookTitle: String, detailQuoteBookAuthor: String) {
+    fun getSingleQuote(detailQuoteText: String, detailQuoteBookTitle: String, detailQuoteBookAuthor: String, detailQuoteReadTime: Int) {
         //isAccessing
-        viewModelScope.launch {
-            currentQuote.value = quoteDetailModel.loadSingleQuotFromDatabase(detailQuoteText, detailQuoteBookTitle, detailQuoteBookAuthor)
+        if (!loadedOnce) {
+            viewModelScope.launch {
+                currentQuote.value = quoteDetailModel.loadSingleQuotFromDatabase(detailQuoteText, detailQuoteBookTitle, detailQuoteBookAuthor, detailQuoteReadTime)
+                loadedOnce = true
+            }
         }
+    }
+
+    fun deleteCurrentQuote() {
+        CoroutineScope(Dispatchers.Main).launch {
+            quoteDetailModel.deleteCurrentQuote(currentQuote.value!!)
+        }
+    }
+
+
+    fun onQuoteModified(modifiedQuote: Quote?) {
+        currentQuote.value = modifiedQuote
     }
 }

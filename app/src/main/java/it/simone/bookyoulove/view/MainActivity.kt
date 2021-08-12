@@ -15,6 +15,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import it.simone.bookyoulove.databinding.ActivityMainBinding
 import com.squareup.picasso.Picasso
 import it.simone.bookyoulove.R
+import it.simone.bookyoulove.view.ended.EndedFragmentDirections
+import it.simone.bookyoulove.view.reading.ReadingFragmentDirections
 
 const val READING_BOOK_CALLER = 0
 const val READ_BOOK_CALLER = 1

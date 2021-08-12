@@ -1,11 +1,7 @@
 package it.simone.bookyoulove.model
 
 import it.simone.bookyoulove.database.AppDatabase
-import it.simone.bookyoulove.database.DAO.NotFormattedShowedBookInfo
 import it.simone.bookyoulove.database.DAO.ShowedBookInfo
-import it.simone.bookyoulove.database.entity.Book
-import it.simone.bookyoulove.database.entity.EndDate
-import it.simone.bookyoulove.database.entity.StartDate
 import it.simone.bookyoulove.view.SORT_BY_TITLE
 import it.simone.bookyoulove.view.SORT_START_DATE
 import kotlinx.coroutines.Dispatchers

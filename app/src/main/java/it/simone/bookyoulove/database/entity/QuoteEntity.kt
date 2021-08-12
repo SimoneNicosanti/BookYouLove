@@ -2,6 +2,7 @@ package it.simone.bookyoulove.database.entity
 
 import androidx.room.Embedded
 import androidx.room.Entity
+import java.io.Serializable
 
 @Entity(primaryKeys = ["quoteText", "keyTitle", "keyAuthor", "readTime"])
 data class Quote (
@@ -19,4 +20,4 @@ data class Quote (
     var quoteChapter : String,
     var quoteThought : String,
     @Embedded var date : StartDate
-)
+) : Serializable

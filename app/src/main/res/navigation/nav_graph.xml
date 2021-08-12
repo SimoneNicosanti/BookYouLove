@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/readingFragment"
-        android:name="it.simone.bookyoulove.view.ReadingFragment"
+        android:name="it.simone.bookyoulove.view.reading.ReadingFragment"
         android:label="@string/reading_string"
         tools:layout="@layout/fragment_reading">
         <action
@@ -37,7 +37,7 @@
         tools:layout="@layout/fragment_charts" />
     <fragment
         android:id="@+id/newReadingBookFragment"
-        android:name="it.simone.bookyoulove.view.NewReadingBookFragment"
+        android:name="it.simone.bookyoulove.view.reading.NewReadingBookFragment"
         tools:layout="@layout/fragment_new_reading_book">
         <argument
             android:name="readingModifyKeyTitle"
@@ -50,10 +50,13 @@
         <argument
             android:name="readingModifyTime"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_newReadingBookFragment_to_placeholder"
+            app:destination="@id/placeholder" />
     </fragment>
     <fragment
         android:id="@+id/endedFragment"
-        android:name="it.simone.bookyoulove.view.EndedFragment"
+        android:name="it.simone.bookyoulove.view.ended.EndedFragment"
         android:label="@string/read_string"
         tools:layout="@layout/fragment_ended" >
         <action
@@ -87,7 +90,7 @@
         app:popUpTo="@id/nav_graph" />
     <fragment
         android:id="@+id/detailReadingFragment"
-        android:name="it.simone.bookyoulove.view.DetailReadingFragment"
+        android:name="it.simone.bookyoulove.view.reading.DetailReadingFragment"
         android:label="DetailReadingFragment" >
         <argument
             android:name="detailKeyTitle"
@@ -104,7 +107,7 @@
     </fragment>
     <fragment
         android:id="@+id/endedDetailFragment"
-        android:name="it.simone.bookyoulove.view.EndedDetailFragment"
+        android:name="it.simone.bookyoulove.view.ended.EndedDetailFragment"
         android:label="fragment_ended_detail"
         tools:layout="@layout/fragment_ended_detail" >
         <action
@@ -125,7 +128,7 @@
     </fragment>
     <fragment
         android:id="@+id/modifyEndedFragment"
-        android:name="it.simone.bookyoulove.view.ModifyEndedFragment"
+        android:name="it.simone.bookyoulove.view.ended.ModifyEndedFragment"
         android:label="fragment_modify_ended"
         tools:layout="@layout/fragment_modify_ended" >
         <argument
@@ -157,7 +160,7 @@
     </fragment>
     <fragment
         android:id="@+id/endedThoughtFragment"
-        android:name="it.simone.bookyoulove.view.EndedThoughtFragment"
+        android:name="it.simone.bookyoulove.view.ended.EndedThoughtFragment"
         android:label="fragment_ended_thought"
         tools:layout="@layout/fragment_ended_thought" >
         <argument
@@ -179,15 +182,22 @@
         android:label="ModifyQuoteFragment" >
         <argument
             android:name="bookTitle"
-            app:argType="string" />
+            app:argType="string"
+            app:nullable="true" />
         <argument
             android:name="bookAuthor"
-            app:argType="string" />
+            app:argType="string"
+            app:nullable="true" />
         <action
             android:id="@+id/action_modifyQuoteFragment_to_quoteWithCameraFragment"
             app:destination="@id/quoteWithCameraFragment" />
-        <argument android:name="readTime"
+        <argument
+            android:name="bookReadTime"
             app:argType="integer" />
+        <argument
+            android:name="modifyQuote"
+            app:argType="it.simone.bookyoulove.database.entity.Quote"
+            app:nullable="true" />
     </fragment>
     <action android:id="@+id/action_global_modifyQuoteFragment" app:destination="@id/modifyQuoteFragment" />
     <fragment
@@ -239,5 +249,13 @@
         <argument
             android:name="detailQuoteBookKeyAuthor"
             app:argType="string" />
+        <argument
+            android:name="detailQuoteReadTime"
+            app:argType="integer" />
+    </fragment>
+    <fragment android:id="@+id/placeholder" >
+        <action
+            android:id="@+id/action_placeholder_to_quoteWithCameraFragment"
+            app:destination="@id/quoteWithCameraFragment" />
     </fragment>
 </navigation>

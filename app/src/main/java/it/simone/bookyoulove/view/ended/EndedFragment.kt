@@ -1,4 +1,4 @@
-package it.simone.bookyoulove.view
+package it.simone.bookyoulove.view.ended
 
 import android.content.res.Configuration
 import android.os.Bundle
@@ -18,11 +18,14 @@ import it.simone.bookyoulove.R
 import it.simone.bookyoulove.adapter.EndedAdapter
 import it.simone.bookyoulove.database.DAO.ShowedBookInfo
 import it.simone.bookyoulove.databinding.FragmentEndedBinding
+import it.simone.bookyoulove.view.SEARCH_BY_AUTHOR
+import it.simone.bookyoulove.view.SEARCH_BY_RATE
+import it.simone.bookyoulove.view.SEARCH_BY_TITLE
 import it.simone.bookyoulove.view.dialog.LoadingDialogFragment
 import it.simone.bookyoulove.viewmodel.EndedViewModel
 
 
-class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListener, SearchView.OnQueryTextListener, SearchView.OnCloseListener{
+class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListener, SearchView.OnQueryTextListener {
 
     private lateinit var binding: FragmentEndedBinding
 
@@ -31,9 +34,9 @@ class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListene
 
     private var loadingDialog = LoadingDialogFragment()
 
-    private lateinit var fragmentMenu : Menu
-    private var isSearching = false
-    private lateinit var mySearchView: SearchView
+    private var endedFragmentMenu : Menu? = null
+
+    private var searchField = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,8 +61,7 @@ class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListene
         val isAccessingDatabaseObserver = Observer<Boolean> {
             if (it) {
                 loadingDialog.showNow(childFragmentManager, "Loading Fragment")
-            }
-            else {
+            } else {
                 if (loadingDialog.isAdded) {
                     loadingDialog.dismiss()
                     loadingDialog = LoadingDialogFragment()
@@ -74,14 +76,11 @@ class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListene
             val linearIndicator = PreferenceManager.getDefaultSharedPreferences(requireContext()).getBoolean("endedLinearLayout", false)
             if (linearIndicator) {
                 binding.endedRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-            }
-
-            else {
+            } else {
                 if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
                     binding.endedRecyclerView.layoutManager = GridLayoutManager(requireContext(), resources.getInteger(R.integer.ended_grid_row_item_count_portr))
                     //binding.endedRecyclerView.layoutParams = RecyclerView.LayoutParams(RecyclerView.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT)
-                }
-                else {
+                } else {
                     binding.endedRecyclerView.layoutManager = GridLayoutManager(requireContext(), resources.getInteger((R.integer.ended_grid_row_item_count_land)))
                     //binding.endedRecyclerView.layoutParams = RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
                 }
@@ -102,42 +101,69 @@ class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListene
         }
         endedVM.changedEndedList.observe(viewLifecycleOwner, changedEndedListObserver)
 
+        val currentSearchFieldObserver = Observer<String> {
+            searchField = it
+        }
+        endedVM.currentSearchField.observe(viewLifecycleOwner, currentSearchFieldObserver)
     }
 
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.ended_fragment_menu, menu)
-        mySearchView = menu.findItem(R.id.endedMenuSearchItem).actionView as SearchView
-        mySearchView.setOnQueryTextListener(this)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
-        fragmentMenu = menu
+        endedFragmentMenu = menu
+        val mySearchView = menu.findItem(R.id.endedMenuSearchItem).actionView as SearchView
+        mySearchView.setOnQueryTextListener(this)
+
+        if (searchField == "") {
+            mySearchView.isIconified = true
+        }
+        else {
+            mySearchView.isIconified = false
+            mySearchView.setQuery(searchField, false)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        Log.i("Nicosanti", "Options")
-        if (!mySearchView.isIconified) {
-            //Cancello Query Precedente
-            mySearchView.setQuery(null, true)
-            item.isChecked = !item.isChecked
-            when (item.itemId) {
-                R.id.endedMenuSearchTypeTitle, R.id.endedMenuSearchTypeAuthor -> {
-                    mySearchView.inputType = InputType.TYPE_CLASS_TEXT
-                }
+        val mySearchView = endedFragmentMenu!!.findItem(R.id.endedMenuSearchItem).actionView as SearchView
+        if (searchField != "") {
+            //Se cambia il tipo di ricerca resetto la lista a quella originale
+            mySearchView.setQuery("", true)
 
-                R.id.endedMenuSearchTypeRate -> {
-                    mySearchView.inputType = InputType.TYPE_CLASS_NUMBER
-                }
-            }
-            return true
         }
 
-        val mySnackbar = Snackbar.make(requireView(), "Search Options", Snackbar.LENGTH_SHORT)
-        mySnackbar.setAnchorView(R.id.bottomNavigationView)
-        mySnackbar.show()
-        return super.onOptionsItemSelected(item)
+        item.isChecked = !item.isChecked
+        when (item.itemId) {
+            R.id.endedMenuSearchTypeTitle, R.id.endedMenuSearchTypeAuthor -> {
+                mySearchView.inputType = InputType.TYPE_CLASS_TEXT
+            }
+
+            R.id.endedMenuSearchTypeRate -> {
+                mySearchView.inputType = InputType.TYPE_CLASS_NUMBER
+            }
+        }
+        return true
+    }
+
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        onQueryTextChange(query)
+        return true
+    }
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        val filterType : Int
+        filterType = when {
+            endedFragmentMenu?.findItem(R.id.endedMenuSearchTypeTitle)!!.isChecked -> SEARCH_BY_TITLE
+            endedFragmentMenu?.findItem(R.id.endedMenuSearchTypeAuthor)!!.isChecked -> SEARCH_BY_AUTHOR
+            else -> SEARCH_BY_RATE
+        }
+
+        endedVM.filterArray(newText, filterType)
+        return true
     }
 
 
@@ -149,30 +175,5 @@ class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListene
         val action = EndedFragmentDirections.actionEndedFragmentToEndedDetailFragment(selectedBook.keyTitle, selectedBook.keyAuthor, selectedBook.readTime)
         navController.navigate(action)
     }
-
-
-    override fun onQueryTextSubmit(query: String?): Boolean {
-        mySearchView.setQuery(null, true)
-        return true
-    }
-
-    override fun onQueryTextChange(newText: String?): Boolean {
-        Log.i("Nicosanti", "Cambiato")
-        val filterType : Int
-        when {
-            fragmentMenu.findItem(R.id.endedMenuSearchTypeTitle).isChecked -> filterType = SEARCH_BY_TITLE
-            fragmentMenu.findItem(R.id.endedMenuSearchTypeAuthor).isChecked -> filterType = SEARCH_BY_AUTHOR
-            else -> filterType = SEARCH_BY_RATE
-        }
-
-        endedVM.filterArray(newText, filterType)
-        return true
-    }
-
-    override fun onClose(): Boolean {
-        mySearchView.setQuery(null, true)
-        return true
-    }
-
 }
 

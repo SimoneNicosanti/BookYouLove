@@ -54,7 +54,7 @@
     <string name="search_off_string">Search Off</string>
     <string name="delete_string">Delete</string>
     <string name="modify_string">Modify</string>
-    <string name="alert_delete_string">Do you really want to delete this book??</string>
+    <string name="alert_delete_string">Do you really want to delete this %1$s??</string>
     <string name="linear_setting_string">Linear Layout</string>
     <string name="total_rate_string">Total Rate</string>
     <string name="style_string">Style</string>
@@ -80,5 +80,8 @@
     <string name="rotate_string">Rotate</string>
     <string name="your_quotes_string">Your Quotes</string>
     <string name="begin_read_string">Begin Read</string>
+    <string name="quote_chapter_and_page">Chapter and Page</string>
+    <string name="book_string">book</string>
+    <string name="quote_delete_string">quote</string>
 
 </resources>

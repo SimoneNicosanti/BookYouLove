@@ -1,4 +1,4 @@
-package it.simone.bookyoulove.view
+package it.simone.bookyoulove.view.reading
 
 
 import android.os.Bundle
@@ -153,7 +153,7 @@ class ReadingFragment : Fragment() , ReadingAdapter.OnReadingItemMenuItemClickLi
         return when (item?.itemId) {
 
             R.id.readingContextMenuTakeNoteItem -> {
-                findNavController().navigate(ReadingFragmentDirections.actionGlobalModifyQuoteFragment(bookArray[position].title, bookArray[position].author, bookArray[position].readTime))
+                findNavController().navigate(ReadingFragmentDirections.actionGlobalModifyQuoteFragment(bookArray[position].title, bookArray[position].author, bookArray[position].readTime, null))
                 true
             }
 

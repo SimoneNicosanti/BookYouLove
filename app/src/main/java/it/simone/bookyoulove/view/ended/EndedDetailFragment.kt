@@ -1,8 +1,9 @@
-package it.simone.bookyoulove.view
+package it.simone.bookyoulove.view.ended
 
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -24,7 +25,7 @@ import java.util.*
 
 //
 
-class EndedDetailFragment : Fragment() {
+class EndedDetailFragment : Fragment(), View.OnClickListener {
 
     private lateinit var binding : FragmentEndedDetailBinding
     private val endedDetailVM : DetailEndedViewModel by viewModels()
@@ -36,6 +37,8 @@ class EndedDetailFragment : Fragment() {
     private val args : EndedDetailFragmentArgs by navArgs()
 
     private lateinit var endedFinalThought : String
+
+    private lateinit var endedDetailBook : Book
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,11 +63,8 @@ class EndedDetailFragment : Fragment() {
 
         binding = FragmentEndedDetailBinding.inflate(inflater, container, false)
 
-        binding.endedDetailFinalThoughtButton.setOnClickListener {
-            val navController = findNavController()
-            val action = EndedDetailFragmentDirections.actionEndedDetailFragmentToEndedThoughtFragment(endedFinalThought, args.endedDetailKeyTitle, args.endedDetailKeyAuthor, args.endedDetailTime)
-            navController.navigate(action)
-        }
+        binding.endedDetailFinalThoughtButton.setOnClickListener(this)
+        binding.endedDetailYourQuotesButton.setOnClickListener(this)
 
         setObservers()
 
@@ -129,6 +129,8 @@ class EndedDetailFragment : Fragment() {
             endedFinalThought = currentBook.finalThought
 
             //setRadarChart(currentBook.rate!!)
+
+            endedDetailBook = currentBook
         }
         endedDetailVM.currentBook.observe(viewLifecycleOwner, currentBookObserver)
 
@@ -153,7 +155,10 @@ class EndedDetailFragment : Fragment() {
         return when (item.itemId) {
 
             R.id.endedDetailMenuDeleteItem -> {
-                ConfirmDeleteDialogFragment().show(childFragmentManager, "Delete Confirm")
+                val arguments = bundleOf("itemToDelete" to resources.getString(R.string.book_string))
+                val confirmDeleteDialog = ConfirmDeleteDialogFragment()
+                confirmDeleteDialog.arguments = arguments
+                confirmDeleteDialog.show(childFragmentManager, "Delete Confirm")
                 true
             }
 
@@ -167,5 +172,19 @@ class EndedDetailFragment : Fragment() {
             else -> super.onOptionsItemSelected(item)
         }
 
+    }
+
+    override fun onClick(v: View?) {
+         when (v) {
+             binding.endedDetailYourQuotesButton -> {
+                 findNavController().navigate(EndedDetailFragmentDirections.actionGlobalQuoteListFragment(endedDetailBook.keyTitle, endedDetailBook.keyAuthor, endedDetailBook.readTime))
+             }
+
+             binding.endedDetailFinalThoughtButton -> {
+                 val navController = findNavController()
+                 val action = EndedDetailFragmentDirections.actionEndedDetailFragmentToEndedThoughtFragment(endedFinalThought, args.endedDetailKeyTitle, args.endedDetailKeyAuthor, args.endedDetailTime)
+                 navController.navigate(action)
+             }
+         }
     }
 }

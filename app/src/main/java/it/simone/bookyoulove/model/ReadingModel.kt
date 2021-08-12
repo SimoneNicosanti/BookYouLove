@@ -2,10 +2,7 @@ package it.simone.bookyoulove.model
 
 import android.content.Context
 import it.simone.bookyoulove.database.AppDatabase
-import it.simone.bookyoulove.database.DAO.NotFormattedShowedBookInfo
 import it.simone.bookyoulove.database.DAO.ShowedBookInfo
-import it.simone.bookyoulove.database.entity.EndDate
-import it.simone.bookyoulove.database.entity.StartDate
 import it.simone.bookyoulove.view.READING_BOOK_STATE
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

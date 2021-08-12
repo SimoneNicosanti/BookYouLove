@@ -1,6 +1,5 @@
-package it.simone.bookyoulove.view
+package it.simone.bookyoulove.view.ended
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
 import androidx.core.widget.doOnTextChanged
@@ -10,9 +9,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.databinding.FragmentEndedThoughtBinding
-import it.simone.bookyoulove.viewmodel.DetailEndedViewModel
 import it.simone.bookyoulove.viewmodel.EndedThoughtViewModel
-import java.util.*
 
 
 class EndedThoughtFragment : Fragment() {

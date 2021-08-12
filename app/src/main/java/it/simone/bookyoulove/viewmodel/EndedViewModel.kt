@@ -26,6 +26,7 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
     var changedEndedArrayOrder : Boolean = true
 
     val isAccessingDatabase =  MutableLiveData<Boolean>()
+    val currentSearchField = MutableLiveData<String>()
 
     val currentReadList = MutableLiveData<Array<ShowedBookInfo>>()
     val changedEndedList = MutableLiveData<Boolean>(true)
@@ -78,6 +79,7 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun filterArray(newText : String?, filterParam : Int) {
+        currentSearchField.value = newText ?: ""
         if (newText == null || newText == "") {
             currentReadList.value = loadedArray
         }

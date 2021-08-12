@@ -1,17 +1,13 @@
 package it.simone.bookyoulove.model
 
-import android.util.Log
 import it.simone.bookyoulove.database.AppDatabase
-import it.simone.bookyoulove.database.DAO.NotFormattedShowedBookInfo
 import it.simone.bookyoulove.database.DAO.ShowedBookInfo
 import it.simone.bookyoulove.database.entity.Book
-import it.simone.bookyoulove.view.READING_BOOK_STATE
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.util.*
 
 class NewReadingBookModel(val myAppDatabase : AppDatabase){
-
+    //TODO("Potrei aggiungere richiesta di importare le citazioni vecchie se libro già letto")
 
     private suspend fun checkPresenceByState(keyTitle: String, keyAuthor: String, readState: Int): Boolean {
         val sameBookArray: Array<ShowedBookInfo>
@@ -76,11 +72,11 @@ class NewReadingBookModel(val myAppDatabase : AppDatabase){
     suspend fun addNewBookInDatabase(newReadingBook : Book) {
         newReadingBook.keyTitle = formatKeyInfo(newReadingBook.title)
         newReadingBook.keyAuthor = formatKeyInfo(newReadingBook.author)
-        if (!checkPresenceByState(newReadingBook.keyTitle, newReadingBook.keyAuthor, READING_BOOK_STATE)) {
-            newReadingBook.readTime = computeReadTime(newReadingBook.keyTitle, newReadingBook.keyAuthor)
-            withContext(Dispatchers.IO) {
-                myAppDatabase.bookDao().insertBooks(newReadingBook)
-            }
+        //if (!checkPresenceByState(newReadingBook.keyTitle, newReadingBook.keyAuthor, READING_BOOK_STATE)) {
+        newReadingBook.readTime = computeReadTime(newReadingBook.keyTitle, newReadingBook.keyAuthor)
+        withContext(Dispatchers.IO) {
+            myAppDatabase.bookDao().insertBooks(newReadingBook)
+
         }
     }
 
