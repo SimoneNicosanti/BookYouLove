@@ -14,6 +14,7 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import it.simone.bookyoulove.R
+import it.simone.bookyoulove.database.DAO.ShowedBookInfo
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.database.entity.StartDate
 import it.simone.bookyoulove.databinding.FragmentNewReadingBookBinding
@@ -66,8 +67,9 @@ class NewReadingBookFragment : Fragment() , View.OnClickListener {
             newReadingVM.updatePages(pagesResult)
         }
 
-        if (args.readingModifyKeyTitle != null) {
-            newReadingVM.loadReadingBookToModify(args.readingModifyKeyTitle!!, args.readingModifyKeyAuthor!!, args.readingModifyTime)
+        if (args.readingModifyBook != null) {
+            //newReadingVM.loadReadingBookToModify(args.readingModifyKeyTitle!!, args.readingModifyKeyAuthor!!, args.readingModifyTime)
+            newReadingVM.setBookToModify(args.readingModifyBook!!)
         }
         newReadingVM.loadAuthorArray()
     }
@@ -122,17 +124,21 @@ class NewReadingBookFragment : Fragment() , View.OnClickListener {
         }
         newReadingVM.isAccessingDatabase.observe(viewLifecycleOwner, isAccessingDatabaseObserver)
 
-        //TODO("Rivedi aggiornamento reading list : Problema non so se chi ha chiamato lo ha fatto da detail o da new --> nel dubbio posso fare upload totale")
-        val exitObserver = Observer<Boolean> { canExit ->
-            if (canExit) {
+        val exitObserver = Observer<Book> { finalBook ->
+            if (args.readingModifyBook != null) {
+                //Chiamato da Detail
                 readingVM.readingUpdated(true)
 
-                val navController = findNavController()
-                val action = NewReadingBookFragmentDirections.actionGlobalReadingFragment()
-                navController.navigate(action)
+                findNavController().previousBackStackEntry?.savedStateHandle?.set("modifiedBook", finalBook)
             }
+            else {
+                //Chiamato da Reading
+                readingVM.notifyNewReadingBook(finalBook)
+            }
+            //Torno indietro dopo salvataggio
+            findNavController().popBackStack()
         }
-        newReadingVM.canExit.observe(viewLifecycleOwner, exitObserver)
+        newReadingVM.canExitWithBook.observe(viewLifecycleOwner, exitObserver)
 
 
         val currentBookObserver = Observer<Book> { currentBook ->

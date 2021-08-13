@@ -14,6 +14,7 @@ import com.squareup.picasso.Picasso
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.databinding.FragmentEndedDetailBinding
+import it.simone.bookyoulove.view.QUOTE_LIST_ENDED_CALLER
 import it.simone.bookyoulove.view.dialog.ConfirmDeleteDialogFragment
 import it.simone.bookyoulove.view.dialog.LoadingDialogFragment
 import it.simone.bookyoulove.viewmodel.ChartsViewModel
@@ -73,9 +74,17 @@ class EndedDetailFragment : Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<String>("changedFinalThoughtKey")?.observe(viewLifecycleOwner) { changedFinalThought ->
             endedFinalThought = changedFinalThought
             endedDetailVM.changeThought(changedFinalThought)
+            findNavController().currentBackStackEntry?.savedStateHandle?.remove<String>("changedFinalThoughtKey")
+        }
+
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Book>("endedModifiedBook")?.observe(viewLifecycleOwner) { changedBook ->
+            endedDetailVM.onEndedBookChanged(changedBook)
+            endedVM.notifyArrayItemChanged(changedBook)
+            findNavController().currentBackStackEntry?.savedStateHandle?.remove<Book>("endedModifiedBook")
         }
     }
 
@@ -137,12 +146,11 @@ class EndedDetailFragment : Fragment(), View.OnClickListener {
         val deleteCompletedObserver = Observer<Boolean> { completed ->
             if (completed) {
                 endedVM.notifyArrayItemDelete()
-                requireActivity().onBackPressed()
+                findNavController().popBackStack()
             }
         }
         endedDetailVM.deleteCompleted.observe(viewLifecycleOwner, deleteCompletedObserver)
     }
-
 
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -164,7 +172,7 @@ class EndedDetailFragment : Fragment(), View.OnClickListener {
 
             R.id.endedDetailMenuEditItem -> {
                 val navController = findNavController()
-                val action = EndedDetailFragmentDirections.actionEndedDetailFragmentToModifyEndedFragment(args.endedDetailKeyTitle, args.endedDetailKeyAuthor, args.endedDetailTime)
+                val action = EndedDetailFragmentDirections.actionEndedDetailFragmentToModifyEndedFragment(endedDetailBook)
                 navController.navigate(action)
                 true
             }
@@ -177,7 +185,7 @@ class EndedDetailFragment : Fragment(), View.OnClickListener {
     override fun onClick(v: View?) {
          when (v) {
              binding.endedDetailYourQuotesButton -> {
-                 findNavController().navigate(EndedDetailFragmentDirections.actionGlobalQuoteListFragment(endedDetailBook.keyTitle, endedDetailBook.keyAuthor, endedDetailBook.readTime))
+                 findNavController().navigate(EndedDetailFragmentDirections.actionGlobalQuoteListFragment(endedDetailBook.keyTitle, endedDetailBook.keyAuthor, endedDetailBook.readTime, QUOTE_LIST_ENDED_CALLER))
              }
 
              binding.endedDetailFinalThoughtButton -> {

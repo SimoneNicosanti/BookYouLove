@@ -27,8 +27,10 @@ class NewReadingBookViewModel(application: Application): AndroidViewModel(applic
     val currentBook = MutableLiveData<Book>()
     val currentAuthorArray = MutableLiveData<Array<String>>()
     val isAccessingDatabase = MutableLiveData<Boolean>()
-    val canExit = MutableLiveData<Boolean>()
+    val canExitWithBook = MutableLiveData<Book>()
 
+    private var bookLoadedOnce = false
+    private var authorsLoadedOnce = false
 
     init {
         //Utilizzo +1 perché in libreria Calendar i mesi partono da 0, mentre in Month partono da 1
@@ -57,12 +59,14 @@ class NewReadingBookViewModel(application: Application): AndroidViewModel(applic
 
 
     fun loadAuthorArray() {
-        var authorArray : Array<String>
-        isAccessingDatabase.value = true
-        viewModelScope.launch {
-            authorArray = newReadingBookModel.loadAuthorArrayFromDatabase()
-            currentAuthorArray.value = authorArray
-            isAccessingDatabase.value = false
+        if (!authorsLoadedOnce) {
+            var authorArray: Array<String>
+            isAccessingDatabase.value = true
+            viewModelScope.launch {
+                authorArray = newReadingBookModel.loadAuthorArrayFromDatabase()
+                currentAuthorArray.value = authorArray
+                isAccessingDatabase.value = false
+            }
         }
     }
 
@@ -77,9 +81,16 @@ class NewReadingBookViewModel(application: Application): AndroidViewModel(applic
                     currentBook.value!!.keyAuthor != newReadingBookModel.formatKeyInfo(currentBook.value?.author!!)) {
                         //Sono stati modificati titolo e autore in qualcosa che modifica la chiave!!
 
-                    newReadingBookModel.removeBookFromDatabase(currentBook.value!!)
-                    newReadingBookModel.addNewBookInDatabase(currentBook.value!!.copy())
-                    newReadingBookModel.changeQuotesInfoInDatabase(currentBook.value!!)
+                            val currentBookCopy = currentBook.value!!.copy()
+                    newReadingBookModel.removeBookFromDatabase(currentBookCopy)
+                    /*
+                        Quando invocata la addNewBookInDatabase il parametro è passato per riferimento, quindi
+                        sono impostati i campi della chiave direttamente nel current.value: posso quindi assegnare direttamente
+                        lui come finalBook
+                     */
+
+                    newReadingBookModel.addNewBookInDatabase(currentBook.value!!)
+                    newReadingBookModel.changeQuotesInfoInDatabase(currentBookCopy)
                 }
 
                 else {
@@ -89,22 +100,24 @@ class NewReadingBookViewModel(application: Application): AndroidViewModel(applic
             }
 
             else {
+                Log.i("Nicosanti", "${currentBook.value!!.keyTitle}")
                 newReadingBookModel.addNewBookInDatabase(currentBook.value!!)
+                Log.i("Nicosanti", "${currentBook.value!!.keyTitle}")
             }
 
             isAccessingDatabase.value = false
-            canExit.value = true
+            canExitWithBook.value = currentBook.value!!
         }
     }
 
-
+    /*
     fun loadReadingBookToModify(readingModifyKeyTitle: String, readingModifyKeyAuthor: String, readingModifyTime: Int) {
         isAccessingDatabase.value = true
         viewModelScope.launch {
             currentBook.value = newReadingBookModel.loadReadingBookToModifyFromDatabase(readingModifyKeyTitle, readingModifyKeyAuthor, readingModifyTime)
             isAccessingDatabase.value = false
         }
-    }
+    }*/
 
 
     fun updateTitle(text: CharSequence?) {
@@ -131,5 +144,12 @@ class NewReadingBookViewModel(application: Application): AndroidViewModel(applic
         currentBook.value?.support?.paperSupport = supportMap[PAPER_SUPPORT]!!
         currentBook.value?.support?.ebookSupport = supportMap[EBOOK_SUPPORT]!!
         currentBook.value?.support?.audiobookSupport = supportMap[AUDIOBOOK_SUPPORT]!!
+    }
+
+    fun setBookToModify(readingModifyBook: Book) {
+        if (!bookLoadedOnce) {
+            currentBook.value = readingModifyBook
+            bookLoadedOnce = true
+        }
     }
 }

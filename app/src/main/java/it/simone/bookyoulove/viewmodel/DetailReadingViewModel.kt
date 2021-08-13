@@ -42,4 +42,8 @@ class DetailReadingViewModel(application : Application) : AndroidViewModel(appli
             }
         }
     }
+
+    fun onReadingBookModified(modifiedBook: Book) {
+        currentBook.value = modifiedBook
+    }
 }

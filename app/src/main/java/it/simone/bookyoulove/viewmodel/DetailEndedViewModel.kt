@@ -49,4 +49,9 @@ class DetailEndedViewModel(application: Application) : AndroidViewModel(applicat
     fun changeThought(newThought: String) {
         currentBook.value?.finalThought = newThought
     }
+
+    fun onEndedBookChanged(changedBook: Book) {
+        currentBook.value = changedBook
+    }
+
 }

@@ -25,7 +25,7 @@ class ModifyEndedViewModel(application : Application) : AndroidViewModel(applica
     var loadedOnce : Boolean = false
 
     val currentBook = MutableLiveData<Book>()
-    val canExit = MutableLiveData<Boolean>(false)
+    val canExitWithBook = MutableLiveData<Book>()
     val isAccessingDatabase = MutableLiveData<Boolean>()
 
     lateinit var currentStartDate : StartDate
@@ -33,7 +33,6 @@ class ModifyEndedViewModel(application : Application) : AndroidViewModel(applica
 
     private var modified = false
 
-    lateinit var finalBook : ShowedBookInfo
 
 
     fun modifyStartDate(newStartDate : StartDate) {
@@ -85,41 +84,20 @@ class ModifyEndedViewModel(application : Application) : AndroidViewModel(applica
             sia caricato nel DB affinché compaia nella lista, posso evitare l'udo di isAccessing
          */
         if (modified) {
-            val modifiedBook = currentBook.value!!
-            finalBook = ShowedBookInfo(
-                    modifiedBook.keyTitle,
-                    modifiedBook.keyAuthor,
-                    modifiedBook.readTime,
-                    modifiedBook.title,
-                    modifiedBook.author,
-                    modifiedBook.coverName,
-                    modifiedBook.startDate,
-                    modifiedBook.endDate,
-                    modifiedBook.rate?.totalRate)
             //isAccessingDatabase.value = true
             CoroutineScope(Dispatchers.Main).launch {
                 modifyEndedModel.saveChangedBook(currentBook.value!!)
                 //isAccessingDatabase.value = false
             }
-            canExit.value = true
+            canExitWithBook.value = currentBook.value
         }
     }
 
 
-    fun setBookToModify(modifyEndedKeyTitle: String, modifyEndedKeyAuthor: String, modifyEndedTime: Int) {
+    fun setBookToModify(modifyEndedBook : Book) {
         if (!loadedOnce) {
-            isAccessingDatabase.value = true
-            viewModelScope.launch {
-                currentBook.value = modifyEndedModel.loadEndedBookToModify(
-                    modifyEndedKeyTitle,
-                    modifyEndedKeyAuthor,
-                    modifyEndedTime
-                )
-                currentStartDate = currentBook.value!!.startDate!!
-                currentEndDate = currentBook.value!!.endDate!!
-                loadedOnce = true
-                isAccessingDatabase.value = false
-            }
+            currentBook.value = modifyEndedBook
+            loadedOnce = true
         }
     }
 

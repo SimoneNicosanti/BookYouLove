@@ -40,19 +40,9 @@
         android:name="it.simone.bookyoulove.view.reading.NewReadingBookFragment"
         tools:layout="@layout/fragment_new_reading_book">
         <argument
-            android:name="readingModifyKeyTitle"
-            app:argType="string"
+            android:name="readingModifyBook"
+            app:argType="it.simone.bookyoulove.database.entity.Book"
             app:nullable="true" />
-        <argument
-            android:name="readingModifyKeyAuthor"
-            app:argType="string"
-            app:nullable="true" />
-        <argument
-            android:name="readingModifyTime"
-            app:argType="integer" />
-        <action
-            android:id="@+id/action_newReadingBookFragment_to_placeholder"
-            app:destination="@id/placeholder" />
     </fragment>
     <fragment
         android:id="@+id/endedFragment"
@@ -132,16 +122,9 @@
         android:label="fragment_modify_ended"
         tools:layout="@layout/fragment_modify_ended" >
         <argument
-            android:name="modifyEndedKeyTitle"
-            app:argType="string"
+            android:name="modifyEndedBook"
+            app:argType="it.simone.bookyoulove.database.entity.Book"
             app:nullable="true" />
-        <argument
-            android:name="modifyEndedKeyAuthor"
-            app:argType="string"
-            app:nullable="true" />
-        <argument
-            android:name="modifyEndedTime"
-            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/endingFragment"
@@ -233,6 +216,9 @@
         <argument
             android:name="bookReadTime"
             app:argType="integer" />
+        <argument
+            android:name="quoteListCaller"
+            app:argType="integer" />
     </fragment>
     <action android:id="@+id/action_global_quoteListFragment" app:destination="@id/quoteListFragment" />
     <fragment
@@ -252,10 +238,5 @@
         <argument
             android:name="detailQuoteReadTime"
             app:argType="integer" />
-    </fragment>
-    <fragment android:id="@+id/placeholder" >
-        <action
-            android:id="@+id/action_placeholder_to_quoteWithCameraFragment"
-            app:destination="@id/quoteWithCameraFragment" />
     </fragment>
 </navigation>

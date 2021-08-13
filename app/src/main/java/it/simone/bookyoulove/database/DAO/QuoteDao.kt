@@ -37,6 +37,9 @@ interface QuoteDao {
 
     @Query("SELECT * FROM Quote WHERE keyTitle LIKE :requestedTitle AND keyAuthor LIKE :requestedAuthor AND readTime LIKE :requestedReadTime")
     fun loadQuotesByBook(requestedTitle: String, requestedAuthor: String, requestedReadTime: Int) : Array<Quote>
+
+    @Query("SELECT * FROM Quote ORDER BY RANDOM() LIMIT 1")
+    fun loadRandomQuote() : Quote?
 }
 
 data class ShowQuoteInfo (

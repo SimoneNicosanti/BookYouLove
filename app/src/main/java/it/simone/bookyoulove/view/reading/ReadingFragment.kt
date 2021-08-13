@@ -15,6 +15,7 @@ import it.simone.bookyoulove.R
 import it.simone.bookyoulove.adapter.ReadingAdapter
 import it.simone.bookyoulove.database.DAO.ShowedBookInfo
 import it.simone.bookyoulove.databinding.FragmentReadingBinding
+import it.simone.bookyoulove.view.QUOTE_LIST_READING_CALLER
 import it.simone.bookyoulove.view.dialog.LoadingDialogFragment
 import it.simone.bookyoulove.viewmodel.ReadingViewModel
 
@@ -72,7 +73,7 @@ class ReadingFragment : Fragment() , ReadingAdapter.OnReadingItemMenuItemClickLi
         when (item.itemId) {
             R.id.readingNewItem -> {
                 //Quando creo un nuovo libro, i parametri per detail sono nulli
-                val action = ReadingFragmentDirections.actionReadingFragmentToNewReadingBookFragment(null, null, 0)
+                val action = ReadingFragmentDirections.actionReadingFragmentToNewReadingBookFragment(null)
                 navController.navigate(action)
             }
         }
@@ -179,7 +180,7 @@ class ReadingFragment : Fragment() , ReadingAdapter.OnReadingItemMenuItemClickLi
             }
 
             R.id.readingContextMenuQuotesListItem -> {
-                findNavController().navigate(ReadingFragmentDirections.actionGlobalQuoteListFragment(bookArray[position].keyTitle, bookArray[position].keyAuthor, bookArray[position].readTime))
+                findNavController().navigate(ReadingFragmentDirections.actionGlobalQuoteListFragment(bookArray[position].keyTitle, bookArray[position].keyAuthor, bookArray[position].readTime, QUOTE_LIST_READING_CALLER))
                 true
             }
             else -> super.onOptionsItemSelected(item!!)

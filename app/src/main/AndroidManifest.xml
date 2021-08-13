@@ -12,7 +12,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BookYouLove">
-        <activity android:name=".view.QuoteWithCameraActivity"></activity>
+
+        <receiver android:name=".view.QuoteOfTheDayWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/quote_of_the_day_widget_info" />
+        </receiver>
+
+
         <activity
             android:name=".view.MainActivity"
             android:windowSoftInputMode="adjustPan">

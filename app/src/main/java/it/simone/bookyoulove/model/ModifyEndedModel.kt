@@ -13,6 +13,7 @@ class ModifyEndedModel(private val myAppDatabase: AppDatabase) {
         }
     }
 
+    /*
     suspend fun loadEndedBookToModify(
         keyTitle: String,
         keyAuthor: String,
@@ -23,5 +24,5 @@ class ModifyEndedModel(private val myAppDatabase: AppDatabase) {
             loadedBook = myAppDatabase.bookDao().loadSpecificBook(keyTitle, keyAuthor, readTime)
         }
         return loadedBook
-    }
+    }*/
 }

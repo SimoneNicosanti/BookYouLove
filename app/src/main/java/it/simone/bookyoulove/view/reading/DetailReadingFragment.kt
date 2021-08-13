@@ -13,6 +13,7 @@ import it.simone.bookyoulove.database.entity.StartDate
 import it.simone.bookyoulove.databinding.FragmentDetailReadingBinding
 import it.simone.bookyoulove.view.dialog.LoadingDialogFragment
 import it.simone.bookyoulove.viewmodel.DetailReadingViewModel
+import it.simone.bookyoulove.viewmodel.ReadingViewModel
 import java.time.Month
 import java.time.format.TextStyle
 import java.util.*
@@ -24,10 +25,13 @@ class DetailReadingFragment : Fragment() {
     private lateinit var binding : FragmentDetailReadingBinding
 
     private val detailReadingVM : DetailReadingViewModel by viewModels()
+    private val readingVM : ReadingViewModel by activityViewModels()
 
     private val args : DetailReadingFragmentArgs by navArgs()
 
     private var loadingDialog = LoadingDialogFragment()
+
+    private lateinit var detailBook : Book
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +47,13 @@ class DetailReadingFragment : Fragment() {
     ): View {
 
         binding = FragmentDetailReadingBinding.inflate(inflater, container, false)
+
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Book>("modifiedBook")?.observe(viewLifecycleOwner) {
+            detailReadingVM.onReadingBookModified(it)
+            findNavController().currentBackStackEntry?.savedStateHandle?.remove<Book>("modifiedBook")
+            readingVM.notifyReadingBookModified(it)
+
+        }
 
         setObservers()
         return binding.root
@@ -66,6 +77,8 @@ class DetailReadingFragment : Fragment() {
             binding.detailReadingAudiobookCheckbox.isChecked = currentBook.support?.audiobookSupport ?: false
 
             binding.detailReadingPages.text = currentBook.pages.toString()
+
+            detailBook = currentBook
         }
         detailReadingVM.currentBook.observe(viewLifecycleOwner, currentBookObserver)
 
@@ -95,7 +108,7 @@ class DetailReadingFragment : Fragment() {
         return when (item.itemId) {
             R.id.detailReadingMenuEdit -> {
                 val navController = findNavController()
-                val action = DetailReadingFragmentDirections.actionDetailReadingFragmentToNewReadingBookFragment(args.detailKeyTitle, args.detailKeyAuthor, args.detailTime)
+                val action = DetailReadingFragmentDirections.actionDetailReadingFragmentToNewReadingBookFragment(detailBook)
                 navController.navigate(action)
                 true
             }

@@ -46,12 +46,13 @@ const val SEARCH_BY_TITLE = 0
 const val SEARCH_BY_AUTHOR = 1
 const val SEARCH_BY_RATE = 2
 
+const val QUOTE_LIST_READING_CALLER = 0
+const val QUOTE_LIST_ENDED_CALLER = 1
+
 
 class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItemSelectedListener, PopupMenu.OnMenuItemClickListener{
 
     private lateinit var binding: ActivityMainBinding
-
-    private lateinit var appBarConfiguration: AppBarConfiguration
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -147,7 +148,7 @@ class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItem
             }
 
             R.id.navViewMenuQuotesItem -> {
-                val action = ChartsFragmentDirections.actionGlobalQuoteListFragment(null, null, 0)
+                val action = ChartsFragmentDirections.actionGlobalQuoteListFragment(null, null, 0, READING_BOOK_CALLER)
                 navController.navigate(action)
                 true
             }

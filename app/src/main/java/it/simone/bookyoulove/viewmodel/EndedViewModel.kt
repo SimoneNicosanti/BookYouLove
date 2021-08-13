@@ -13,7 +13,6 @@ import it.simone.bookyoulove.model.EndedModel
 import it.simone.bookyoulove.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.*
 
 class EndedViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -109,11 +108,21 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-    fun notifyArrayItemChanged(finalBook: ShowedBookInfo) {
+    fun notifyArrayItemChanged(modifiedBook: Book) {
         //L'unico elemento che può essere cambiato è quello selezionato correntemente
-        loadedArray[currentSelectedPosition] = finalBook
+        val modifiedShowBookInfo = ShowedBookInfo(
+                modifiedBook.keyTitle,
+                modifiedBook.keyAuthor,
+                modifiedBook.readTime,
+                modifiedBook.title,
+                modifiedBook.author,
+                modifiedBook.coverName,
+                modifiedBook.startDate,
+                modifiedBook.endDate,
+                modifiedBook.rate?.totalRate)
+        loadedArray[currentSelectedPosition] = modifiedShowBookInfo
         sortBookArray(loadedArray)
-        //Dopo il riordino non so la posizione in cui è andato il libro, quindi resetto il il selectedPosition
+        //Dopo il riordino non so la posizione in cui è andato il libro, quindi resetto il selectedPosition
         currentSelectedPosition = -1
     }
 
@@ -125,6 +134,10 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
             loadedArray = support.toTypedArray()
             sortBookArray()
         }
+    }
+
+    fun notifyEndedBookChange(changedBook: Book?) {
+
     }
 
 

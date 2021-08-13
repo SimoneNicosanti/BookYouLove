@@ -84,7 +84,7 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
         })
 
         //Controllo se non null perché nel caso in cui si faccia direttamente l'aggiunta di un libro Ended il parametro è null
-        if (args.modifyEndedKeyTitle != null) modifyEndedVM.setBookToModify(args.modifyEndedKeyTitle!!, args.modifyEndedKeyAuthor!!, args.modifyEndedTime)
+        if (args.modifyEndedBook != null) modifyEndedVM.setBookToModify(args.modifyEndedBook!!)
     }
 
 
@@ -146,18 +146,17 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
         }
         modifyEndedVM.currentBook.observe(viewLifecycleOwner, currentBookObserver)
 
-        val canExitObserver = Observer<Boolean> { canExit ->
-            if (canExit) {
-                //Notifico il cambiamento del SINGOLO item della lista
-                if (modifyEndedVM.finalBook != null) endedVM.notifyArrayItemChanged(modifyEndedVM.finalBook!!)
+        val canExitObserver = Observer<Book> { finalBook ->
+            if (args.modifyEndedBook != null) {
+                findNavController().previousBackStackEntry?.savedStateHandle?.set("endedModifiedBook", finalBook)
                 chartsVM.changeLoadedStatus()
-                //requireActivity().onBackPressed()
-                val navController = findNavController()
-                val action = ModifyEndedFragmentDirections.actionGlobalReadListFragment()
-                navController.navigate(action)
             }
+            else {
+                //Caso in cui viene aggiunto direttamente un libro in stato di ended
+            }
+            findNavController().popBackStack()
         }
-        modifyEndedVM.canExit.observe(viewLifecycleOwner, canExitObserver)
+        modifyEndedVM.canExitWithBook.observe(viewLifecycleOwner, canExitObserver)
 
         val isAccessingObserver = Observer<Boolean> {isAccessing ->
             if (isAccessing) {

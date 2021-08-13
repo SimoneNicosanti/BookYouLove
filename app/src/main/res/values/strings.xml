@@ -83,5 +83,7 @@
     <string name="quote_chapter_and_page">Chapter and Page</string>
     <string name="book_string">book</string>
     <string name="quote_delete_string">quote</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 
 </resources>

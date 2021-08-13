@@ -61,4 +61,38 @@ class ReadingViewModel(application: Application) : AndroidViewModel(application)
         currentBookIndex = position
     }
 
+
+    fun notifyReadingBookModified(modifiedBook : Book) {
+        val modifiedShowedBookInfo = ShowedBookInfo(
+                keyTitle = modifiedBook.keyTitle,
+                keyAuthor = modifiedBook.keyAuthor,
+                readTime = modifiedBook.readTime,
+                title = modifiedBook.title,
+                author = modifiedBook.author,
+                coverName = modifiedBook.coverName,
+                startDate = modifiedBook.startDate,
+                endDate = modifiedBook.endDate,
+                totalRate = modifiedBook.rate?.totalRate
+        )
+        currentReadingBookArray.value!![currentBookIndex] = modifiedShowedBookInfo
+        currentBookIndex = 0
+    }
+
+    fun notifyNewReadingBook(newBook: Book) {
+        val newShowedBookInfo = ShowedBookInfo(
+                keyTitle = newBook.keyTitle,
+                keyAuthor = newBook.keyAuthor,
+                readTime = newBook.readTime,
+                title = newBook.title,
+                author = newBook.author,
+                coverName = newBook.coverName,
+                startDate = newBook.startDate,
+                endDate = newBook.endDate,
+                totalRate = newBook.rate?.totalRate
+        )
+        val supportList = currentReadingBookArray.value!!.toMutableList()
+        supportList.add(newShowedBookInfo)
+        currentReadingBookArray.value = supportList.toTypedArray()
+        currentBookIndex = 0
+    }
 }

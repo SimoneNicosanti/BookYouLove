@@ -14,6 +14,7 @@ import it.simone.bookyoulove.R
 import it.simone.bookyoulove.adapter.QuoteListAdapter
 import it.simone.bookyoulove.database.DAO.ShowQuoteInfo
 import it.simone.bookyoulove.databinding.FragmentQuoteListBinding
+import it.simone.bookyoulove.view.QUOTE_LIST_ENDED_CALLER
 import it.simone.bookyoulove.view.dialog.LoadingDialogFragment
 import it.simone.bookyoulove.viewmodel.QuoteListViewModel
 
@@ -113,6 +114,25 @@ class QuoteListFragment : Fragment(), QuoteListAdapter.OnQuoteListHolderClick, S
         else {
             mySearchView.isIconified = true
         }
+
+        if (args.quoteListCaller == QUOTE_LIST_ENDED_CALLER) {
+            val addQuoteItem = menu.findItem(R.id.quoteListMenuAddQuoteItem)
+            addQuoteItem.isEnabled = true
+            addQuoteItem.isVisible = true
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        if (item.itemId == R.id.quoteListMenuAddQuoteItem) {
+            /*
+                L'unico caso in cui è abilitato è quando sto visualizzando la lista per un libro terminato: se è un libro terminato allora sono dati in input le chiavi e il readTime : posso
+                passarle come parametro della action che mi porta alla modifyQuote
+             */
+            findNavController().navigate(QuoteListFragmentDirections.actionGlobalModifyQuoteFragment(args.bookKeyTitle, args.bookKeyAuthor, args.bookReadTime, null))
+            //TODO("Finisci")
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 
