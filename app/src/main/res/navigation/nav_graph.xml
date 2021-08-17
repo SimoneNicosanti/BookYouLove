@@ -216,9 +216,6 @@
         <argument
             android:name="bookReadTime"
             app:argType="integer" />
-        <argument
-            android:name="quoteListCaller"
-            app:argType="integer" />
     </fragment>
     <action android:id="@+id/action_global_quoteListFragment" app:destination="@id/quoteListFragment" />
     <fragment
@@ -239,4 +236,13 @@
             android:name="detailQuoteReadTime"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/blankFragment"
+        android:name="it.simone.bookyoulove.BlankFragment"
+        android:label="BlankFragment" />
+    <fragment
+        android:id="@+id/takeBookIsbnFragment"
+        android:name="it.simone.bookyoulove.view.reading.TakeBookIsbnFragment"
+        android:label="fragment_take_book_isbn"
+        tools:layout="@layout/fragment_take_book_isbn" /><action android:id="@+id/action_global_takeBookIsbnFragment" app:destination="@id/takeBookIsbnFragment"/>
 </navigation>

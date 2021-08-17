@@ -58,14 +58,15 @@ class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListene
 
 
     private fun setObservers() {
-        val isAccessingDatabaseObserver = Observer<Boolean> {
-            if (it) {
-                loadingDialog.showNow(childFragmentManager, "Loading Fragment")
-            } else {
-                if (loadingDialog.isAdded) {
-                    loadingDialog.dismiss()
-                    loadingDialog = LoadingDialogFragment()
-                }
+        val isAccessingDatabaseObserver = Observer<Boolean> { isAccessing ->
+            if (isAccessing) {
+                requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                binding.endedLoading.root.visibility = View.VISIBLE
+            }
+
+            else {
+                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                binding.endedLoading.root.visibility = View.GONE
             }
         }
         endedVM.isAccessingDatabase.observe(viewLifecycleOwner, isAccessingDatabaseObserver)

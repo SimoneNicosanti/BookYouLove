@@ -1,8 +1,10 @@
 package it.simone.bookyoulove.view.quotes
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.*
 import android.widget.Toast
@@ -118,13 +120,13 @@ class ModifyQuoteFragment : Fragment(), View.OnClickListener {
 
         val isAccessingDatabaseObserver = Observer<Boolean> { isAccessing ->
             if (isAccessing) {
-                loadingDialog.showNow(childFragmentManager, "Loading Dialog")
+                requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                binding.modifyQuoteLoading.root.visibility = View.VISIBLE
             }
+
             else {
-                if (loadingDialog.isAdded) {
-                    loadingDialog.dismiss()
-                    loadingDialog = LoadingDialogFragment()
-                }
+                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                binding.modifyQuoteLoading.root.visibility = View.GONE
             }
         }
         modifyQuoteVM.isAccessingDatabase.observe(viewLifecycleOwner, isAccessingDatabaseObserver)
@@ -134,7 +136,7 @@ class ModifyQuoteFragment : Fragment(), View.OnClickListener {
                 //Chiamato da detail --> Devo comunicare la modifica del testo per permettere il reload
                 findNavController().previousBackStackEntry?.savedStateHandle?.set("modifiedQuote", finalQuote)
             }
-            Log.i("Nicosanti", "Impostata Quote")
+
             findNavController().popBackStack()
         }
         modifyQuoteVM.canExitWithQuote.observe(viewLifecycleOwner, canExitWithQuoteObserver)

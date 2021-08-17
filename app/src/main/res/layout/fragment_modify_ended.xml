@@ -6,7 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".view.ended.ModifyEndedFragment" >
 
+    <include
+        android:id="@+id/modifyEndedLoading"
+        layout="@layout/fragment_loading_dialog_fragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/scrollView6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ScrollView
+        android:id="@+id/scrollView6"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"

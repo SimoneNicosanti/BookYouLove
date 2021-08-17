@@ -23,7 +23,7 @@ class DetailEndedViewModel(application: Application) : AndroidViewModel(applicat
 
 
     val currentBook = MutableLiveData<Book>()
-    val isAccessingDatabase = MutableLiveData<Boolean>()
+    val isAccessingDatabase = MutableLiveData(false)
     val deleteCompleted = MutableLiveData<Boolean>()
 
 

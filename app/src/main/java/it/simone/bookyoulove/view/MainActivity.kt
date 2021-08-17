@@ -148,7 +148,7 @@ class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItem
             }
 
             R.id.navViewMenuQuotesItem -> {
-                val action = ChartsFragmentDirections.actionGlobalQuoteListFragment(null, null, 0, READING_BOOK_CALLER)
+                val action = ChartsFragmentDirections.actionGlobalQuoteListFragment(null, null, 0)
                 navController.navigate(action)
                 true
             }

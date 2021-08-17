@@ -1,8 +1,13 @@
 package it.simone.bookyoulove.view.reading
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.*
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -12,19 +17,15 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
+import com.google.common.util.concurrent.ListenableFuture
 import com.squareup.picasso.Picasso
 import it.simone.bookyoulove.R
-import it.simone.bookyoulove.database.DAO.ShowedBookInfo
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.database.entity.StartDate
 import it.simone.bookyoulove.databinding.FragmentNewReadingBookBinding
 import it.simone.bookyoulove.view.*
-import it.simone.bookyoulove.view.dialog.CoverLinkPickerFragment
-import it.simone.bookyoulove.view.dialog.DatePickerFragment
-import it.simone.bookyoulove.view.dialog.LoadingDialogFragment
-import it.simone.bookyoulove.view.dialog.PagesPickerFragment
-import it.simone.bookyoulove.viewmodel.NewReadingBookViewModel
-import it.simone.bookyoulove.viewmodel.ReadingViewModel
+import it.simone.bookyoulove.view.dialog.*
+import it.simone.bookyoulove.viewmodel.*
 import java.time.Month
 import java.time.format.TextStyle
 import java.util.*
@@ -40,6 +41,17 @@ class NewReadingBookFragment : Fragment() , View.OnClickListener {
     private val args : NewReadingBookFragmentArgs by navArgs()
 
     private var loadingDialog = LoadingDialogFragment()
+
+    private var requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+        if (isGranted) {
+            takeIsbnWithCamera()
+        }
+        else {
+            Toast.makeText(requireContext(), "Permesso Negato", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private lateinit var cameraProviderFuture : ListenableFuture<ProcessCameraProvider>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,6 +84,10 @@ class NewReadingBookFragment : Fragment() , View.OnClickListener {
             newReadingVM.setBookToModify(args.readingModifyBook!!)
         }
         newReadingVM.loadAuthorArray()
+
+        setHasOptionsMenu(true)
+        cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
+
     }
 
 
@@ -99,7 +115,21 @@ class NewReadingBookFragment : Fragment() , View.OnClickListener {
             newReadingVM.updateAuthor(text)
         }
 
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<String>("scannedIsbnKey")?.observe(viewLifecycleOwner) { scannedIsbn ->
+            //Snackbar.make(requireView(), scannedIsbn, Snackbar.LENGTH_LONG).show()
+            findNavController().currentBackStackEntry?.savedStateHandle?.remove<String>("scannedIsbnKey")
+            newReadingVM.findBookByIsbn(scannedIsbn)
+        }
+
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        cameraProviderFuture.addListener(Runnable {
+            val cameraProvider = cameraProviderFuture.get()
+        }, ContextCompat.getMainExecutor(requireContext()))
     }
 
 
@@ -113,13 +143,13 @@ class NewReadingBookFragment : Fragment() , View.OnClickListener {
 
         val isAccessingDatabaseObserver = Observer<Boolean> { isAccessing ->
             if (isAccessing) {
-                loadingDialog.showNow(childFragmentManager, "Loading Dialog")
+                requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                binding.modifyReadingLoading.root.visibility = View.VISIBLE
             }
+
             else {
-                if (loadingDialog.isAdded) {
-                    loadingDialog.dismiss()
-                    loadingDialog = LoadingDialogFragment()
-                }
+                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                binding.modifyReadingLoading.root.visibility = View.GONE
             }
         }
         newReadingVM.isAccessingDatabase.observe(viewLifecycleOwner, isAccessingDatabaseObserver)
@@ -158,6 +188,22 @@ class NewReadingBookFragment : Fragment() , View.OnClickListener {
             binding.newBookPagesInput.text = currentBook.pages.toString()
         }
         newReadingVM.currentBook.observe(viewLifecycleOwner, currentBookObserver)
+
+        val internetAccessErrorObserver = Observer<Int> { errorCode ->
+            if (errorCode != ISBN_NO_ERROR) {
+                val myAlert = AlertDialogFragment()
+                val args = when (errorCode) {
+                    ISBN_INTERNET_ACCESS_ERROR -> bundleOf("alertDialogTitleKey" to resources.getString(R.string.no_internet_connection_string))
+                    ISBN_FIND_ITEM_ERROR -> bundleOf("alertDialogTitleKey" to getString(R.string.no_book_found_string))
+                    else -> bundleOf("alertDialogTitleKey" to "")
+                }
+                myAlert.arguments = args
+                myAlert.showNow(childFragmentManager, "Alert Dialog")
+                newReadingVM.handledInternetError(ISBN_NO_ERROR)
+            }
+        }
+        newReadingVM.internetAccessError.observe(viewLifecycleOwner, internetAccessErrorObserver)
+
     }
 
 
@@ -221,4 +267,32 @@ class NewReadingBookFragment : Fragment() , View.OnClickListener {
         } ${startDate.startYear}"
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.modify_reading_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        return when (item.itemId) {
+            R.id.modifyReadingMenuScanItem -> {
+                requestPermissionForCamera()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+
+    private fun requestPermissionForCamera() {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
+            requestPermissionLauncher.launch(Manifest.permission.CAMERA)
+        }
+        else {
+            takeIsbnWithCamera()
+        }
+    }
+
+    private fun takeIsbnWithCamera() {
+        findNavController().navigate(NewReadingBookFragmentDirections.actionGlobalTakeBookIsbnFragment())
+    }
 }

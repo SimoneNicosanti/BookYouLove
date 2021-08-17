@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
@@ -64,13 +65,13 @@ class ChartsFragment : Fragment() {
     private fun setObservers() {
         val isAccessingDatabaseObserver = Observer<Boolean> {isAccessing ->
             if (isAccessing) {
-                loadingFragment.show(childFragmentManager, "Loading Dialog")
+                requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                binding.chartsLoading.root.visibility = View.VISIBLE
             }
+
             else {
-                if (loadingFragment.isAdded) {
-                    loadingFragment.dismiss()
-                    loadingFragment = LoadingDialogFragment()
-                }
+                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                binding.chartsLoading.root.visibility = View.GONE
             }
         }
         chartsVM.isAccessingDatabase.observe(viewLifecycleOwner, isAccessingDatabaseObserver)

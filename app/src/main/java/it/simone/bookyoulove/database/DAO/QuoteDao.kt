@@ -1,5 +1,6 @@
 package it.simone.bookyoulove.database.DAO
 
+import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
 import androidx.room.*
@@ -39,7 +40,10 @@ interface QuoteDao {
     fun loadQuotesByBook(requestedTitle: String, requestedAuthor: String, requestedReadTime: Int) : Array<Quote>
 
     @Query("SELECT * FROM Quote ORDER BY RANDOM() LIMIT 1")
-    fun loadRandomQuote() : Quote?
+    fun loadRandomQuote() : Cursor
+
+    @Query("DELETE FROM Quote WHERE keyTitle LIKE :requestedKeyTitle AND keyAuthor LIKE :requestedKeyAuthor AND readTime LIKE :requestedTime")
+    fun deleteQuotesByBook(requestedKeyTitle: String, requestedKeyAuthor: String, requestedTime: Int)
 }
 
 data class ShowQuoteInfo (

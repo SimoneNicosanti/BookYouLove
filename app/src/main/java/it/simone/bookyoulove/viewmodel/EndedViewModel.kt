@@ -24,7 +24,7 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
 
     var changedEndedArrayOrder : Boolean = true
 
-    val isAccessingDatabase =  MutableLiveData<Boolean>()
+    val isAccessingDatabase =  MutableLiveData(false)
     val currentSearchField = MutableLiveData<String>()
 
     val currentReadList = MutableLiveData<Array<ShowedBookInfo>>()

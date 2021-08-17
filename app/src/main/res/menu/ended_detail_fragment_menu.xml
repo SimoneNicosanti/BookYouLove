@@ -12,4 +12,9 @@
         android:icon="@drawable/ic_round_edit_reading_details"
         android:title="@string/modify_string"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/endedDetailMenuTakeNoteItem"
+        android:icon="@drawable/ic_round_edit_note"
+        android:title="@string/take_note_string"
+        app:showAsAction="ifRoom" />
 </menu>

@@ -23,7 +23,7 @@ class EndingViewModel(application: Application) : AndroidViewModel(application) 
     private val endingModel = EndingModel(myAppDatabase)
 
     val terminateBook = MutableLiveData<Book>()
-    val isAccessingDatabase = MutableLiveData<Boolean>()
+    val isAccessingDatabase = MutableLiveData(false)
     val canExit = MutableLiveData<Boolean>()
 
     private lateinit var loadedBook : Book

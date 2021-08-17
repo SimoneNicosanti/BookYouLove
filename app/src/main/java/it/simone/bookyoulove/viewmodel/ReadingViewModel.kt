@@ -24,7 +24,7 @@ class ReadingViewModel(application: Application) : AndroidViewModel(application)
     private var currentBookIndex : Int = 0
 
     //Gestione Visualizzazione
-    val isAccessingDatabase = MutableLiveData<Boolean>()                            //Permette di mostrare un DialogFragment con una rotella che gira nel caso di operazioni di accesso a DB
+    val isAccessingDatabase = MutableLiveData(false)                            //Permette di mostrare un DialogFragment con una rotella che gira nel caso di operazioni di accesso a DB
     var changedReadingList = MutableLiveData<Boolean>(true)                   //Comunicazione al fragment che la lista di libri in lettura è stata modificata da qualche altro fragment
     val currentReadingBookArray = MutableLiveData<Array<ShowedBookInfo>>()
 

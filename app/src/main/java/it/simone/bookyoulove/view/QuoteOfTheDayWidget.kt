@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.AppDatabase
 import it.simone.bookyoulove.databinding.QuoteOfTheDayWidgetBinding
+import it.simone.bookyoulove.providers.QuotesProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -36,7 +37,7 @@ class QuoteOfTheDayWidget : AppWidgetProvider() {
         alarm.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds)
         val pendingIntent = PendingIntent.getBroadcast(context, 0, alarm, PendingIntent.FLAG_CANCEL_CURRENT)
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        alarmManager.setRepeating(AlarmManager.RTC, System.currentTimeMillis(), 1000, pendingIntent)
+        alarmManager.setRepeating(AlarmManager.RTC, System.currentTimeMillis(), 10000, pendingIntent)
 
         for (appWidgetId in appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId)
@@ -63,18 +64,28 @@ internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManage
     // Construct the RemoteViews object
     val views = RemoteViews(context.packageName, R.layout.quote_of_the_day_widget)
 
-    val myAppDatabase = AppDatabase.getDatabaseInstance(context)
     CoroutineScope(Dispatchers.IO).launch {
-        val newQuote = myAppDatabase.quoteDao().loadRandomQuote()
+        val quoteCursor = context.contentResolver.query(QuotesProvider().URI_RANDOM, null, null, null, null)
+
         withContext(Dispatchers.Main) {
-            if (newQuote != null) {
-                views.setTextViewText(R.id.quoteOfTheDayWidgetQuoteText, newQuote.quoteText)
-                views.setTextViewText(R.id.quoteOfTheDayWidgetTitle, newQuote.bookTitle)
-                views.setTextViewText(R.id.quoteOfTheDayWidgetAuthor, newQuote.bookAuthor)
-                appWidgetManager.updateAppWidget(appWidgetId, views)
+            /*
+                Il Cursor è come un array di oggetti Quotes. Poiché in questo caso ho un UNICA quote, mi muovo sulla prima con moveToFirst
+                e poi prendoo i vari campi dell'oggetto Quote cui punta il cursore tramite le getString
+             */
+            if (quoteCursor?.moveToFirst() == true) {
+                views.setTextViewText(R.id.quoteOfTheDayWidgetQuoteText, quoteCursor.getString(0))
+
+                views.setTextViewText(R.id.quoteOfTheDayWidgetTitle, quoteCursor.getString(quoteCursor.getColumnIndex("bookTitle")))
+
+                views.setTextViewText(R.id.quoteOfTheDayWidgetAuthor, quoteCursor.getString(quoteCursor.getColumnIndex("bookAuthor")))
             }
+            quoteCursor?.close()
+
+            appWidgetManager.updateAppWidget(appWidgetId, views)
         }
     }
+
+
 }
 
 class ScrollableTextView(context : Context) : androidx.appcompat.widget.AppCompatTextView(context) {

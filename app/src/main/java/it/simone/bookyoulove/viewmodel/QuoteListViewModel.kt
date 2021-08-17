@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import it.simone.bookyoulove.database.AppDatabase
 import it.simone.bookyoulove.database.DAO.ShowQuoteInfo
+import it.simone.bookyoulove.database.entity.Quote
 import it.simone.bookyoulove.model.QuoteListModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.DisposableHandle

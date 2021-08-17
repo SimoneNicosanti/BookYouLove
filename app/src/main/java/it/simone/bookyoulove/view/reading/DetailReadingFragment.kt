@@ -85,13 +85,13 @@ class DetailReadingFragment : Fragment() {
 
         val isAccessingDatabaseObserver = Observer<Boolean> { isAccessing ->
             if (isAccessing) {
-                loadingDialog.showNow(childFragmentManager, "Loading Dialog")
+                requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                binding.detailReadingLoading.root.visibility = View.VISIBLE
             }
+
             else {
-                if (loadingDialog.isAdded) {
-                    loadingDialog.dismiss()
-                    loadingDialog = LoadingDialogFragment()
-                }
+                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                binding.detailReadingLoading.root.visibility = View.GONE
             }
         }
         detailReadingVM.isAccessingDatabase.observe(viewLifecycleOwner, isAccessingDatabaseObserver)

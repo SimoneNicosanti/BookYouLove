@@ -3,6 +3,7 @@ package it.simone.bookyoulove.view.reading
 
 import android.os.Bundle
 import android.view.*
+import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -44,6 +45,7 @@ class ReadingFragment : Fragment() , ReadingAdapter.OnReadingItemMenuItemClickLi
         super.onCreate(savedInstanceState)
         //readingVM.loadReadingBookList()
         setHasOptionsMenu(true)
+
     }
 
 
@@ -95,6 +97,7 @@ class ReadingFragment : Fragment() , ReadingAdapter.OnReadingItemMenuItemClickLi
         readingVM.changedReadingList.observe(viewLifecycleOwner, readingListStateObserver)
 
         val isAccessingDatabaseObserver = Observer<Boolean> { isAccessing ->
+            /*
             if (isAccessing) {
                 loadingDialog.showNow(childFragmentManager, null)
             }
@@ -107,6 +110,20 @@ class ReadingFragment : Fragment() , ReadingAdapter.OnReadingItemMenuItemClickLi
                         loadingDialog.dismiss()
                         loadingDialog = LoadingDialogFragment()
                     }
+            }*/
+            //if (isAccessing) {
+                //disableAllViews(binding.root as ViewGroup)
+
+            //}
+
+            if (isAccessing) {
+                requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                binding.loadingInclude.root.visibility = View.VISIBLE
+            }
+
+            else {
+                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                binding.loadingInclude.root.visibility = View.GONE
             }
         }
         readingVM.isAccessingDatabase.observe(viewLifecycleOwner, isAccessingDatabaseObserver)
@@ -136,6 +153,14 @@ class ReadingFragment : Fragment() , ReadingAdapter.OnReadingItemMenuItemClickLi
         }
         readingVM.currentReadingBookArray.observe(viewLifecycleOwner, currentListObserver)
 
+    }
+
+    private fun disableAllViews(viewGroup: ViewGroup) {
+        for (child in viewGroup.children) {
+            child.visibility = View.GONE
+            if (child is ViewGroup) disableAllViews(child)
+        }
+        viewGroup.visibility = View.GONE
     }
 
 
@@ -180,7 +205,7 @@ class ReadingFragment : Fragment() , ReadingAdapter.OnReadingItemMenuItemClickLi
             }
 
             R.id.readingContextMenuQuotesListItem -> {
-                findNavController().navigate(ReadingFragmentDirections.actionGlobalQuoteListFragment(bookArray[position].keyTitle, bookArray[position].keyAuthor, bookArray[position].readTime, QUOTE_LIST_READING_CALLER))
+                findNavController().navigate(ReadingFragmentDirections.actionGlobalQuoteListFragment(bookArray[position].keyTitle, bookArray[position].keyAuthor, bookArray[position].readTime))
                 true
             }
             else -> super.onOptionsItemSelected(item!!)

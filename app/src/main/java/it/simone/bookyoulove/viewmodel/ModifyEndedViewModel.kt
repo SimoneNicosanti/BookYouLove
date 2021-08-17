@@ -26,7 +26,7 @@ class ModifyEndedViewModel(application : Application) : AndroidViewModel(applica
 
     val currentBook = MutableLiveData<Book>()
     val canExitWithBook = MutableLiveData<Book>()
-    val isAccessingDatabase = MutableLiveData<Boolean>()
+    val isAccessingDatabase = MutableLiveData(false)
 
     lateinit var currentStartDate : StartDate
     lateinit var currentEndDate : EndDate

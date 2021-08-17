@@ -1,8 +1,13 @@
 package it.simone.bookyoulove.view.quotes
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.content.Intent.ACTION_EDIT
+import android.gesture.GestureLibraries.fromFile
 import android.net.Uri
+import android.net.Uri.fromFile
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,6 +15,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.camera.core.impl.utils.Exif
+import androidx.core.content.FileProvider
+import androidx.documentfile.provider.DocumentFile.fromFile
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
@@ -90,13 +97,16 @@ class QuoteWithCameraAnalyzerFragment : Fragment() , View.OnClickListener{
             }
 
             binding.quoteWithCameraAnalyzerRotateButton -> {
-                val exif = Exif.createFromFile(File(requireContext().filesDir, "quoteWithCameraFile"))
-                val rotation = exif.rotation
-                if (rotation != 0) {
-                    exif.rotate(rotation)
+
+                CoroutineScope(Dispatchers.Default).launch {
+                    val exif = Exif.createFromFile(File(requireContext().filesDir, "quoteWithCameraFile"))
+                    //val rotation = exif.rotation
+                    exif.rotate(90)
                     exif.save()
+                    withContext(Dispatchers.Main) {
+                        Picasso.get().load(File(requireContext().filesDir, "quoteWithCameraFile")).into(binding.quoteWithCameraAnalyzerImageView)
+                    }
                 }
-                Picasso.get().load(File(requireContext().filesDir, "quoteWithCameraFile")).into(binding.quoteWithCameraAnalyzerImageView)
             }
         }
 

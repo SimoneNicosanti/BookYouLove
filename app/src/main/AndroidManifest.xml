@@ -23,6 +23,13 @@
                 android:resource="@xml/quote_of_the_day_widget_info" />
         </receiver>
 
+        <provider
+            android:authorities="it.simone.bookyoulove.providers"
+            android:name=".providers.QuotesProvider"
+            android:exported = "true"
+            android:permission="it.simone.bookyoulove.providers.READ_WRITE">
+        </provider>
+
 
         <activity
             android:name=".view.MainActivity"
@@ -37,7 +44,7 @@
 
         <meta-data
             android:name="com.google.mlkit.vision.DEPENDENCIES"
-            android:value="ocr" />
+            android:value="ocr,barcode" />
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

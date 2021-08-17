@@ -15,7 +15,7 @@ class ChartsViewModel(application : Application) : AndroidViewModel(application)
     private val chartsModel = ChartsModel(myAppDatabase)
 
     var currentChartsDataArray = MutableLiveData<Array<ChartsBookData>>()
-    val isAccessingDatabase = MutableLiveData<Boolean>()
+    val isAccessingDatabase = MutableLiveData(false)
 
     private var loadedOnce = false
 

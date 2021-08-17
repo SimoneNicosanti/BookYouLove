@@ -13,10 +13,13 @@ import androidx.navigation.fragment.navArgs
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.adapter.QuoteListAdapter
 import it.simone.bookyoulove.database.DAO.ShowQuoteInfo
+import it.simone.bookyoulove.database.entity.Quote
+import it.simone.bookyoulove.database.entity.StartDate
 import it.simone.bookyoulove.databinding.FragmentQuoteListBinding
 import it.simone.bookyoulove.view.QUOTE_LIST_ENDED_CALLER
 import it.simone.bookyoulove.view.dialog.LoadingDialogFragment
 import it.simone.bookyoulove.viewmodel.QuoteListViewModel
+import java.util.*
 
 
 class QuoteListFragment : Fragment(), QuoteListAdapter.OnQuoteListHolderClick, SearchView.OnQueryTextListener {
@@ -67,6 +70,7 @@ class QuoteListFragment : Fragment(), QuoteListAdapter.OnQuoteListHolderClick, S
             findNavController().currentBackStackEntry?.savedStateHandle?.remove<ShowQuoteInfo>("modifiedQuoteInfo")
         }
 
+
         setObservers()
         return binding.root
     }
@@ -80,12 +84,13 @@ class QuoteListFragment : Fragment(), QuoteListAdapter.OnQuoteListHolderClick, S
 
         val isAccessingDatabaseObserver = Observer<Boolean> { isAccessing ->
             if (isAccessing) {
-                loadingDialog.showNow(childFragmentManager, "Loading Fragment")
-            } else {
-                if (loadingDialog.isAdded) {
-                    loadingDialog.dismiss()
-                    loadingDialog = LoadingDialogFragment()
-                }
+                requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                binding.quoteListLoading.root.visibility = View.VISIBLE
+            }
+
+            else {
+                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                binding.quoteListLoading.root.visibility = View.GONE
             }
         }
         quoteListVM.isAccessingDatabase.observe(viewLifecycleOwner, isAccessingDatabaseObserver)
@@ -115,24 +120,6 @@ class QuoteListFragment : Fragment(), QuoteListAdapter.OnQuoteListHolderClick, S
             mySearchView.isIconified = true
         }
 
-        if (args.quoteListCaller == QUOTE_LIST_ENDED_CALLER) {
-            val addQuoteItem = menu.findItem(R.id.quoteListMenuAddQuoteItem)
-            addQuoteItem.isEnabled = true
-            addQuoteItem.isVisible = true
-        }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
-        if (item.itemId == R.id.quoteListMenuAddQuoteItem) {
-            /*
-                L'unico caso in cui è abilitato è quando sto visualizzando la lista per un libro terminato: se è un libro terminato allora sono dati in input le chiavi e il readTime : posso
-                passarle come parametro della action che mi porta alla modifyQuote
-             */
-            findNavController().navigate(QuoteListFragmentDirections.actionGlobalModifyQuoteFragment(args.bookKeyTitle, args.bookKeyAuthor, args.bookReadTime, null))
-            //TODO("Finisci")
-        }
-        return super.onOptionsItemSelected(item)
     }
 
 

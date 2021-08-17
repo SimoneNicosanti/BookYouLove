@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".view.ended.EndedDetailFragment">
 
+    <include
+        android:id="@+id/endedDetailLoading"
+        layout="@layout/fragment_loading_dialog_fragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/scrollView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/endedDetailCoverImageView"
         android:layout_width="@dimen/new_book_cover_width"

@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.RatingBar
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
@@ -160,13 +161,13 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
 
         val isAccessingObserver = Observer<Boolean> {isAccessing ->
             if (isAccessing) {
-                loadingDialog.showNow(childFragmentManager, "Loading Dialog")
+                requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                binding.modifyEndedLoading.root.visibility = View.VISIBLE
             }
+
             else {
-                if (loadingDialog.isAdded) {
-                    loadingDialog.dismiss()
-                    loadingDialog = LoadingDialogFragment()
-                }
+                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                binding.modifyEndedLoading.root.visibility = View.GONE
             }
         }
         modifyEndedVM.isAccessingDatabase.observe(viewLifecycleOwner, isAccessingObserver)

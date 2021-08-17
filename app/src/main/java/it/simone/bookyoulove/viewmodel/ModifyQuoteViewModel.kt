@@ -22,7 +22,7 @@ class ModifyQuoteViewModel(application: Application) : AndroidViewModel(applicat
     private val modifyQuoteModel = ModifyQuoteModel(myAppDatabase)
 
     val currentQuote = MutableLiveData<Quote>()
-    val isAccessingDatabase = MutableLiveData<Boolean>()
+    val isAccessingDatabase = MutableLiveData(false)
     val canExitWithQuote = MutableLiveData<Quote>()
 
     //private var loadedOnce = false

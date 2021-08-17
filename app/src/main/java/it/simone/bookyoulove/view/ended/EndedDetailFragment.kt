@@ -90,15 +90,15 @@ class EndedDetailFragment : Fragment(), View.OnClickListener {
 
     private fun setObservers() {
 
-        val isAccessingDatabaseObserver = Observer<Boolean> {
-            if (it) {
-                loadingDialog.showNow(childFragmentManager, "Loading Dialog")
+        val isAccessingDatabaseObserver = Observer<Boolean> { isAccessing ->
+            if (isAccessing) {
+                requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                binding.endedDetailLoading.root.visibility = View.VISIBLE
             }
+
             else {
-                if (loadingDialog.isAdded) {
-                    loadingDialog.dismiss()
-                    loadingDialog = LoadingDialogFragment()
-                }
+                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                binding.endedDetailLoading.root.visibility = View.GONE
             }
         }
         endedDetailVM.isAccessingDatabase.observe(viewLifecycleOwner, isAccessingDatabaseObserver)
@@ -177,6 +177,11 @@ class EndedDetailFragment : Fragment(), View.OnClickListener {
                 true
             }
 
+            R.id.endedDetailMenuTakeNoteItem -> {
+                findNavController().navigate(EndedDetailFragmentDirections.actionGlobalModifyQuoteFragment(endedDetailBook.title, endedDetailBook.author, endedDetailBook.readTime, null))
+                true
+            }
+
             else -> super.onOptionsItemSelected(item)
         }
 
@@ -185,7 +190,7 @@ class EndedDetailFragment : Fragment(), View.OnClickListener {
     override fun onClick(v: View?) {
          when (v) {
              binding.endedDetailYourQuotesButton -> {
-                 findNavController().navigate(EndedDetailFragmentDirections.actionGlobalQuoteListFragment(endedDetailBook.keyTitle, endedDetailBook.keyAuthor, endedDetailBook.readTime, QUOTE_LIST_ENDED_CALLER))
+                 findNavController().navigate(EndedDetailFragmentDirections.actionGlobalQuoteListFragment(endedDetailBook.keyTitle, endedDetailBook.keyAuthor, endedDetailBook.readTime))
              }
 
              binding.endedDetailFinalThoughtButton -> {
