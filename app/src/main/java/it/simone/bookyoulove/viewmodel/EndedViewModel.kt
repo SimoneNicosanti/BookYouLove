@@ -110,7 +110,8 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
 
     fun notifyArrayItemChanged(modifiedBook: Book) {
         //L'unico elemento che può essere cambiato è quello selezionato correntemente
-        val modifiedShowBookInfo = ShowedBookInfo(
+        if (currentSelectedPosition != -1) {
+            val modifiedShowBookInfo = ShowedBookInfo(
                 modifiedBook.keyTitle,
                 modifiedBook.keyAuthor,
                 modifiedBook.readTime,
@@ -119,26 +120,26 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
                 modifiedBook.coverName,
                 modifiedBook.startDate,
                 modifiedBook.endDate,
-                modifiedBook.rate?.totalRate)
-        loadedArray[currentSelectedPosition] = modifiedShowBookInfo
-        sortBookArray(loadedArray)
-        //Dopo il riordino non so la posizione in cui è andato il libro, quindi resetto il selectedPosition
-        currentSelectedPosition = -1
+                modifiedBook.rate?.totalRate
+            )
+            loadedArray[currentSelectedPosition] = modifiedShowBookInfo
+            sortBookArray(loadedArray)
+            //Dopo il riordino non so la posizione in cui è andato il libro, quindi resetto il selectedPosition
+            currentSelectedPosition = -1
+        }
     }
 
     fun notifyArrayItemDelete() {
         //L'unico che può essere eliminato è il corrente
-        viewModelScope.launch { Dispatchers.Default
-            val support = loadedArray.toMutableList()
-            support.removeAt(currentSelectedPosition)
-            loadedArray = support.toTypedArray()
-            sortBookArray()
+        if (currentSelectedPosition != -1) {
+            viewModelScope.launch {
+                Dispatchers.Default
+                val support = loadedArray.toMutableList()
+                support.removeAt(currentSelectedPosition)
+                loadedArray = support.toTypedArray()
+                sortBookArray()
+                currentSelectedPosition = -1
+            }
         }
     }
-
-    fun notifyEndedBookChange(changedBook: Book?) {
-
-    }
-
-
 }

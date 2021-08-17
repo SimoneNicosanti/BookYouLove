@@ -12,7 +12,11 @@ import java.time.Period
 import java.time.YearMonth
 import kotlin.collections.ArrayList
 
-
+const val TOTAL_RATE = "total"
+const val STYLE_RATE = "style"
+const val EMOTIONS_RATE = "emotions"
+const val PLOT_RATE = "plot"
+const val CHARACTER_RATE = "character"
 
 class ChartsYearViewModel : ViewModel() {
 
@@ -22,7 +26,6 @@ class ChartsYearViewModel : ViewModel() {
     val currentChartsYearInfo = MutableLiveData<ChartsYearInfo>()
 
     fun setChartsDataArray(newChartDataArray: Array<ChartsBookData>) {
-        //TODO("Fai il sortinge dell'array prima di passarlo")
         currentChartsDataArray = newChartDataArray
         computeYearList()
     }
@@ -48,25 +51,51 @@ class ChartsYearViewModel : ViewModel() {
         var bookPerMonthArray = arrayListOf<Int>()
         var pagesPerMonthArray = arrayListOf<Float>()
         var supportPerYear = arrayListOf<Float>()
-        var totalRateArray = arrayListOf<Float>()
+        var rateMap = mapOf(
+            TOTAL_RATE to arrayListOf<Float>(),
+            STYLE_RATE to arrayListOf(),
+            EMOTIONS_RATE to arrayListOf(),
+            PLOT_RATE to arrayListOf(),
+            CHARACTER_RATE to arrayListOf())
+        var booksOfTheYearArray : ArrayList<ChartsBookData>
         viewModelScope.launch { Dispatchers.Default
 
             bookPerMonthArray = computeBookPerMonthArray(selectedYear)
             pagesPerMonthArray = computePagesPerMonthArray(selectedYear)
             supportPerYear = computeSupportPerYear(selectedYear)
-            totalRateArray = computeTotalRateArray(selectedYear)
-            currentChartsYearInfo.value = ChartsYearInfo(bookPerMonthArray, pagesPerMonthArray, supportPerYear, totalRateArray)
+            rateMap = computeRateMap(selectedYear)
+            booksOfTheYearArray = computeBooksOfTheYear(selectedYear)
+            currentChartsYearInfo.value = ChartsYearInfo(bookPerMonthArray, pagesPerMonthArray, supportPerYear, rateMap, booksOfTheYearArray)
         }
     }
 
-    private fun computeTotalRateArray(selectedYear: Int): ArrayList<Float> {
-        val totalRateArray = arrayListOf<Float>()
+    private fun computeBooksOfTheYear(selectedYear: Int): ArrayList<ChartsBookData> {
+        val booksOfTheYearArray = arrayListOf<ChartsBookData>()
+        for (info in currentChartsDataArray) {
+            if (info.endDate.endYear == selectedYear) booksOfTheYearArray.add(info)
+        }
+
+        return booksOfTheYearArray
+    }
+
+    private fun computeRateMap(selectedYear: Int): Map<String, ArrayList<Float>> {
+        val rateMap = mapOf(
+            TOTAL_RATE to arrayListOf<Float>(),
+            STYLE_RATE to arrayListOf(),
+            EMOTIONS_RATE to arrayListOf(),
+            PLOT_RATE to arrayListOf(),
+            CHARACTER_RATE to arrayListOf())
+
         for (info in currentChartsDataArray) {
             if (info.endDate.endYear == selectedYear) {
-                totalRateArray.add(info.rate.totalRate)
+                rateMap[TOTAL_RATE]!!.add(info.rate.totalRate)
+                rateMap[STYLE_RATE]!!.add(info.rate.styleRate)
+                rateMap[EMOTIONS_RATE]!!.add(info.rate.emotionRate)
+                rateMap[PLOT_RATE]!!.add(info.rate.plotRate)
+                rateMap[CHARACTER_RATE]!!.add(info.rate.characterRate)
             }
         }
-        return totalRateArray
+        return rateMap
     }
 
     private fun computeSupportPerYear(selectedYear: Int): ArrayList<Float> {
@@ -183,5 +212,6 @@ data class ChartsYearInfo(
     var bookPerMonth: ArrayList<Int> ,
     var pagesPerMonth : ArrayList<Float>,
     var supportPerYear : ArrayList<Float>,
-    var totalRateArray : ArrayList<Float>
+    var rateMap : Map<String, ArrayList<Float>>,
+    var booksOfTheYear : ArrayList<ChartsBookData>
 )

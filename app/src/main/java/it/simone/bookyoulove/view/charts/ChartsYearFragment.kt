@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.charts.PieChart
@@ -23,9 +24,8 @@ import com.google.android.material.snackbar.Snackbar
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.databinding.FragmentChartsYearBinding
 import it.simone.bookyoulove.model.ChartsBookData
-import it.simone.bookyoulove.viewmodel.ChartsViewModel
-import it.simone.bookyoulove.viewmodel.ChartsYearInfo
-import it.simone.bookyoulove.viewmodel.ChartsYearViewModel
+import it.simone.bookyoulove.view.ChartsFragmentDirections
+import it.simone.bookyoulove.viewmodel.*
 import java.time.Month
 import java.time.format.TextStyle
 import java.util.*
@@ -36,7 +36,7 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
 
     private lateinit var binding : FragmentChartsYearBinding
 
-    private lateinit var chartsBookDataArray : Array<ChartsBookData>
+    private var booksOfTheYearArray = arrayListOf<ChartsBookData>()
 
     private val chartsVM : ChartsViewModel by activityViewModels()
     private val chartsYearVM : ChartsYearViewModel by viewModels()
@@ -62,7 +62,6 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
 
         val currentChartsDataArrayObserver = Observer<Array<ChartsBookData>> {
             chartsYearVM.setChartsDataArray(it)
-            chartsBookDataArray = it
         }
         chartsVM.currentChartsDataArray.observe(viewLifecycleOwner, currentChartsDataArrayObserver)
 
@@ -79,32 +78,53 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
             setPagesPerMonthBarChart(it)
             setPagesPerMonthPieChart(it)
             setSupportYearPieChart(it)
-            setTotalRateLineChart(it)
+
+            for (rates in it.rateMap) {
+                setRatesLineCharts(it.rateMap, rates.key)
+            }
+
+            booksOfTheYearArray = it.booksOfTheYear
         }
         chartsYearVM.currentChartsYearInfo.observe(viewLifecycleOwner, currentChartsYearInfoObserver)
     }
 
-    private fun setTotalRateLineChart(it: ChartsYearInfo) {
-        val totalRateLineChart = binding.chartsYearTotalRateLineChart as LineChart
-        val totalRateEntries = ArrayList<Entry>()
-        for (index in 0 until it.totalRateArray.size) {
-            totalRateEntries.add(Entry((index + 2).toFloat(), it.totalRateArray[index]))
-        }
-        val totalRateSet = LineDataSet(totalRateEntries, "Total Rate")
-        val totalRateData = LineData(totalRateSet)
-        totalRateLineChart.data = totalRateData
-        totalRateLineChart.invalidate()
+    private fun setRatesLineCharts(rateMap: Map<String, ArrayList<Float>>, rateKey : String) {
+        val rateLineChart = when(rateKey) {
+            STYLE_RATE -> binding.chartsYearStyleRateLineChart
+            EMOTIONS_RATE -> binding.chartsYearEmotionsRateLineChart
+            PLOT_RATE -> binding.chartsYearPlotRateLineChart
+            CHARACTER_RATE -> binding.chartsYearCharacterRateLineChart
+            else -> binding.chartsYearTotalRateLineChart
+        } as LineChart
 
-        totalRateLineChart.setOnChartValueSelectedListener(this)
+        val rateEntries = ArrayList<Entry>()
+        for (index in 0 until rateMap[rateKey]!!.size) {
+            rateEntries.add(Entry((index).toFloat(), rateMap[rateKey]!![index]))
+        }
+        val chartLabel : String = when(rateKey) {
+            STYLE_RATE -> getString(R.string.style_rate_string)
+            EMOTIONS_RATE -> getString(R.string.emotions_rate_string)
+            PLOT_RATE -> getString(R.string.plot_rate_string)
+            CHARACTER_RATE -> getString(R.string.characters_rate_string)
+            else -> getString(R.string.total_rate_string)
+        }
+        val rateChartSet = LineDataSet(rateEntries, chartLabel)
+        val rateChartData = LineData(rateChartSet)
+        rateLineChart.data = rateChartData
+
+        rateLineChart.setVisibleXRangeMaximum(10F)
+        rateLineChart.invalidate()
+
+        rateLineChart.setOnChartValueSelectedListener(this)
     }
 
     private fun setSupportYearPieChart(it: ChartsYearInfo) {
         val supportPerYearPieChart = binding.chartsYearSupportPieChart as PieChart
         val supportPerYearEntries = ArrayList<PieEntry>()
 
-        if (it.supportPerYear[0] != 0F)supportPerYearEntries.add(PieEntry(it.supportPerYear[0], "Paper"))
-        if (it.supportPerYear[1] != 0F) supportPerYearEntries.add(PieEntry(it.supportPerYear[1], "eBook"))
-        if (it.supportPerYear[2] != 0F)supportPerYearEntries.add(PieEntry(it.supportPerYear[2], "AudioBook"))
+        if (it.supportPerYear[0] != 0F)supportPerYearEntries.add(PieEntry(it.supportPerYear[0], getString(R.string.paper_string)))
+        if (it.supportPerYear[1] != 0F) supportPerYearEntries.add(PieEntry(it.supportPerYear[1], getString(R.string.ebook_string)))
+        if (it.supportPerYear[2] != 0F)supportPerYearEntries.add(PieEntry(it.supportPerYear[2], getString(R.string.audiobook_string)))
 
         val supportPerYearSet = PieDataSet(supportPerYearEntries, "")
         supportPerYearSet.colors = ColorTemplate.MATERIAL_COLORS.toList() + ColorTemplate.COLORFUL_COLORS.toList()
@@ -142,7 +162,7 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
             pagesPerMonthEntries.add(BarEntry(monthIndex.toFloat(), it.pagesPerMonth[monthIndex]))
             monthArrayLabels.add(Month.of(monthIndex + 1).getDisplayName(TextStyle.SHORT, Locale.getDefault()).capitalize(Locale.getDefault()))
         }
-        val pagesPerMonthDataSet = BarDataSet(pagesPerMonthEntries, "Pages Per Month")
+        val pagesPerMonthDataSet = BarDataSet(pagesPerMonthEntries, getString(R.string.pages_per_month_string))
         pagesPerMonthDataSet.colors = ColorTemplate.MATERIAL_COLORS.toList()
         val pagesPerMonthData = BarData(pagesPerMonthDataSet)
         pagesPerMonthBarChart.data = pagesPerMonthData
@@ -162,7 +182,7 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
             bookPerMonthBarChartEntries.add(BarEntry(monthIndex.toFloat(), it.bookPerMonth[monthIndex].toFloat()))
             monthArrayLabels.add(Month.of(monthIndex + 1).getDisplayName(TextStyle.SHORT, Locale.getDefault()).capitalize(Locale.getDefault()))
         }
-        val bookPerMonthBarChartSet = BarDataSet(bookPerMonthBarChartEntries, "Book Per Month")
+        val bookPerMonthBarChartSet = BarDataSet(bookPerMonthBarChartEntries, getString(R.string.books_per_month_string))
         bookPerMonthBarChartSet.colors = ColorTemplate.MATERIAL_COLORS.toList()
         val bookPerMonthBarChartData = BarData(bookPerMonthBarChartSet)
         barChart.data = bookPerMonthBarChartData
@@ -184,33 +204,49 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
 
             binding.chartsYearChartTypeSpinner -> {
                 when (position) {
-                    0 -> {
+                    0 -> { //Books
                         binding.chartsYearBooksBarChartCard.visibility = View.VISIBLE
                         binding.chartsYearPagesBarChartCard.visibility = View.GONE
                         binding.chartsYearPagesPieChartCard.visibility = View.GONE
                         binding.chartsYearSupportPieChartCard.visibility = View.GONE
                         binding.chartsYearTotalRateLineChartCard.visibility = View.GONE
+                        binding.chartsYearStyleRateLineChartCard.visibility = View.GONE
+                        binding.chartsYearEmotionRateLineChartCard.visibility = View.GONE
+                        binding.chartsYearPlotRateLineChartCard.visibility = View.GONE
+                        binding.chartsYearCharacterRateLineChartCard.visibility = View.GONE
                     }
 
-                    1 -> {
+                    1 -> { //Pages
                         binding.chartsYearPagesBarChartCard.visibility = View.VISIBLE
                         binding.chartsYearPagesPieChartCard.visibility = View.VISIBLE
                         binding.chartsYearBooksBarChartCard.visibility = View.GONE
                         binding.chartsYearSupportPieChartCard.visibility = View.GONE
                         binding.chartsYearTotalRateLineChartCard.visibility = View.GONE
-
+                        binding.chartsYearStyleRateLineChartCard.visibility = View.GONE
+                        binding.chartsYearEmotionRateLineChartCard.visibility = View.GONE
+                        binding.chartsYearPlotRateLineChartCard.visibility = View.GONE
+                        binding.chartsYearCharacterRateLineChartCard.visibility = View.GONE
                     }
 
-                    2 -> {
+                    2 -> { //Supports
                         binding.chartsYearSupportPieChartCard.visibility = View.VISIBLE
                         binding.chartsYearPagesBarChartCard.visibility = View.GONE
                         binding.chartsYearPagesPieChartCard.visibility = View.GONE
                         binding.chartsYearBooksBarChartCard.visibility = View.GONE
                         binding.chartsYearTotalRateLineChartCard.visibility = View.GONE
+                        binding.chartsYearStyleRateLineChartCard.visibility = View.GONE
+                        binding.chartsYearEmotionRateLineChartCard.visibility = View.GONE
+                        binding.chartsYearPlotRateLineChartCard.visibility = View.GONE
+                        binding.chartsYearCharacterRateLineChartCard.visibility = View.GONE
                     }
 
-                    3 -> {
+                    3 -> { //Rates
                         binding.chartsYearTotalRateLineChartCard.visibility = View.VISIBLE
+                        binding.chartsYearStyleRateLineChartCard.visibility = View.VISIBLE
+                        binding.chartsYearEmotionRateLineChartCard.visibility = View.VISIBLE
+                        binding.chartsYearPlotRateLineChartCard.visibility = View.VISIBLE
+                        binding.chartsYearCharacterRateLineChartCard.visibility = View.VISIBLE
+
                         binding.chartsYearBooksBarChartCard.visibility = View.GONE
                         binding.chartsYearPagesBarChartCard.visibility = View.GONE
                         binding.chartsYearPagesPieChartCard.visibility = View.GONE
@@ -223,11 +259,24 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
 
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
-        TODO("Not yet implemented")
     }
 
     override fun onValueSelected(e: Entry?, h: Highlight?) {
-        //TODO("Devo poter passare il titolo (ed eventualmente il resto della chiave se voglio implementare la ridirezione) nella lista delle entry che vengono inserite, potrei usare un array di array")
+        if (e != null) {
+            val x = e.x.toInt()
+            //Log.d("Nicosanti", "$x ${chartsBookDataArray[x].title}")
+            val rateChartSnackbar = Snackbar.make(requireView(), booksOfTheYearArray[x].title, Snackbar.LENGTH_SHORT)
+            rateChartSnackbar.setAction(getString(R.string.goto_string)) {
+                findNavController().navigate(
+                    ChartsFragmentDirections.actionChartsFragmentToEndedDetailFragment(
+                        booksOfTheYearArray[x].keyTitle,
+                        booksOfTheYearArray[x].keyAuthor,
+                        booksOfTheYearArray[x].readTime
+                    )
+                )
+            }
+            rateChartSnackbar.show()
+        }
     }
 
     override fun onNothingSelected() {

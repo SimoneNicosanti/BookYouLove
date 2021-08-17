@@ -12,9 +12,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 data class ChartsBookData(
+    @ColumnInfo(name = "keyTitle") var keyTitle : String,
+    @ColumnInfo(name = "keyAuthor") var keyAuthor : String,
+    @ColumnInfo(name = "readTime") var readTime : Int,
     @ColumnInfo(name = "title") var title : String,
     @ColumnInfo(name = "author") var author : String,
-    @ColumnInfo(name = "readTime") var readTime : Int,
     @Embedded @ColumnInfo(name = "startDate") var startDate : StartDate,
     @Embedded @ColumnInfo(name = "endDate") var endDate : EndDate,
     @Embedded @ColumnInfo(name = "support") var support : BookSupport,

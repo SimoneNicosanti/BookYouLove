@@ -91,7 +91,7 @@
                         android:id="@+id/chartsYearPagesBarChart"
                         class="com.github.mikephil.charting.charts.BarChart"
                         android:layout_width="0dp"
-                        android:layout_height="@dimen/charts_year_books_bar_chart_height"
+                        android:layout_height="500dp"
                         android:layout_marginHorizontal="@dimen/charts_year_books_bar_chart_hor_margin"
                         android:layout_marginVertical="@dimen/charts_year_books_bar_chart_hor_margin"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -165,7 +165,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/charts_year_card_margin"
                 android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -184,6 +184,83 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/chartsYearStyleRateLineChartCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/charts_year_card_margin"
+                android:foregroundGravity="center"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/chartsYearTotalRateLineChartCard">
+
+                <view
+                    android:id="@+id/chartsYearStyleRateLineChart"
+                    class="com.github.mikephil.charting.charts.LineChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/charts_year_books_bar_chart_hor_margin" />
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/chartsYearEmotionRateLineChartCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/charts_year_card_margin"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/chartsYearStyleRateLineChartCard">
+
+                <view
+                    android:id="@+id/chartsYearEmotionsRateLineChart"
+                    class="com.github.mikephil.charting.charts.LineChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/charts_year_books_bar_chart_hor_margin" />
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/chartsYearPlotRateLineChartCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/charts_year_card_margin"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/chartsYearEmotionRateLineChartCard">
+
+                <view
+                    android:id="@+id/chartsYearPlotRateLineChart"
+                    class="com.github.mikephil.charting.charts.LineChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/charts_year_books_bar_chart_hor_margin" />
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/chartsYearCharacterRateLineChartCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/charts_year_card_margin"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/chartsYearPlotRateLineChartCard">
+
+                <view
+                    android:id="@+id/chartsYearCharacterRateLineChart"
+                    class="com.github.mikephil.charting.charts.LineChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/charts_year_books_bar_chart_hor_margin" />
             </androidx.cardview.widget.CardView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

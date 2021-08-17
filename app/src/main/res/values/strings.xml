@@ -88,5 +88,12 @@
     <string name="scan_string">Scan</string>
     <string name="no_internet_connection_string">No Internet Connection</string>
     <string name="no_book_found_string">No book found</string>
+    <string name="pages_per_month_string">Pages Per Month</string>
+    <string name="books_per_month_string">Books Per Month</string>
+    <string name="style_rate_string">Style Rate</string>
+    <string name="emotions_rate_string">Emotions Rate</string>
+    <string name="plot_rate_string">Plot Rate</string>
+    <string name="characters_rate_string">Characters Rate</string>
+    <string name="goto_string">Goto</string>
 
 </resources>

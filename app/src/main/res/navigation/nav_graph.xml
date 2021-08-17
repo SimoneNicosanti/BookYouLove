@@ -34,7 +34,11 @@
         android:id="@+id/chartsFragment"
         android:name="it.simone.bookyoulove.view.ChartsFragment"
         android:label="@string/charts_string"
-        tools:layout="@layout/fragment_charts" />
+        tools:layout="@layout/fragment_charts" >
+        <action
+            android:id="@+id/action_chartsFragment_to_endedDetailFragment"
+            app:destination="@id/endedDetailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/newReadingBookFragment"
         android:name="it.simone.bookyoulove.view.reading.NewReadingBookFragment"
