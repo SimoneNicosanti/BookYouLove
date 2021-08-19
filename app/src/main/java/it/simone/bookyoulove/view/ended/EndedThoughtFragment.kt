@@ -5,6 +5,7 @@ import android.view.*
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import it.simone.bookyoulove.R
@@ -37,8 +38,6 @@ class EndedThoughtFragment : Fragment() {
 
         binding = FragmentEndedThoughtBinding.inflate(inflater, container, false)
 
-        binding.endedThoughtEditText.setText(args.endedFinalThought)
-        endedThoughtVM.updateThought(args.endedFinalThought)
 
         binding.endedThoughtTitleTextView.text = getString(R.string.final_thought_string)
         setUI(isEditing)
@@ -47,13 +46,34 @@ class EndedThoughtFragment : Fragment() {
             endedThoughtVM.updateThought(text.toString())
         }
 
+        setObserver()
+
+        //Modifica il testo della editText che triggera il doOnTextChanged, il quale modifica il testo della TextView
+        binding.endedThoughtEditText.setText(args.endedFinalThought)
+        //endedThoughtVM.updateThought(args.endedFinalThought)
+
         return binding.root
+    }
+
+    private fun setObserver() {
+        val currentThoughtObserver = Observer<String> { currentThought ->
+            binding.endedThoughtTextView.text = currentThought
+        }
+        endedThoughtVM.currentThought.observe(viewLifecycleOwner, currentThoughtObserver)
     }
 
 
     private fun setUI(editing: Boolean) {
-        binding.endedThoughtEditText.isEnabled = editing
-        //TODO("Sistemare colori in night mode")
+        if (editing) {
+            binding.endedThoughtEditText.visibility = View.VISIBLE
+            binding.endedThoughtEditText.isEnabled = true
+            binding.endedThoughtTextView.visibility = View.GONE
+        }
+        else {
+            binding.endedThoughtEditText.visibility = View.GONE
+            binding.endedThoughtEditText.isEnabled = false
+            binding.endedThoughtTextView.visibility = View.VISIBLE
+        }
     }
 
 
@@ -79,6 +99,7 @@ class EndedThoughtFragment : Fragment() {
                 }
                 else {
                     item.setIcon(R.drawable.ic_round_save_new_reading_book)
+                    //binding.endedThoughtEditText.setText(binding.endedThoughtTextView.text)
                 }
                 isEditing = !isEditing
                 setUI(isEditing)

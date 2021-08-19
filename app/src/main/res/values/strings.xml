@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">BookYouLove</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="cover_image_view_descriptor">Book Cover</string>
     <string name="reading_string">Reading</string>
@@ -11,7 +10,7 @@
     <string name="book_cover_string">Book Cover</string>
     <string name="reading_new_string">New</string>
     <string name="finish_string">Finish</string>
-    <string name="abandon_string">Abandon</string>
+    <string name="leave_string">Leave</string>
     <string name="take_note_string">Take Note</string>
     //
     <string name="new_reading_book_string">New Reading Book</string>

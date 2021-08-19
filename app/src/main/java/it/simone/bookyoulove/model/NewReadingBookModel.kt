@@ -22,7 +22,6 @@ class NewReadingBookModel(val myAppDatabase : AppDatabase){
             }
         }
         return isPresent
-        //TODO("Trova un modo per ritornare valori dall'interno di un withContext")
     }
 
 

@@ -27,7 +27,7 @@
         tools:layout="@layout/fragment_settings" />
     <fragment
         android:id="@+id/tbrFragment"
-        android:name="it.simone.bookyoulove.view.TbrFragment"
+        android:name="it.simone.bookyoulove.view.tbr.TbrFragment"
         android:label="@string/tbr_string"
         tools:layout="@layout/fragment_tbr" />
     <fragment

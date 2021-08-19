@@ -10,6 +10,9 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.Period
 import java.time.YearMonth
+import java.time.temporal.ChronoUnit
+import java.time.temporal.Temporal
+import java.util.*
 import kotlin.collections.ArrayList
 
 const val TOTAL_RATE = "total"
@@ -51,12 +54,7 @@ class ChartsYearViewModel : ViewModel() {
         var bookPerMonthArray = arrayListOf<Int>()
         var pagesPerMonthArray = arrayListOf<Float>()
         var supportPerYear = arrayListOf<Float>()
-        var rateMap = mapOf(
-            TOTAL_RATE to arrayListOf<Float>(),
-            STYLE_RATE to arrayListOf(),
-            EMOTIONS_RATE to arrayListOf(),
-            PLOT_RATE to arrayListOf(),
-            CHARACTER_RATE to arrayListOf())
+        var rateMap: Map<String, ArrayList<Float>>
         var booksOfTheYearArray : ArrayList<ChartsBookData>
         viewModelScope.launch { Dispatchers.Default
 
@@ -110,11 +108,11 @@ class ChartsYearViewModel : ViewModel() {
             }
         }
         val totalSupport = (paperSupport + ebookSupport + audiobookSupport).toFloat()
-        if (totalSupport != 0F) {
-            return arrayListOf(paperSupport / totalSupport * 100, ebookSupport / totalSupport * 100, audiobookSupport / totalSupport * 100)
+        return if (totalSupport != 0F) {
+            arrayListOf(paperSupport / totalSupport * 100, ebookSupport / totalSupport * 100, audiobookSupport / totalSupport * 100)
         }
         else {
-            return arrayListOf(0F, 0F, 0F)
+            arrayListOf(0F, 0F, 0F)
         }
     }
 
@@ -137,6 +135,7 @@ class ChartsYearViewModel : ViewModel() {
             if (info.startDate.startYear <= selectedYear && selectedYear <= info.endDate.endYear) {
                 val totalReadDays : Int = computeReadDays(info)
                 val pagesPerDay : Float = if (totalReadDays > 0) info.pages / totalReadDays.toFloat() else 0F
+                Log.d("Nicosanti", "readDays $totalReadDays - pagesPerDay $pagesPerDay")
 
                 // Se il libro è stato letto TUTTO nell'anno selezionato
                 if (selectedYear == info.startDate.startYear && selectedYear == info.endDate.endYear) {
@@ -190,15 +189,20 @@ class ChartsYearViewModel : ViewModel() {
 
 
     private fun computeReadDays(info: ChartsBookData): Int {
-        //TODO("Rivedi per ritornare il numero esatto e non approssimato")
-        /*return ((info.endDate.endYear - info.startDate.startYear) * DAYS_IN_YEAR +
-                (info.endDate.endMonth - info.startDate.startMonth) * DAYS_IN_MONTH +
-                (info.endDate.endDay - info.startDate.startDay + 1))*/
-
+        /*
         val totalDays = Period.between(LocalDate.of(info.startDate.startYear, info.startDate.startMonth, info.startDate.startDay), LocalDate.of(info.endDate.endYear, info.endDate.endMonth, info.endDate.endDay)).days
         Log.i("Nicosanti", "$totalDays")
         return totalDays
         // +1 mi considera il giorno di inizio
+        */
+        val startDateCal = Calendar.getInstance()
+        startDateCal.set(info.startDate.startYear, info.startDate.startMonth, info.startDate.startDay)
+
+        val endDateCal = Calendar.getInstance()
+        endDateCal.set(info.endDate.endYear, info.endDate.endMonth, info.endDate.endDay)
+
+        val diffInMillis = endDateCal.timeInMillis - startDateCal.timeInMillis
+        return (diffInMillis / (1000 * 60 * 60 * 24)).toInt()
     }
 
     fun changeSelectedYear(selectedYear: Int) {

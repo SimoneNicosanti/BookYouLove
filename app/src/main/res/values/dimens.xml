@@ -85,4 +85,6 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     -->
     <dimen name="widget_margin">0dp</dimen>
     <dimen name="charts_year_pages_bar_chart_heaight">500dp</dimen>
+    <dimen name="detail_reading_card_internal_margin">5dp</dimen>
+    <dimen name="new_reading_card_internal_margin">5dp</dimen>
 </resources>

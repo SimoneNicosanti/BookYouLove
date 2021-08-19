@@ -16,12 +16,10 @@ import it.simone.bookyoulove.R
 import it.simone.bookyoulove.adapter.ReadingAdapter
 import it.simone.bookyoulove.database.DAO.ShowedBookInfo
 import it.simone.bookyoulove.databinding.FragmentReadingBinding
-import it.simone.bookyoulove.view.QUOTE_LIST_READING_CALLER
 import it.simone.bookyoulove.view.dialog.LoadingDialogFragment
 import it.simone.bookyoulove.viewmodel.ReadingViewModel
 
 
-//TODO("Inserire meccanismo di cancelazione del libro")
 
 //https://medium.com/holler-developers/paging-image-gallery-with-recyclerview-f059d035b7e7
 //https://medium.com/@supahsoftware/custom-android-views-carousel-recyclerview-7b9318d23e9a
@@ -199,7 +197,7 @@ class ReadingFragment : Fragment() , ReadingAdapter.OnReadingItemMenuItemClickLi
                 true
             }
 
-            R.id.readingContextMenuAbandonItem -> {
+            R.id.readingContextMenuLeaveItem -> {
                 true
                 //TODO("Abandono --> TBR / Delete")
             }

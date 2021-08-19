@@ -9,7 +9,6 @@ import kotlinx.coroutines.withContext
 class EndingModel(val myAppDatabase: AppDatabase) {
 
     suspend fun saveTerminatedBook(terminatedBook: Book?) {
-        //TODO("Verifica no altri libri stesso titolo e autore in stesso periodo di tempo")
         withContext(Dispatchers.IO) {
             terminatedBook!!.readState = ENDED_BOOK_STATE
             myAppDatabase.bookDao().updateBooks(terminatedBook)

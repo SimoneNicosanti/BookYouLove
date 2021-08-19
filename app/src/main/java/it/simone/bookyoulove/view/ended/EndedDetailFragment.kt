@@ -172,7 +172,12 @@ class EndedDetailFragment : Fragment(), View.OnClickListener {
 
             R.id.endedDetailMenuEditItem -> {
                 val navController = findNavController()
-                val action = EndedDetailFragmentDirections.actionEndedDetailFragmentToModifyEndedFragment(endedDetailBook)
+                val action = EndedDetailFragmentDirections.actionEndedDetailFragmentToModifyEndedFragment(endedDetailBook.copy(
+                        startDate = endedDetailBook.startDate?.copy(),
+                        endDate = endedDetailBook.endDate?.copy(),
+                        support = endedDetailBook.support?.copy(),
+                        rate = endedDetailBook.rate?.copy()
+                ))
                 navController.navigate(action)
                 true
             }

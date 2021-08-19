@@ -2,10 +2,10 @@
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:initialKeyguardLayout="@layout/quote_of_the_day_widget"
     android:initialLayout="@layout/quote_of_the_day_widget"
-    android:minWidth="250dp"
+    android:minWidth="40dp"
     android:minHeight="40dp"
     android:previewImage="@drawable/example_appwidget_preview"
     android:resizeMode="horizontal|vertical"
-    android:updatePeriodMillis="0"
+    android:updatePeriodMillis="1800000"
     android:widgetCategory="home_screen|keyguard">
 </appwidget-provider>

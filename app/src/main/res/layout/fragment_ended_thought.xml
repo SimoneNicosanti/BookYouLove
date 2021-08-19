@@ -21,6 +21,7 @@
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_margin="5dp"
             android:orientation="vertical">
 
             <TextView
@@ -35,13 +36,21 @@
                 android:id="@+id/endedThoughtEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="5dp"
                 android:background="@android:color/transparent"
                 android:foregroundGravity="top"
                 android:gravity="clip_horizontal"
                 android:hapticFeedbackEnabled="false"
                 android:isScrollContainer="true"
                 android:scrollbars="vertical"
-                android:text="ddd"
+                android:textSize="@dimen/ended_thought_text_size"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/endedThoughtTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
                 android:textSize="@dimen/ended_thought_text_size" />
 
         </LinearLayout>

@@ -7,8 +7,8 @@
         android:title="@string/terminate_string"
         android:visible="true" />
     <item
-        android:id="@+id/readingContextMenuAbandonItem"
-        android:title="@string/abandon_string"
+        android:id="@+id/readingContextMenuLeaveItem"
+        android:title="@string/leave_string"
         android:visible="true" />
     <item
         android:id="@+id/readingContextMenuDetailItem"

@@ -29,7 +29,8 @@ class QuoteListViewModel(application : Application) : AndroidViewModel(applicati
     fun getAllQuotes() {
         isAccessingDatabase.value = true
         viewModelScope.launch {
-            currentQuotesArray.value = quoteListModel.loadAllQuotesFromDatabase()
+            originalArray = quoteListModel.loadAllQuotesFromDatabase()
+            currentQuotesArray.value = originalArray
             isAccessingDatabase.value = false
         }
     }

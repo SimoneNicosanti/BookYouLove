@@ -3,9 +3,7 @@ package it.simone.bookyoulove.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import it.simone.bookyoulove.database.AppDatabase
-import it.simone.bookyoulove.database.DAO.ShowedBookInfo
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.database.entity.EndDate
 import it.simone.bookyoulove.database.entity.StartDate
@@ -47,9 +45,9 @@ class ModifyEndedViewModel(application : Application) : AndroidViewModel(applica
         currentBook.value?.endDate = newEndDate
     }
 
-    fun modifyPages(newPages : Int) {
+    fun modifyPages(newPagesString: String?) {
         if (!modified) modified = true
-        currentBook.value?.pages = newPages
+        currentBook.value?.pages = if (newPagesString == null || newPagesString == "") 0 else newPagesString.toInt()
     }
 
     fun modifyCover(newCoverLink : String) {

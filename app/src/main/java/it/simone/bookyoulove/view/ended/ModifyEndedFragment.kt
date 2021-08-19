@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.RatingBar
 import androidx.core.os.bundleOf
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -23,7 +24,6 @@ import it.simone.bookyoulove.view.*
 import it.simone.bookyoulove.view.dialog.CoverLinkPickerFragment
 import it.simone.bookyoulove.view.dialog.DatePickerFragment
 import it.simone.bookyoulove.view.dialog.LoadingDialogFragment
-import it.simone.bookyoulove.view.dialog.PagesPickerFragment
 import it.simone.bookyoulove.viewmodel.ChartsViewModel
 import it.simone.bookyoulove.viewmodel.EndedViewModel
 import it.simone.bookyoulove.viewmodel.ModifyEndedViewModel
@@ -68,11 +68,12 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
             modifyEndedVM.modifyEndDate(newEndDate)
         })
 
+        /*
         childFragmentManager.setFragmentResultListener("pagesKey", this, {_ , bundle ->
             val newPages = bundle.getInt("settedPages")
             modifyEndedVM.modifyPages(newPages)
             binding.modifyEndedPagesText.text = newPages.toString()
-        })
+        })*/
 
         childFragmentManager.setFragmentResultListener("coverLinkKey", this, {_, bundle ->
             val newLink = bundle.getString("settedCoverLink")
@@ -102,7 +103,7 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
         binding.modifyEndedPaperCheck.setOnClickListener(this)
         binding.modifyEndedEbookCheck.setOnClickListener(this)
         binding.modifyEndedAudiobookCheck.setOnClickListener(this)
-        binding.modifyEndedPagesCard.setOnClickListener(this)
+        //binding.modifyEndedPagesCard.setOnClickListener(this)
         binding.modifyEndedSaveButton.setOnClickListener(this)
 
         binding.endedModifyTotalRate.onRatingBarChangeListener = this
@@ -110,6 +111,10 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
         binding.endedModifyEmotionsRate.onRatingBarChangeListener = this
         binding.endedModifyPlotRate.onRatingBarChangeListener = this
         binding.endedModifyCharactersRate.onRatingBarChangeListener = this
+
+        binding.modifyEndedPagesText.doOnTextChanged { text, _, _, _ ->
+            modifyEndedVM.modifyPages(text.toString())
+        }
 
         setObservers()
 
@@ -127,7 +132,7 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
                 R.drawable.cover_not_found).into(binding.modifyEndedCoverImageView)
             else Picasso.get().load(R.drawable.book_cover_place_holder).into(binding.modifyEndedCoverImageView)
 
-            binding.modifyEndedPagesText.text = currentBook.pages.toString()
+            binding.modifyEndedPagesText.setText(currentBook.pages.toString())
 
             binding.endedModifyTotalRate.rating = currentBook.rate?.totalRate!!
             binding.endedModifyStyleRate.rating = currentBook.rate?.totalRate!!
@@ -196,9 +201,10 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
                 datePickerDialog.show(childFragmentManager, "End Date Picker")
             }
 
+            /*
             binding.modifyEndedPagesCard -> {
                 PagesPickerFragment().show(childFragmentManager, "Pages Picker")
-            }
+            }*/
 
             binding.modifyEndedCoverImageView -> {
                 CoverLinkPickerFragment().show(childFragmentManager, "Cover Link Picker")

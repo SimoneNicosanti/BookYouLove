@@ -1,10 +1,9 @@
 package it.simone.bookyoulove.view.quotes
 
-import android.app.SearchManager
+
 import android.os.Bundle
 import android.view.*
 import android.widget.SearchView
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -13,13 +12,9 @@ import androidx.navigation.fragment.navArgs
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.adapter.QuoteListAdapter
 import it.simone.bookyoulove.database.DAO.ShowQuoteInfo
-import it.simone.bookyoulove.database.entity.Quote
-import it.simone.bookyoulove.database.entity.StartDate
 import it.simone.bookyoulove.databinding.FragmentQuoteListBinding
-import it.simone.bookyoulove.view.QUOTE_LIST_ENDED_CALLER
 import it.simone.bookyoulove.view.dialog.LoadingDialogFragment
 import it.simone.bookyoulove.viewmodel.QuoteListViewModel
-import java.util.*
 
 
 class QuoteListFragment : Fragment(), QuoteListAdapter.OnQuoteListHolderClick, SearchView.OnQueryTextListener {
@@ -69,7 +64,6 @@ class QuoteListFragment : Fragment(), QuoteListAdapter.OnQuoteListHolderClick, S
             quoteListVM.onModifiedQuote(it)
             findNavController().currentBackStackEntry?.savedStateHandle?.remove<ShowQuoteInfo>("modifiedQuoteInfo")
         }
-
 
         setObservers()
         return binding.root

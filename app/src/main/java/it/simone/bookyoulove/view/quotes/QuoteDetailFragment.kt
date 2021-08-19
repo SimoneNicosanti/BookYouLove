@@ -113,7 +113,7 @@ class QuoteDetailFragment : Fragment() {
         return when(item.itemId) {
 
             R.id.quoteDetailMenuEditItem -> {
-                findNavController().navigate(QuoteListFragmentDirections.actionGlobalModifyQuoteFragment(null, null, 0, requestedQuote))
+                findNavController().navigate(QuoteListFragmentDirections.actionGlobalModifyQuoteFragment(null, null, 0, requestedQuote.copy()))
                 true
             }
 

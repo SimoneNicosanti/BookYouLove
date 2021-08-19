@@ -1,6 +1,7 @@
 package it.simone.bookyoulove.view.reading
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.*
 import androidx.lifecycle.Observer
@@ -52,7 +53,6 @@ class DetailReadingFragment : Fragment() {
             detailReadingVM.onReadingBookModified(it)
             findNavController().currentBackStackEntry?.savedStateHandle?.remove<Book>("modifiedBook")
             readingVM.notifyReadingBookModified(it)
-
         }
 
         setObservers()
@@ -62,7 +62,7 @@ class DetailReadingFragment : Fragment() {
     private fun setObservers() {
 
         val currentBookObserver = Observer<Book> { currentBook ->
-
+            Log.d("Nicosanti", "Detail Reading Current")
             if (currentBook.coverName != "") Picasso.get().load(currentBook.coverName).placeholder(R.drawable.book_cover_place_holder).error(
                 R.drawable.cover_not_found).into(binding.detailReadingCoverImageView)
             else Picasso.get().load(R.drawable.book_cover_place_holder).into(binding.detailReadingCoverImageView)
@@ -108,7 +108,11 @@ class DetailReadingFragment : Fragment() {
         return when (item.itemId) {
             R.id.detailReadingMenuEdit -> {
                 val navController = findNavController()
-                val action = DetailReadingFragmentDirections.actionDetailReadingFragmentToNewReadingBookFragment(detailBook)
+                val action = DetailReadingFragmentDirections.actionDetailReadingFragmentToNewReadingBookFragment(detailBook.copy(
+                        startDate = detailBook.startDate!!.copy(),
+                        support = detailBook.support!!.copy()))
+                //Anche se effettuo la copia le strutture interne sono passate per riferimento e non vengono copiate, quindi le copio a mano
+                //Trovato con bug
                 navController.navigate(action)
                 true
             }

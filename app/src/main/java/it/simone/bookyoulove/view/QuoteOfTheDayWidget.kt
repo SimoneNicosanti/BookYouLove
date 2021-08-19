@@ -1,30 +1,15 @@
 package it.simone.bookyoulove.view
 
-import android.app.AlarmManager
-import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
-import android.database.DataSetObserver
-import android.os.SystemClock
-import android.text.method.MovementMethod
-import android.text.method.ScrollingMovementMethod
+import android.database.Cursor
+import android.net.Uri
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.*
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.AppDatabase
-import it.simone.bookyoulove.databinding.QuoteOfTheDayWidgetBinding
-import it.simone.bookyoulove.providers.QuotesProvider
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 
 class QuoteOfTheDayWidget : AppWidgetProvider() {
@@ -32,15 +17,22 @@ class QuoteOfTheDayWidget : AppWidgetProvider() {
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         // There may be multiple widgets active, so update all of them
         Log.i("Nicosanti", "Updating")
-        val alarm = Intent(context, QuoteOfTheDayWidget::class.java)
-        alarm.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
-        alarm.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds)
-        val pendingIntent = PendingIntent.getBroadcast(context, 0, alarm, PendingIntent.FLAG_CANCEL_CURRENT)
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        alarmManager.setRepeating(AlarmManager.RTC, System.currentTimeMillis(), 10000, pendingIntent)
 
         for (appWidgetId in appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId)
+            val intent = Intent(context, QuoteOfTheDayWidgetService::class.java).apply {
+                putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+                data = Uri.parse(toUri(Intent.URI_INTENT_SCHEME))
+            }
+
+            val remoteViews = RemoteViews(context.packageName, R.layout.quote_of_the_day_widget).apply {
+                setRemoteAdapter(R.id.quoteOfTheDayWidgetListView, intent)
+            }
+
+            //Chiamo prima la notify che invoca la onDataSetChanged (Ricarico nuova quote) e la imposta come quella visualizzata
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.quoteOfTheDayWidgetListView)
+            //Permette di aggiornare la visualizzazione delle informazioni
+            appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
+
         }
 
         super.onUpdate(context, appWidgetManager, appWidgetIds)
@@ -56,14 +48,15 @@ class QuoteOfTheDayWidget : AppWidgetProvider() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
         super.onReceive(context, intent)
-
     }
 }
 
+/*
 internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
     // Construct the RemoteViews object
     val views = RemoteViews(context.packageName, R.layout.quote_of_the_day_widget)
 
+    /*
     CoroutineScope(Dispatchers.IO).launch {
         val quoteCursor = context.contentResolver.query(QuotesProvider().URI_RANDOM, null, null, null, null)
 
@@ -81,20 +74,84 @@ internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManage
             }
             quoteCursor?.close()
 
+     */
+
             appWidgetManager.updateAppWidget(appWidgetId, views)
         }
     }
 
 
-}
+}*/
 
-class ScrollableTextView(context : Context) : androidx.appcompat.widget.AppCompatTextView(context) {
-
-    init {
-        this.movementMethod = ScrollingMovementMethod()
+class QuoteOfTheDayWidgetService : RemoteViewsService() {
+    override fun onGetViewFactory(intent: Intent): RemoteViewsFactory {
+        return QuoteOfTheDayRemoteViewsFactory(this.applicationContext, intent)
     }
 }
 
 
+class QuoteOfTheDayRemoteViewsFactory(
+        private val context : Context,
+        intent : Intent
+) : RemoteViewsService.RemoteViewsFactory {
+
+    private var quoteCursor : Cursor? = null
+
+    private val myAppDatabase = AppDatabase.getDatabaseInstance(context)
+
+    override fun onCreate() {
+    }
+
+    override fun onDataSetChanged() {
+        //quoteCursor = context.contentResolver.query(QuotesProvider().URI_RANDOM, null, null, null, null)
+        quoteCursor = myAppDatabase.quoteDao().loadRandomQuote()
+        /*
+            Devo per forza utilizzare l'istanza del DB in maniera diretta senza passare per il Provider.
+            Infatti mi serve accedere al DB in maniera Sincrona, per fare in modo che quando il quoteCursor
+            è caricato poi venga visualizzata la quote caricata. Dovendo accedere al DB non posso farlo con
+            il Main Thread e dovei quindi lanciare una Coroutine, che però non mi garantisce sincronia a meno di
+            fare join e quindi rendere la funzione suspend.
+            Invece la onDataSetChanged è fatta proprio per eseguire operazioni lunghe (come accesso a DB) in maniera
+            sincrona
+         */
+    }
+
+    override fun onDestroy() {
+    }
+
+    override fun getCount(): Int {
+        return 1
+    }
+
+    override fun getViewAt(position: Int): RemoteViews {
+        return RemoteViews(context.packageName, R.layout.quote_of_the_day_widget_quote_text).apply {
+
+            if (quoteCursor != null) {
+                quoteCursor!!.moveToFirst()
+                setTextViewText(R.id.quoteOfTheDayQuoteText, quoteCursor!!.getString(0))
+                setTextViewText(R.id.quoteOfTheDayWidgetTitle, quoteCursor!!.getString(quoteCursor!!.getColumnIndex("bookTitle")))
+                setTextViewText(R.id.quoteOfTheDayWidgetAuthor, quoteCursor!!.getString(quoteCursor!!.getColumnIndex("bookAuthor")))
+            }
+
+        }
+    }
+
+    override fun getLoadingView(): RemoteViews? {
+        return null
+    }
+
+    override fun getViewTypeCount(): Int {
+        return 1
+    }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun hasStableIds(): Boolean {
+        return true
+    }
+
+}
 
 

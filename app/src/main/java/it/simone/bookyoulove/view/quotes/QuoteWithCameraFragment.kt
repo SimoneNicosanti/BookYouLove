@@ -3,6 +3,8 @@ package it.simone.bookyoulove.view.quotes
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.util.Rational
+import android.util.Size
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -73,12 +75,13 @@ class QuoteWithCameraFragment : Fragment() {
 
 
     private fun bindPreview(cameraProvider: ProcessCameraProvider?) {
-        val preview: Preview = Preview.Builder()
-                .setTargetAspectRatio(AspectRatio.RATIO_4_3)
-                .build()
 
         val cameraSelector: CameraSelector = CameraSelector.Builder()
                 .requireLensFacing(CameraSelector.LENS_FACING_BACK)
+                .build()
+
+        val preview: Preview = Preview.Builder()
+                .setTargetAspectRatio(AspectRatio.RATIO_4_3 )
                 .build()
 
         val previewView = binding.quoteWithCameraPreviewView as PreviewView
@@ -94,11 +97,19 @@ class QuoteWithCameraFragment : Fragment() {
                     .build()
         }
 
+        val viewPort = ViewPort.Builder(Rational(previewView.width, previewView.height), previewView.display!!.rotation).build()
+        val useCaseGroup = UseCaseGroup.Builder()
+                .addUseCase(preview)
+                .addUseCase(imageCapture as UseCase)
+                .setViewPort(viewPort)
+                .build()
+
+
         binding.quoteWithCameraTakePictureButton.setOnClickListener {
 
             val quoteImageFile = ImageCapture.OutputFileOptions.Builder(File(requireContext().filesDir, "quoteWithCameraFile")).build()
             imageCapture.run {
-                this?.takePicture(
+                this.takePicture(
                         quoteImageFile,
                         CameraXExecutors.ioExecutor(),
                         object : ImageCapture.OnImageSavedCallback {
@@ -117,11 +128,12 @@ class QuoteWithCameraFragment : Fragment() {
                 )
             }
 
-            cameraProvider?.bindToLifecycle(viewLifecycleOwner, cameraSelector, imageCapture, preview)
+            cameraProvider?.bindToLifecycle(viewLifecycleOwner, cameraSelector, useCaseGroup)
 
         }
 
     }
+
 }
 
 class QuoteWithCameraViewModel : ViewModel() {

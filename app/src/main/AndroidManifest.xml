@@ -23,6 +23,10 @@
                 android:resource="@xml/quote_of_the_day_widget_info" />
         </receiver>
 
+        <service
+            android:name=".view.QuoteOfTheDayWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
         <provider
             android:authorities="it.simone.bookyoulove.providers"
             android:name=".providers.QuotesProvider"

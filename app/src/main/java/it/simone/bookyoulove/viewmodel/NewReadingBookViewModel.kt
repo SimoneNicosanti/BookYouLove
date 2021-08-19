@@ -1,28 +1,21 @@
 package it.simone.bookyoulove.viewmodel
 
 import android.app.Application
-import android.media.ThumbnailUtils
 import android.util.Log
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.AppDatabase
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.database.entity.BookSupport
 import it.simone.bookyoulove.database.entity.StartDate
 import it.simone.bookyoulove.model.NewReadingBookModel
 import it.simone.bookyoulove.view.*
-import it.simone.bookyoulove.view.dialog.AlertDialogFragment
 import kotlinx.coroutines.*
 import org.json.JSONObject
-import java.lang.IllegalArgumentException
 import java.util.*
 
 
@@ -90,31 +83,33 @@ class NewReadingBookViewModel(application: Application): AndroidViewModel(applic
 
 
     fun addNewBook() {
+        Log.d("Nicosanti", "Added")
         isAccessingDatabase.value = true
 
         CoroutineScope(Dispatchers.Main).launch {
             if (currentBook.value!!.keyTitle != "") {
                 //Sto in caso di modifica di un libro precedente
+                /*
+                    Quando invocata la addNewBookInDatabase il parametro è passato per riferimento, quindi
+                    sono impostati i campi della chiave direttamente nel current.value: posso quindi assegnare direttamente
+                    lui come finalBook
+                 */
+                val currentBookCopy = currentBook.value!!.copy()
                 if (currentBook.value!!.keyTitle != newReadingBookModel.formatKeyInfo(currentBook.value?.title!!) ||
                     currentBook.value!!.keyAuthor != newReadingBookModel.formatKeyInfo(currentBook.value?.author!!)) {
                         //Sono stati modificati titolo e autore in qualcosa che modifica la chiave!!
 
-                            val currentBookCopy = currentBook.value!!.copy()
                     newReadingBookModel.removeBookFromDatabase(currentBookCopy)
-                    /*
-                        Quando invocata la addNewBookInDatabase il parametro è passato per riferimento, quindi
-                        sono impostati i campi della chiave direttamente nel current.value: posso quindi assegnare direttamente
-                        lui come finalBook
-                     */
 
                     newReadingBookModel.addNewBookInDatabase(currentBook.value!!)
-                    newReadingBookModel.changeQuotesInfoInDatabase(currentBookCopy)
                 }
 
                 else {
                     // Anche se modificati titole e autore la chiave rimane uguale
                     newReadingBookModel.updateReadingBookInDatabase(currentBook.value!!)
                 }
+
+                newReadingBookModel.changeQuotesInfoInDatabase(currentBookCopy)
             }
 
             else {
@@ -145,8 +140,8 @@ class NewReadingBookViewModel(application: Application): AndroidViewModel(applic
         currentBook.value?.coverName = coverLinkResult
     }
 
-    fun updatePages(pagesResult: Int) {
-        currentBook.value?.pages = pagesResult
+    fun updatePages(pagesResult: String?) {
+        currentBook.value?.pages = if (pagesResult == null || pagesResult == "") 0 else pagesResult.toInt()
     }
 
     fun updateSupport(supportMap: Map<String, Boolean>) {

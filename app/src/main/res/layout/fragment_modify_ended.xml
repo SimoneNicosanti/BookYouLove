@@ -11,7 +11,7 @@
         layout="@layout/fragment_loading_dialog_fragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/scrollView6"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -240,10 +240,12 @@
                         android:layout_height="wrap_content"
                         android:text="@string/pages_string" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/modifyEndedPagesText"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:maxLength="5" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 

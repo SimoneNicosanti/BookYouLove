@@ -1,4 +1,4 @@
-package it.simone.bookyoulove.viewmodel
+ package it.simone.bookyoulove.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -10,19 +10,19 @@ import kotlinx.coroutines.launch
 
 class EndedThoughtViewModel(application: Application) : AndroidViewModel(application) {
 
-    var currentThought: String = ""
+    var currentThought = MutableLiveData("")
     val myAppDatabase = AppDatabase.getDatabaseInstance(application.applicationContext)
 
 
     fun saveNewThought(keyTitle : String , keyAuthor: String, time: Int) {
         //Dovrebbe stare in Model con una chiamata
         CoroutineScope(Dispatchers.IO).launch {
-            myAppDatabase.bookDao().updateFinalThoughtByKey(keyTitle, keyAuthor, time, currentThought)
+            myAppDatabase.bookDao().updateFinalThoughtByKey(keyTitle, keyAuthor, time, currentThought.value!!)
         }
     }
 
     fun updateThought(text: String) {
-        currentThought = text
+        currentThought.value = text
     }
 
 }

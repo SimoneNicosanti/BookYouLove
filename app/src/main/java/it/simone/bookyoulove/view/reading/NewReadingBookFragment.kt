@@ -3,6 +3,7 @@ package it.simone.bookyoulove.view.reading
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
@@ -73,11 +74,12 @@ class NewReadingBookFragment : Fragment() , View.OnClickListener {
             newReadingVM.updateCoverLink(coverLinkResult!!)
         }
 
+        /*
         childFragmentManager.setFragmentResultListener("pagesKey", this) { _, bundle ->
             val pagesResult : Int = bundle.getInt("settedPages")
             binding.newBookPagesInput.text = pagesResult.toString()
             newReadingVM.updatePages(pagesResult)
-        }
+        }*/
 
         if (args.readingModifyBook != null) {
             //newReadingVM.loadReadingBookToModify(args.readingModifyKeyTitle!!, args.readingModifyKeyAuthor!!, args.readingModifyTime)
@@ -103,7 +105,7 @@ class NewReadingBookFragment : Fragment() , View.OnClickListener {
         binding.newBookPaperCheckbox.setOnClickListener(this)
         binding.newBookEbookCheckbox.setOnClickListener(this)
         binding.newBookAudiobookCheckbox.setOnClickListener(this)
-        binding.newBookPagesInput.setOnClickListener (this)
+        //binding.newBookPagesInput.setOnClickListener (this)
         binding.newBookSaveButton.setOnClickListener(this)
 
         setObservers()
@@ -113,6 +115,10 @@ class NewReadingBookFragment : Fragment() , View.OnClickListener {
         }
         binding.newBookAuthorInput.doOnTextChanged { text, _, _, _ ->
             newReadingVM.updateAuthor(text)
+        }
+
+        binding.newBookPagesInput.doOnTextChanged { text, _, _, _ ->
+            newReadingVM.updatePages(text.toString())
         }
 
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<String>("scannedIsbnKey")?.observe(viewLifecycleOwner) { scannedIsbn ->
@@ -155,6 +161,7 @@ class NewReadingBookFragment : Fragment() , View.OnClickListener {
         newReadingVM.isAccessingDatabase.observe(viewLifecycleOwner, isAccessingDatabaseObserver)
 
         val exitObserver = Observer<Book> { finalBook ->
+            Log.d("Nicosanti", "Final Book")
             if (args.readingModifyBook != null) {
                 //Chiamato da Detail
                 readingVM.readingUpdated(true)
@@ -185,7 +192,7 @@ class NewReadingBookFragment : Fragment() , View.OnClickListener {
             binding.newBookEbookCheckbox.isChecked = currentBook.support?.ebookSupport ?: false
             binding.newBookAudiobookCheckbox.isChecked = currentBook.support?.audiobookSupport ?: false
 
-            binding.newBookPagesInput.text = currentBook.pages.toString()
+            binding.newBookPagesInput.setText(currentBook.pages.toString())
         }
         newReadingVM.currentBook.observe(viewLifecycleOwner, currentBookObserver)
 
@@ -207,8 +214,6 @@ class NewReadingBookFragment : Fragment() , View.OnClickListener {
     }
 
 
-
-
     override fun onClick(view: View?) {
 
         when (view) {
@@ -217,11 +222,11 @@ class NewReadingBookFragment : Fragment() , View.OnClickListener {
                 "Cover Link Picker"
             )
 
-            //TODO("Sostituire number picker con EditText che prende solo numeri : non ho problemi con tipo di input")
+            /*
             binding.newBookPagesInput -> PagesPickerFragment().show(
                 childFragmentManager,
                 "Pages Picker"
-            )
+            )*/
 
             binding.newBookStartDateText -> {
                 val newDatePicker = DatePickerFragment()
@@ -295,4 +300,5 @@ class NewReadingBookFragment : Fragment() , View.OnClickListener {
     private fun takeIsbnWithCamera() {
         findNavController().navigate(NewReadingBookFragmentDirections.actionGlobalTakeBookIsbnFragment())
     }
+
 }
