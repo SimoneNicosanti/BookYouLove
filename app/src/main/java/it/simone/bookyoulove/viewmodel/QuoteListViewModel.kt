@@ -7,10 +7,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import it.simone.bookyoulove.database.AppDatabase
 import it.simone.bookyoulove.database.DAO.ShowQuoteInfo
-import it.simone.bookyoulove.database.entity.Quote
 import it.simone.bookyoulove.model.QuoteListModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.DisposableHandle
 import kotlinx.coroutines.launch
 
 class QuoteListViewModel(application : Application) : AndroidViewModel(application) {
@@ -35,10 +33,10 @@ class QuoteListViewModel(application : Application) : AndroidViewModel(applicati
         }
     }
 
-    fun getQuotesByBook(bookKeyTitle: String, bookKeyAuthor: String, bookReadTime : Int) {
+    fun getQuotesByBookId(bookId : Long) {
         isAccessingDatabase.value = true
         viewModelScope.launch {
-            currentQuotesArray.value = quoteListModel.loadQuotesByBookFromDatabase(bookKeyTitle, bookKeyAuthor, bookReadTime)
+            currentQuotesArray.value = quoteListModel.loadQuotesByBookFromDatabase(bookId)
             originalArray = currentQuotesArray.value!!
             isAccessingDatabase.value = false
         }

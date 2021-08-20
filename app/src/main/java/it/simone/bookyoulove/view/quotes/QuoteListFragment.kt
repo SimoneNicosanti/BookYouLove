@@ -38,11 +38,11 @@ class QuoteListFragment : Fragment(), QuoteListAdapter.OnQuoteListHolderClick, S
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (args.bookKeyTitle == null) {
+        if (args.bookId == 0L) {
             quoteListVM.getAllQuotes()
         }
         else {
-            quoteListVM.getQuotesByBook(args.bookKeyTitle!!, args.bookKeyAuthor!!, args.bookReadTime)
+            quoteListVM.getQuotesByBookId(args.bookId)
         }
 
         setHasOptionsMenu(true)
@@ -121,10 +121,8 @@ class QuoteListFragment : Fragment(), QuoteListAdapter.OnQuoteListHolderClick, S
 
         quoteListVM.setCurrentPosition(position)
         findNavController().navigate(QuoteListFragmentDirections.actionQuoteListFragmentToQuoteDetailFragment(
-                quoteArray[position].quoteText,
-                quoteArray[position].bookTitle,
-                quoteArray[position].bookAuthor,
-                quoteArray[position].readTime))
+                quoteArray[position].quoteId,
+                quoteArray[position].bookId))
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {

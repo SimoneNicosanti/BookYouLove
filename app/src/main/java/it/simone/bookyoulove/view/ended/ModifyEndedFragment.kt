@@ -40,7 +40,6 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
     private val chartsVM : ChartsViewModel by activityViewModels()
     private val modifyEndedVM : ModifyEndedViewModel by viewModels()
 
-    private var loadingDialog = LoadingDialogFragment()
 
     private val args: ModifyEndedFragmentArgs by navArgs()
 
@@ -68,12 +67,6 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
             modifyEndedVM.modifyEndDate(newEndDate)
         })
 
-        /*
-        childFragmentManager.setFragmentResultListener("pagesKey", this, {_ , bundle ->
-            val newPages = bundle.getInt("settedPages")
-            modifyEndedVM.modifyPages(newPages)
-            binding.modifyEndedPagesText.text = newPages.toString()
-        })*/
 
         childFragmentManager.setFragmentResultListener("coverLinkKey", this, {_, bundle ->
             val newLink = bundle.getString("settedCoverLink")
@@ -158,7 +151,7 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
                 chartsVM.changeLoadedStatus()
             }
             else {
-                //Caso in cui viene aggiunto direttamente un libro in stato di ended
+                TODO("Caso aggiunta diretta libro in stato ended")
             }
             findNavController().popBackStack()
         }

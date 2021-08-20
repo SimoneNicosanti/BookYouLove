@@ -3,6 +3,7 @@ package it.simone.bookyoulove.database.entity
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 import java.io.Serializable
 
 // Per poter rendere Serializable Book devo rendere tali anche tutte le classi interne
@@ -37,12 +38,9 @@ data class BookSupport (
     ) : Serializable
 
 
-@Entity(primaryKeys = ["keyTitle", "keyAuthor", "readTime"])
+@Entity
 data class Book (
-
-    var keyTitle: String,
-    var keyAuthor: String,
-    var readTime: Int,
+    @PrimaryKey var bookId : Long,
 
     var title : String,
     var author : String,

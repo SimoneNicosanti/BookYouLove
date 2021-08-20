@@ -3,14 +3,17 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/tbrItemMenuStartItem"
         android:icon="@drawable/ic_round_begin_read"
         android:title="@string/begin_read_string"
         app:showAsAction="ifRoom" />
     <item
+        android:id="@+id/tbrItemMenuDeleteItem"
         android:icon="@drawable/ic_round_delete"
         android:title="@string/delete_string"
         app:showAsAction="ifRoom" />
     <item
+        android:id="@+id/tbrItemMenuEditItem"
         android:icon="@drawable/ic_round_edit_reading_details"
         android:title="@string/edit_string"
         app:showAsAction="ifRoom" />

@@ -38,7 +38,7 @@ class DetailReadingFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        detailReadingVM.loadDetailReadingBook(args.detailKeyTitle, args.detailKeyAuthor, args.detailTime)
+        detailReadingVM.loadDetailReadingBook(args.detailReadingBookId)
     }
 
 

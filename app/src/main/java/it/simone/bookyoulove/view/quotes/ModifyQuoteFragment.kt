@@ -53,9 +53,7 @@ class ModifyQuoteFragment : Fragment(), View.OnClickListener {
 
         if (args.modifyQuote == null) {
             //Aggiunta di Quote in libro
-            modifyQuoteVM.changeQuoteTitle(args.bookTitle!!)
-            modifyQuoteVM.changeQuoteAuthor(args.bookAuthor!!)
-            modifyQuoteVM.changeQuoteReadTime(args.bookReadTime)
+            modifyQuoteVM.setQuoteBookInfo(args.bookId, args.bookTitle!!, args.bookAuthor!!)
         }
         else {
             //Modifica di Quote esistente

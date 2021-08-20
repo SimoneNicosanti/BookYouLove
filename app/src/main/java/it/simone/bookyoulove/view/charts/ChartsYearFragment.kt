@@ -32,6 +32,8 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
+
+
 class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnChartValueSelectedListener {
 
     private lateinit var binding : FragmentChartsYearBinding
@@ -268,11 +270,7 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
             val rateChartSnackbar = Snackbar.make(requireView(), booksOfTheYearArray[x].title, Snackbar.LENGTH_SHORT)
             rateChartSnackbar.setAction(getString(R.string.goto_string)) {
                 findNavController().navigate(
-                    ChartsFragmentDirections.actionChartsFragmentToEndedDetailFragment(
-                        booksOfTheYearArray[x].keyTitle,
-                        booksOfTheYearArray[x].keyAuthor,
-                        booksOfTheYearArray[x].readTime
-                    )
+                    ChartsFragmentDirections.actionChartsFragmentToEndedDetailFragment(booksOfTheYearArray[x].bookId)
                 )
             }
             rateChartSnackbar.show()

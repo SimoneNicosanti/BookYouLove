@@ -33,7 +33,6 @@ class ReadingFragment : Fragment() , ReadingAdapter.OnReadingItemMenuItemClickLi
     //Variabile che mantiene le informazioni del libro da mostrare
     //private var showBookInfo : ShowedBookInfo? = null
 
-    private var loadingDialog = LoadingDialogFragment()
 
     private val readingVM: ReadingViewModel by activityViewModels()
 
@@ -95,25 +94,6 @@ class ReadingFragment : Fragment() , ReadingAdapter.OnReadingItemMenuItemClickLi
         readingVM.changedReadingList.observe(viewLifecycleOwner, readingListStateObserver)
 
         val isAccessingDatabaseObserver = Observer<Boolean> { isAccessing ->
-            /*
-            if (isAccessing) {
-                loadingDialog.showNow(childFragmentManager, null)
-            }
-            else {
-                /*
-                https://stackoverflow.com/questions/11201022/how-to-correctly-dismiss-a-dialogfragment
-                Dopo dismiss devo ricreare subito il Fragment, altrimenti rischio di invocare la show su un fragment che non esiste più : vedi appunti
-                 */
-                     if (loadingDialog.isAdded) {
-                        loadingDialog.dismiss()
-                        loadingDialog = LoadingDialogFragment()
-                    }
-            }*/
-            //if (isAccessing) {
-                //disableAllViews(binding.root as ViewGroup)
-
-            //}
-
             if (isAccessing) {
                 requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
                 binding.loadingInclude.root.visibility = View.VISIBLE
@@ -135,8 +115,6 @@ class ReadingFragment : Fragment() , ReadingAdapter.OnReadingItemMenuItemClickLi
 
             else {
                 val placeholderArray = arrayOf(ShowedBookInfo(
-                    "",
-                    "",
                     0,
                     title = getString(R.string.begin_read_string),
                     "",
@@ -151,14 +129,6 @@ class ReadingFragment : Fragment() , ReadingAdapter.OnReadingItemMenuItemClickLi
         }
         readingVM.currentReadingBookArray.observe(viewLifecycleOwner, currentListObserver)
 
-    }
-
-    private fun disableAllViews(viewGroup: ViewGroup) {
-        for (child in viewGroup.children) {
-            child.visibility = View.GONE
-            if (child is ViewGroup) disableAllViews(child)
-        }
-        viewGroup.visibility = View.GONE
     }
 
 
@@ -177,22 +147,25 @@ class ReadingFragment : Fragment() , ReadingAdapter.OnReadingItemMenuItemClickLi
         return when (item?.itemId) {
 
             R.id.readingContextMenuTakeNoteItem -> {
-                findNavController().navigate(ReadingFragmentDirections.actionGlobalModifyQuoteFragment(bookArray[position].title, bookArray[position].author, bookArray[position].readTime, null))
+                findNavController().navigate(ReadingFragmentDirections.actionGlobalModifyQuoteFragment(
+                    null,
+                    bookArray[position].bookId,
+                    bookArray[position].title,
+                    bookArray[position].author
+                ))
                 true
             }
 
             R.id.readingContextMenuDetailItem -> {
-                val detailBookTitle = bookArray[position].keyTitle
-                val detailBookAuthor = bookArray[position].keyAuthor
-                val detailBookTime = bookArray[position].readTime
-                val action = ReadingFragmentDirections.actionReadingFragmentToDetailReadingFragment(detailBookTitle, detailBookAuthor, detailBookTime)
+
+                val action = ReadingFragmentDirections.actionReadingFragmentToDetailReadingFragment(bookArray[position].bookId)
                 navController.navigate(action)
                 true
             }
 
             R.id.readingContextMenuTerminateItem -> {
                 val navController = findNavController()
-                val action = ReadingFragmentDirections.actionReadingFragmentToEndingFragment(bookArray[position].keyTitle, bookArray[position].keyAuthor, bookArray[position].readTime)
+                val action = ReadingFragmentDirections.actionReadingFragmentToEndingFragment(bookArray[position].bookId)
                 navController.navigate(action)
                 true
             }
@@ -203,7 +176,7 @@ class ReadingFragment : Fragment() , ReadingAdapter.OnReadingItemMenuItemClickLi
             }
 
             R.id.readingContextMenuQuotesListItem -> {
-                findNavController().navigate(ReadingFragmentDirections.actionGlobalQuoteListFragment(bookArray[position].keyTitle, bookArray[position].keyAuthor, bookArray[position].readTime))
+                findNavController().navigate(ReadingFragmentDirections.actionGlobalQuoteListFragment(bookArray[position].bookId))
                 true
             }
             else -> super.onOptionsItemSelected(item!!)

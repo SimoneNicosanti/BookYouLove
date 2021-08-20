@@ -35,7 +35,7 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
     fun getEndedList() {
         isAccessingDatabase.value = true
         viewModelScope.launch {
-            loadedArray = readModel.loadReadList(ENDED_BOOK_STATE)
+            loadedArray = readModel.loadEndedList(ENDED_BOOK_STATE)
             isAccessingDatabase.value = false
             sortBookArray(loadedArray)
         }
@@ -93,9 +93,9 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
             viewModelScope.launch {
                 when (filterParam) {
                     SEARCH_BY_TITLE -> currentReadList.value = (loadedArray.filter {
-                        it.keyTitle.contains(newText) }).toTypedArray()
+                        it.title.contains(newText) }).toTypedArray()
 
-                    SEARCH_BY_AUTHOR -> currentReadList.value = (loadedArray.filter {it.keyAuthor.contains(newText)}).toTypedArray()
+                    SEARCH_BY_AUTHOR -> currentReadList.value = (loadedArray.filter {it.author.contains(newText)}).toTypedArray()
                     else -> {
                         val searchRate = newText.toFloat()
                         currentReadList.value = (loadedArray.filter {it.totalRate == searchRate}).toTypedArray()
@@ -112,9 +112,7 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
         //L'unico elemento che può essere cambiato è quello selezionato correntemente
         if (currentSelectedPosition != -1) {
             val modifiedShowBookInfo = ShowedBookInfo(
-                modifiedBook.keyTitle,
-                modifiedBook.keyAuthor,
-                modifiedBook.readTime,
+                modifiedBook.bookId,
                 modifiedBook.title,
                 modifiedBook.author,
                 modifiedBook.coverName,

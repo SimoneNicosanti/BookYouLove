@@ -16,6 +16,8 @@ import it.simone.bookyoulove.databinding.ActivityMainBinding
 import com.squareup.picasso.Picasso
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.view.ended.EndedFragmentDirections
+import it.simone.bookyoulove.view.quotes.QuoteListFragment
+import it.simone.bookyoulove.view.quotes.QuoteListFragmentDirections
 import it.simone.bookyoulove.view.reading.ReadingFragmentDirections
 
 const val READING_BOOK_CALLER = 0
@@ -87,7 +89,6 @@ class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItem
                     val action = ReadingFragmentDirections.actionGlobalReadingFragment()
                     navController.navigate(action)
                 }
-                //binding.drawerLayout.closeDrawers()
                 true
             }
 
@@ -96,19 +97,17 @@ class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItem
                     val action = EndedFragmentDirections.actionGlobalReadListFragment()
                     navController.navigate(action)
                 }
-                //binding.drawerLayout.closeDrawers()
                 true
             }
 
-            /*
-            R.id.navViewMenuSettingsItem -> {
-                if (navController.currentDestination?.id != R.id.settingsFragment) {
-                    val action = SettingsFragmentDirections.actionGlobalSettingsFragment()
+            R.id.navViewMenuTbrItem -> {
+                if (navController.currentDestination?.id != R.id.tbrFragment) {
+                    val action = EndedFragmentDirections.actionGlobalTbrFragment()
                     navController.navigate(action)
                 }
-                //binding.drawerLayout.closeDrawers()
                 true
-            }*/
+            }
+
 
             R.id.navViewOthersItem -> {
                 val popupMenu = PopupMenu(this, binding.bottomNavigationView)
@@ -148,7 +147,7 @@ class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItem
             }
 
             R.id.navViewMenuQuotesItem -> {
-                val action = ChartsFragmentDirections.actionGlobalQuoteListFragment(null, null, 0)
+                val action = QuoteListFragmentDirections.actionGlobalQuoteListFragment(0L)
                 navController.navigate(action)
                 true
             }

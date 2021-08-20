@@ -94,7 +94,7 @@ class EndedThoughtFragment : Fragment() {
             R.id.endedFinalThoughtEdit -> {
                 if (isEditing) {
                     item.setIcon(R.drawable.ic_round_edit_reading_details)
-                    endedThoughtVM.saveNewThought(args.endedDetailKeyTitle, args.endedDetailKeyAuthor, args.endedDetailTime)
+                    endedThoughtVM.saveNewThought(args.endedBookId)
                     findNavController().previousBackStackEntry?.savedStateHandle?.set("changedFinalThoughtKey", binding.endedThoughtEditText.text.toString())
                 }
                 else {

@@ -64,9 +64,7 @@ class ReadingViewModel(application: Application) : AndroidViewModel(application)
 
     fun notifyReadingBookModified(modifiedBook : Book) {
         val modifiedShowedBookInfo = ShowedBookInfo(
-                keyTitle = modifiedBook.keyTitle,
-                keyAuthor = modifiedBook.keyAuthor,
-                readTime = modifiedBook.readTime,
+                bookId = modifiedBook.bookId,
                 title = modifiedBook.title,
                 author = modifiedBook.author,
                 coverName = modifiedBook.coverName,
@@ -80,9 +78,7 @@ class ReadingViewModel(application: Application) : AndroidViewModel(application)
 
     fun notifyNewReadingBook(newBook: Book) {
         val newShowedBookInfo = ShowedBookInfo(
-                keyTitle = newBook.keyTitle,
-                keyAuthor = newBook.keyAuthor,
-                readTime = newBook.readTime,
+                bookId = newBook.bookId,
                 title = newBook.title,
                 author = newBook.author,
                 coverName = newBook.coverName,

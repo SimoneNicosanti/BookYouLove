@@ -8,27 +8,27 @@ import kotlinx.coroutines.withContext
 class ModifyQuoteModel(private val myAppDatabase: AppDatabase) {
 
     suspend fun insertQuoteInDatabase(quoteToAdd: Quote) {
+        quoteToAdd.quoteId = computeNewQuoteId(quoteToAdd.bookId)
         withContext(Dispatchers.IO) {
             myAppDatabase.quoteDao().insertQuote(quoteToAdd)
         }
     }
 
-    fun formatKeyInfo(notFormattedKey: String): String {
-        //Todo("Potrei ad esempio farla più complessa : togliere spazi e simboli superflui
-        var formattedKey = ""
-        for (char in notFormattedKey) {
-            formattedKey += char.toLowerCase()
+    private suspend fun computeNewQuoteId(bookId: Long): Long {
+        var maxQuoteId = 0L
+
+        withContext(Dispatchers.IO) {
+            val bookQuotesArray : Array<Quote> = myAppDatabase.quoteDao().loadQuotesByBook(bookId)
+            withContext(Dispatchers.Default) {
+                for (quote in bookQuotesArray) {
+                    if (quote.quoteId > maxQuoteId) maxQuoteId = quote.quoteId
+                }
+            }
         }
-        return formattedKey
+
+        return maxQuoteId + 1
     }
 
-    suspend fun loadQuoteToModifyFromDatabase(modifyQuoteText: String, keyTitle: String, keyAuthor: String, bookReadTime: Int): Quote? {
-        val quoteToModify : Quote
-        withContext(Dispatchers.IO) {
-            quoteToModify = myAppDatabase.quoteDao().loadSingleQuote(modifyQuoteText, keyTitle, keyAuthor, bookReadTime)
-        }
-        return quoteToModify
-    }
 
     suspend fun updateQuoteInDatabase(quoteToUpdate: Quote) {
         withContext(Dispatchers.IO) {
@@ -36,9 +36,4 @@ class ModifyQuoteModel(private val myAppDatabase: AppDatabase) {
         }
     }
 
-    suspend fun deleteQuoteFromDatabase(quoteToDelete: Quote) {
-        withContext(Dispatchers.IO) {
-            myAppDatabase.quoteDao().deleteQuote(quoteToDelete)
-        }
-    }
 }

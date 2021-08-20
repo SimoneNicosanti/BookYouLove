@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.*
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -32,7 +31,7 @@ class QuoteDetailFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        quoteDetailVM.getSingleQuote(args.detailQuoteText, args.detailQuoteBookKeyTitle, args.detailQuoteBookKeyAuthor, args.detailQuoteReadTime)
+        quoteDetailVM.getSingleQuote(args.quoteDetailQuoteId, args.quoteDetailBookId)
         setHasOptionsMenu(true)
 
         childFragmentManager.setFragmentResultListener("deleteKey", this) { _, bundle ->
@@ -58,10 +57,9 @@ class QuoteDetailFragment : Fragment() {
             quoteDetailVM.onQuoteModified(it)
             findNavController().previousBackStackEntry?.savedStateHandle?.set<ShowQuoteInfo>("modifiedQuoteInfo",
                     ShowQuoteInfo(
+                            quoteId = it.quoteId,
+                            bookId = it.bookId,
                             quoteText = it.quoteText,
-                            keyTitle = it.keyTitle,
-                            keyAuthor = it.keyAuthor,
-                            readTime = it.readTime,
 
                             bookTitle = it.bookTitle,
                             bookAuthor = it.bookAuthor,
@@ -113,7 +111,7 @@ class QuoteDetailFragment : Fragment() {
         return when(item.itemId) {
 
             R.id.quoteDetailMenuEditItem -> {
-                findNavController().navigate(QuoteListFragmentDirections.actionGlobalModifyQuoteFragment(null, null, 0, requestedQuote.copy()))
+                findNavController().navigate(QuoteListFragmentDirections.actionGlobalModifyQuoteFragment(requestedQuote.copy(date = requestedQuote.date.copy()), 0L, null, null))
                 true
             }
 

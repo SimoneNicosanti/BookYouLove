@@ -15,13 +15,13 @@ class DetailEndedModel(val myAppDatabase: AppDatabase) {
     }
 
     private fun deleteBookQuotes(toDeleteBook: Book) {
-        myAppDatabase.quoteDao().deleteQuotesByBook(toDeleteBook.keyTitle, toDeleteBook.keyAuthor, toDeleteBook.readTime)
+        myAppDatabase.quoteDao().deleteQuotesByBook(toDeleteBook.bookId)
     }
 
-    suspend fun loadEndedDetailBook(endedDetailKeyTitle: String, endedDetailKeyAuthor: String, endedDetailTime: Int): Book {
+    suspend fun loadEndedDetailBook(endedDetailBookId: Long): Book {
         val endedBook : Book
         withContext(Dispatchers.IO) {
-            endedBook = myAppDatabase.bookDao().loadSpecificBook(endedDetailKeyTitle, endedDetailKeyAuthor, endedDetailTime)
+            endedBook = myAppDatabase.bookDao().loadBookById(endedDetailBookId)
         }
         return endedBook
     }

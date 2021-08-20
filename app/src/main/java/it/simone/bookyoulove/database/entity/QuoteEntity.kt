@@ -4,13 +4,12 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import java.io.Serializable
 
-@Entity(primaryKeys = ["quoteText", "keyTitle", "keyAuthor", "readTime"])
+@Entity(primaryKeys = ["quoteId", "bookId"])
 data class Quote (
-    var quoteText : String,
-    var keyTitle : String,
-    var keyAuthor : String,
-    var readTime : Int,
+    var quoteId : Long,
+    var bookId : Long,
 
+    var quoteText : String,
     var bookTitle : String,
     var bookAuthor : String,
 

@@ -29,7 +29,11 @@
         android:id="@+id/tbrFragment"
         android:name="it.simone.bookyoulove.view.tbr.TbrFragment"
         android:label="@string/tbr_string"
-        tools:layout="@layout/fragment_tbr" />
+        tools:layout="@layout/fragment_tbr" >
+        <action
+            android:id="@+id/action_tbrFragment_to_tbrModifyFragment"
+            app:destination="@id/tbrModifyFragment" />
+    </fragment>
     <fragment
         android:id="@+id/chartsFragment"
         android:name="it.simone.bookyoulove.view.ChartsFragment"
@@ -86,18 +90,12 @@
         android:id="@+id/detailReadingFragment"
         android:name="it.simone.bookyoulove.view.reading.DetailReadingFragment"
         android:label="DetailReadingFragment" >
-        <argument
-            android:name="detailKeyTitle"
-            app:argType="string" />
-        <argument
-            android:name="detailKeyAuthor"
-            app:argType="string" />
-        <argument
-            android:name="detailTime"
-            app:argType="integer" />
         <action
             android:id="@+id/action_detailReadingFragment_to_newReadingBookFragment"
             app:destination="@id/newReadingBookFragment" />
+        <argument
+            android:name="detailReadingBookId"
+            app:argType="long" />
     </fragment>
     <fragment
         android:id="@+id/endedDetailFragment"
@@ -107,18 +105,12 @@
         <action
             android:id="@+id/action_endedDetailFragment_to_modifyEndedFragment"
             app:destination="@id/modifyEndedFragment" />
-        <argument
-            android:name="endedDetailKeyTitle"
-            app:argType="string" />
-        <argument
-            android:name="endedDetailKeyAuthor"
-            app:argType="string" />
-        <argument
-            android:name="endedDetailTime"
-            app:argType="integer" />
         <action
             android:id="@+id/action_endedDetailFragment_to_endedThoughtFragment"
             app:destination="@id/endedThoughtFragment" />
+        <argument
+            android:name="endedBookId"
+            app:argType="long" />
     </fragment>
     <fragment
         android:id="@+id/modifyEndedFragment"
@@ -136,14 +128,8 @@
         android:label="fragment_ending"
         tools:layout="@layout/fragment_ending" >
         <argument
-            android:name="endingKeyTitle"
-            app:argType="string" />
-        <argument
-            android:name="endingKeyAuthor"
-            app:argType="string" />
-        <argument
-            android:name="endingTime"
-            app:argType="integer" />
+            android:name="endingBookid"
+            app:argType="long" />
     </fragment>
     <fragment
         android:id="@+id/endedThoughtFragment"
@@ -154,19 +140,23 @@
             android:name="endedFinalThought"
             app:argType="string" />
         <argument
-            android:name="endedDetailKeyTitle"
-            app:argType="string" />
-        <argument
-            android:name="endedDetailKeyAuthor"
-            app:argType="string" />
-        <argument
-            android:name="endedDetailTime"
-            app:argType="integer" />
+            android:name="endedBookId"
+            app:argType="long" />
     </fragment>
     <fragment
         android:id="@+id/modifyQuoteFragment"
         android:name="it.simone.bookyoulove.view.quotes.ModifyQuoteFragment"
         android:label="ModifyQuoteFragment" >
+        <action
+            android:id="@+id/action_modifyQuoteFragment_to_quoteWithCameraFragment"
+            app:destination="@id/quoteWithCameraFragment" />
+        <argument
+            android:name="modifyQuote"
+            app:argType="it.simone.bookyoulove.database.entity.Quote"
+            app:nullable="true" />
+        <argument
+            android:name="bookId"
+            app:argType="long" />
         <argument
             android:name="bookTitle"
             app:argType="string"
@@ -174,16 +164,6 @@
         <argument
             android:name="bookAuthor"
             app:argType="string"
-            app:nullable="true" />
-        <action
-            android:id="@+id/action_modifyQuoteFragment_to_quoteWithCameraFragment"
-            app:destination="@id/quoteWithCameraFragment" />
-        <argument
-            android:name="bookReadTime"
-            app:argType="integer" />
-        <argument
-            android:name="modifyQuote"
-            app:argType="it.simone.bookyoulove.database.entity.Quote"
             app:nullable="true" />
     </fragment>
     <action android:id="@+id/action_global_modifyQuoteFragment" app:destination="@id/modifyQuoteFragment" />
@@ -206,20 +186,12 @@
         android:name="it.simone.bookyoulove.view.quotes.QuoteListFragment"
         android:label="fragment_quote_list"
         tools:layout="@layout/fragment_quote_list" >
-        <argument
-            android:name="bookKeyTitle"
-            app:argType="string"
-            app:nullable="true" />
-        <argument
-            android:name="bookKeyAuthor"
-            app:argType="string"
-            app:nullable="true" />
         <action
             android:id="@+id/action_quoteListFragment_to_quoteDetailFragment"
             app:destination="@id/quoteDetailFragment" />
         <argument
-            android:name="bookReadTime"
-            app:argType="integer" />
+            android:name="bookId"
+            app:argType="long" />
     </fragment>
     <action android:id="@+id/action_global_quoteListFragment" app:destination="@id/quoteListFragment" />
     <fragment
@@ -228,17 +200,11 @@
         android:label="fragment_quote_detail"
         tools:layout="@layout/fragment_quote_detail" >
         <argument
-            android:name="detailQuoteText"
-            app:argType="string" />
+            android:name="quoteDetailQuoteId"
+            app:argType="long" />
         <argument
-            android:name="detailQuoteBookKeyTitle"
-            app:argType="string" />
-        <argument
-            android:name="detailQuoteBookKeyAuthor"
-            app:argType="string" />
-        <argument
-            android:name="detailQuoteReadTime"
-            app:argType="integer" />
+            android:name="quoteDetailBookId"
+            app:argType="long" />
     </fragment>
     <fragment
         android:id="@+id/blankFragment"
@@ -249,4 +215,14 @@
         android:name="it.simone.bookyoulove.view.reading.TakeBookIsbnFragment"
         android:label="fragment_take_book_isbn"
         tools:layout="@layout/fragment_take_book_isbn" /><action android:id="@+id/action_global_takeBookIsbnFragment" app:destination="@id/takeBookIsbnFragment"/>
+    <fragment
+        android:id="@+id/tbrModifyFragment"
+        android:name="it.simone.bookyoulove.view.tbr.TbrModifyFragment"
+        android:label="fragment_tbr_modify"
+        tools:layout="@layout/fragment_tbr_modify" >
+        <argument
+            android:name="tbrModifyShowedBookInfo"
+            app:argType="it.simone.bookyoulove.database.DAO.ShowedBookInfo"
+            app:nullable="true" />
+    </fragment>
 </navigation>

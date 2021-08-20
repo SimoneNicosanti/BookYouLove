@@ -14,7 +14,6 @@ import com.squareup.picasso.Picasso
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.databinding.FragmentEndedDetailBinding
-import it.simone.bookyoulove.view.QUOTE_LIST_ENDED_CALLER
 import it.simone.bookyoulove.view.dialog.ConfirmDeleteDialogFragment
 import it.simone.bookyoulove.view.dialog.LoadingDialogFragment
 import it.simone.bookyoulove.viewmodel.ChartsViewModel
@@ -24,7 +23,7 @@ import java.time.Month
 import java.time.format.TextStyle
 import java.util.*
 
-//
+
 
 class EndedDetailFragment : Fragment(), View.OnClickListener {
 
@@ -33,7 +32,6 @@ class EndedDetailFragment : Fragment(), View.OnClickListener {
     private val endedVM : EndedViewModel by activityViewModels()
     private val chartsVM : ChartsViewModel by activityViewModels()
 
-    private var loadingDialog = LoadingDialogFragment()
 
     private val args : EndedDetailFragmentArgs by navArgs()
 
@@ -53,7 +51,7 @@ class EndedDetailFragment : Fragment(), View.OnClickListener {
             }
         }
 
-        endedDetailVM.loadEndedDetailBook(args.endedDetailKeyTitle, args.endedDetailKeyAuthor, args.endedDetailTime)
+        endedDetailVM.loadEndedDetailBook(args.endedBookId)
 
         setHasOptionsMenu(true)
     }
@@ -183,7 +181,11 @@ class EndedDetailFragment : Fragment(), View.OnClickListener {
             }
 
             R.id.endedDetailMenuTakeNoteItem -> {
-                findNavController().navigate(EndedDetailFragmentDirections.actionGlobalModifyQuoteFragment(endedDetailBook.title, endedDetailBook.author, endedDetailBook.readTime, null))
+                findNavController().navigate(EndedDetailFragmentDirections.actionGlobalModifyQuoteFragment(
+                    null,
+                    endedDetailBook.bookId,
+                    endedDetailBook.title,
+                    endedDetailBook.author))
                 true
             }
 
@@ -195,12 +197,12 @@ class EndedDetailFragment : Fragment(), View.OnClickListener {
     override fun onClick(v: View?) {
          when (v) {
              binding.endedDetailYourQuotesButton -> {
-                 findNavController().navigate(EndedDetailFragmentDirections.actionGlobalQuoteListFragment(endedDetailBook.keyTitle, endedDetailBook.keyAuthor, endedDetailBook.readTime))
+                 findNavController().navigate(EndedDetailFragmentDirections.actionGlobalQuoteListFragment(args.endedBookId))
              }
 
              binding.endedDetailFinalThoughtButton -> {
                  val navController = findNavController()
-                 val action = EndedDetailFragmentDirections.actionEndedDetailFragmentToEndedThoughtFragment(endedFinalThought, args.endedDetailKeyTitle, args.endedDetailKeyAuthor, args.endedDetailTime)
+                 val action = EndedDetailFragmentDirections.actionEndedDetailFragmentToEndedThoughtFragment(endedFinalThought, args.endedBookId)
                  navController.navigate(action)
              }
          }

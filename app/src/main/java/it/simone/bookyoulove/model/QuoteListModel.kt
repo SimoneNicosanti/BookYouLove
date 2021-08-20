@@ -16,10 +16,10 @@ class QuoteListModel(private val myAppDatabase : AppDatabase) {
         return quotesArray
     }
 
-    suspend fun loadQuotesByBookFromDatabase(bookKeyTitle: String, bookKeyAuthor: String, bookReadTime: Int): Array<ShowQuoteInfo> {
+    suspend fun loadQuotesByBookFromDatabase(bookId: Long): Array<ShowQuoteInfo> {
         var quotesArray : Array<ShowQuoteInfo>
         withContext(Dispatchers.IO) {
-            quotesArray = myAppDatabase.quoteDao().loadShowQuoteInfoByBook(bookKeyTitle, bookKeyAuthor, bookReadTime)
+            quotesArray = myAppDatabase.quoteDao().loadShowQuoteInfoByBook(bookId)
             quotesArray = orderShowInfoByDate(quotesArray)
         }
         return quotesArray

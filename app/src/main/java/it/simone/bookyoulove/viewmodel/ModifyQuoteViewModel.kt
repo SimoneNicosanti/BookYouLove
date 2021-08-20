@@ -35,10 +35,9 @@ class ModifyQuoteViewModel(application: Application) : AndroidViewModel(applicat
         val month = cal.get(Calendar.MONTH) + 1
         val year = cal.get(Calendar.YEAR)
         currentQuote.value = Quote(
+                quoteId = 0L,
+                bookId = 0L,
                 quoteText = "",
-                keyTitle = "",
-                readTime = 0,
-                keyAuthor = "",
                 bookTitle = "",
                 bookAuthor = "",
                 favourite = false,
@@ -55,30 +54,19 @@ class ModifyQuoteViewModel(application: Application) : AndroidViewModel(applicat
     }
 
     fun changeQuotePage(newPageText: String) {
-        //LA massima lunghezza di newPageText è impostata a 5 nel layout. Se non pongo limite ho problemi di overflow nella rappresentazione
+        //La massima lunghezza di newPageText è impostata a 5 nel layout. Se non pongo limite ho problemi di overflow nella rappresentazione
         currentQuote.value!!.quotePage = if (newPageText != "") newPageText.toInt() else 0
     }
 
     fun changeQuoteText(newQuoteText: String) {
         currentQuote.value?.quoteText = newQuoteText
         //Log.i("Nicosanti", "${newQuoteText.hashCode()}")
-        Log.i("Nicosanti", currentQuote.value!!.quoteText)
     }
 
     fun changeQuoteThought(newQuoteThought: String) {
         currentQuote.value!!.quoteThought = newQuoteThought
     }
 
-    fun changeQuoteTitle(bookTitle: String) {
-        //Da titolo --> Chiave, ma non posso fare viceversa!!
-        currentQuote.value!!.bookTitle = bookTitle
-        currentQuote.value!!.keyTitle = modifyQuoteModel.formatKeyInfo(bookTitle)
-    }
-
-    fun changeQuoteAuthor(bookAuthor: String) {
-        currentQuote.value!!.bookAuthor = bookAuthor
-        currentQuote.value!!.keyAuthor = modifyQuoteModel.formatKeyInfo(bookAuthor)
-    }
 
     fun changeQuoteFavorite(isFavorite : Boolean) {
         currentQuote.value!!.favourite = isFavorite
@@ -89,46 +77,31 @@ class ModifyQuoteViewModel(application: Application) : AndroidViewModel(applicat
         //la garanzia che se l'utente
         isAccessingDatabase.value = true
         CoroutineScope(Dispatchers.Main).launch {
-            if (loadedQuoteText == "") {
-                //Citazione ex-novo
-                modifyQuoteModel.insertQuoteInDatabase(currentQuote.value!!)
+            if (currentQuote.value!!.quoteId != 0L) {
+                //Modifica vecchia quote
+                modifyQuoteModel.updateQuoteInDatabase(currentQuote.value!!)
             }
-
             else {
-                if (loadedQuoteText == currentQuote.value!!.quoteText) {
-                    //Non modificato il testo --> upadate semplice
-                    modifyQuoteModel.updateQuoteInDatabase(currentQuote.value!!)
-                }
-                else {
-                    //Modificato il testo --> devo eliminare e reinserire citazione visto che il testo è la chiave
-                    modifyQuoteModel.deleteQuoteFromDatabase(currentQuote.value!!.copy(quoteText = loadedQuoteText))
-                    modifyQuoteModel.insertQuoteInDatabase(currentQuote.value!!)
-                }
+                //Aggiunta nuova quote
+                modifyQuoteModel.insertQuoteInDatabase(currentQuote.value!!)
             }
             isAccessingDatabase.value = false
             canExitWithQuote.value = currentQuote.value!!
         }
     }
 
-    fun changeQuoteReadTime(readTime: Int) {
-        currentQuote.value!!.readTime = readTime
-    }
 
-    /*
-    fun getModifyQuote(modifyQuoteText: String, bookTitle: String, bookAuthor: String, bookReadTime: Int) {
-        if (!loadedOnce) {
-            val keyTitle = modifyQuoteModel.formatKeyInfo(bookTitle)
-            val keyAuthor = modifyQuoteModel.formatKeyInfo(bookAuthor)
-            viewModelScope.launch {
-                currentQuote.value = modifyQuoteModel.loadQuoteToModifyFromDatabase(modifyQuoteText, keyTitle, keyAuthor, bookReadTime)
-                loadedQuoteText = currentQuote.value!!.quoteText
-                loadedOnce = true
-            }
-        }
-    }*/
+
 
     fun setModifyQuote(modifyQuote: Quote) {
         currentQuote.value = modifyQuote
         loadedQuoteText = modifyQuote.quoteText
+    }
+
+
+    fun setQuoteBookInfo(bookId: Long, bookTitle: String, bookAuthor: String) {
+        currentQuote.value!!.bookId = bookId
+        currentQuote.value!!.bookTitle = bookTitle
+        currentQuote.value!!.bookAuthor = bookAuthor
     }
 }

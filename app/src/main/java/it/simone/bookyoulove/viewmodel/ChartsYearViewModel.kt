@@ -7,11 +7,7 @@ import androidx.lifecycle.viewModelScope
 import it.simone.bookyoulove.model.ChartsBookData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.time.LocalDate
-import java.time.Period
 import java.time.YearMonth
-import java.time.temporal.ChronoUnit
-import java.time.temporal.Temporal
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -51,18 +47,14 @@ class ChartsYearViewModel : ViewModel() {
     }
 
     private fun computeChartsYearInfo(selectedYear : Int) {
-        var bookPerMonthArray = arrayListOf<Int>()
-        var pagesPerMonthArray = arrayListOf<Float>()
-        var supportPerYear = arrayListOf<Float>()
-        var rateMap: Map<String, ArrayList<Float>>
-        var booksOfTheYearArray : ArrayList<ChartsBookData>
+
         viewModelScope.launch { Dispatchers.Default
 
-            bookPerMonthArray = computeBookPerMonthArray(selectedYear)
-            pagesPerMonthArray = computePagesPerMonthArray(selectedYear)
-            supportPerYear = computeSupportPerYear(selectedYear)
-            rateMap = computeRateMap(selectedYear)
-            booksOfTheYearArray = computeBooksOfTheYear(selectedYear)
+            val bookPerMonthArray = computeBookPerMonthArray(selectedYear)
+            val pagesPerMonthArray = computePagesPerMonthArray(selectedYear)
+            val supportPerYear = computeSupportPerYear(selectedYear)
+            val rateMap = computeRateMap(selectedYear)
+            val booksOfTheYearArray = computeBooksOfTheYear(selectedYear)
             currentChartsYearInfo.value = ChartsYearInfo(bookPerMonthArray, pagesPerMonthArray, supportPerYear, rateMap, booksOfTheYearArray)
         }
     }

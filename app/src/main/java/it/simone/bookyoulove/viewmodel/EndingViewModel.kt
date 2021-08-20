@@ -8,12 +8,10 @@ import it.simone.bookyoulove.database.AppDatabase
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.database.entity.EndDate
 import it.simone.bookyoulove.database.entity.Rate
-import it.simone.bookyoulove.database.entity.StartDate
 import it.simone.bookyoulove.model.EndingModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.*
 
 class EndingViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -84,12 +82,12 @@ class EndingViewModel(application: Application) : AndroidViewModel(application) 
     }
 
 
-    fun loadEndingBook(endingKeyTitle: String, endingKeyAuthor: String, endingTime: Int) {
+    fun loadEndingBook(endingBookId: Long) {
         if (!loadedOnce) {
 
             isAccessingDatabase.value = true
             viewModelScope.launch {
-                loadedBook = endingModel.loadEndingBook(endingKeyTitle, endingKeyAuthor, endingTime)
+                loadedBook = endingModel.loadEndingBook(endingBookId)
                 loadedOnce = true
                 prepareTerminateBook()
                 isAccessingDatabase.value = false

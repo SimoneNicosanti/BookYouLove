@@ -36,11 +36,11 @@ class DetailEndedViewModel(application: Application) : AndroidViewModel(applicat
         }
     }
 
-    fun loadEndedDetailBook(endedDetailKeyTitle: String, endedDetailKeyAuthor: String, endedDetailTime: Int) {
+    fun loadEndedDetailBook(endedBookId: Long) {
         if (!loadedOnce) {
             isAccessingDatabase.value = true
             viewModelScope.launch {
-                currentBook.value = detailEndedModel.loadEndedDetailBook(endedDetailKeyTitle, endedDetailKeyAuthor, endedDetailTime)
+                currentBook.value = detailEndedModel.loadEndedDetailBook(endedBookId)
                 isAccessingDatabase.value = false
             }
         }

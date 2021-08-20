@@ -25,8 +25,6 @@ interface BookDao {
     /*  This function looks for a Book with given title and author. It give back a list of Book and the length
         of this list says the next read time I should use for the next time
      */
-    @Query("SELECT * FROM Book WHERE keyTitle LIKE :requestedTitle AND keyAuthor LIKE :requestedAuthor")
-    fun loadSameBook(requestedTitle: String, requestedAuthor: String): Array<Book>
 
     @Query("SELECT * FROM Book WHERE totalRate > :requestedRate")
     fun loadBookByRate(requestedRate: Float) : Array<Book>
@@ -38,12 +36,15 @@ interface BookDao {
     @Query("SELECT * FROM Book WHERE readState LIKE :requestedState")
     fun loadShowedBookInfoByState(requestedState: Int) : Array<ShowedBookInfo>
 
-    @Query("SELECT * FROM Book WHERE keyTitle LIKE :requestedTitle AND keyAuthor LIKE :requestedAuthor AND readTime LIKE :requestedTime")
-    fun loadSpecificBook(requestedTitle: String, requestedAuthor: String, requestedTime: Int) : Book
+    @Query("SELECT * FROM Book WHERE bookId LIKE :requestedBookId")
+    fun loadBookById(requestedBookId: Long) : Book
 
 
-    @Query("UPDATE Book SET finalThought = :newFinalThought WHERE keyTitle LIKE :requestedTitle AND keyAuthor LIKE :requestedAuthor AND readTime LIKE :requestedTime")
-    fun updateFinalThoughtByKey(requestedTitle: String, requestedAuthor: String, requestedTime: Int, newFinalThought : String)
+    @Query("UPDATE Book SET finalThought = :newFinalThought WHERE bookId LIKE :requestedBookId")
+    fun updateFinalThoughtByKey(requestedBookId: Long, newFinalThought: String)
+
+    @Query("DELETE FROM Book WHERE bookId LIKE :requestedBookId")
+    fun deleteBookById(requestedBookId: Long)
 
 
     @RewriteQueriesToDropUnusedColumns

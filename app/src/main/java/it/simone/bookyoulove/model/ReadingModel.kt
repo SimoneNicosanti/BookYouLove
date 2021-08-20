@@ -19,20 +19,4 @@ class ReadingModel(context: Context) {
         return array
     }
 
-    /*
-    private fun formatLoadedBookInfo(loadedArray: Array<NotFormattedShowedBookInfo>): Array<ShowedBookInfo> {
-        val supportList : MutableList<ShowedBookInfo> = mutableListOf()
-        for (elem in loadedArray) {
-
-            val startDate = if (elem.startDay != null) StartDate(elem.startDay!!, elem.startMonth!!, elem.startYear!!) else null
-            val endDate = if (elem.endDay != null) EndDate(elem.endDay!!, elem.endMonth!!, elem.endYear!!) else null
-
-            val newElem = ShowedBookInfo(elem.title, elem.author, elem.readTime, elem.coverName, startDate, endDate, elem.totalRate)
-
-            supportList.add(newElem)
-        }
-        return supportList.toTypedArray()
-    }
-     */
-
 }

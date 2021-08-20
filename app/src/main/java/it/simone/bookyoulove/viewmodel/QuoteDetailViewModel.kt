@@ -20,10 +20,9 @@ class QuoteDetailViewModel(application : Application) : AndroidViewModel(applica
     private var loadedOnce = false
 
     val currentQuote = MutableLiveData( Quote (
+            quoteId = 0L,
+            bookId = 0L,
             quoteText = "",
-            keyTitle = "",
-            keyAuthor = "",
-            readTime = 0,
             bookTitle = "",
             bookAuthor = "",
             favourite = false,
@@ -34,11 +33,11 @@ class QuoteDetailViewModel(application : Application) : AndroidViewModel(applica
             date = StartDate(0,0,0)
     ))
 
-    fun getSingleQuote(detailQuoteText: String, detailQuoteBookTitle: String, detailQuoteBookAuthor: String, detailQuoteReadTime: Int) {
+    fun getSingleQuote(quoteId: Long, bookId: Long) {
         //isAccessing
         if (!loadedOnce) {
             viewModelScope.launch {
-                currentQuote.value = quoteDetailModel.loadSingleQuotFromDatabase(detailQuoteText, detailQuoteBookTitle, detailQuoteBookAuthor, detailQuoteReadTime)
+                currentQuote.value = quoteDetailModel.loadSingleQuotFromDatabase(quoteId, bookId)
                 loadedOnce = true
             }
         }

@@ -7,9 +7,7 @@ import it.simone.bookyoulove.database.entity.StartDate
 import java.io.Serializable
 
 data class ShowedBookInfo(
-    @ColumnInfo(name = "keyTitle") var keyTitle: String,
-    @ColumnInfo(name = "keyAuthor")var keyAuthor : String,
-    @ColumnInfo(name = "readTime") var readTime : Int,
+    @ColumnInfo(name = "bookId") var bookId : Long,
     @ColumnInfo(name = "title") var title : String,
     @ColumnInfo(name = "author")var author : String,
     @ColumnInfo(name = "coverName") var coverName : String,

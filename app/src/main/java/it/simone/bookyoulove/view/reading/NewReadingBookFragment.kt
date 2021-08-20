@@ -41,7 +41,6 @@ class NewReadingBookFragment : Fragment() , View.OnClickListener {
 
     private val args : NewReadingBookFragmentArgs by navArgs()
 
-    private var loadingDialog = LoadingDialogFragment()
 
     private var requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
         if (isGranted) {
@@ -74,22 +73,14 @@ class NewReadingBookFragment : Fragment() , View.OnClickListener {
             newReadingVM.updateCoverLink(coverLinkResult!!)
         }
 
-        /*
-        childFragmentManager.setFragmentResultListener("pagesKey", this) { _, bundle ->
-            val pagesResult : Int = bundle.getInt("settedPages")
-            binding.newBookPagesInput.text = pagesResult.toString()
-            newReadingVM.updatePages(pagesResult)
-        }*/
 
         if (args.readingModifyBook != null) {
-            //newReadingVM.loadReadingBookToModify(args.readingModifyKeyTitle!!, args.readingModifyKeyAuthor!!, args.readingModifyTime)
             newReadingVM.setBookToModify(args.readingModifyBook!!)
         }
         newReadingVM.loadAuthorArray()
 
         setHasOptionsMenu(true)
         cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
-
     }
 
 

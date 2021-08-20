@@ -9,7 +9,7 @@ import kotlinx.coroutines.withContext
 
 class EndedModel(private val myAppDatabase: AppDatabase) {
 
-    suspend fun loadReadList(requestedState : Int) : Array<ShowedBookInfo> {
+    suspend fun loadEndedList(requestedState : Int) : Array<ShowedBookInfo> {
         var loadedList : Array<ShowedBookInfo>
         withContext(Dispatchers.IO) {
             loadedList = myAppDatabase.bookDao().loadShowedBookInfoByState(requestedState)
@@ -17,20 +17,6 @@ class EndedModel(private val myAppDatabase: AppDatabase) {
         return loadedList
     }
 
-    /*
-    private fun formatLoadedBookInfo(loadedArray: Array<NotFormattedShowedBookInfo>): Array<ShowedBookInfo> {
-        val supportList : MutableList<ShowedBookInfo> = mutableListOf()
-        for (elem in loadedArray) {
-
-            val startDate = if (elem.startDay != null) StartDate(elem.startDay!!, elem.startMonth!!, elem.startYear!!) else null
-            val endDate = if (elem.endDay != null) EndDate(elem.endDay!!, elem.endMonth!!, elem.endYear!!) else null
-
-            val newElem = ShowedBookInfo(elem.title, elem.author, elem.readTime, elem.coverName, startDate, endDate, elem.totalRate)
-
-            supportList.add(newElem)
-        }
-        return supportList.toTypedArray()
-    }*/
 
     suspend fun sortByDate(bookArray: Array<ShowedBookInfo>, sortType: Int): Array<ShowedBookInfo> {
         val sortedBookArray = arrayListOf<ShowedBookInfo>()
@@ -67,8 +53,8 @@ class EndedModel(private val myAppDatabase: AppDatabase) {
 
     suspend fun sortByTitleOrAuthor(notSortedArray: Array<ShowedBookInfo>, sortType: Int): Array<ShowedBookInfo> {
         withContext(Dispatchers.Default) {
-            if (sortType == SORT_BY_TITLE) notSortedArray.sortBy{ it.keyTitle }
-            else notSortedArray.sortBy { it.keyAuthor }
+            if (sortType == SORT_BY_TITLE) notSortedArray.sortBy{ it.title }
+            else notSortedArray.sortBy { it.author }
         }
         return notSortedArray
     }

@@ -19,7 +19,7 @@ import org.json.JSONObject
 import java.util.*
 
 
-private const val GOOGLE_BOOK_API_WITH_ISBN_URL = "https://www.googleapis.com/books/v1/volumes?q=isbn:"
+const val GOOGLE_BOOK_API_WITH_ISBN_URL = "https://www.googleapis.com/books/v1/volumes?q=isbn:"
 
 const val ISBN_INTERNET_ACCESS_ERROR = 1
 const val ISBN_FIND_ITEM_ERROR = 2
@@ -52,12 +52,11 @@ class NewReadingBookViewModel(application: Application): AndroidViewModel(applic
         val year = cal.get(Calendar.YEAR)
         startDate = StartDate(day, month, year)
 
-        currentBook.value = Book("",
+        currentBook.value = Book(
+            bookId = 0,
             "",
-            0,
-            title = "",
-            author = "",
-            startDate,
+            "",
+            startDate = startDate,
             null,
             BookSupport(paperSupport = false, ebookSupport = false, audiobookSupport = false),
             "",
@@ -66,7 +65,6 @@ class NewReadingBookViewModel(application: Application): AndroidViewModel(applic
             "",
             READING_BOOK_STATE)
     }
-
 
 
     fun loadAuthorArray() {
@@ -87,35 +85,15 @@ class NewReadingBookViewModel(application: Application): AndroidViewModel(applic
         isAccessingDatabase.value = true
 
         CoroutineScope(Dispatchers.Main).launch {
-            if (currentBook.value!!.keyTitle != "") {
+            if (currentBook.value!!.bookId != 0L) {
                 //Sto in caso di modifica di un libro precedente
-                /*
-                    Quando invocata la addNewBookInDatabase il parametro è passato per riferimento, quindi
-                    sono impostati i campi della chiave direttamente nel current.value: posso quindi assegnare direttamente
-                    lui come finalBook
-                 */
-                val currentBookCopy = currentBook.value!!.copy()
-                if (currentBook.value!!.keyTitle != newReadingBookModel.formatKeyInfo(currentBook.value?.title!!) ||
-                    currentBook.value!!.keyAuthor != newReadingBookModel.formatKeyInfo(currentBook.value?.author!!)) {
-                        //Sono stati modificati titolo e autore in qualcosa che modifica la chiave!!
-
-                    newReadingBookModel.removeBookFromDatabase(currentBookCopy)
-
-                    newReadingBookModel.addNewBookInDatabase(currentBook.value!!)
-                }
-
-                else {
-                    // Anche se modificati titole e autore la chiave rimane uguale
-                    newReadingBookModel.updateReadingBookInDatabase(currentBook.value!!)
-                }
-
-                newReadingBookModel.changeQuotesInfoInDatabase(currentBookCopy)
+                newReadingBookModel.updateReadingBookInDatabase(currentBook.value!!)
+                newReadingBookModel.changeQuotesInfoInDatabase(currentBook.value!!)
             }
 
             else {
-                Log.i("Nicosanti", "${currentBook.value!!.keyTitle}")
+                //Aggiunta nuovo libro
                 newReadingBookModel.addNewBookInDatabase(currentBook.value!!)
-                Log.i("Nicosanti", "${currentBook.value!!.keyTitle}")
             }
 
             isAccessingDatabase.value = false

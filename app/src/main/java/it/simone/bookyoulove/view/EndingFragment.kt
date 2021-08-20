@@ -53,7 +53,7 @@ class EndingFragment : Fragment(), View.OnClickListener, RatingBar.OnRatingBarCh
             endingVM.setEndDate(settedEndDate)
         })
 
-        endingVM.loadEndingBook(args.endingKeyTitle, args.endingKeyAuthor, args.endingTime)
+        endingVM.loadEndingBook(args.endingBookid)
     }
 
 

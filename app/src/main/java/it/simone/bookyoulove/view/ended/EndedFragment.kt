@@ -173,7 +173,7 @@ class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListene
         endedVM.setSelectedBook(selectedBook)
         endedVM.currentSelectedPosition = position
         val navController = findNavController()
-        val action = EndedFragmentDirections.actionEndedFragmentToEndedDetailFragment(selectedBook.keyTitle, selectedBook.keyAuthor, selectedBook.readTime)
+        val action = EndedFragmentDirections.actionEndedFragmentToEndedDetailFragment(selectedBook.bookId)
         navController.navigate(action)
     }
 }
