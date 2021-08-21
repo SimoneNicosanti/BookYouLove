@@ -49,7 +49,8 @@ class TbrViewModel(application: Application) : AndroidViewModel(application) {
                 coverName = newTbrBook.coverName,
                 startDate = newTbrBook.startDate,
                 endDate = newTbrBook.endDate,
-                totalRate = newTbrBook.rate?.totalRate
+                totalRate = newTbrBook.rate?.totalRate,
+                pages = newTbrBook.pages
             )
 
             currentTbrArray.value = arrayOf(newTbrShowedBookInfo).plus(currentTbrArray.value!!)
@@ -86,10 +87,18 @@ class TbrViewModel(application: Application) : AndroidViewModel(application) {
                     coverName = tbrModifiedBook.coverName,
                     startDate = tbrModifiedBook.startDate,
                     endDate = tbrModifiedBook.endDate,
-                    totalRate = tbrModifiedBook.rate?.totalRate
+                    totalRate = tbrModifiedBook.rate?.totalRate,
+                    pages = tbrModifiedBook.pages
             )
             currentTbrArray.value!![currentPosition] = modifiedTbrShowedBookInfo
             currentPosition = -1
         }
+    }
+
+    fun onStartedBook() {
+        val supportList = currentTbrArray.value!!.toMutableList()
+        supportList.removeAt(currentPosition)
+        currentPosition = -1
+        currentTbrArray.value = supportList.toTypedArray()
     }
 }

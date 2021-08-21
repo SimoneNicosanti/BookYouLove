@@ -94,5 +94,7 @@
     <string name="plot_rate_string">Plot Rate</string>
     <string name="characters_rate_string">Characters Rate</string>
     <string name="goto_string">Goto</string>
+    <string name="starting_tirle">&#128214; You are starting this book &#128214;</string>
+    <string name="placeholder_quote">He who does not read, at 70 years old will have lived only one life. He who reads, will have lived 5000 years. Reading is a backward immortality</string>
 
 </resources>

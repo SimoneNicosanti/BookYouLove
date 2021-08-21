@@ -118,7 +118,8 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
                 modifiedBook.coverName,
                 modifiedBook.startDate,
                 modifiedBook.endDate,
-                modifiedBook.rate?.totalRate
+                modifiedBook.rate?.totalRate,
+                modifiedBook.pages
             )
             loadedArray[currentSelectedPosition] = modifiedShowBookInfo
             sortBookArray(loadedArray)

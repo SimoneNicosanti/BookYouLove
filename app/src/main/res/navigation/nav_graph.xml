@@ -33,6 +33,9 @@
         <action
             android:id="@+id/action_tbrFragment_to_tbrModifyFragment"
             app:destination="@id/tbrModifyFragment" />
+        <action
+            android:id="@+id/action_tbrFragment_to_startingFragment"
+            app:destination="@id/startingFragment" />
     </fragment>
     <fragment
         android:id="@+id/chartsFragment"
@@ -224,5 +227,14 @@
             android:name="tbrModifyShowedBookInfo"
             app:argType="it.simone.bookyoulove.database.DAO.ShowedBookInfo"
             app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/startingFragment"
+        android:name="it.simone.bookyoulove.view.StartingFragment"
+        android:label="fragment_starting"
+        tools:layout="@layout/fragment_starting" >
+        <argument
+            android:name="startingBookId"
+            app:argType="long" />
     </fragment>
 </navigation>

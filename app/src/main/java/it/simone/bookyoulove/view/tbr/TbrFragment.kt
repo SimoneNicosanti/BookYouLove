@@ -51,6 +51,13 @@ class TbrFragment : Fragment(), TbrAdapter.OnTbrItemClickedListener {
             findNavController().currentBackStackEntry?.savedStateHandle?.remove<Book>("modifyTbrBookKey")
         }
 
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>("startedTbrBookKey")?.observe(viewLifecycleOwner) {
+            if (it) {
+                tbrVM.onStartedBook()
+                findNavController().currentBackStackEntry?.savedStateHandle?.remove<Boolean>("startedTbrBookKey")
+            }
+        }
+
         childFragmentManager.setFragmentResultListener("deleteKey", viewLifecycleOwner) { _, bundle ->
             if (bundle.getBoolean("deleteConfirm")) {
                 tbrVM.deleteTbrBook()
@@ -112,6 +119,11 @@ class TbrFragment : Fragment(), TbrAdapter.OnTbrItemClickedListener {
                 val deleteFragment = ConfirmDeleteDialogFragment()
                 deleteFragment.arguments = args
                 deleteFragment.show(childFragmentManager, "Delete Confirm")
+                true
+            }
+
+            R.id.tbrItemMenuStartItem -> {
+                findNavController().navigate(TbrFragmentDirections.actionTbrFragmentToStartingFragment(tbrShowedBookInfoArray[position].bookId))
                 true
             }
             else -> false

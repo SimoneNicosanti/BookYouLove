@@ -22,6 +22,7 @@ class TbrAdapter(private val tbrArray : Array<ShowedBookInfo>, private val onTbr
     override fun onBindViewHolder(holder: TbrViewHolder, position: Int) {
         holder.titleTextView.text = tbrArray[position].title
         holder.authorTextView.text = tbrArray[position].author
+        holder.pagesTextView.text = tbrArray[position].pages.toString() 
 
         if (tbrArray[position].coverName != "") Picasso.get().load(tbrArray[position].coverName)
                                                         .placeholder(R.drawable.book_cover_place_holder).error(R.drawable.cover_not_found)
@@ -38,6 +39,7 @@ class TbrAdapter(private val tbrArray : Array<ShowedBookInfo>, private val onTbr
 
         val titleTextView : TextView = tbrView.findViewById(R.id.tbrItemTitle)
         val authorTextView : TextView = tbrView.findViewById(R.id.tbrItemAuthor)
+        val pagesTextView : TextView = tbrView.findViewById(R.id.tbrItemPages)
         val coverImageView : ImageView = tbrView.findViewById(R.id.tbrItemCoverImageView)
         private val toolbar : androidx.appcompat.widget.Toolbar = tbrView.findViewById(R.id.tbrItemToolbar)
 

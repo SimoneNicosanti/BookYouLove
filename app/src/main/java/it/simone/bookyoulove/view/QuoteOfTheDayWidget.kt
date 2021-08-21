@@ -51,37 +51,6 @@ class QuoteOfTheDayWidget : AppWidgetProvider() {
     }
 }
 
-/*
-internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
-    // Construct the RemoteViews object
-    val views = RemoteViews(context.packageName, R.layout.quote_of_the_day_widget)
-
-    /*
-    CoroutineScope(Dispatchers.IO).launch {
-        val quoteCursor = context.contentResolver.query(QuotesProvider().URI_RANDOM, null, null, null, null)
-
-        withContext(Dispatchers.Main) {
-            /*
-                Il Cursor è come un array di oggetti Quotes. Poiché in questo caso ho un UNICA quote, mi muovo sulla prima con moveToFirst
-                e poi prendoo i vari campi dell'oggetto Quote cui punta il cursore tramite le getString
-             */
-            if (quoteCursor?.moveToFirst() == true) {
-                views.setTextViewText(R.id.quoteOfTheDayWidgetQuoteText, quoteCursor.getString(0))
-
-                views.setTextViewText(R.id.quoteOfTheDayWidgetTitle, quoteCursor.getString(quoteCursor.getColumnIndex("bookTitle")))
-
-                views.setTextViewText(R.id.quoteOfTheDayWidgetAuthor, quoteCursor.getString(quoteCursor.getColumnIndex("bookAuthor")))
-            }
-            quoteCursor?.close()
-
-     */
-
-            appWidgetManager.updateAppWidget(appWidgetId, views)
-        }
-    }
-
-
-}*/
 
 class QuoteOfTheDayWidgetService : RemoteViewsService() {
     override fun onGetViewFactory(intent: Intent): RemoteViewsFactory {
@@ -127,10 +96,26 @@ class QuoteOfTheDayRemoteViewsFactory(
         return RemoteViews(context.packageName, R.layout.quote_of_the_day_widget_quote_text).apply {
 
             if (quoteCursor != null) {
-                quoteCursor!!.moveToFirst()
-                setTextViewText(R.id.quoteOfTheDayQuoteText, quoteCursor!!.getString(0))
-                setTextViewText(R.id.quoteOfTheDayWidgetTitle, quoteCursor!!.getString(quoteCursor!!.getColumnIndex("bookTitle")))
-                setTextViewText(R.id.quoteOfTheDayWidgetAuthor, quoteCursor!!.getString(quoteCursor!!.getColumnIndex("bookAuthor")))
+                if (quoteCursor!!.count != 0) {
+                    setTextViewText(
+                        R.id.quoteOfTheDayQuoteText,
+                        quoteCursor!!.getString(quoteCursor!!.getColumnIndex("quoteText "))
+                    )
+                    setTextViewText(
+                        R.id.quoteOfTheDayWidgetTitle,
+                        quoteCursor!!.getString(quoteCursor!!.getColumnIndex("bookTitle"))
+                    )
+                    setTextViewText(
+                        R.id.quoteOfTheDayWidgetAuthor,
+                        quoteCursor!!.getString(quoteCursor!!.getColumnIndex("bookAuthor"))
+                    )
+                }
+
+                else {
+                    setTextViewText(R.id.quoteOfTheDayQuoteText, context.getString(R.string.placeholder_quote))
+                    setTextViewText(R.id.quoteOfTheDayWidgetAuthor, "")
+                    setTextViewText(R.id.quoteOfTheDayWidgetAuthor, "Umberto Eco")
+                }
             }
 
         }

@@ -121,7 +121,8 @@ class ReadingFragment : Fragment() , ReadingAdapter.OnReadingItemMenuItemClickLi
                     "",
                     null,
                     null,
-                    null))
+                    null,
+                    0))
                 cardSlider.adapter = ReadingAdapter(placeholderArray, this)
             }
 

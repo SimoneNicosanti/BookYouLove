@@ -13,5 +13,6 @@ data class ShowedBookInfo(
     @ColumnInfo(name = "coverName") var coverName : String,
     @Embedded @ColumnInfo(name = "startDate") var startDate : StartDate?,
     @Embedded @ColumnInfo(name = "endDate") var endDate : EndDate?,
-    @ColumnInfo(name = "totalRate")  var totalRate: Float?
+    @ColumnInfo(name = "totalRate")  var totalRate: Float?,
+    @ColumnInfo(name = "pages") var pages : Int?
 ) : Serializable

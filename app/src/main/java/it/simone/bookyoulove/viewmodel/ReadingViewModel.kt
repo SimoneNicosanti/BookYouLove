@@ -70,7 +70,8 @@ class ReadingViewModel(application: Application) : AndroidViewModel(application)
                 coverName = modifiedBook.coverName,
                 startDate = modifiedBook.startDate,
                 endDate = modifiedBook.endDate,
-                totalRate = modifiedBook.rate?.totalRate
+                totalRate = modifiedBook.rate?.totalRate,
+                pages = modifiedBook.pages
         )
         currentReadingBookArray.value!![currentBookIndex] = modifiedShowedBookInfo
         currentBookIndex = 0
@@ -84,7 +85,8 @@ class ReadingViewModel(application: Application) : AndroidViewModel(application)
                 coverName = newBook.coverName,
                 startDate = newBook.startDate,
                 endDate = newBook.endDate,
-                totalRate = newBook.rate?.totalRate
+                totalRate = newBook.rate?.totalRate,
+                pages = newBook.pages
         )
         val supportList = currentReadingBookArray.value!!.toMutableList()
         supportList.add(newShowedBookInfo)
