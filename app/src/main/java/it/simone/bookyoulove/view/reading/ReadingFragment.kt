@@ -16,6 +16,7 @@ import it.simone.bookyoulove.R
 import it.simone.bookyoulove.adapter.ReadingAdapter
 import it.simone.bookyoulove.database.DAO.ShowedBookInfo
 import it.simone.bookyoulove.databinding.FragmentReadingBinding
+import it.simone.bookyoulove.view.dialog.LeavingReadingDialog
 import it.simone.bookyoulove.view.dialog.LoadingDialogFragment
 import it.simone.bookyoulove.viewmodel.ReadingViewModel
 
@@ -51,6 +52,13 @@ class ReadingFragment : Fragment() , ReadingAdapter.OnReadingItemMenuItemClickLi
         binding = FragmentReadingBinding.inflate(inflater, container, false)
 
         setObservers()
+
+        childFragmentManager.setFragmentResultListener("leavingKey", this) {_, bundle ->
+            val moveToTbr = bundle.getBoolean("moveToTbr")
+
+            if (moveToTbr) readingVM.moveReadingBookToTbr()
+            else readingVM.deleteReadingBook()
+        }
 
         return binding.root
     }
@@ -172,8 +180,8 @@ class ReadingFragment : Fragment() , ReadingAdapter.OnReadingItemMenuItemClickLi
             }
 
             R.id.readingContextMenuLeaveItem -> {
+                LeavingReadingDialog().show(childFragmentManager, "Leaving Dialog")
                 true
-                //TODO("Abandono --> TBR / Delete")
             }
 
             R.id.readingContextMenuQuotesListItem -> {

@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.RatingBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
@@ -37,7 +38,8 @@ class EndedAdapter(private val bookSet: Array<ShowedBookInfo>,
     class LinearViewHolder(view: View, private val onRecyclerViewItemSelectedListener: OnRecyclerViewItemSelectedListener) : RecyclerView.ViewHolder(view), View.OnClickListener {
         val coverImageView : ImageView = view.findViewById(R.id.linearEndedCoverImageView)
         val titleTextView : TextView = view.findViewById(R.id.linearEndedTitle)
-        //val ratingBar : RatingBar = view.findViewById(R.id.linearEndedRate)
+        val authorTextView : TextView = view.findViewById(R.id.linearEndedAuthor)
+        val ratingBar : RatingBar = view.findViewById(R.id.linearEndedRate)
 
         init {
             view.setOnClickListener(this)
@@ -82,7 +84,9 @@ class EndedAdapter(private val bookSet: Array<ShowedBookInfo>,
             else Picasso.get().load(R.drawable.book_cover_place_holder).into(holder.coverImageView)
 
             holder.titleTextView.text = bookSet[position].title
-            //holder.ratingBar.rating = bookSet[position].totalRate!!
+            holder.ratingBar.rating = bookSet[position].totalRate!!
+            holder.authorTextView.text = bookSet[position].author
+
         }
 
     }

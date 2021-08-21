@@ -93,4 +93,22 @@ class ReadingViewModel(application: Application) : AndroidViewModel(application)
         currentReadingBookArray.value = supportList.toTypedArray()
         currentBookIndex = 0
     }
+
+    fun moveReadingBookToTbr() {
+        isAccessingDatabase.value = true
+        CoroutineScope(Dispatchers.Main).launch {
+            readingModel.moveBookToTbrInDatabase(currentReadingBookArray.value!![currentBookIndex].bookId)
+            isAccessingDatabase.value = false
+            notifyBookTerminated()
+        }
+    }
+
+    fun deleteReadingBook() {
+        isAccessingDatabase.value = true
+        CoroutineScope(Dispatchers.Main).launch {
+            readingModel.deleteReadingBookFromDatabase(currentReadingBookArray.value!![currentBookIndex].bookId)
+            isAccessingDatabase.value = false
+            notifyBookTerminated()
+        }
+    }
 }

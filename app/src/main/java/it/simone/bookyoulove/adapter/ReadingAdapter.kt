@@ -1,8 +1,11 @@
 package it.simone.bookyoulove.adapter
 
+import android.content.Context
+import android.graphics.Typeface
 import android.util.Log
 import android.view.*
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
 import com.github.islamkhsh.CardSliderAdapter

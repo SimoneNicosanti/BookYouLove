@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <style name="CustomTheme.BookYouLove" parent="@style/Theme.BookYouLove">
+        <item name="buttonStyle">@style/CustomButtonStyle</item>
+        <item name="android:textViewStyle">@style/CustomTextViewStyle</item>
+        <item name="android:editTextStyle">@style/CustomEditTextStyle</item>
+        <item name="android:checkboxStyle">@style/CustomCheckboxStyle</item>
+        <item name="cardViewStyle">@style/CustomCardViewStyle</item>
+
+    </style>
+
+    <style name="CustomButtonStyle" parent="@style/Widget.MaterialComponents.Button">
+        <item name="android:buttonCornerRadius">20dp</item>
+        <item name="android:textAppearance">@style/CustomButtonTextStyle</item>
+    </style>
+
+    <style name="CustomButtonTextStyle" parent="TextAppearance.MaterialComponents.Button">
+        <item name="android:fontFamily">casual</item>
+    </style>
+
+    <style name="CustomTextViewStyle" parent="Widget.MaterialComponents.TextView">
+        <item name="android:fontFamily">casual</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="CustomEditTextStyle" parent="Widget.AppCompat.EditText">
+        <item name="android:textAppearance">@style/CustomEditTextTextStyle</item>
+    </style>
+
+    <style name="CustomEditTextTextStyle" parent="TextAppearance.AppCompat.Medium.Inverse">
+        <item name="android:fontFamily">casual</item>
+    </style>
+
+    <style name="CustomCheckboxStyle" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="android:textAppearance">@style/CustomCheckboxTextStyle</item>
+    </style>
+
+    <style name="CustomCheckboxTextStyle" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:fontFamily">casual</item>
+    </style>
+
+    <style name="CustomCardViewStyle" parent="Base.CardView">
+        <item name="cardCornerRadius">15dp</item>
+    </style>
+
+    <style name="CustomToolbarStyle" parent="Widget.MaterialComponents.Toolbar">
+        <item name="titleTextAppearance">@style/CustomToolbarTitleTextStyle</item>
+        <item name="subtitleTextAppearance">@style/CustomToolbarSubtitleTextStyle</item>
+    </style>
+
+    <style name="CustomToolbarTitleTextStyle" parent="Widget.MaterialComponents.Toolbar">
+        <item name="android:fontFamily">casual</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="CustomToolbarSubtitleTextStyle" parent="Widget.MaterialComponents.Toolbar">
+        <item name="android:fontFamily">casual</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+</resources>

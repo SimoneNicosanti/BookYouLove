@@ -34,7 +34,7 @@ class QuotesProvider : ContentProvider() {
 
         when (matcher.match(uri)) {
             CODE_GET_RANDOM_QUOTE -> {
-                val randomQuoteCursor = myAppDatabase.quoteDao().loadRandomQuote()
+                val randomQuoteCursor = myAppDatabase.quoteDao().loadRandomQuoteCursor()
                 randomQuoteCursor.setNotificationUri(context?.contentResolver, uri)
                 return randomQuoteCursor
             }

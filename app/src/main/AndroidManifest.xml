@@ -11,7 +11,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.BookYouLove">
+        android:theme="@style/CustomTheme.BookYouLove">
 
         <receiver android:name=".view.QuoteOfTheDayWidget">
             <intent-filter>
@@ -38,7 +38,7 @@
         <activity
             android:name=".view.MainActivity"
             android:windowSoftInputMode="adjustPan">
-            //Permette di evitare che la bottomBar vada sopra la tastiera
+            <!--Permette di evitare che la bottomBar vada sopra la tastiera -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

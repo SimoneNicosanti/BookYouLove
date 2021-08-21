@@ -1,11 +1,11 @@
 package it.simone.bookyoulove.viewmodel
 
 import android.app.Application
-import androidx.compose.runtime.key
-import androidx.core.os.persistableBundleOf
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.preference.PreferenceManager
 import it.simone.bookyoulove.database.AppDatabase
 import it.simone.bookyoulove.database.DAO.ShowedBookInfo
 import it.simone.bookyoulove.database.entity.Book
@@ -18,7 +18,9 @@ import kotlinx.coroutines.withContext
 class TbrViewModel(application: Application) : AndroidViewModel(application) {
 
     val myAppDatabase = AppDatabase.getDatabaseInstance(application.applicationContext)
-    val tbrModel = TbrModel(myAppDatabase)
+    private val tbrModel = TbrModel(myAppDatabase)
+
+    private val myApp = application
 
     val currentTbrArray = MutableLiveData(arrayOf<ShowedBookInfo>())
     val isAccessing = MutableLiveData(false)
@@ -31,7 +33,11 @@ class TbrViewModel(application: Application) : AndroidViewModel(application) {
         if (!loadedOnce) {
             viewModelScope.launch {
                 isAccessing.value = true
-                currentTbrArray.value = tbrModel.loadTbrArrayFromDatabase()
+                val loadedArray = tbrModel.loadTbrArrayFromDatabase()
+                val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(myApp.applicationContext)
+                val order = sharedPreferences.getString("tbrOrderPreference", "title")
+
+                currentTbrArray.value = tbrModel.sortTbrBookArrayByPreference(loadedArray, order)
                 isAccessing.value = false
                 loadedOnce = true
             }

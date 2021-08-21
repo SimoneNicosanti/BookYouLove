@@ -39,6 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/ended_grid_title_hor_marg"
                 android:gravity="center"
+                android:maxLines="2"
                 android:singleLine="false"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"

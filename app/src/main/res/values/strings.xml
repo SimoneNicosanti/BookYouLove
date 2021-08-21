@@ -35,7 +35,7 @@
     <string name="new_book_missing_fields_error_string">Missing Arguments</string>
     <string name="reading_empty_list">Begin Read To See Your Book Details</string>
     <string name="edit_string">Edit</string>
-    <string name="loading_string">Loading...</string>
+    <string name="loading_string">Loading…</string>
     <string name="not_inserted_string">Not Inserted</string>
     <string name="read_settings_string">Ended Settings</string>
     <string name="grid_setting_string">Grid Layout</string>
@@ -60,7 +60,7 @@
     <string name="emotions_string">Emotions</string>
     <string name="plot_string">Plot</string>
     <string name="characters_string">Characters</string>
-    <string name="final_thought_string">Final Thouht</string>
+    <string name="final_thought_string">Final Thought</string>
     <string name="total_string">Total</string>
     <string name="books_string">Books</string>
     <string name="rates_string">Rates</string>
@@ -96,5 +96,7 @@
     <string name="goto_string">Goto</string>
     <string name="starting_tirle">&#128214; You are starting this book &#128214;</string>
     <string name="placeholder_quote">He who does not read, at 70 years old will have lived only one life. He who reads, will have lived 5000 years. Reading is a backward immortality</string>
+    <string name="leaving_dialog_title">Do you want to delete this book or move it to TBR?</string>
+    <string name="move_to_tbr_string">Move to TBR</string>
 
 </resources>

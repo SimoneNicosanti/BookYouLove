@@ -1,6 +1,7 @@
 package it.simone.bookyoulove.view.ended
 
 import android.os.Bundle
+import android.text.method.ScrollingMovementMethod
 import android.view.*
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -50,6 +51,7 @@ class EndedThoughtFragment : Fragment() {
 
         //Modifica il testo della editText che triggera il doOnTextChanged, il quale modifica il testo della TextView
         binding.endedThoughtEditText.setText(args.endedFinalThought)
+        binding.endedThoughtTextView.movementMethod = ScrollingMovementMethod()
         //endedThoughtVM.updateThought(args.endedFinalThought)
 
         return binding.root

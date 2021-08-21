@@ -113,6 +113,7 @@
                 android:id="@+id/endingFlipRateCardButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@null"
                 android:src="@drawable/ic_round_arrow_drop_up" />
 
             <LinearLayout
@@ -142,7 +143,8 @@
                         android:id="@+id/endingStyleRate"
                         style="@style/Widget.AppCompat.RatingBar.Small"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_weight="1"
                         android:isIndicator="false"
                         android:numStars="5" />
@@ -167,7 +169,8 @@
                         android:id="@+id/endingEmotionsRate"
                         style="@android:style/Widget.Material.Light.RatingBar.Small"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_weight="1"
                         android:isIndicator="false"
                         android:numStars="5" />
@@ -192,7 +195,8 @@
                         android:id="@+id/endingPlotRate"
                         style="@android:style/Widget.Material.Light.RatingBar.Small"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_weight="1"
                         android:isIndicator="false"
                         android:numStars="5" />
@@ -216,7 +220,8 @@
                         android:id="@+id/endingCharactersRate"
                         style="@android:style/Widget.Material.Light.RatingBar.Small"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_weight="1"
                         android:isIndicator="false"
                         android:numStars="5" />

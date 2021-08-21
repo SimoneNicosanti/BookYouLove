@@ -35,7 +35,10 @@ interface QuoteDao {
     fun loadQuotesByBook(requestedBookId: Long) : Array<Quote>
 
     @Query("SELECT * FROM Quote ORDER BY RANDOM() LIMIT 1")
-    fun loadRandomQuote() : Cursor
+    fun loadRandomQuoteCursor() : Cursor
+
+    @Query("SELECT * FROM Quote ORDER BY RANDOM() LIMIT 1")
+    fun loadRandomQuote() : Quote
 
     @Query("DELETE FROM Quote WHERE bookId LIKE :requestedBookId")
     fun deleteQuotesByBook(requestedBookId: Long)

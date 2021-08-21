@@ -10,6 +10,7 @@ import android.util.Log
 import android.widget.*
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.AppDatabase
+import it.simone.bookyoulove.database.entity.Quote
 
 
 class QuoteOfTheDayWidget : AppWidgetProvider() {
@@ -64,7 +65,7 @@ class QuoteOfTheDayRemoteViewsFactory(
         intent : Intent
 ) : RemoteViewsService.RemoteViewsFactory {
 
-    private var quoteCursor : Cursor? = null
+    private var widgetQuote : Quote? = null
 
     private val myAppDatabase = AppDatabase.getDatabaseInstance(context)
 
@@ -73,7 +74,7 @@ class QuoteOfTheDayRemoteViewsFactory(
 
     override fun onDataSetChanged() {
         //quoteCursor = context.contentResolver.query(QuotesProvider().URI_RANDOM, null, null, null, null)
-        quoteCursor = myAppDatabase.quoteDao().loadRandomQuote()
+        widgetQuote = myAppDatabase.quoteDao().loadRandomQuote()
         /*
             Devo per forza utilizzare l'istanza del DB in maniera diretta senza passare per il Provider.
             Infatti mi serve accedere al DB in maniera Sincrona, per fare in modo che quando il quoteCursor
@@ -95,29 +96,17 @@ class QuoteOfTheDayRemoteViewsFactory(
     override fun getViewAt(position: Int): RemoteViews {
         return RemoteViews(context.packageName, R.layout.quote_of_the_day_widget_quote_text).apply {
 
-            if (quoteCursor != null) {
-                if (quoteCursor!!.count != 0) {
-                    setTextViewText(
-                        R.id.quoteOfTheDayQuoteText,
-                        quoteCursor!!.getString(quoteCursor!!.getColumnIndex("quoteText "))
-                    )
-                    setTextViewText(
-                        R.id.quoteOfTheDayWidgetTitle,
-                        quoteCursor!!.getString(quoteCursor!!.getColumnIndex("bookTitle"))
-                    )
-                    setTextViewText(
-                        R.id.quoteOfTheDayWidgetAuthor,
-                        quoteCursor!!.getString(quoteCursor!!.getColumnIndex("bookAuthor"))
-                    )
-                }
-
-                else {
-                    setTextViewText(R.id.quoteOfTheDayQuoteText, context.getString(R.string.placeholder_quote))
-                    setTextViewText(R.id.quoteOfTheDayWidgetAuthor, "")
-                    setTextViewText(R.id.quoteOfTheDayWidgetAuthor, "Umberto Eco")
-                }
+            if (widgetQuote != null) {
+                setTextViewText(R.id.quoteOfTheDayQuoteText, widgetQuote!!.quoteText)
+                setTextViewText(R.id.quoteOfTheDayWidgetTitle, widgetQuote!!.bookTitle)
+                setTextViewText(R.id.quoteOfTheDayWidgetAuthor, widgetQuote!!.bookAuthor)
             }
 
+            else {
+                setTextViewText(R.id.quoteOfTheDayQuoteText, context.getString(R.string.placeholder_quote))
+                setTextViewText(R.id.quoteOfTheDayWidgetAuthor, "")
+                setTextViewText(R.id.quoteOfTheDayWidgetAuthor, "Umberto Eco")
+            }
         }
     }
 

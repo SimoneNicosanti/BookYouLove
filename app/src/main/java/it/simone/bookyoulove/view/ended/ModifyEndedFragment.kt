@@ -128,10 +128,10 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
             binding.modifyEndedPagesText.setText(currentBook.pages.toString())
 
             binding.endedModifyTotalRate.rating = currentBook.rate?.totalRate!!
-            binding.endedModifyStyleRate.rating = currentBook.rate?.totalRate!!
-            binding.endedModifyEmotionsRate.rating = currentBook.rate?.totalRate!!
-            binding.endedModifyPlotRate.rating = currentBook.rate?.totalRate!!
-            binding.endedModifyCharactersRate.rating = currentBook.rate?.totalRate!!
+            binding.endedModifyStyleRate.rating = currentBook.rate?.styleRate!!
+            binding.endedModifyEmotionsRate.rating = currentBook.rate?.emotionRate!!
+            binding.endedModifyPlotRate.rating = currentBook.rate?.plotRate!!
+            binding.endedModifyCharactersRate.rating = currentBook.rate?.characterRate!!
 
             binding.modifyEndedPaperCheck.isChecked = currentBook.support?.paperSupport ?: false
             binding.modifyEndedEbookCheck.isChecked = currentBook.support?.ebookSupport ?: false
