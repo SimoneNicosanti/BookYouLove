@@ -25,8 +25,6 @@ class QuoteListFragment : Fragment(), QuoteListAdapter.OnQuoteListHolderClick, S
 
     private val quoteListVM : QuoteListViewModel by viewModels()
 
-    private var loadingDialog = LoadingDialogFragment()
-
     private lateinit var quoteArray : Array<ShowQuoteInfo>
 
     private var searchField : String = ""
@@ -44,6 +42,8 @@ class QuoteListFragment : Fragment(), QuoteListAdapter.OnQuoteListHolderClick, S
         else {
             quoteListVM.getQuotesByBookId(args.bookId)
         }
+
+        if (savedInstanceState != null) searchField = savedInstanceState.getString("searchField").toString()
 
         setHasOptionsMenu(true)
     }
@@ -89,10 +89,6 @@ class QuoteListFragment : Fragment(), QuoteListAdapter.OnQuoteListHolderClick, S
         }
         quoteListVM.isAccessingDatabase.observe(viewLifecycleOwner, isAccessingDatabaseObserver)
 
-        val searchFieldObserver = Observer<String> { currentSearchField ->
-            searchField = currentSearchField
-        }
-        quoteListVM.currentSearchField.observe(viewLifecycleOwner, searchFieldObserver)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -104,7 +100,6 @@ class QuoteListFragment : Fragment(), QuoteListAdapter.OnQuoteListHolderClick, S
         quoteListFragmentMenu = menu
 
         val mySearchView = menu.findItem(R.id.quotesListMenuSearchItem).actionView as SearchView
-        mySearchView.setOnQueryTextListener(this)
 
         if (searchField != "") {
             mySearchView.isIconified = false
@@ -113,6 +108,8 @@ class QuoteListFragment : Fragment(), QuoteListAdapter.OnQuoteListHolderClick, S
         else {
             mySearchView.isIconified = true
         }
+
+        mySearchView.setOnQueryTextListener(this)
 
     }
 
@@ -134,8 +131,13 @@ class QuoteListFragment : Fragment(), QuoteListAdapter.OnQuoteListHolderClick, S
     }
 
     override fun onQueryTextChange(newText: String?): Boolean {
+        searchField = newText!!
         quoteListVM.searchByContents(newText)
         return true
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("searchField", searchField)
+    }
 }

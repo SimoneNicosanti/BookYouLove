@@ -2,22 +2,6 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group
-        android:id="@+id/endedMenuSearchTypeGroup"
-        android:checkableBehavior="single"
-        android:enabled="true"
-        android:menuCategory="container">
-        <item
-            android:id="@+id/endedMenuSearchTypeTitle"
-            android:checked="true"
-            android:title="@string/title_string" />
-        <item
-            android:id="@+id/endedMenuSearchTypeAuthor"
-            android:title="@string/author_string" />
-        <item
-            android:id="@+id/endedMenuSearchTypeRate"
-            android:title="@string/your_rate_string" />
-    </group>
     <item
         android:id="@+id/endedMenuSearchItem"
         android:icon="@drawable/ic_search_black_24dp"

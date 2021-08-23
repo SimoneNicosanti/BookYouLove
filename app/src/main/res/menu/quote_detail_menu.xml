@@ -12,9 +12,4 @@
         android:icon="@drawable/ic_round_delete"
         android:title="@string/delete_string"
         app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/quoteDetailMenuFavouriteItem"
-        android:icon="@drawable/ic_round_modify_quote_favorite_off"
-        android:title="@string/favourite_string"
-        app:showAsAction="ifRoom" />
 </menu>

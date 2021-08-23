@@ -13,48 +13,51 @@ import it.simone.bookyoulove.model.EndedModel
 import it.simone.bookyoulove.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class EndedViewModel(application: Application) : AndroidViewModel(application) {
 
     private val myAppDatabase = AppDatabase.getDatabaseInstance(application.applicationContext)
     private val readModel = EndedModel(myAppDatabase)
     private val myApp : Application = application
+    private val sortType = "start_date"
+
     //Lo preimposto in modo da non avere mai un null, ma al massimo un array vuoto
     private var loadedArray : Array<ShowedBookInfo> = arrayOf()
+
+    private var filterText : String = ""
+    private var filterType : Int = SEARCH_BY_TITLE
 
     var changedEndedArrayOrder : Boolean = true
 
     val isAccessingDatabase =  MutableLiveData(false)
-    val currentSearchField = MutableLiveData<String>()
-
     val currentReadList = MutableLiveData<Array<ShowedBookInfo>>()
-    val changedEndedList = MutableLiveData<Boolean>(true)
-    val currentSelectedBook = MutableLiveData<ShowedBookInfo>()
+    private var changedEndedList = true
+
     var currentSelectedPosition : Int = -1
 
+
     fun getEndedList() {
-        isAccessingDatabase.value = true
-        viewModelScope.launch {
-            loadedArray = readModel.loadEndedList(ENDED_BOOK_STATE)
-            isAccessingDatabase.value = false
-            sortBookArray(loadedArray)
+        if(changedEndedList) {
+            isAccessingDatabase.value = true
+            viewModelScope.launch {
+                loadedArray = readModel.loadEndedList(ENDED_BOOK_STATE)
+                isAccessingDatabase.value = false
+                changedEndedList = false
+                sortBookArray(loadedArray)
+            }
         }
     }
 
 
     fun setEndedListChanged(changed : Boolean) {
-        changedEndedList.value = changed
-    }
-
-    fun setSelectedBook(selectedBook: ShowedBookInfo) {
-        currentSelectedBook.value = selectedBook
+        changedEndedList = changed
     }
 
 
     fun sortBookArray(notSortedArray: Array<ShowedBookInfo> = loadedArray) {
 
         isAccessingDatabase.value = true
-        //delay(5000)
 
         viewModelScope.launch {
             val sharedPreferences =
@@ -72,18 +75,19 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
             }
             loadedArray = sortedArray
             currentReadList.value = sortedArray
-
             isAccessingDatabase.value = false
+            //filterArray(searchField, searchType)
         }
     }
 
     fun filterArray(newText : String?, filterParam : Int) {
-        currentSearchField.value = newText ?: ""
-        if (newText == null || newText == "") {
+        filterText = newText!!
+        filterType = filterParam
+        Log.d("Nicosanti", "Making Filter $filterText $filterType")
+        if (newText == "") {
             currentReadList.value = loadedArray
         }
         else {
-            Log.i("Nicosanti", "Ricerca")
             /*
                 Mi serve il casting perché la filter ritorna una List anziché un Array.
                 Poiché il filtraggio può essere un'operazione lunga, lancio una coroutine e nel mentre
@@ -96,9 +100,13 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
                         it.title.contains(newText) }).toTypedArray()
 
                     SEARCH_BY_AUTHOR -> currentReadList.value = (loadedArray.filter {it.author.contains(newText)}).toTypedArray()
-                    else -> {
+                    SEARCH_BY_RATE -> {
                         val searchRate = newText.toFloat()
                         currentReadList.value = (loadedArray.filter {it.totalRate == searchRate}).toTypedArray()
+                    }
+                    else -> {
+                        val searchYear = newText.toInt()
+                        currentReadList.value = (loadedArray.filter {it.startDate!!.startYear == searchYear || it.endDate!!.endYear == searchYear}).toTypedArray()
                     }
                 }
                 isAccessingDatabase.value = false
@@ -121,10 +129,14 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
                 modifiedBook.rate?.totalRate,
                 modifiedBook.pages
             )
-            loadedArray[currentSelectedPosition] = modifiedShowBookInfo
-            sortBookArray(loadedArray)
-            //Dopo il riordino non so la posizione in cui è andato il libro, quindi resetto il selectedPosition
-            currentSelectedPosition = -1
+            viewModelScope.launch {
+                val originalPosition = findOriginalPosition()
+                loadedArray[originalPosition] = modifiedShowBookInfo
+                sortBookArray(loadedArray)
+                //filterArray(searchField, searchType)
+                //Dopo il riordino non so la posizione in cui è andato il libro, quindi resetto il selectedPosition
+                //currentSelectedPosition = -1
+            }
         }
     }
 
@@ -132,13 +144,32 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
         //L'unico che può essere eliminato è il corrente
         if (currentSelectedPosition != -1) {
             viewModelScope.launch {
-                Dispatchers.Default
-                val support = loadedArray.toMutableList()
-                support.removeAt(currentSelectedPosition)
-                loadedArray = support.toTypedArray()
+                val originalPosition = findOriginalPosition()
+                withContext(Dispatchers.Default) {
+                    val support = loadedArray.toMutableList()
+                    support.removeAt(originalPosition)
+                    loadedArray = support.toTypedArray()
+                }
                 sortBookArray()
+                //filterArray(searchField, searchType)
                 currentSelectedPosition = -1
             }
         }
+    }
+
+    fun resetSearchParams() {
+        filterText = ""
+        filterType = SEARCH_BY_TITLE
+        Log.d("Nicosanti", "Reset")
+    }
+
+    private suspend fun findOriginalPosition() : Int {
+        var originalPosition = 0
+
+        withContext(Dispatchers.Default) {
+            while (currentReadList.value!![currentSelectedPosition].bookId != loadedArray[originalPosition].bookId) originalPosition += 1
+        }
+
+        return originalPosition
     }
 }

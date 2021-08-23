@@ -35,7 +35,6 @@ class ModifyQuoteFragment : Fragment(), View.OnClickListener {
 
     private var isSettedFavorite = false
 
-    private var loadingDialog = LoadingDialogFragment()
 
     private var requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
         if (isGranted) {

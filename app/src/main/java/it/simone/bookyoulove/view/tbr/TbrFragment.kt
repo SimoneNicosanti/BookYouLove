@@ -1,7 +1,10 @@
 package it.simone.bookyoulove.view.tbr
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.util.Log
 import android.view.*
+import android.widget.SearchView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -16,7 +19,7 @@ import it.simone.bookyoulove.view.dialog.ConfirmDeleteDialogFragment
 import it.simone.bookyoulove.viewmodel.TbrViewModel
 
 
-class TbrFragment : Fragment(), TbrAdapter.OnTbrItemClickedListener {
+class TbrFragment : Fragment(), TbrAdapter.OnTbrItemClickedListener, SearchView.OnQueryTextListener {
 
     private lateinit var binding : FragmentTbrBinding
 
@@ -24,9 +27,14 @@ class TbrFragment : Fragment(), TbrAdapter.OnTbrItemClickedListener {
 
     private val tbrVM : TbrViewModel by viewModels()
 
+    private lateinit var searchView : SearchView
+
+    private var searchField : String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (savedInstanceState != null) searchField = savedInstanceState.getString("searchField").toString()
 
         tbrVM.getTbrArray()
         setHasOptionsMenu(true)
@@ -64,6 +72,11 @@ class TbrFragment : Fragment(), TbrAdapter.OnTbrItemClickedListener {
             }
         }
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
 
     private fun setObservers() {
@@ -129,5 +142,37 @@ class TbrFragment : Fragment(), TbrAdapter.OnTbrItemClickedListener {
             else -> false
         }
 
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        searchView = menu.findItem(R.id.tbrFragmentMenuSearchItem).actionView as SearchView
+
+
+        if (searchField == "") {
+            searchView.isIconified = true
+        }
+        else {
+            searchView.isIconified = false
+            searchView.setQuery(searchField, false)
+        }
+        //Imposto il listener dopo aver restaurato lo stato della searchView: in questo modo non triggero la onQueryTextChange che invoca il filtro
+        searchView.setOnQueryTextListener(this)
+    }
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        return true
+    }
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        Log.d("Nicosanti", "Text Changed")
+        searchField = newText ?: ""
+        tbrVM.onSearchQuery(newText)
+        return true
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("searchField", searchField)
     }
 }

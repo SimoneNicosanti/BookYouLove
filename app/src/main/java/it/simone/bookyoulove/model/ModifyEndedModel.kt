@@ -10,7 +10,17 @@ class ModifyEndedModel(private val myAppDatabase: AppDatabase) {
     suspend fun saveChangedBook(changedBook : Book) {
         withContext(Dispatchers.IO) {
             myAppDatabase.bookDao().updateBooks(changedBook)
+            changeQuotesInfo(changedBook)
         }
     }
-    
+
+    private fun changeQuotesInfo(changedBook : Book) {
+        val quotesArray = myAppDatabase.quoteDao().loadQuotesByBook(changedBook.bookId)
+        for (quote in quotesArray) {
+            quote.bookTitle = changedBook.title
+            quote.bookAuthor = changedBook.author
+            myAppDatabase.quoteDao().updateQuote(quote)
+        }
+    }
+
 }

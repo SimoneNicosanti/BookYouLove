@@ -12,7 +12,7 @@
         android:visible="true" />
     <item
         android:id="@+id/readingContextMenuDetailItem"
-        android:title="@string/detai_string"
+        android:title="@string/detail_string"
         android:visible="true" />
     <item
         android:id="@+id/readingContextMenuTakeNoteItem"

@@ -15,7 +15,11 @@
             app:destination="@id/newReadingBookFragment" />
         <action
             android:id="@+id/action_readingFragment_to_detailReadingFragment"
-            app:destination="@id/detailReadingFragment" />
+            app:destination="@id/detailReadingFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
         <action
             android:id="@+id/action_readingFragment_to_endingFragment"
             app:destination="@id/endingFragment" />
@@ -70,25 +74,40 @@
     <action
         android:id="@+id/action_global_readingFragment"
         app:destination="@id/readingFragment"
-        app:launchSingleTop="false"
-        app:popUpTo="@id/nav_graph"
-        app:popUpToInclusive="false" />
+        app:popUpTo="@id/readingFragment"
+        app:popUpToInclusive="true" />
     <action
         android:id="@+id/action_global_readListFragment"
         app:destination="@id/endedFragment"
-        app:popUpTo="@id/nav_graph" />
+        app:enterAnim="@android:anim/fade_in"
+        app:exitAnim="@android:anim/fade_out"
+        app:popEnterAnim="@android:anim/fade_in"
+        app:popExitAnim="@android:anim/fade_out"
+        app:popUpTo="@id/readingFragment" />
     <action
         android:id="@+id/action_global_tbrFragment"
         app:destination="@id/tbrFragment"
-        app:popUpTo="@id/nav_graph" />
+        app:enterAnim="@android:anim/fade_in"
+        app:exitAnim="@android:anim/fade_out"
+        app:popEnterAnim="@android:anim/fade_in"
+        app:popExitAnim="@android:anim/fade_out"
+        app:popUpTo="@id/readingFragment" />
     <action
         android:id="@+id/action_global_chartsFragment"
         app:destination="@id/chartsFragment"
-        app:popUpTo="@id/nav_graph" />
+        app:enterAnim="@android:anim/fade_in"
+        app:exitAnim="@android:anim/fade_out"
+        app:popEnterAnim="@android:anim/fade_in"
+        app:popExitAnim="@android:anim/fade_out"
+        app:popUpTo="@id/readingFragment" />
     <action
         android:id="@+id/action_global_settingsFragment"
         app:destination="@id/settingsFragment"
-        app:popUpTo="@id/nav_graph" />
+        app:enterAnim="@android:anim/fade_in"
+        app:exitAnim="@android:anim/fade_out"
+        app:popEnterAnim="@android:anim/fade_in"
+        app:popExitAnim="@android:anim/fade_in"
+        app:popUpTo="@id/readingFragment" />
     <fragment
         android:id="@+id/detailReadingFragment"
         android:name="it.simone.bookyoulove.view.reading.DetailReadingFragment"
@@ -209,10 +228,6 @@
             android:name="quoteDetailBookId"
             app:argType="long" />
     </fragment>
-    <fragment
-        android:id="@+id/blankFragment"
-        android:name="it.simone.bookyoulove.BlankFragment"
-        android:label="BlankFragment" />
     <fragment
         android:id="@+id/takeBookIsbnFragment"
         android:name="it.simone.bookyoulove.view.reading.TakeBookIsbnFragment"

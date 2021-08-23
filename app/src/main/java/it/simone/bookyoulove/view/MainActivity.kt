@@ -47,6 +47,7 @@ const val SORT_BY_AUTHOR = 1
 const val SEARCH_BY_TITLE = 0
 const val SEARCH_BY_AUTHOR = 1
 const val SEARCH_BY_RATE = 2
+const val SEARCH_BY_YEAR = 3
 
 const val QUOTE_LIST_READING_CALLER = 0
 const val QUOTE_LIST_ENDED_CALLER = 1
@@ -72,13 +73,6 @@ class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItem
     }
 
 
-    /*
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.navHostFragment)
-        return navController.navigateUp(appBarConfiguration)
-                || super.onSupportNavigateUp()
-    }*/
-
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         val navController = findNavController(R.id.navHostFragment)
@@ -94,7 +88,7 @@ class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItem
 
             R.id.navViewMenuReadItem -> {
                 if (navController.currentDestination?.id != R.id.endedFragment) {
-                    val action = EndedFragmentDirections.actionGlobalReadListFragment()
+                    val action = ReadingFragmentDirections.actionGlobalReadListFragment()
                     navController.navigate(action)
                 }
                 true
@@ -102,7 +96,7 @@ class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItem
 
             R.id.navViewMenuTbrItem -> {
                 if (navController.currentDestination?.id != R.id.tbrFragment) {
-                    val action = EndedFragmentDirections.actionGlobalTbrFragment()
+                    val action = ReadingFragmentDirections.actionGlobalTbrFragment()
                     navController.navigate(action)
                 }
                 true
@@ -132,7 +126,7 @@ class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItem
 
             R.id.navViewMenuSettingsItem -> {
                 if (navController.currentDestination?.id != R.id.settingsFragment) {
-                    val action = SettingsFragmentDirections.actionGlobalSettingsFragment()
+                    val action = ReadingFragmentDirections.actionGlobalSettingsFragment()
                     navController.navigate(action)
                 }
                 true
@@ -140,20 +134,20 @@ class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItem
 
             R.id.navViewMenuChartsItem -> {
                 if (navController.currentDestination?.id != R.id.chartsFragment) {
-                    val action = ChartsFragmentDirections.actionGlobalChartsFragment()
+                    val action = ReadingFragmentDirections.actionGlobalChartsFragment()
                     navController.navigate(action)
                 }
                 true
             }
 
             R.id.navViewMenuQuotesItem -> {
-                val action = QuoteListFragmentDirections.actionGlobalQuoteListFragment(0L)
+                val action = ReadingFragmentDirections.actionGlobalQuoteListFragment(0L)
                 navController.navigate(action)
                 true
             }
             else -> false
-
-
         }
     }
+
+
 }

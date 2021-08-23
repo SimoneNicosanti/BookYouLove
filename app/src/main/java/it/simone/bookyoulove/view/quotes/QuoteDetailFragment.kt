@@ -20,7 +20,6 @@ class QuoteDetailFragment : Fragment() {
 
     private lateinit var binding : FragmentQuoteDetailBinding
 
-    private var isFavorite = false
     private lateinit var requestedQuote : Quote
 
     private val quoteDetailVM : QuoteDetailViewModel by viewModels()
@@ -74,7 +73,7 @@ class QuoteDetailFragment : Fragment() {
     private fun setObservers() {
 
         val currentQuoteObserver = Observer<Quote> { currentQuote ->
-            isFavorite = currentQuote.favourite
+
             binding.quoteDetailTitleTextView.text = currentQuote.bookTitle
             binding.quoteDetailAuthorTextView.text = currentQuote.bookAuthor
             binding.quoteDetailChapterTextView.text = currentQuote.quoteChapter
@@ -82,7 +81,8 @@ class QuoteDetailFragment : Fragment() {
             binding.quoteDetailQuoteTextTextView.text = currentQuote.quoteText
             binding.quoteDetailYourThoughtTextView.text = currentQuote.quoteThought
 
-            isFavorite = currentQuote.favourite
+            if (currentQuote.favourite) binding.quoteDetailFavoriteImage.setImageResource(R.drawable.ic_round_modify_quote_favorite_on)
+            else binding.quoteDetailFavoriteImage.setImageResource(R.drawable.ic_round_modify_quote_favorite_off)
             /*
             if (quoteDetailFragmentMenu != null) {
                 //Il menu è già stato impostato, ma non lo è stato ancora il favorite
@@ -100,11 +100,6 @@ class QuoteDetailFragment : Fragment() {
         inflater.inflate(R.menu.quote_detail_menu, menu)
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        quoteDetailFragmentMenu = menu
-        if (isFavorite) menu.findItem(R.id.quoteDetailMenuFavouriteItem).setIcon(R.drawable.ic_round_modify_quote_favorite_on)
-        else menu.findItem(R.id.quoteDetailMenuFavouriteItem).setIcon(R.drawable.ic_round_modify_quote_favorite_off)
-    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 

@@ -1,7 +1,6 @@
 package it.simone.bookyoulove.viewmodel
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -29,6 +28,11 @@ class TbrViewModel(application: Application) : AndroidViewModel(application) {
 
     private var currentPosition = -1
 
+    private var originalArray = arrayOf<ShowedBookInfo>()
+
+    private var searchField : String? = null
+
+
     fun getTbrArray() {
         if (!loadedOnce) {
             viewModelScope.launch {
@@ -36,8 +40,8 @@ class TbrViewModel(application: Application) : AndroidViewModel(application) {
                 val loadedArray = tbrModel.loadTbrArrayFromDatabase()
                 val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(myApp.applicationContext)
                 val order = sharedPreferences.getString("tbrOrderPreference", "title")
-
-                currentTbrArray.value = tbrModel.sortTbrBookArrayByPreference(loadedArray, order)
+                originalArray = tbrModel.sortTbrBookArrayByPreference(loadedArray, order)
+                currentTbrArray.value = originalArray
                 isAccessing.value = false
                 loadedOnce = true
             }
@@ -49,7 +53,6 @@ class TbrViewModel(application: Application) : AndroidViewModel(application) {
         if (newTbrBook != null) {
             val newTbrShowedBookInfo = ShowedBookInfo(
                 bookId = newTbrBook.bookId,
-
                 title = newTbrBook.title,
                 author = newTbrBook.author,
                 coverName = newTbrBook.coverName,
@@ -59,22 +62,34 @@ class TbrViewModel(application: Application) : AndroidViewModel(application) {
                 pages = newTbrBook.pages
             )
 
-            currentTbrArray.value = arrayOf(newTbrShowedBookInfo).plus(currentTbrArray.value!!)
+            val supportArray = arrayOf(newTbrShowedBookInfo).plus(originalArray)
+            val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(myApp.applicationContext)
+            val order = sharedPreferences.getString("tbrOrderPreference", "title")
+            isAccessing.value = true
+            viewModelScope.launch {
+                originalArray = tbrModel.sortTbrBookArrayByPreference(supportArray, order)
+                currentTbrArray.value = originalArray
+                isAccessing.value = false
+                //onSearchQuery(searchField)
+            }
         }
     }
+
 
     fun deleteTbrBook() {
         if (currentPosition != -1) {
             isAccessing.value = true
             CoroutineScope(Dispatchers.Main).launch {
                 tbrModel.deleteTbrBook(currentTbrArray.value!![currentPosition].bookId)
-                withContext(Dispatchers.Main) {
-                    val supportMutableList = currentTbrArray.value!!.toMutableList()
-                    supportMutableList.removeAt(currentPosition)
-                    currentTbrArray.value = supportMutableList.toTypedArray()
+                val originalPosition = findOriginalPosition()
+                withContext(Dispatchers.Default) {
+                    val supportMutableList = originalArray.toMutableList()
+                    supportMutableList.removeAt(originalPosition)
+                    originalArray = supportMutableList.toTypedArray()
                 }
+                currentTbrArray.value = originalArray
                 isAccessing.value = false
-                currentPosition = -1
+                //onSearchQuery(searchField)
             }
         }
     }
@@ -96,15 +111,58 @@ class TbrViewModel(application: Application) : AndroidViewModel(application) {
                     totalRate = tbrModifiedBook.rate?.totalRate,
                     pages = tbrModifiedBook.pages
             )
-            currentTbrArray.value!![currentPosition] = modifiedTbrShowedBookInfo
-            currentPosition = -1
+            isAccessing.value = true
+            viewModelScope.launch {
+                val originalPosition = findOriginalPosition()
+                originalArray[originalPosition] = modifiedTbrShowedBookInfo
+                val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(myApp.applicationContext)
+                val order = sharedPreferences.getString("tbrOrderPreference", "title")
+                
+                originalArray = tbrModel.sortTbrBookArrayByPreference(originalArray, order)
+                currentTbrArray.value = originalArray
+                isAccessing.value = false
+                //onSearchQuery(searchField)
+            }
         }
     }
 
     fun onStartedBook() {
-        val supportList = currentTbrArray.value!!.toMutableList()
-        supportList.removeAt(currentPosition)
-        currentPosition = -1
-        currentTbrArray.value = supportList.toTypedArray()
+        viewModelScope.launch {
+            val originalPosition = findOriginalPosition()
+            withContext(Dispatchers.Default) {
+                val supportList = originalArray.toMutableList()
+                supportList.removeAt(originalPosition)
+                originalArray = supportList.toTypedArray()
+            }
+            currentTbrArray.value = originalArray
+            //onSearchQuery(searchField)
+        }
+    }
+
+
+    fun onSearchQuery(newText : String?) {
+        searchField = newText
+        if (newText == null || newText == "") {
+            currentTbrArray.value = originalArray
+        }
+        else {
+            isAccessing.value = true
+            viewModelScope.launch {
+                val filteredArray : Array<ShowedBookInfo>
+                withContext(Dispatchers.Default) {
+                    filteredArray = (originalArray.filter { it.title.contains(newText) || it.author.contains(newText) }).toTypedArray()
+                }
+                currentTbrArray.value = filteredArray
+                isAccessing.value = false
+            }
+        }
+    }
+
+    private suspend fun findOriginalPosition(): Int {
+        var originalPosition = 0
+        withContext(Dispatchers.Default) {
+            while(currentTbrArray.value!![currentPosition].bookId != originalArray[originalPosition].bookId) originalPosition += 1
+        }
+        return originalPosition
     }
 }

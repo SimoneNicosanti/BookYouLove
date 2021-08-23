@@ -99,6 +99,13 @@ class ModifyEndedViewModel(application : Application) : AndroidViewModel(applica
         }
     }
 
+    fun modifyTitle(text: CharSequence?) {
+        currentBook.value!!.title = text?.toString() ?: ""
+    }
+
+    fun modifyAuthor(text: CharSequence?) {
+        currentBook.value!!.author = text?.toString() ?: ""
+    }
 
 
 }

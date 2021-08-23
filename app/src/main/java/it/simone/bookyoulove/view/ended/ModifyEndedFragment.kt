@@ -36,7 +36,6 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
 
     private lateinit var binding : FragmentModifyEndedBinding
 
-    private val endedVM : EndedViewModel by activityViewModels()
     private val chartsVM : ChartsViewModel by activityViewModels()
     private val modifyEndedVM : ModifyEndedViewModel by viewModels()
 
@@ -109,6 +108,14 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
             modifyEndedVM.modifyPages(text.toString())
         }
 
+        binding.modifyEndedTitleText.doOnTextChanged {text, _, _, _ ->
+            modifyEndedVM.modifyTitle(text)
+        }
+
+        binding.modifyEndedAuthorText.doOnTextChanged {text, _, _, _ ->
+            modifyEndedVM.modifyAuthor(text)
+        }
+
         setObservers()
 
         return binding.root
@@ -118,8 +125,8 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
     private fun setObservers() {
 
         val currentBookObserver = Observer<Book> { currentBook ->
-            binding.modifyEndedTitleText.text = currentBook.title
-            binding.modifyEndedAuthorText.text = currentBook.author
+            binding.modifyEndedTitleText.setText(currentBook.title)
+            binding.modifyEndedAuthorText.setText(currentBook.author)
 
             if (currentBook.coverName != "") Picasso.get().load(currentBook.coverName).placeholder(R.drawable.book_cover_place_holder).error(
                 R.drawable.cover_not_found).into(binding.modifyEndedCoverImageView)
@@ -214,7 +221,13 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
             }
 
             binding.modifyEndedSaveButton -> {
-                modifyEndedVM.saveModifiedBook()
+                if (binding.modifyEndedTitleText.text.toString() != "" && binding.modifyEndedAuthorText.text.toString() != "") {
+                    modifyEndedVM.saveModifiedBook()
+                }
+                else {
+                    if (binding.modifyEndedTitleText.text.toString() == "") binding.modifyEndedTitleText.error = getString(R.string.new_book_missing_title_error_string)
+                    if (binding.modifyEndedAuthorText.text.toString() == "") binding.modifyEndedAuthorText.error = getString(R.string.new_book_missing_author_error_string)
+                }
             }
         }
     }

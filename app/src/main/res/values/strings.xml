@@ -15,14 +15,14 @@
     //
     <string name="new_reading_book_string">New Reading Book</string>
     <string name="cover_link_picker_msg_sting">Enter Cover Link</string>
-    <string name="link_string">Link</string>
+    <string name="link_string" translatable="false">Link</string>
     <string name="title_string">Title</string>
     <string name="author_string">Author</string>
     <string name="start_date_string">Start Date</string>
     <string name="end_date_string">End Date</string>
     <string name="reading_support_string">Reading Support</string>
     <string name="paper_string">Paper</string>
-    <string name="ebook_string">eBook</string>
+    <string name="ebook_string" translatable="false">eBook</string>
     <string name="audiobook_string">AudioBook</string>
     <string name="pages_string">Pages</string>
     <string name="language_string">Language</string>
@@ -30,8 +30,8 @@
     <string name="back_string">Back</string>
     <string name="pages_picker_title">Insert Pages Amount</string>
     <string name="save_string">Save</string>
-    <string name="new_book_missing_title_error_string">Title Obligatory</string>
-    <string name="new_book_missing_author_error_string">Author Obligatory</string>
+    <string name="new_book_missing_title_error_string">Must Insert Title</string>
+    <string name="new_book_missing_author_error_string">Must Insert Author</string>
     <string name="new_book_missing_fields_error_string">Missing Arguments</string>
     <string name="reading_empty_list">Begin Read To See Your Book Details</string>
     <string name="edit_string">Edit</string>
@@ -47,9 +47,9 @@
     <string name="quotes_string">Quotes</string>
     <string name="invalid_date_string">Inserted Date Not Valid</string>
     <string name="terminate_string">Terminate</string>
-    <string name="detai_string">Detail</string>
+    <string name="detail_string">Detail</string>
     <string name="search_string">Search</string>
-    <string name="ended_order_preference_string">Order</string>
+    <string name="ended_order_preference_string">Sort by</string>
     <string name="search_off_string">Search Off</string>
     <string name="delete_string">Delete</string>
     <string name="modify_string">Modify</string>
@@ -75,7 +75,7 @@
     <string name="quote_chapter_string">Quote Chapter</string>
     <string name="quote_text_string">Quote Text</string>
     <string name="quote_thought_string">Your Thought</string>
-    <string name="obligatory_quote_text_string">Obligatory Quote Text</string>
+    <string name="obligatory_quote_text_string">Must Insert Quote Text</string>
     <string name="rotate_string">Rotate</string>
     <string name="your_quotes_string">Your Quotes</string>
     <string name="begin_read_string">Begin Read</string>
@@ -94,9 +94,10 @@
     <string name="plot_rate_string">Plot Rate</string>
     <string name="characters_rate_string">Characters Rate</string>
     <string name="goto_string">Goto</string>
-    <string name="starting_tirle">&#128214; You are starting this book &#128214;</string>
+    <string name="starting_dialog_title">&#128214; You are starting this book &#128214;</string>
     <string name="placeholder_quote">He who does not read, at 70 years old will have lived only one life. He who reads, will have lived 5000 years. Reading is a backward immortality</string>
     <string name="leaving_dialog_title">Do you want to delete this book or move it to TBR?</string>
     <string name="move_to_tbr_string">Move to TBR</string>
+    <string name="search_by_string">Search By</string>
 
 </resources>

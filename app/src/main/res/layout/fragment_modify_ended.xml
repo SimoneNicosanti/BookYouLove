@@ -70,7 +70,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/title_string" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/modifyEndedTitleText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -100,7 +100,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/author_string" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/modifyEndedAuthorText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

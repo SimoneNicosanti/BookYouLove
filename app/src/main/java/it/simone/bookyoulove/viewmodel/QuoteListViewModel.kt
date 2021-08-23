@@ -10,6 +10,7 @@ import it.simone.bookyoulove.database.DAO.ShowQuoteInfo
 import it.simone.bookyoulove.model.QuoteListModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class QuoteListViewModel(application : Application) : AndroidViewModel(application) {
 
@@ -18,35 +19,50 @@ class QuoteListViewModel(application : Application) : AndroidViewModel(applicati
 
     val currentQuotesArray = MutableLiveData<Array<ShowQuoteInfo>>(arrayOf())
     val isAccessingDatabase = MutableLiveData(false)
-    val currentSearchField = MutableLiveData<String>()
 
     private var currentPosition : Int = -1
 
     private var originalArray : Array<ShowQuoteInfo> = arrayOf()
 
+    private var searchField : String? = null
+
+    private var loadedOnce = false
+
     fun getAllQuotes() {
-        isAccessingDatabase.value = true
-        viewModelScope.launch {
-            originalArray = quoteListModel.loadAllQuotesFromDatabase()
-            currentQuotesArray.value = originalArray
-            isAccessingDatabase.value = false
+        if (!loadedOnce) {
+            isAccessingDatabase.value = true
+            viewModelScope.launch {
+                originalArray = quoteListModel.loadAllQuotesFromDatabase()
+                loadedOnce = true
+                currentQuotesArray.value = originalArray
+                isAccessingDatabase.value = false
+            }
         }
     }
 
     fun getQuotesByBookId(bookId : Long) {
-        isAccessingDatabase.value = true
-        viewModelScope.launch {
-            currentQuotesArray.value = quoteListModel.loadQuotesByBookFromDatabase(bookId)
-            originalArray = currentQuotesArray.value!!
-            isAccessingDatabase.value = false
+        if (!loadedOnce) {
+            isAccessingDatabase.value = true
+            viewModelScope.launch {
+                currentQuotesArray.value = quoteListModel.loadQuotesByBookFromDatabase(bookId)
+                loadedOnce = true
+                originalArray = currentQuotesArray.value!!
+                isAccessingDatabase.value = false
+            }
         }
     }
 
     fun onQuoteDeleted() {
-        val supportArrayList = currentQuotesArray.value!!.toMutableList()
-        supportArrayList.removeAt(currentPosition)
-        currentPosition = -1
-        currentQuotesArray.value = supportArrayList.toTypedArray()
+        viewModelScope.launch {
+            val originalPosition = findOriginalPosition()
+            withContext(Dispatchers.Default) {
+                val supportArrayList = originalArray.toMutableList()
+                supportArrayList.removeAt(originalPosition)
+                originalArray = supportArrayList.toTypedArray()
+            }
+            currentQuotesArray.value = originalArray
+            //searchByContents(searchField)
+        }
     }
 
     fun setCurrentPosition(position: Int) {
@@ -54,15 +70,19 @@ class QuoteListViewModel(application : Application) : AndroidViewModel(applicati
     }
 
     fun onModifiedQuote(showQuoteInfo: ShowQuoteInfo) {
-        currentQuotesArray.value!![currentPosition] = showQuoteInfo
-        currentQuotesArray.value = currentQuotesArray.value
-        currentPosition = -1
+        viewModelScope.launch {
+            val originalPosition = findOriginalPosition()
+            originalArray[originalPosition] = showQuoteInfo
+            currentQuotesArray.value = originalArray
+            currentPosition = -1
+            //searchByContents(searchField)
+        }
     }
 
     fun searchByContents(newText: String?) {
-        currentSearchField.value = newText ?: ""
+        searchField = newText ?: ""
         Log.i("Nicosanti", "Cerca")
-        if (newText != null) {
+        if (newText != null && newText != "") {
             isAccessingDatabase.value = true
             viewModelScope.launch { Dispatchers.Default
                 currentQuotesArray.value = (originalArray.filter { it.quoteText.contains(newText) }).toTypedArray()
@@ -72,5 +92,16 @@ class QuoteListViewModel(application : Application) : AndroidViewModel(applicati
         else currentQuotesArray.value = originalArray
     }
 
+    private suspend fun findOriginalPosition(): Int {
+        var originalPosition = 0
+        val currentQuoteId = currentQuotesArray.value!![currentPosition].quoteId
+        val currentBookId = currentQuotesArray.value!![currentPosition].bookId
+
+        withContext(Dispatchers.Default) {
+            while (currentQuoteId != originalArray[originalPosition].quoteId || currentBookId != originalArray[originalPosition].bookId) originalPosition += 1
+        }
+
+        return originalPosition
+    }
 
 }
