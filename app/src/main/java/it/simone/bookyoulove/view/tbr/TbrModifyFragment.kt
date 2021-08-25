@@ -2,6 +2,7 @@ package it.simone.bookyoulove.view.tbr
 
 
 import android.Manifest
+import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.*
@@ -111,6 +112,8 @@ class TbrModifyFragment : Fragment(), View.OnClickListener {
         cameraProviderFuture.addListener(Runnable {
             val cameraProvider = cameraProviderFuture.get()
         }, ContextCompat.getMainExecutor(requireContext()))
+
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
     }
 
     private fun setObservers() {

@@ -20,7 +20,7 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
     private val myAppDatabase = AppDatabase.getDatabaseInstance(application.applicationContext)
     private val readModel = EndedModel(myAppDatabase)
     private val myApp : Application = application
-    private val sortType = "start_date"
+    private var sortType = ""
 
     //Lo preimposto in modo da non avere mai un null, ma al massimo un array vuoto
     private var loadedArray : Array<ShowedBookInfo> = arrayOf()
@@ -36,14 +36,26 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
 
     var currentSelectedPosition : Int = -1
 
-
     fun getEndedList() {
         if(changedEndedList) {
+            //Se l'array è cambiato lo ricarico e lo riordino
+            Log.d("Nicosanti", "Modificato")
             isAccessingDatabase.value = true
             viewModelScope.launch {
                 loadedArray = readModel.loadEndedList(ENDED_BOOK_STATE)
                 isAccessingDatabase.value = false
                 changedEndedList = false
+                sortBookArray(loadedArray)
+            }
+        }
+
+        else {
+            //Se l'array è rimasto uguale allora eseguo SOLO il riordino se è cambiato il tipo di ordinamento
+            val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(myApp.applicationContext)
+            val preferenceSortType = sharedPreferences.getString("endedOrderPreference", "start_date")
+            if (sortType != preferenceSortType && sortType != "") {
+                Log.d("Nicosanti", "Riordino")
+                sortType = preferenceSortType.toString()
                 sortBookArray(loadedArray)
             }
         }
@@ -64,7 +76,7 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
                 PreferenceManager.getDefaultSharedPreferences(myApp.applicationContext)
             val order = sharedPreferences.getString("endedOrderPreference", "start_date")
             Log.i("Nicosanti", "$order")
-
+            sortType = order.toString()
             val sortedArray = when (order) {
                 "start_date" -> readModel.sortByDate(notSortedArray, SORT_START_DATE)
                 "end_date" -> readModel.sortByDate(notSortedArray, SORT_END_DATE)
@@ -102,7 +114,7 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
                     SEARCH_BY_AUTHOR -> currentReadList.value = (loadedArray.filter {it.author.contains(newText)}).toTypedArray()
                     SEARCH_BY_RATE -> {
                         val searchRate = newText.toFloat()
-                        currentReadList.value = (loadedArray.filter {it.totalRate == searchRate}).toTypedArray()
+                        currentReadList.value = (loadedArray.filter {it.totalRate == searchRate || it.totalRate == searchRate + 0.5F }).toTypedArray()
                     }
                     else -> {
                         val searchYear = newText.toInt()

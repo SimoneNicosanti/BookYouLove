@@ -1,20 +1,30 @@
 package it.simone.bookyoulove.view.charts
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
+import android.util.AttributeSet
+import android.util.TypedValue
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.EditText
+import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.charts.PieChart
+import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
@@ -32,6 +42,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
+const val TEXT_DATA_SIZE = 10F
 
 
 class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnChartValueSelectedListener {
@@ -51,7 +62,7 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
         binding.chartsYearSpinner.onItemSelectedListener = this
         binding.chartsYearChartTypeSpinner.onItemSelectedListener = this
 
-        val arrayAdapter = ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, resources.getStringArray(R.array.charts_year_chart_type_array))
+        val arrayAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, resources.getStringArray(R.array.charts_year_chart_type_array))
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         //Quando è impostato l'adapter viene chiamata la funzione onItemSelected che invoca l'aggiornamento delle statistiche
         binding.chartsYearChartTypeSpinner.adapter = arrayAdapter
@@ -68,7 +79,7 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
         chartsVM.currentChartsDataArray.observe(viewLifecycleOwner, currentChartsDataArrayObserver)
 
         val currentYearListObserver = Observer<Array<Int>> {
-            val arrayAdapter = ArrayAdapter<Int>(requireContext(), android.R.layout.simple_spinner_item, it)
+            val arrayAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, it)
             arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             //Quando è impostato l'adapter viene chiamata la funzione onItemSelected che invoca l'aggiornamento delle statistiche
             binding.chartsYearSpinner.adapter = arrayAdapter
@@ -92,12 +103,12 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
 
     private fun setRatesLineCharts(rateMap: Map<String, ArrayList<Float>>, rateKey : String) {
         val rateLineChart = when(rateKey) {
-            STYLE_RATE -> binding.chartsYearStyleRateLineChart
-            EMOTIONS_RATE -> binding.chartsYearEmotionsRateLineChart
-            PLOT_RATE -> binding.chartsYearPlotRateLineChart
-            CHARACTER_RATE -> binding.chartsYearCharacterRateLineChart
-            else -> binding.chartsYearTotalRateLineChart
-        } as LineChart
+            STYLE_RATE ->  view?.findViewById<LineChart>(R.id.chartsYearStyleRateLineChart)!!
+            EMOTIONS_RATE -> view?.findViewById(R.id.chartsYearEmotionsRateLineChart)
+            PLOT_RATE -> view?.findViewById(R.id.chartsYearPlotRateLineChart)
+            CHARACTER_RATE -> view?.findViewById(R.id.chartsYearCharacterRateLineChart)
+            else -> view?.findViewById(R.id.chartsYearTotalRateLineChart)
+        }
 
         val rateEntries = ArrayList<Entry>()
         for (index in 0 until rateMap[rateKey]!!.size) {
@@ -112,16 +123,34 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
         }
         val rateChartSet = LineDataSet(rateEntries, chartLabel)
         val rateChartData = LineData(rateChartSet)
-        rateLineChart.data = rateChartData
+        rateLineChart?.run {
+            data = rateChartData
+            legend.textColor = EditText(requireContext()).currentTextColor
+            setVisibleXRangeMaximum(10F)
 
-        rateLineChart.setVisibleXRangeMaximum(10F)
-        rateLineChart.invalidate()
+            animateXY(1000, 1000)
+            setScaleEnabled(false)
 
-        rateLineChart.setOnChartValueSelectedListener(this)
+            description?.isEnabled = false
+
+            axisLeft?.run {
+                textColor = EditText(requireContext()).currentTextColor
+                //setDrawGridLines(false)
+            }
+            xAxis?.run {
+                textColor = EditText(requireContext()).currentTextColor
+                setDrawGridLines(false)
+            }
+            data.setValueTextColor(EditText(requireContext()).currentTextColor)
+
+            axisRight?.isEnabled = false
+            invalidate()
+        }
+        rateLineChart?.setOnChartValueSelectedListener(this)
     }
 
     private fun setSupportYearPieChart(it: ChartsYearInfo) {
-        val supportPerYearPieChart = binding.chartsYearSupportPieChart as PieChart
+        val supportPerYearPieChart = view?.findViewById<PieChart>(R.id.chartsYearSupportPieChart)
         val supportPerYearEntries = ArrayList<PieEntry>()
 
         if (it.supportPerYear[0] != 0F)supportPerYearEntries.add(PieEntry(it.supportPerYear[0], getString(R.string.paper_string)))
@@ -131,15 +160,19 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
         val supportPerYearSet = PieDataSet(supportPerYearEntries, "")
         supportPerYearSet.colors = ColorTemplate.MATERIAL_COLORS.toList() + ColorTemplate.COLORFUL_COLORS.toList()
         val supportPerYearData = PieData(supportPerYearSet)
-        supportPerYearPieChart.data = supportPerYearData
-        //pagesPerMonthPieChart.xAxis.valueFormatter = IndexAxisValueFormatter(monthArrayLabels.toTypedArray())
-        //supportPerYearPieChart.setBackgroundColor(resources.getColor(R.color.white))
-        supportPerYearPieChart.animateXY(3000, 3000)
-        supportPerYearPieChart.invalidate()
+        supportPerYearPieChart?.run {
+            data = supportPerYearData
+            description?.isEnabled = false
+            //pagesPerMonthPieChart.xAxis.valueFormatter = IndexAxisValueFormatter(monthArrayLabels.toTypedArray())
+            //supportPerYearPieChart.setBackgroundColor(resources.getColor(R.color.white))
+            legend.textColor = EditText(requireContext()).currentTextColor
+            animateXY(3000, 3000)
+            invalidate()
+        }
     }
 
     private fun setPagesPerMonthPieChart(it: ChartsYearInfo) {
-        val pagesPerMonthPieChart = binding.chartsYearPagesPieChart as PieChart
+        val pagesPerMonthPieChart = view?.findViewById<PieChart>(R.id.chartsYearPagesPieChart)
         val pagesPerMonthEntries = ArrayList<PieEntry>()
         val monthArrayLabels = ArrayList<String>()
         for (monthIndex in 0..11) {
@@ -149,50 +182,81 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
         val pagesPerMonthDataSet = PieDataSet(pagesPerMonthEntries, "")
         pagesPerMonthDataSet.colors = ColorTemplate.MATERIAL_COLORS.toList() + ColorTemplate.COLORFUL_COLORS.toList()
         val pagesPerMonthData = PieData(pagesPerMonthDataSet)
-        pagesPerMonthPieChart.data = pagesPerMonthData
-        //pagesPerMonthPieChart.xAxis.valueFormatter = IndexAxisValueFormatter(monthArrayLabels.toTypedArray())
-        //pagesPerMonthPieChart.setBackgroundColor(resources.getColor(R.color.white))
-        pagesPerMonthPieChart.animateXY(3000, 3000)
-        pagesPerMonthPieChart.invalidate()
+        pagesPerMonthPieChart?.run {
+            data = pagesPerMonthData
+
+            //pagesPerMonthPieChart.xAxis.valueFormatter = IndexAxisValueFormatter(monthArrayLabels.toTypedArray())
+            //pagesPerMonthPieChart.setBackgroundColor(resources.getColor(R.color.white))
+            description?.isEnabled = false
+            legend.textColor = EditText(requireContext()).currentTextColor
+            animateXY(3000, 3000)
+            invalidate()
+        }
     }
 
     private fun setPagesPerMonthBarChart(it: ChartsYearInfo) {
-        val pagesPerMonthBarChart = binding.chartsYearPagesBarChart as BarChart
+        val pagesPerMonthBarChart = view?.findViewById<BarChart>(R.id.chartsYearPagesBarChart)
         val pagesPerMonthEntries = ArrayList<BarEntry>()
         val monthArrayLabels = ArrayList<String>()
         for (monthIndex in 0..11) {
             pagesPerMonthEntries.add(BarEntry(monthIndex.toFloat(), it.pagesPerMonth[monthIndex]))
             monthArrayLabels.add(Month.of(monthIndex + 1).getDisplayName(TextStyle.SHORT, Locale.getDefault()).capitalize(Locale.getDefault()))
         }
-        val pagesPerMonthDataSet = BarDataSet(pagesPerMonthEntries, getString(R.string.pages_per_month_string))
+        val pagesPerMonthDataSet = BarDataSet(pagesPerMonthEntries, "")
         pagesPerMonthDataSet.colors = ColorTemplate.MATERIAL_COLORS.toList()
         val pagesPerMonthData = BarData(pagesPerMonthDataSet)
-        pagesPerMonthBarChart.data = pagesPerMonthData
-        pagesPerMonthBarChart.xAxis.valueFormatter = IndexAxisValueFormatter(monthArrayLabels.toTypedArray())
-        pagesPerMonthBarChart.setVisibleXRangeMaximum(6F)
-        //pagesPerMonthBarChart.setBackgroundColor(resources.getColor(R.color.white))
+        pagesPerMonthBarChart?.run {
+            val color = EditText(requireContext()).currentTextColor
+            data = pagesPerMonthData
+            xAxis?.valueFormatter = IndexAxisValueFormatter(monthArrayLabels.toTypedArray())
+            setVisibleXRangeMaximum(6F)
+            animateXY(1000, 1000)
 
-        pagesPerMonthBarChart.invalidate()
+            axisRight.isEnabled = false
+            axisLeft.textColor = color
+            xAxis.textColor = color
+            xAxis.setDrawGridLines(false)
+            data.setValueTextColor(color)
+            data.setValueTextSize(TEXT_DATA_SIZE)
+            //pagesPerMonthBarChart.setBackgroundColor(resources.getColor(R.color.white))
+            setScaleEnabled(false)
+            description?.isEnabled = false
+            invalidate()
+        }
     }
 
 
     private fun setBookPerMonthBarChart(it: ChartsYearInfo) {
-        val barChart = binding.chartsYearBooksBarChart as BarChart
+        val barChart = view?.findViewById<BarChart>(R.id.chartsYearBooksBarChart)
         val bookPerMonthBarChartEntries = ArrayList<BarEntry>()
         val monthArrayLabels = ArrayList<String>()
         for (monthIndex in 0..11) {
             bookPerMonthBarChartEntries.add(BarEntry(monthIndex.toFloat(), it.bookPerMonth[monthIndex].toFloat()))
             monthArrayLabels.add(Month.of(monthIndex + 1).getDisplayName(TextStyle.SHORT, Locale.getDefault()).capitalize(Locale.getDefault()))
         }
-        val bookPerMonthBarChartSet = BarDataSet(bookPerMonthBarChartEntries, getString(R.string.books_per_month_string))
+        val bookPerMonthBarChartSet = BarDataSet(bookPerMonthBarChartEntries, "")
         bookPerMonthBarChartSet.colors = ColorTemplate.MATERIAL_COLORS.toList()
         val bookPerMonthBarChartData = BarData(bookPerMonthBarChartSet)
-        barChart.data = bookPerMonthBarChartData
-        barChart.xAxis.valueFormatter = IndexAxisValueFormatter(monthArrayLabels.toTypedArray())
-        barChart.setVisibleXRangeMaximum(6F)
-        barChart.setVisibleXRangeMinimum(3F)
-        //barChart.setBackgroundColor(resources.getColor(R.color.white))
-        barChart.invalidate()
+        barChart?.run {
+            data = bookPerMonthBarChartData
+            xAxis?.valueFormatter = IndexAxisValueFormatter(monthArrayLabels.toTypedArray())
+            setVisibleXRangeMaximum(6F)
+            setVisibleXRangeMinimum(3F)
+            animateXY(1000,1000)
+            //barChart.setBackgroundColor(resources.getColor(R.color.white))
+            setScaleEnabled(false)
+            description?.isEnabled = false
+
+            val color = EditText(requireContext()).currentTextColor
+            legend.textColor = color
+            xAxis.textColor = color
+            xAxis.setDrawGridLines(false)
+            axisRight.isEnabled = false
+            axisLeft.textColor = color
+            data.setValueTextColor(color)
+            data.setValueTextSize(TEXT_DATA_SIZE)
+            invalidate()
+        }
     }
 
 
@@ -207,6 +271,7 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
             binding.chartsYearChartTypeSpinner -> {
                 when (position) {
                     0 -> { //Books
+
                         binding.chartsYearBooksBarChartCard.visibility = View.VISIBLE
                         binding.chartsYearPagesBarChartCard.visibility = View.GONE
                         binding.chartsYearPagesPieChartCard.visibility = View.GONE
@@ -228,6 +293,7 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
                         binding.chartsYearEmotionRateLineChartCard.visibility = View.GONE
                         binding.chartsYearPlotRateLineChartCard.visibility = View.GONE
                         binding.chartsYearCharacterRateLineChartCard.visibility = View.GONE
+
                     }
 
                     2 -> { //Supports
@@ -278,6 +344,33 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
     }
 
     override fun onNothingSelected() {
+    }
+
+
+    private fun crossFade(view: View?, toGone: Boolean) {
+        if (toGone) {
+            view?.animate()?.run {
+                alpha(0F)
+                duration = 0L
+                setListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator?) {
+                        view.visibility = View.GONE
+                    }
+                })
+            }
+        }
+
+        else {
+            view?.run {
+                alpha = 0F
+                visibility = View.VISIBLE
+                animate().run {
+                    alpha(1F)
+                    duration = 0L
+                    setListener(null)
+                }
+            }
+        }
     }
 
 }

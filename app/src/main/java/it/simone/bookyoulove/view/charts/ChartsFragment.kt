@@ -1,5 +1,6 @@
 package it.simone.bookyoulove.view
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -60,6 +61,8 @@ class ChartsFragment : Fragment() {
             quando l'utente fa lo scroll dei grafici nella pagina successiva
          */
         binding.chartsViewPager.isUserInputEnabled = false
+
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
 
     private fun setObservers() {

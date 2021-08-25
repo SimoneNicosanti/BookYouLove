@@ -2,21 +2,16 @@
 
 <resources>
     <style name="CustomTheme.BookYouLove" parent="@style/Theme.BookYouLove">
-        <item name="buttonStyle">@style/CustomButtonStyle</item>
         <item name="android:textViewStyle">@style/CustomTextViewStyle</item>
         <item name="android:editTextStyle">@style/CustomEditTextStyle</item>
         <item name="android:checkboxStyle">@style/CustomCheckboxStyle</item>
         <item name="cardViewStyle">@style/CustomCardViewStyle</item>
-
     </style>
 
-    <style name="CustomButtonStyle" parent="@style/Widget.MaterialComponents.Button">
-        <item name="android:buttonCornerRadius">20dp</item>
-        <item name="android:textAppearance">@style/CustomButtonTextStyle</item>
-    </style>
-
-    <style name="CustomButtonTextStyle" parent="TextAppearance.MaterialComponents.Button">
+    <style name="CustomButtonStyle" parent="Widget.MaterialComponents.Button">
         <item name="android:fontFamily">casual</item>
+        <item name="android:textStyle">bold</item>
+        <item name="cornerRadius">20dp</item>
     </style>
 
     <style name="CustomTextViewStyle" parent="Widget.MaterialComponents.TextView">

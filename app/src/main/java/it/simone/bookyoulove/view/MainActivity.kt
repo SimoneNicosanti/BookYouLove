@@ -20,13 +20,6 @@ import it.simone.bookyoulove.view.quotes.QuoteListFragment
 import it.simone.bookyoulove.view.quotes.QuoteListFragmentDirections
 import it.simone.bookyoulove.view.reading.ReadingFragmentDirections
 
-const val READING_BOOK_CALLER = 0
-const val READ_BOOK_CALLER = 1
-const val TBR_BOOK_CALLER = 2
-
-const val MIN_PAGES_AMOUNT = 0
-const val MAX_PAGES_AMOUNT = 4096
-
 const val START_DATE_SETTER = 0
 const val END_DATE_SETTER = 1
 
@@ -49,8 +42,6 @@ const val SEARCH_BY_AUTHOR = 1
 const val SEARCH_BY_RATE = 2
 const val SEARCH_BY_YEAR = 3
 
-const val QUOTE_LIST_READING_CALLER = 0
-const val QUOTE_LIST_ENDED_CALLER = 1
 
 
 class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItemSelectedListener, PopupMenu.OnMenuItemClickListener{
@@ -108,8 +99,8 @@ class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItem
                 val inflater: MenuInflater = popupMenu.menuInflater
                 inflater.inflate(R.menu.navigation_view_others, popupMenu.menu)
                 popupMenu.setOnMenuItemClickListener(this)
-                popupMenu.gravity = Gravity.RIGHT
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                popupMenu.gravity = Gravity.END
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     popupMenu.setForceShowIcon(true)
                 }
                 popupMenu.show()

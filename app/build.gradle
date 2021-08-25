@@ -142,4 +142,8 @@ dependencies {
 
     //Notification
     implementation "androidx.core:core-ktx:1.6.0"
+
+    //uCrop
+    def uCrop_version = "2.2.6"
+    implementation "com.github.yalantis:ucrop:$uCrop_version"
 }

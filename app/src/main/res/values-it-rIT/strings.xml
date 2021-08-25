@@ -99,4 +99,9 @@
     <string name="pages_per_month_chart_type">Pagine al Mese</string>
     <string name="supports_per_year_type">Supporti dell\'Anno</string>
     <string name="rates_per_year_type">Voti dell\'Anno</string>
+    <string name="scan_error_string">Errore Scansione Testo</string>
+    <string name="crop_error_string">Errore Ritaglio Immagine</string>
+    <string name="capture_error_string">Errore Presa Immagine</string>
+    <string name="delete_book_dialog_title">Vuoi davvero eliminare questo libro??</string>
+    <string name="delete_quote_dialog_title">Vuoi davvero eliminare questa citazione??</string>
 </resources>

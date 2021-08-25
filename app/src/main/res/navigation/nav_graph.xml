@@ -12,17 +12,25 @@
         tools:layout="@layout/fragment_reading">
         <action
             android:id="@+id/action_readingFragment_to_newReadingBookFragment"
-            app:destination="@id/newReadingBookFragment" />
+            app:destination="@id/newReadingBookFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
         <action
             android:id="@+id/action_readingFragment_to_detailReadingFragment"
             app:destination="@id/detailReadingFragment"
-            app:enterAnim="@android:anim/fade_in"
+            app:enterAnim="@android:anim/slide_in_left"
             app:exitAnim="@android:anim/slide_out_right"
             app:popEnterAnim="@android:anim/slide_in_left"
             app:popExitAnim="@android:anim/slide_out_right" />
         <action
             android:id="@+id/action_readingFragment_to_endingFragment"
-            app:destination="@id/endingFragment" />
+            app:destination="@id/endingFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -74,6 +82,10 @@
     <action
         android:id="@+id/action_global_readingFragment"
         app:destination="@id/readingFragment"
+        app:enterAnim="@android:anim/fade_in"
+        app:exitAnim="@android:anim/fade_out"
+        app:popEnterAnim="@android:anim/fade_in"
+        app:popExitAnim="@android:anim/fade_out"
         app:popUpTo="@id/readingFragment"
         app:popUpToInclusive="true" />
     <action
@@ -114,7 +126,11 @@
         android:label="DetailReadingFragment" >
         <action
             android:id="@+id/action_detailReadingFragment_to_newReadingBookFragment"
-            app:destination="@id/newReadingBookFragment" />
+            app:destination="@id/newReadingBookFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
         <argument
             android:name="detailReadingBookId"
             app:argType="long" />
@@ -193,16 +209,7 @@
         android:id="@+id/quoteWithCameraFragment"
         android:name="it.simone.bookyoulove.view.quotes.QuoteWithCameraFragment"
         android:label="fragment_quote_with_camera"
-        tools:layout="@layout/fragment_quote_with_camera" >
-        <action
-            android:id="@+id/action_quoteWithCameraFragment_to_quoteWithCameraAnalyzerFragment"
-            app:destination="@id/quoteWithCameraAnalyzerFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/quoteWithCameraAnalyzerFragment"
-        android:name="it.simone.bookyoulove.view.quotes.QuoteWithCameraAnalyzerFragment"
-        android:label="fragment_quote_with_camera_analyzer"
-        tools:layout="@layout/fragment_quote_with_camera_analyzer" />
+        tools:layout="@layout/fragment_quote_with_camera" />
     <fragment
         android:id="@+id/quoteListFragment"
         android:name="it.simone.bookyoulove.view.quotes.QuoteListFragment"
@@ -215,7 +222,13 @@
             android:name="bookId"
             app:argType="long" />
     </fragment>
-    <action android:id="@+id/action_global_quoteListFragment" app:destination="@id/quoteListFragment" />
+    <action
+        android:id="@+id/action_global_quoteListFragment"
+        app:destination="@id/quoteListFragment"
+        app:enterAnim="@android:anim/fade_in"
+        app:exitAnim="@android:anim/fade_out"
+        app:popEnterAnim="@android:anim/fade_in"
+        app:popExitAnim="@android:anim/fade_out" />
     <fragment
         android:id="@+id/quoteDetailFragment"
         android:name="it.simone.bookyoulove.view.quotes.QuoteDetailFragment"
@@ -232,7 +245,14 @@
         android:id="@+id/takeBookIsbnFragment"
         android:name="it.simone.bookyoulove.view.reading.TakeBookIsbnFragment"
         android:label="fragment_take_book_isbn"
-        tools:layout="@layout/fragment_take_book_isbn" /><action android:id="@+id/action_global_takeBookIsbnFragment" app:destination="@id/takeBookIsbnFragment"/>
+        tools:layout="@layout/fragment_take_book_isbn" />
+    <action
+        android:id="@+id/action_global_takeBookIsbnFragment"
+        app:destination="@id/takeBookIsbnFragment"
+        app:enterAnim="@android:anim/slide_in_left"
+        app:exitAnim="@android:anim/slide_out_right"
+        app:popEnterAnim="@android:anim/slide_in_left"
+        app:popExitAnim="@android:anim/slide_out_right" />
     <fragment
         android:id="@+id/tbrModifyFragment"
         android:name="it.simone.bookyoulove.view.tbr.TbrModifyFragment"

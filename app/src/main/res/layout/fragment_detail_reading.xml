@@ -33,13 +33,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <Button
-                android:id="@+id/button6"
-                android:layout_width="15dp"
-                android:layout_height="749dp"
-                android:text="Button"
-                android:visibility="gone" />
-
             <ImageView
                 android:id="@+id/detailReadingCoverImageView"
                 android:layout_width="@dimen/new_book_cover_width"
@@ -78,7 +71,8 @@
                         android:id="@+id/detailReadingTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:singleLine="true" />
+                        android:singleLine="true"
+                        android:textSize="18sp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -108,7 +102,8 @@
                         android:id="@+id/detailReadingAuthor"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:singleLine="true" />
+                        android:singleLine="true"
+                        android:textSize="@dimen/reading_detail_title_text_size" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -133,6 +128,7 @@
                         android:id="@+id/textView6"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:gravity="center"
                         android:text="@string/start_date_string" />
 

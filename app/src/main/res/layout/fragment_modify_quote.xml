@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ModifyQuoteFragment" >
+    tools:context=".quotes.ModifyQuoteFragment">
 
     <include
         android:id="@+id/modifyQuoteLoading"
@@ -174,7 +174,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="@dimen/modify_quote_save_button_vert_margin"
                 android:text="@string/save_string"
-                app:cornerRadius="20dp"
                 app:icon="@drawable/ic_round_save_new_reading_book"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

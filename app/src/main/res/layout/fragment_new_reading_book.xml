@@ -33,13 +33,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <Button
-                android:id="@+id/button7"
-                android:layout_width="15dp"
-                android:layout_height="813dp"
-                android:text="Button"
-                android:visibility="gone" />
-
             <ImageView
                 android:id="@+id/newBookCoverImageView"
                 android:layout_width="@dimen/new_book_cover_width"
@@ -75,7 +68,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/title_string" />
 
-                    <MultiAutoCompleteTextView
+                    <EditText
                         android:id="@+id/newBookTitleInput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -243,11 +236,12 @@
 
             <Button
                 android:id="@+id/newBookSaveButton"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/new_book_input_margin_hor"
                 android:layout_marginVertical="@dimen/new_book_input_margin"
                 android:text="@string/save_string"
+                app:icon="@drawable/ic_round_save_new_reading_book"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

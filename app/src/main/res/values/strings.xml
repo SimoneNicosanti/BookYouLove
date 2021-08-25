@@ -40,9 +40,9 @@
     <string name="read_settings_string">Ended Settings</string>
     <string name="grid_setting_string">Grid Layout</string>
     <string name="tbr_settings_screen">TBR settings</string>
-    <string name="widget_settings_string">Widget Settings</string>
     <string name="your_rate_string">Your Rate</string>
-    <string name="end_book_dialog_title">"&#128293; Congratulations!! You Ended This Book &#128293;"</string>
+    <string name="end_book_dialog_title">&#128293; Congratulations!! You Ended This Book &#128293;</string>
+    <string name="fire_emoticon" translatable="false">&#128293;</string>
     <string name="others_string">Others</string>
     <string name="quotes_string">Quotes</string>
     <string name="invalid_date_string">Inserted Date Not Valid</string>
@@ -95,9 +95,15 @@
     <string name="characters_rate_string">Characters Rate</string>
     <string name="goto_string">Goto</string>
     <string name="starting_dialog_title">&#128214; You are starting this book &#128214;</string>
+    <string name="book_emoticon" translatable="false">&#128214;</string>
     <string name="placeholder_quote">He who does not read, at 70 years old will have lived only one life. He who reads, will have lived 5000 years. Reading is a backward immortality</string>
     <string name="leaving_dialog_title">Do you want to delete this book or move it to TBR?</string>
     <string name="move_to_tbr_string">Move to TBR</string>
     <string name="search_by_string">Search By</string>
+    <string name="scan_error_string">Error in Text Scanning</string>
+    <string name="crop_error_string">Error in Cropping Image</string>
+    <string name="capture_error_string">Error in Capturing Image</string>
+    <string name="delete_book_dialog_title">Do you really want to delete this book??</string>
+    <string name="delete_quote_dialog_title">Do you really want to delete this quote??</string>
 
 </resources>

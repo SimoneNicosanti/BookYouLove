@@ -2,6 +2,7 @@ package it.simone.bookyoulove.view.quotes
 
 import android.Manifest
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.provider.MediaStore
@@ -102,6 +103,7 @@ class ModifyQuoteFragment : Fragment(), View.OnClickListener {
             val cameraProvider = cameraProviderFuture.get()
         }, ContextCompat.getMainExecutor(requireContext()))
 
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
     }
 
     private fun setObservers() {

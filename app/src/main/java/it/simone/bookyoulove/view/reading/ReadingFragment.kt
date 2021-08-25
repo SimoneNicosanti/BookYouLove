@@ -1,6 +1,8 @@
 package it.simone.bookyoulove.view.reading
 
 
+import android.appwidget.AppWidgetManager
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.*
 import androidx.core.view.children
@@ -10,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.viewbinding.ViewBinding
 import com.github.islamkhsh.CardSliderViewPager
 import com.google.android.material.snackbar.Snackbar
 import it.simone.bookyoulove.R
@@ -24,6 +27,7 @@ import it.simone.bookyoulove.viewmodel.ReadingViewModel
 
 //https://medium.com/holler-developers/paging-image-gallery-with-recyclerview-f059d035b7e7
 //https://medium.com/@supahsoftware/custom-android-views-carousel-recyclerview-7b9318d23e9a
+
 
 class ReadingFragment : Fragment() , ReadingAdapter.OnReadingItemMenuItemClickListener {
 
@@ -43,7 +47,6 @@ class ReadingFragment : Fragment() , ReadingAdapter.OnReadingItemMenuItemClickLi
         super.onCreate(savedInstanceState)
         //readingVM.loadReadingBookList()
         setHasOptionsMenu(true)
-
     }
 
 
@@ -68,6 +71,8 @@ class ReadingFragment : Fragment() , ReadingAdapter.OnReadingItemMenuItemClickLi
         super.onViewCreated(view, savedInstanceState)
 
         navController = view.findNavController()
+
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
 
 
@@ -116,7 +121,7 @@ class ReadingFragment : Fragment() , ReadingAdapter.OnReadingItemMenuItemClickLi
 
 
         val currentListObserver = Observer<Array<ShowedBookInfo>> { newArray ->
-            val cardSlider : CardSliderViewPager = binding.cardSlider
+            val cardSlider : CardSliderViewPager = view?.findViewById(R.id.cardSlider)!! 
             if (newArray.isNotEmpty()) {
                 cardSlider.adapter = ReadingAdapter(newArray, this)
             }

@@ -1,5 +1,6 @@
 package it.simone.bookyoulove.view.ended
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -84,6 +85,8 @@ class EndedDetailFragment : Fragment(), View.OnClickListener {
             endedVM.notifyArrayItemChanged(changedBook)
             findNavController().currentBackStackEntry?.savedStateHandle?.remove<Book>("endedModifiedBook")
         }
+
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
 
     private fun setObservers() {
@@ -161,7 +164,7 @@ class EndedDetailFragment : Fragment(), View.OnClickListener {
         return when (item.itemId) {
 
             R.id.endedDetailMenuDeleteItem -> {
-                val arguments = bundleOf("itemToDelete" to resources.getString(R.string.book_string))
+                val arguments = bundleOf("itemToDelete" to resources.getString(R.string.delete_book_dialog_title))
                 val confirmDeleteDialog = ConfirmDeleteDialogFragment()
                 confirmDeleteDialog.arguments = arguments
                 confirmDeleteDialog.show(childFragmentManager, "Delete Confirm")

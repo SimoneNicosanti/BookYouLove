@@ -1,5 +1,6 @@
 package it.simone.bookyoulove.view.quotes
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.*
 import androidx.core.os.bundleOf
@@ -70,6 +71,11 @@ class QuoteDetailFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+    }
+
     private fun setObservers() {
 
         val currentQuoteObserver = Observer<Quote> { currentQuote ->
@@ -112,7 +118,7 @@ class QuoteDetailFragment : Fragment() {
 
             R.id.quoteDetailMenuDeleteItem -> {
                 //Non Visualizza Quote nella stringa
-                val arguments = bundleOf("itemToDelete" to R.string.quote_delete_string)
+                val arguments = bundleOf("itemToDelete" to getString(R.string.delete_quote_dialog_title))
                 val confirmDeleteDialog = ConfirmDeleteDialogFragment()
                 confirmDeleteDialog.arguments = arguments
                 confirmDeleteDialog.show(childFragmentManager, "Delete Confirm")

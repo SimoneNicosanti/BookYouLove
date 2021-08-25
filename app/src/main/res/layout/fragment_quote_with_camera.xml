@@ -6,12 +6,25 @@
     android:layout_height="match_parent"
     tools:context=".view.quotes.QuoteWithCameraFragment" >
 
+    <include
+        android:id="@+id/quoteWithCameraLoading"
+        layout="@layout/fragment_loading_dialog_fragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/quoteWithCameraPreviewView" />
+
     <view
         android:id="@+id/quoteWithCameraPreviewView"
         class="androidx.camera.view.PreviewView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintDimensionRatio="3:4"
+        android:layout_marginBottom="20dp"
+        app:implementationMode="compatible"
+        app:layout_constraintBottom_toTopOf="@+id/quoteWithCameraTakePictureButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

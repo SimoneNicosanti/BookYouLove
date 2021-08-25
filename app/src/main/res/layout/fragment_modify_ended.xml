@@ -133,7 +133,8 @@
                     <TextView
                         android:id="@+id/modifyEndedStartDateText"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -162,7 +163,8 @@
                     <TextView
                         android:id="@+id/modifyEndedEndDateText"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -244,6 +246,7 @@
                         android:id="@+id/modifyEndedPagesText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
                         android:inputType="number"
                         android:maxLength="5" />
                 </LinearLayout>
@@ -421,7 +424,7 @@
                 android:layout_marginVertical="@dimen/ended_modify_date_card_margin_vert"
                 android:text="@string/save_string"
                 app:icon="@drawable/ic_round_save_new_reading_book"
-                app:iconGravity="textTop"
+                app:iconGravity="start"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

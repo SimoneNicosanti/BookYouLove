@@ -1,5 +1,6 @@
 package it.simone.bookyoulove.view.ended
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
 import android.view.*
@@ -55,6 +56,11 @@ class EndedThoughtFragment : Fragment() {
         //endedThoughtVM.updateThought(args.endedFinalThought)
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
     }
 
     private fun setObserver() {

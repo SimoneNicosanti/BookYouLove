@@ -1,5 +1,7 @@
 package it.simone.bookyoulove.view.reading
 
+import android.annotation.SuppressLint
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
 import android.util.Size
@@ -24,6 +26,7 @@ import com.google.mlkit.vision.barcode.Barcode
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
+import it.simone.bookyoulove.R
 import it.simone.bookyoulove.databinding.FragmentTakeBookIsbnBinding
 import java.lang.IllegalStateException
 import java.util.concurrent.Executors
@@ -43,7 +46,7 @@ class TakeBookIsbnFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
 
         binding = FragmentTakeBookIsbnBinding.inflate(inflater, container, false)
         return binding.root
@@ -58,6 +61,8 @@ class TakeBookIsbnFragment : Fragment() {
             val cameraProvider = cameraProviderFuture.get()
             if (cameraProvider != null) bindPreview(cameraProvider)
         }, ContextCompat.getMainExecutor(requireContext()))
+
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
     }
 
     private fun setObserver() {
@@ -86,8 +91,8 @@ class TakeBookIsbnFragment : Fragment() {
 
         imageAnalysis.setAnalyzer(Executors.newSingleThreadExecutor(), IsbnAnalyzer(takeBookIsbnVM))
 
-        val previewView = binding.takeBookIsbnCameraPreviewView as PreviewView
-        preview.setSurfaceProvider(previewView.surfaceProvider)
+        val previewView = view?.findViewById<PreviewView>(R.id.takeBookIsbnCameraPreviewView)
+        preview.setSurfaceProvider(previewView?.surfaceProvider)
 
         cameraProvider.bindToLifecycle(viewLifecycleOwner, cameraSelector, imageAnalysis, preview)
     }
@@ -96,7 +101,9 @@ class TakeBookIsbnFragment : Fragment() {
     private class IsbnAnalyzer(private val takeBookIsbnVM: TakeBookIsbnViewModel) : ImageAnalysis.Analyzer {
 
         override fun analyze(imageProxy: ImageProxy) {
+            @androidx.camera.core.ExperimentalGetImage
             val isbnMediaImage = imageProxy.image
+            @androidx.camera.core.ExperimentalGetImage
             if (isbnMediaImage != null) {
                 val isbnImage = InputImage.fromMediaImage(isbnMediaImage, imageProxy.imageInfo.rotationDegrees)
 

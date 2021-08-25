@@ -1,6 +1,7 @@
 package it.simone.bookyoulove.view.quotes
 
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.*
 import android.widget.SearchView
@@ -67,6 +68,11 @@ class QuoteListFragment : Fragment(), QuoteListAdapter.OnQuoteListHolderClick, S
 
         setObservers()
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
 
     private fun setObservers() {

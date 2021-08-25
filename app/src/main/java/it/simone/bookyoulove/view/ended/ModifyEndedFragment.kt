@@ -1,5 +1,6 @@
 package it.simone.bookyoulove.view.ended
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -119,6 +120,11 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
         setObservers()
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
     }
 
 
