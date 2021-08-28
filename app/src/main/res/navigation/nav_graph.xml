@@ -204,7 +204,9 @@
             app:argType="string"
             app:nullable="true" />
     </fragment>
-    <action android:id="@+id/action_global_modifyQuoteFragment" app:destination="@id/modifyQuoteFragment" />
+    <action
+        android:id="@+id/action_global_modifyQuoteFragment"
+        app:destination="@id/modifyQuoteFragment" />
     <fragment
         android:id="@+id/quoteWithCameraFragment"
         android:name="it.simone.bookyoulove.view.quotes.QuoteWithCameraFragment"

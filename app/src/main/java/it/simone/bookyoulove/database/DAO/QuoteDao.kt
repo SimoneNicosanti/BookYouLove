@@ -10,7 +10,7 @@ import java.io.Serializable
 @Dao
 interface QuoteDao {
 
-    @Insert(onConflict = OnConflictStrategy.ABORT)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertQuote(vararg newQuote : Quote)
 
     @Update

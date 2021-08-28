@@ -41,8 +41,4 @@ class LoadingDialogFragment : DialogFragment() {
         return binding.root
     }
 
-    override fun onDismiss(dialog: DialogInterface) {
-        //callback.isEnabled = false
-        super.onDismiss(dialog)
-    }
 }

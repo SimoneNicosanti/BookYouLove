@@ -1,12 +1,9 @@
 package it.simone.bookyoulove.view.quotes
 
 import android.Manifest
-import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.provider.MediaStore
-import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -23,8 +20,7 @@ import com.google.common.util.concurrent.ListenableFuture
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.entity.Quote
 import it.simone.bookyoulove.databinding.FragmentModifyQuoteBinding
-import it.simone.bookyoulove.view.dialog.LoadingDialogFragment
-import it.simone.bookyoulove.viewmodel.ModifyQuoteViewModel
+import it.simone.bookyoulove.viewmodel.quotes.ModifyQuoteViewModel
 
 
 class ModifyQuoteFragment : Fragment(), View.OnClickListener {
@@ -99,8 +95,8 @@ class ModifyQuoteFragment : Fragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        cameraProviderFuture.addListener(Runnable {
-            val cameraProvider = cameraProviderFuture.get()
+        cameraProviderFuture.addListener({
+            cameraProviderFuture.get()
         }, ContextCompat.getMainExecutor(requireContext()))
 
         requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED

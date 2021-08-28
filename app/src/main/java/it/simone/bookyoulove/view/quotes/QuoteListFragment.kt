@@ -13,9 +13,9 @@ import androidx.navigation.fragment.navArgs
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.adapter.QuoteListAdapter
 import it.simone.bookyoulove.database.DAO.ShowQuoteInfo
+import it.simone.bookyoulove.database.entity.Quote
 import it.simone.bookyoulove.databinding.FragmentQuoteListBinding
-import it.simone.bookyoulove.view.dialog.LoadingDialogFragment
-import it.simone.bookyoulove.viewmodel.QuoteListViewModel
+import it.simone.bookyoulove.viewmodel.quotes.QuoteListViewModel
 
 
 class QuoteListFragment : Fragment(), QuoteListAdapter.OnQuoteListHolderClick, SearchView.OnQueryTextListener {
@@ -61,9 +61,9 @@ class QuoteListFragment : Fragment(), QuoteListAdapter.OnQuoteListHolderClick, S
             }
         }
 
-        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<ShowQuoteInfo>("modifiedQuoteInfo")?.observe(viewLifecycleOwner) {
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Quote>("modifiedQuoteInfo")?.observe(viewLifecycleOwner) {
             quoteListVM.onModifiedQuote(it)
-            findNavController().currentBackStackEntry?.savedStateHandle?.remove<ShowQuoteInfo>("modifiedQuoteInfo")
+            findNavController().currentBackStackEntry?.savedStateHandle?.remove<Quote>("modifiedQuoteInfo")
         }
 
         setObservers()

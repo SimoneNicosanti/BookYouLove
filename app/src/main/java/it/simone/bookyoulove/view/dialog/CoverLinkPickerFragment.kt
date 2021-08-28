@@ -6,12 +6,9 @@ import android.content.DialogInterface
 import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.viewModels
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.databinding.FragmentCoverLinkPickerBinding
-import it.simone.bookyoulove.viewmodel.NewReadingBookViewModel
 import java.lang.IllegalStateException
 
 

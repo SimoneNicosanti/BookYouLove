@@ -2,22 +2,20 @@ package it.simone.bookyoulove.view
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.databinding.FragmentChartsBinding
 import it.simone.bookyoulove.view.charts.*
-import it.simone.bookyoulove.view.dialog.LoadingDialogFragment
-import it.simone.bookyoulove.viewmodel.ChartsViewModel
+import it.simone.bookyoulove.viewmodel.charts.ChartsViewModel
 
 private const val CHARTS_FRAGMENTS_COUNT = 2
 
@@ -28,7 +26,6 @@ class ChartsFragment : Fragment() {
 
     private val chartsVM : ChartsViewModel by activityViewModels()
 
-    private var loadingFragment = LoadingDialogFragment()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

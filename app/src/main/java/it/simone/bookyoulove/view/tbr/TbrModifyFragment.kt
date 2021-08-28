@@ -25,10 +25,10 @@ import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.databinding.FragmentTbrModifyBinding
 import it.simone.bookyoulove.view.dialog.AlertDialogFragment
 import it.simone.bookyoulove.view.dialog.CoverLinkPickerFragment
-import it.simone.bookyoulove.viewmodel.ISBN_FIND_ITEM_ERROR
-import it.simone.bookyoulove.viewmodel.ISBN_INTERNET_ACCESS_ERROR
-import it.simone.bookyoulove.viewmodel.ISBN_NO_ERROR
-import it.simone.bookyoulove.viewmodel.TbrModifyViewModel
+import it.simone.bookyoulove.viewmodel.reading.ISBN_FIND_ITEM_ERROR
+import it.simone.bookyoulove.viewmodel.reading.ISBN_INTERNET_ACCESS_ERROR
+import it.simone.bookyoulove.viewmodel.reading.ISBN_NO_ERROR
+import it.simone.bookyoulove.viewmodel.tbr.TbrModifyViewModel
 
 
 class TbrModifyFragment : Fragment(), View.OnClickListener {
@@ -109,8 +109,8 @@ class TbrModifyFragment : Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        cameraProviderFuture.addListener(Runnable {
-            val cameraProvider = cameraProviderFuture.get()
+        cameraProviderFuture.addListener({
+            cameraProviderFuture.get()
         }, ContextCompat.getMainExecutor(requireContext()))
 
         requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED

@@ -43,7 +43,6 @@ const val SEARCH_BY_RATE = 2
 const val SEARCH_BY_YEAR = 3
 
 
-
 class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItemSelectedListener, PopupMenu.OnMenuItemClickListener{
 
     private lateinit var binding: ActivityMainBinding
@@ -64,7 +63,7 @@ class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItem
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.Q)
+    //@RequiresApi(Build.VERSION_CODES.Q)
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         val navController = findNavController(R.id.navHostFragment)
         return when(item.itemId) {
@@ -132,8 +131,11 @@ class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItem
             }
 
             R.id.navViewMenuQuotesItem -> {
-                val action = ReadingFragmentDirections.actionGlobalQuoteListFragment(0L)
-                navController.navigate(action)
+                if (navController.currentDestination?.id != R.id.quoteListFragment) {
+                    val action = ReadingFragmentDirections.actionGlobalQuoteListFragment(0L)
+                    navController.popBackStack(R.id.readingFragment, false)
+                    navController.navigate(action)
+                }
                 true
             }
             else -> false

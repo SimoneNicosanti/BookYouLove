@@ -8,7 +8,7 @@
             android:key="endedLinearLayout"
             android:title="@string/linear_setting_string" />
         <ListPreference
-            android:defaultValue="1"
+            android:defaultValue="false"
             android:entries="@array/ended_order_array_entries"
             android:entryValues="@array/ended_order_array_entry_values"
             android:key="endedOrderPreference"
@@ -17,11 +17,23 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/tbr_settings_screen">
         <ListPreference
-            android:defaultValue="1"
+            android:defaultValue="title"
             android:entries="@array/tbr_order_array_entries"
             android:entryValues="@array/tbr_order_array_values"
             android:key="tbrOrderPreference"
             android:title="@string/ended_order_preference_string"
             app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Google Drive">
+        <Preference
+            android:key="googleDriveUpload"
+            android:title="Upload"
+            app:enabled="true"
+            app:icon="@drawable/ic_round_cloud_upload_24" />
+        <Preference
+            android:key="googleDriveDownload"
+            android:title="Download"
+            app:enabled="true"
+            app:icon="@drawable/ic_round_cloud_download_24" />
     </PreferenceCategory>
 </PreferenceScreen>

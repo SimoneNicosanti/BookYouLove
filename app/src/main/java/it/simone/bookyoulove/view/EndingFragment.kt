@@ -14,6 +14,7 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.entity.Book
@@ -21,11 +22,10 @@ import it.simone.bookyoulove.database.entity.EndDate
 import it.simone.bookyoulove.database.entity.StartDate
 import it.simone.bookyoulove.databinding.FragmentEndingBinding
 import it.simone.bookyoulove.view.dialog.DatePickerFragment
-import it.simone.bookyoulove.view.dialog.LoadingDialogFragment
-import it.simone.bookyoulove.viewmodel.ChartsViewModel
-import it.simone.bookyoulove.viewmodel.EndedViewModel
+import it.simone.bookyoulove.viewmodel.charts.ChartsViewModel
+import it.simone.bookyoulove.viewmodel.ended.EndedViewModel
 import it.simone.bookyoulove.viewmodel.EndingViewModel
-import it.simone.bookyoulove.viewmodel.ReadingViewModel
+import it.simone.bookyoulove.viewmodel.reading.ReadingViewModel
 import java.time.Month
 import java.time.format.TextStyle
 import java.util.*
@@ -37,13 +37,12 @@ class EndingFragment : Fragment(), View.OnClickListener, RatingBar.OnRatingBarCh
     private val endingVM : EndingViewModel by viewModels()
     private val readingVM : ReadingViewModel by activityViewModels()
     private val endedVM : EndedViewModel by activityViewModels()
-    private val chartsViewModel : ChartsViewModel by activityViewModels()
+    //private val chartsVM: ChartsViewModel by activityViewModels()
 
     private val args : EndingFragmentArgs by navArgs()
 
     private lateinit var terminateStartDate : StartDate
 
-    private var loadingFragment = LoadingDialogFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -100,8 +99,8 @@ class EndingFragment : Fragment(), View.OnClickListener, RatingBar.OnRatingBarCh
             if (canExit) {
                 readingVM.notifyBookTerminated()
                 endedVM.setEndedListChanged(true)
-                chartsViewModel.changeLoadedStatus()        //Comunico il cambiamento nella lista di libri letti di modo che venga ricaricata da charts
-                requireActivity().onBackPressed()
+                //chartsVM.changeLoadedStatus()        //Comunico il cambiamento nella lista di libri letti di modo che venga ricaricata da charts
+                findNavController().popBackStack()
             }
         }
         endingVM.canExit.observe(viewLifecycleOwner, canExitObserver)
@@ -132,16 +131,14 @@ class EndingFragment : Fragment(), View.OnClickListener, RatingBar.OnRatingBarCh
     override fun onClick(view: View?) {
 
         when (view) {
-            //Se si apre la tendina del voto, faccio scomparire l'edit text del final, in modo da evitare complicazioni su piccoli schermi
+
             binding.endingFlipRateCardButton -> {
                 if (!endingVM.isFlipped) {
                     binding.otherRatesLinearLayout.visibility = View.VISIBLE
-                    //binding.endingFinalThoughtInput.visibility = View.GONE
                     (view as ImageButton).setImageResource(R.drawable.ic_round_arrow_drop_down)
                 }
                 else {
                     binding.otherRatesLinearLayout.visibility = View.GONE
-                    //binding.endingFinalThoughtInput.visibility = View.VISIBLE
                     (view as ImageButton).setImageResource(R.drawable.ic_round_arrow_drop_up)
                 }
                 endingVM.isFlipped = !endingVM.isFlipped

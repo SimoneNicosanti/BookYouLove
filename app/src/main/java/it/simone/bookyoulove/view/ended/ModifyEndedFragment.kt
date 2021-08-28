@@ -24,10 +24,9 @@ import it.simone.bookyoulove.databinding.FragmentModifyEndedBinding
 import it.simone.bookyoulove.view.*
 import it.simone.bookyoulove.view.dialog.CoverLinkPickerFragment
 import it.simone.bookyoulove.view.dialog.DatePickerFragment
-import it.simone.bookyoulove.view.dialog.LoadingDialogFragment
-import it.simone.bookyoulove.viewmodel.ChartsViewModel
-import it.simone.bookyoulove.viewmodel.EndedViewModel
-import it.simone.bookyoulove.viewmodel.ModifyEndedViewModel
+import it.simone.bookyoulove.viewmodel.charts.ChartsViewModel
+import it.simone.bookyoulove.viewmodel.ended.EndedViewModel
+import it.simone.bookyoulove.viewmodel.ended.ModifyEndedViewModel
 import java.time.Month
 import java.time.format.TextStyle
 import java.util.*
@@ -37,7 +36,8 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
 
     private lateinit var binding : FragmentModifyEndedBinding
 
-    private val chartsVM : ChartsViewModel by activityViewModels()
+    //private val chartsVM : ChartsViewModel by activityViewModels()
+    private val endedVM : EndedViewModel by activityViewModels()
     private val modifyEndedVM : ModifyEndedViewModel by viewModels()
 
 
@@ -161,7 +161,8 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
         val canExitObserver = Observer<Book> { finalBook ->
             if (args.modifyEndedBook != null) {
                 findNavController().previousBackStackEntry?.savedStateHandle?.set("endedModifiedBook", finalBook)
-                chartsVM.changeLoadedStatus()
+                endedVM.notifyArrayItemChanged(finalBook)
+                //chartsVM.changeLoadedStatus()
             }
             else {
                 TODO("Caso aggiunta diretta libro in stato ended")
@@ -206,11 +207,6 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
                     "minYear" to currentStartDate.startYear)
                 datePickerDialog.show(childFragmentManager, "End Date Picker")
             }
-
-            /*
-            binding.modifyEndedPagesCard -> {
-                PagesPickerFragment().show(childFragmentManager, "Pages Picker")
-            }*/
 
             binding.modifyEndedCoverImageView -> {
                 CoverLinkPickerFragment().show(childFragmentManager, "Cover Link Picker")

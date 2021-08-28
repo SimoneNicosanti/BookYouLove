@@ -14,7 +14,7 @@ import it.simone.bookyoulove.database.DAO.ShowQuoteInfo
 import it.simone.bookyoulove.database.entity.Quote
 import it.simone.bookyoulove.databinding.FragmentQuoteDetailBinding
 import it.simone.bookyoulove.view.dialog.ConfirmDeleteDialogFragment
-import it.simone.bookyoulove.viewmodel.QuoteDetailViewModel
+import it.simone.bookyoulove.viewmodel.quotes.QuoteDetailViewModel
 
 
 class QuoteDetailFragment : Fragment() {
@@ -27,7 +27,6 @@ class QuoteDetailFragment : Fragment() {
 
     private val args : QuoteDetailFragmentArgs by navArgs()
 
-    private var quoteDetailFragmentMenu : Menu? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +36,6 @@ class QuoteDetailFragment : Fragment() {
         childFragmentManager.setFragmentResultListener("deleteKey", this) { _, bundle ->
             if (bundle.getBoolean("deleteConfirm")) {
                 quoteDetailVM.deleteCurrentQuote()
-                //Notifico la cancellazione per il grafico dei charts
                 findNavController().previousBackStackEntry?.savedStateHandle?.set("quoteDeletedKey", true)
                 findNavController().popBackStack()
             }
@@ -55,16 +53,7 @@ class QuoteDetailFragment : Fragment() {
 
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Quote>("modifiedQuote")?.observe(viewLifecycleOwner) {
             quoteDetailVM.onQuoteModified(it)
-            findNavController().previousBackStackEntry?.savedStateHandle?.set<ShowQuoteInfo>("modifiedQuoteInfo",
-                    ShowQuoteInfo(
-                            quoteId = it.quoteId,
-                            bookId = it.bookId,
-                            quoteText = it.quoteText,
-
-                            bookTitle = it.bookTitle,
-                            bookAuthor = it.bookAuthor,
-                            favourite = it.favourite,
-                            date = it.date))
+            findNavController().previousBackStackEntry?.savedStateHandle?.set<Quote>("modifiedQuoteInfo", it)
             findNavController().currentBackStackEntry?.savedStateHandle?.remove<Quote>("modifiedQuoteInfo")
         }
 
@@ -89,12 +78,6 @@ class QuoteDetailFragment : Fragment() {
 
             if (currentQuote.favourite) binding.quoteDetailFavoriteImage.setImageResource(R.drawable.ic_round_modify_quote_favorite_on)
             else binding.quoteDetailFavoriteImage.setImageResource(R.drawable.ic_round_modify_quote_favorite_off)
-            /*
-            if (quoteDetailFragmentMenu != null) {
-                //Il menu è già stato impostato, ma non lo è stato ancora il favorite
-                onPrepareOptionsMenu(quoteDetailFragmentMenu!!)
-                //Se invece è null sto impostando il favourite PRIMA che venga chiamata la onPrepare e quindi quando sarà chiamata lo imposterà lei
-            }*/
 
             requestedQuote = currentQuote
         }

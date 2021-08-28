@@ -1,18 +1,13 @@
 package it.simone.bookyoulove.view.reading
 
 
-import android.appwidget.AppWidgetManager
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.*
-import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import androidx.viewbinding.ViewBinding
 import com.github.islamkhsh.CardSliderViewPager
 import com.google.android.material.snackbar.Snackbar
 import it.simone.bookyoulove.R
@@ -20,24 +15,13 @@ import it.simone.bookyoulove.adapter.ReadingAdapter
 import it.simone.bookyoulove.database.DAO.ShowedBookInfo
 import it.simone.bookyoulove.databinding.FragmentReadingBinding
 import it.simone.bookyoulove.view.dialog.LeavingReadingDialog
-import it.simone.bookyoulove.view.dialog.LoadingDialogFragment
-import it.simone.bookyoulove.viewmodel.ReadingViewModel
+import it.simone.bookyoulove.viewmodel.reading.ReadingViewModel
 
-
-
-//https://medium.com/holler-developers/paging-image-gallery-with-recyclerview-f059d035b7e7
-//https://medium.com/@supahsoftware/custom-android-views-carousel-recyclerview-7b9318d23e9a
 
 
 class ReadingFragment : Fragment() , ReadingAdapter.OnReadingItemMenuItemClickListener {
 
     private lateinit var binding: FragmentReadingBinding
-
-    private lateinit var navController: NavController
-
-    //Variabile che mantiene le informazioni del libro da mostrare
-    //private var showBookInfo : ShowedBookInfo? = null
-
 
     private val readingVM: ReadingViewModel by activityViewModels()
 
@@ -45,7 +29,6 @@ class ReadingFragment : Fragment() , ReadingAdapter.OnReadingItemMenuItemClickLi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //readingVM.loadReadingBookList()
         setHasOptionsMenu(true)
     }
 
@@ -70,7 +53,7 @@ class ReadingFragment : Fragment() , ReadingAdapter.OnReadingItemMenuItemClickLi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        navController = view.findNavController()
+        readingVM.loadReadingBookList()
 
         requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
@@ -86,7 +69,7 @@ class ReadingFragment : Fragment() , ReadingAdapter.OnReadingItemMenuItemClickLi
             R.id.readingNewItem -> {
                 //Quando creo un nuovo libro, i parametri per detail sono nulli
                 val action = ReadingFragmentDirections.actionReadingFragmentToNewReadingBookFragment(null)
-                navController.navigate(action)
+                findNavController().navigate(action)
             }
         }
         return true
@@ -94,17 +77,6 @@ class ReadingFragment : Fragment() , ReadingAdapter.OnReadingItemMenuItemClickLi
 
 
     private fun setObservers() {
-
-        val readingListStateObserver = Observer<Boolean> { changed ->
-            //Se la lista nel DB è aggiornata
-            if (changed) {
-                //Invoco la lettura
-                readingVM.loadReadingBookList()
-                //Dopo la lettura, la lista che possiedo combacia con quella in DB
-                //readingVM.readingUpdated(false)
-            }
-        }
-        readingVM.changedReadingList.observe(viewLifecycleOwner, readingListStateObserver)
 
         val isAccessingDatabaseObserver = Observer<Boolean> { isAccessing ->
             if (isAccessing) {
@@ -142,7 +114,6 @@ class ReadingFragment : Fragment() , ReadingAdapter.OnReadingItemMenuItemClickLi
             bookArray = newArray
         }
         readingVM.currentReadingBookArray.observe(viewLifecycleOwner, currentListObserver)
-
     }
 
 
@@ -173,7 +144,7 @@ class ReadingFragment : Fragment() , ReadingAdapter.OnReadingItemMenuItemClickLi
             R.id.readingContextMenuDetailItem -> {
 
                 val action = ReadingFragmentDirections.actionReadingFragmentToDetailReadingFragment(bookArray[position].bookId)
-                navController.navigate(action)
+                findNavController().navigate(action)
                 true
             }
 

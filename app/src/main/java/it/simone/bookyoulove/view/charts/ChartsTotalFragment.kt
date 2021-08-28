@@ -1,9 +1,5 @@
 package it.simone.bookyoulove.view.charts
 
-import android.app.ApplicationExitInfo
-import android.content.pm.ApplicationInfo
-import android.content.res.Configuration
-import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import com.github.mikephil.charting.charts.Chart
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
@@ -22,9 +17,9 @@ import com.github.mikephil.charting.utils.ColorTemplate
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.databinding.FragmentChartsTotalBinding
 import it.simone.bookyoulove.model.ChartsBookData
-import it.simone.bookyoulove.viewmodel.ChartsTotalViewModel
-import it.simone.bookyoulove.viewmodel.ChartsViewModel
-import it.simone.bookyoulove.viewmodel.TotalChartData
+import it.simone.bookyoulove.viewmodel.charts.ChartsTotalViewModel
+import it.simone.bookyoulove.viewmodel.charts.ChartsViewModel
+import it.simone.bookyoulove.viewmodel.charts.TotalChartData
 import java.util.*
 
 
@@ -69,11 +64,11 @@ class ChartsTotalFragment : Fragment() {
             totalSupportChart?.run{
                 data = PieData(set)
                 description?.text = getString(R.string.total_support_string)
-                animateXY(1000,1000)
                 val color = EditText(requireContext()).currentTextColor
                 legend.textColor = color
                 description?.textColor = color
                 //data.setValueTextColor(color)
+                animateXY(1000,1000)
                 invalidate()
             }
 

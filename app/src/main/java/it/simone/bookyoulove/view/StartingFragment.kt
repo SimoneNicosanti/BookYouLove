@@ -7,19 +7,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.CheckBox
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.database.entity.StartDate
 import it.simone.bookyoulove.databinding.FragmentStartingBinding
 import it.simone.bookyoulove.view.dialog.DatePickerFragment
-import it.simone.bookyoulove.viewmodel.ReadingViewModel
+import it.simone.bookyoulove.viewmodel.reading.ReadingViewModel
 import it.simone.bookyoulove.viewmodel.StartingViewModel
 import java.time.Month
 import java.time.format.TextStyle
@@ -60,7 +58,7 @@ class StartingFragment : Fragment() , View.OnClickListener{
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
 
     private fun setObservers() {

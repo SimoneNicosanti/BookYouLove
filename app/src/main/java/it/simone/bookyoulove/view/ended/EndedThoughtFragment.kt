@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.databinding.FragmentEndedThoughtBinding
-import it.simone.bookyoulove.viewmodel.EndedThoughtViewModel
+import it.simone.bookyoulove.viewmodel.ended.EndedThoughtViewModel
 
 
 class EndedThoughtFragment : Fragment() {
@@ -107,7 +107,6 @@ class EndedThoughtFragment : Fragment() {
                 }
                 else {
                     item.setIcon(R.drawable.ic_round_save_new_reading_book)
-                    //binding.endedThoughtEditText.setText(binding.endedThoughtTextView.text)
                 }
                 isEditing = !isEditing
                 setUI(isEditing)

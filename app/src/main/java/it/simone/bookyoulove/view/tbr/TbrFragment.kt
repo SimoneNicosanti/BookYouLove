@@ -16,7 +16,7 @@ import it.simone.bookyoulove.database.DAO.ShowedBookInfo
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.databinding.FragmentTbrBinding
 import it.simone.bookyoulove.view.dialog.ConfirmDeleteDialogFragment
-import it.simone.bookyoulove.viewmodel.TbrViewModel
+import it.simone.bookyoulove.viewmodel.tbr.TbrViewModel
 
 
 class TbrFragment : Fragment(), TbrAdapter.OnTbrItemClickedListener, SearchView.OnQueryTextListener {

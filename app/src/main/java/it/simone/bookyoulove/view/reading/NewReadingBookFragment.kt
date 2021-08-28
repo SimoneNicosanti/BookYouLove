@@ -27,13 +27,13 @@ import it.simone.bookyoulove.database.entity.StartDate
 import it.simone.bookyoulove.databinding.FragmentNewReadingBookBinding
 import it.simone.bookyoulove.view.*
 import it.simone.bookyoulove.view.dialog.*
-import it.simone.bookyoulove.viewmodel.*
+import it.simone.bookyoulove.viewmodel.reading.*
 import java.time.Month
 import java.time.format.TextStyle
 import java.util.*
 
 
-class NewReadingBookFragment : Fragment() , View.OnClickListener {
+class  NewReadingBookFragment : Fragment() , View.OnClickListener {
 
     private lateinit var binding: FragmentNewReadingBookBinding
 
@@ -46,9 +46,6 @@ class NewReadingBookFragment : Fragment() , View.OnClickListener {
     private var requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
         if (isGranted) {
             takeIsbnWithCamera()
-        }
-        else {
-            Toast.makeText(requireContext(), "Permesso Negato", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -97,7 +94,6 @@ class NewReadingBookFragment : Fragment() , View.OnClickListener {
         binding.newBookPaperCheckbox.setOnClickListener(this)
         binding.newBookEbookCheckbox.setOnClickListener(this)
         binding.newBookAudiobookCheckbox.setOnClickListener(this)
-        //binding.newBookPagesInput.setOnClickListener (this)
         binding.newBookSaveButton.setOnClickListener(this)
 
         setObservers()
@@ -125,9 +121,7 @@ class NewReadingBookFragment : Fragment() , View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        cameraProviderFuture.addListener(Runnable {
-            val cameraProvider = cameraProviderFuture.get()
-        }, ContextCompat.getMainExecutor(requireContext()))
+        cameraProviderFuture.addListener({ cameraProviderFuture.get() }, ContextCompat.getMainExecutor(requireContext()))
 
         requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
     }
@@ -136,7 +130,7 @@ class NewReadingBookFragment : Fragment() , View.OnClickListener {
     private fun setObservers() {
 
         val authorListObserver = Observer<Array<String>> { newAuthorList ->
-            val authorAdapter = ArrayAdapter<String>(requireContext(), android.R.layout.simple_dropdown_item_1line, newAuthorList)
+            val authorAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, newAuthorList)
             binding.newBookAuthorInput.setAdapter(authorAdapter)
         }
         newReadingVM.currentAuthorArray.observe(viewLifecycleOwner, authorListObserver)
@@ -158,8 +152,8 @@ class NewReadingBookFragment : Fragment() , View.OnClickListener {
             Log.d("Nicosanti", "Final Book")
             if (args.readingModifyBook != null) {
                 //Chiamato da Detail
-                readingVM.readingUpdated(true)
-
+                //readingVM.readingUpdated(true)
+                readingVM.notifyReadingBookModified(finalBook)
                 findNavController().previousBackStackEntry?.savedStateHandle?.set("modifiedBook", finalBook)
             }
             else {
@@ -216,12 +210,6 @@ class NewReadingBookFragment : Fragment() , View.OnClickListener {
                 "Cover Link Picker"
             )
 
-            /*
-            binding.newBookPagesInput -> PagesPickerFragment().show(
-                childFragmentManager,
-                "Pages Picker"
-            )*/
-
             binding.newBookStartDateText -> {
                 val newDatePicker = DatePickerFragment()
                 newDatePicker.arguments = bundleOf("caller" to START_DATE_SETTER)
@@ -233,7 +221,7 @@ class NewReadingBookFragment : Fragment() , View.OnClickListener {
                 val paperSupport = binding.newBookPaperCheckbox.isChecked
                 val ebookSupport = binding.newBookEbookCheckbox.isChecked
                 val audiobookSupport = binding.newBookAudiobookCheckbox.isChecked
-                val supportMap = mapOf<String, Boolean>(PAPER_SUPPORT to paperSupport, EBOOK_SUPPORT to ebookSupport, AUDIOBOOK_SUPPORT to audiobookSupport)
+                val supportMap = mapOf(PAPER_SUPPORT to paperSupport, EBOOK_SUPPORT to ebookSupport, AUDIOBOOK_SUPPORT to audiobookSupport)
                 newReadingVM.updateSupport(supportMap)
             }
 

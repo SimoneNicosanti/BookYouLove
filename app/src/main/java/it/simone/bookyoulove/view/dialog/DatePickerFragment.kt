@@ -25,7 +25,6 @@ class DatePickerFragment: DialogFragment(), DatePickerDialog.OnDateSetListener {
         val month = cal.get(Calendar.MONTH)
         val year = cal.get(Calendar.YEAR)
 
-
         val datePickerDialog = DatePickerDialog(requireContext(), this, year, month, day)
 
         setMinDate(datePickerDialog)

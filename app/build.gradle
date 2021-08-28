@@ -39,8 +39,20 @@ android {
     }
 
     repositories {
-        //MPAndroidChart
+        //MPAndroidChart e altre libreria di Arsenal
         maven { url 'https://jitpack.io' }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+        exclude("META-INF/*.kotlin_module")
     }
 
 }
@@ -64,7 +76,6 @@ dependencies {
     implementation("androidx.navigation:navigation-dynamic-features-fragment:$nav_version")
     androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
     implementation("androidx.navigation:navigation-compose:2.4.0-alpha04")
-
 
     //Fragment
     def fragment_version = "1.3.5"
@@ -97,9 +108,6 @@ dependencies {
     //Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0")
 
-    //MotionLayout
-    implementation("androidx.constraintlayout:constraintlayout:2.1.0-beta02")
-
     //Preferences
     def preferences_version = "1.1.1"
     implementation "androidx.preference:preference-ktx:$preferences_version"
@@ -131,7 +139,7 @@ dependencies {
     implementation 'com.github.IslamKhSh:CardSlider:1.0.1'
 
     //BarCode Scanning
-    implementation 'com.google.mlkit:barcode-scanning:17.0.0'
+    //implementation 'com.google.mlkit:barcode-scanning:17.0.0'
     implementation 'com.google.android.gms:play-services-mlkit-barcode-scanning:16.2.1'
 
     //Volley
@@ -146,4 +154,18 @@ dependencies {
     //uCrop
     def uCrop_version = "2.2.6"
     implementation "com.github.yalantis:ucrop:$uCrop_version"
+
+    //Google Drive
+    implementation 'com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava'
+
+    implementation('com.google.api-client:google-api-client-android:1.23.0')
+    implementation('com.google.apis:google-api-services-drive:v3-rev136-1.25.0')
+    implementation 'com.google.android.gms:play-services-auth:19.2.0'
+
+    //Backup Room Database
+    implementation 'com.github.salehyarahmadi:RoomDatabaseBackupAndRestore:v1.0.1'
+
+    //AnimationX
+    def animationx_version = "2.0"
+    implementation "com.github.rommansabbir:AnimationX:$animationx_version"
 }

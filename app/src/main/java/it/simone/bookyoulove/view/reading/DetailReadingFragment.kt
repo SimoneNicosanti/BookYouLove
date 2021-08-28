@@ -14,8 +14,8 @@ import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.database.entity.StartDate
 import it.simone.bookyoulove.databinding.FragmentDetailReadingBinding
 import it.simone.bookyoulove.view.dialog.LoadingDialogFragment
-import it.simone.bookyoulove.viewmodel.DetailReadingViewModel
-import it.simone.bookyoulove.viewmodel.ReadingViewModel
+import it.simone.bookyoulove.viewmodel.reading.DetailReadingViewModel
+import it.simone.bookyoulove.viewmodel.reading.ReadingViewModel
 import java.time.Month
 import java.time.format.TextStyle
 import java.util.*
@@ -27,11 +27,9 @@ class DetailReadingFragment : Fragment() {
     private lateinit var binding : FragmentDetailReadingBinding
 
     private val detailReadingVM : DetailReadingViewModel by viewModels()
-    private val readingVM : ReadingViewModel by activityViewModels()
+    //private val readingVM : ReadingViewModel by activityViewModels()
 
     private val args : DetailReadingFragmentArgs by navArgs()
-
-    private var loadingDialog = LoadingDialogFragment()
 
     private lateinit var detailBook : Book
 
@@ -53,7 +51,7 @@ class DetailReadingFragment : Fragment() {
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Book>("modifiedBook")?.observe(viewLifecycleOwner) {
             detailReadingVM.onReadingBookModified(it)
             findNavController().currentBackStackEntry?.savedStateHandle?.remove<Book>("modifiedBook")
-            readingVM.notifyReadingBookModified(it)
+            //readingVM.notifyReadingBookModified(it)
         }
 
         setObservers()

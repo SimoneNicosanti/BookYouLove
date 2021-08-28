@@ -23,16 +23,20 @@ class StartingViewModel(application: Application) : AndroidViewModel(application
     private val myAppDatabase = AppDatabase.getDatabaseInstance(application.applicationContext)
     private val startingModel = StartingModel(myAppDatabase)
 
+    private var loadedOnce = false
+
     val currentStartingBook = MutableLiveData<Book>()
     val canExitWithBook = MutableLiveData<Book>()
     val isAccessing = MutableLiveData(false)
 
     fun loadStartingBook(bookId: Long) {
-        isAccessing.value = true
-        viewModelScope.launch {
-            val loadedBook = startingModel.loadBookFromDatabase(bookId)
-            currentStartingBook.value = prepareStartingBook(loadedBook)
-            isAccessing.value = false
+        if (!loadedOnce) {
+            isAccessing.value = true
+            viewModelScope.launch {
+                val loadedBook = startingModel.loadBookFromDatabase(bookId)
+                currentStartingBook.value = prepareStartingBook(loadedBook)
+                isAccessing.value = false
+            }
         }
     }
 
@@ -85,6 +89,5 @@ class StartingModel(private val myAppDatabase: AppDatabase) {
             myAppDatabase.bookDao().updateBooks(startingBook)
         }
     }
-
 
 }

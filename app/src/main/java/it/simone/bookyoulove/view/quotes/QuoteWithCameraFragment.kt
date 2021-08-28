@@ -1,15 +1,12 @@
 package it.simone.bookyoulove.view.quotes
 
 
-import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.app.Application
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
-import android.util.Rational
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -19,11 +16,10 @@ import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.*
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.snackbar.Snackbar
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
@@ -31,10 +27,11 @@ import com.google.mlkit.vision.text.TextRecognizerOptions
 import com.yalantis.ucrop.UCrop
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.databinding.FragmentQuoteWithCameraBinding
+import it.simone.bookyoulove.view.dialog.AlertDialogFragment
 import kotlinx.coroutines.*
 import java.io.File
-import java.lang.Runnable
 import java.util.concurrent.Executors
+
 
 @androidx.camera.lifecycle.ExperimentalUseCaseGroupLifecycle
 class QuoteWithCameraFragment : Fragment() {
@@ -70,9 +67,11 @@ class QuoteWithCameraFragment : Fragment() {
                 findNavController().popBackStack()
             }
             else {
-                val errorSnackBar = Snackbar.make(requireView(), getString(R.string.scan_error_string), Snackbar.LENGTH_SHORT)
-                errorSnackBar.anchorView = requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-                errorSnackBar.show()
+                val alertDialog = AlertDialogFragment()
+                val arguments = bundleOf("alertDialogTitleKey" to getString(R.string.scan_error_string))
+                alertDialog.arguments = arguments
+                alertDialog.show(childFragmentManager, "Scan Text Error")
+
             }
         }
         quoteWithCameraVM.canExitWithText.observe(viewLifecycleOwner, canExitWithTextObservers)
@@ -95,7 +94,6 @@ class QuoteWithCameraFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setObservers()
-        //Devo impostare la rotazione DOPO la creazione della view, altrimenti ho GIUSTAMENTE crash
         requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         cameraProviderFuture.addListener({
             val cameraProvider = cameraProviderFuture.get()
@@ -112,7 +110,7 @@ class QuoteWithCameraFragment : Fragment() {
                 .build()
 
         val preview: Preview = Preview.Builder()
-                .setTargetAspectRatio(AspectRatio.RATIO_4_3 )
+                //.setTargetAspectRatio(AspectRatio.RATIO_4_3 )
                 .build()
 
         val previewView = requireView().findViewById<PreviewView>(R.id.quoteWithCameraPreviewView)
@@ -121,7 +119,7 @@ class QuoteWithCameraFragment : Fragment() {
         val imageCapture = ImageCapture.Builder()
                     .setCaptureMode(ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY)
                     .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
-                    .setTargetAspectRatio(AspectRatio.RATIO_4_3)
+                    //.setTargetAspectRatio(AspectRatio.RATIO_4_3)
                     .build()
 
 
@@ -157,9 +155,10 @@ class QuoteWithCameraFragment : Fragment() {
                             }
 
                             override fun onError(exception: ImageCaptureException) {
-                                val captureSnackBar = Snackbar.make(requireView(), getString(R.string.capture_error_string), Snackbar.LENGTH_SHORT)
-                                captureSnackBar.anchorView = requireActivity().findViewById(R.id.bottomNavigationView)
-                                captureSnackBar.show()
+                                val alertDialog = AlertDialogFragment()
+                                val args = bundleOf("alertDialogTitleKey" to getString(R.string.capture_error_string))
+                                alertDialog.arguments = args
+                                alertDialog.show(childFragmentManager, "Capture Image Error Dialog")
                             }
 
                         }
@@ -169,15 +168,15 @@ class QuoteWithCameraFragment : Fragment() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        Log.d("Nicosanti", "Result")
         if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP && data != null) {
             val resultUri : Uri = UCrop.getOutput(data)!!
             quoteWithCameraVM.scanText(resultUri)
         }
         else if (resultCode == UCrop.RESULT_ERROR) {
-            val cropSnackBar = Snackbar.make(requireView(), getString(R.string.crop_error_string), Snackbar.LENGTH_SHORT)
-            cropSnackBar.anchorView = requireActivity().findViewById(R.id.bottomNavigationView)
-            cropSnackBar.show()
+            val alertDialog = AlertDialogFragment()
+            val args = bundleOf("alertDialogTitleKey" to getString(R.string.crop_error_string))
+            alertDialog.arguments = args
+            alertDialog.show(childFragmentManager, "Crop Image Error Dialog")
         }
     }
 

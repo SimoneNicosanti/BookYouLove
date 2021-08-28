@@ -1,41 +1,33 @@
 package it.simone.bookyoulove.view.charts
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
-import android.graphics.Color
 import android.os.Bundle
-import android.util.AttributeSet
-import android.util.TypedValue
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
-import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.charts.PieChart
-import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.android.material.snackbar.Snackbar
+import com.rommansabbir.animationx.Slide
+import com.rommansabbir.animationx.animationXSlide
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.databinding.FragmentChartsYearBinding
 import it.simone.bookyoulove.model.ChartsBookData
 import it.simone.bookyoulove.view.ChartsFragmentDirections
-import it.simone.bookyoulove.viewmodel.*
+import it.simone.bookyoulove.viewmodel.charts.*
 import java.time.Month
 import java.time.format.TextStyle
 import java.util.*
@@ -124,8 +116,9 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
         val rateChartSet = LineDataSet(rateEntries, chartLabel)
         val rateChartData = LineData(rateChartSet)
         rateLineChart?.run {
+            val editTextColor = EditText(requireContext()).currentTextColor
             data = rateChartData
-            legend.textColor = EditText(requireContext()).currentTextColor
+            legend.textColor = editTextColor
             setVisibleXRangeMaximum(10F)
 
             animateXY(1000, 1000)
@@ -134,14 +127,14 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
             description?.isEnabled = false
 
             axisLeft?.run {
-                textColor = EditText(requireContext()).currentTextColor
+                textColor = editTextColor
                 //setDrawGridLines(false)
             }
             xAxis?.run {
-                textColor = EditText(requireContext()).currentTextColor
+                textColor = editTextColor
                 setDrawGridLines(false)
             }
-            data.setValueTextColor(EditText(requireContext()).currentTextColor)
+            data.setValueTextColor(editTextColor)
 
             axisRight?.isEnabled = false
             invalidate()
@@ -210,7 +203,6 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
             data = pagesPerMonthData
             xAxis?.valueFormatter = IndexAxisValueFormatter(monthArrayLabels.toTypedArray())
             setVisibleXRangeMaximum(6F)
-            animateXY(1000, 1000)
 
             axisRight.isEnabled = false
             axisLeft.textColor = color
@@ -221,6 +213,7 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
             //pagesPerMonthBarChart.setBackgroundColor(resources.getColor(R.color.white))
             setScaleEnabled(false)
             description?.isEnabled = false
+            animateXY(1000, 1000)
             invalidate()
         }
     }
@@ -242,7 +235,6 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
             xAxis?.valueFormatter = IndexAxisValueFormatter(monthArrayLabels.toTypedArray())
             setVisibleXRangeMaximum(6F)
             setVisibleXRangeMinimum(3F)
-            animateXY(1000,1000)
             //barChart.setBackgroundColor(resources.getColor(R.color.white))
             setScaleEnabled(false)
             description?.isEnabled = false
@@ -255,6 +247,7 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
             axisLeft.textColor = color
             data.setValueTextColor(color)
             data.setValueTextSize(TEXT_DATA_SIZE)
+            animateXY(1000,1000)
             invalidate()
         }
     }
@@ -281,6 +274,46 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
                         binding.chartsYearEmotionRateLineChartCard.visibility = View.GONE
                         binding.chartsYearPlotRateLineChartCard.visibility = View.GONE
                         binding.chartsYearCharacterRateLineChartCard.visibility = View.GONE
+
+                            /*
+                            binding.chartsYearPagesBarChartCard.run {
+                                animationXSlide(Slide.SLIDE_OUT_RIGHT, 1000)
+                                visibility = View.GONE
+                            }
+                            binding.chartsYearPagesPieChartCard.run {
+                                animationXSlide(Slide.SLIDE_OUT_RIGHT, 1000)
+                                visibility = View.GONE
+                            }
+                                binding.chartsYearSupportPieChartCard.run {
+                                    animationXSlide(Slide.SLIDE_OUT_RIGHT, 1000)
+                                    visibility = View.GONE
+                                }
+                                binding.chartsYearTotalRateLineChartCard.run {
+                                    animationXSlide(Slide.SLIDE_OUT_RIGHT, 1000)
+                                    visibility = View.GONE
+                                }
+                                binding.chartsYearStyleRateLineChartCard.run {
+                                    animationXSlide(Slide.SLIDE_OUT_RIGHT, 1000)
+                                    visibility = View.GONE
+                                }
+                                binding.chartsYearEmotionRateLineChartCard.run {
+                                    animationXSlide(Slide.SLIDE_OUT_RIGHT, 1000)
+                                    visibility = View.GONE
+                                }
+                                binding.chartsYearPlotRateLineChartCard.run {
+                                    animationXSlide(Slide.SLIDE_OUT_RIGHT, 1000)
+                                    visibility = View.GONE
+                                }
+                                binding.chartsYearCharacterRateLineChartCard.run {
+                                    animationXSlide(Slide.SLIDE_OUT_RIGHT, 1000)
+                                    visibility = View.GONE
+                                }
+
+                                binding.chartsYearBooksBarChartCard.animationXSlide(Slide.SLIDE_IN_LEFT, 1000)
+                                binding.chartsYearBooksBarChartCard.visibility = View.VISIBLE
+
+                             */
+
                     }
 
                     1 -> { //Pages
@@ -319,6 +352,7 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
                         binding.chartsYearPagesBarChartCard.visibility = View.GONE
                         binding.chartsYearPagesPieChartCard.visibility = View.GONE
                         binding.chartsYearSupportPieChartCard.visibility = View.GONE
+
                     }
                 }
             }
@@ -332,45 +366,20 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
     override fun onValueSelected(e: Entry?, h: Highlight?) {
         if (e != null) {
             val x = e.x.toInt()
-            //Log.d("Nicosanti", "$x ${chartsBookDataArray[x].title}")
             val rateChartSnackbar = Snackbar.make(requireView(), booksOfTheYearArray[x].title, Snackbar.LENGTH_SHORT)
-            rateChartSnackbar.setAction(getString(R.string.goto_string)) {
+
+            /*rateChartSnackbar.setAction(getString(R.string.goto_string)) {
                 findNavController().navigate(
                     ChartsFragmentDirections.actionChartsFragmentToEndedDetailFragment(booksOfTheYearArray[x].bookId)
                 )
-            }
+            }*/
+
+            rateChartSnackbar.anchorView = requireActivity().findViewById(R.id.bottomNavigationView)
             rateChartSnackbar.show()
         }
     }
 
     override fun onNothingSelected() {
-    }
-
-
-    private fun crossFade(view: View?, toGone: Boolean) {
-        if (toGone) {
-            view?.animate()?.run {
-                alpha(0F)
-                duration = 0L
-                setListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator?) {
-                        view.visibility = View.GONE
-                    }
-                })
-            }
-        }
-
-        else {
-            view?.run {
-                alpha = 0F
-                visibility = View.VISIBLE
-                animate().run {
-                    alpha(1F)
-                    duration = 0L
-                    setListener(null)
-                }
-            }
-        }
     }
 
 }

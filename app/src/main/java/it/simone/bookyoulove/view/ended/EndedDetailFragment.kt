@@ -16,10 +16,9 @@ import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.databinding.FragmentEndedDetailBinding
 import it.simone.bookyoulove.view.dialog.ConfirmDeleteDialogFragment
-import it.simone.bookyoulove.view.dialog.LoadingDialogFragment
-import it.simone.bookyoulove.viewmodel.ChartsViewModel
-import it.simone.bookyoulove.viewmodel.DetailEndedViewModel
-import it.simone.bookyoulove.viewmodel.EndedViewModel
+import it.simone.bookyoulove.viewmodel.charts.ChartsViewModel
+import it.simone.bookyoulove.viewmodel.ended.DetailEndedViewModel
+import it.simone.bookyoulove.viewmodel.ended.EndedViewModel
 import java.time.Month
 import java.time.format.TextStyle
 import java.util.*
@@ -31,7 +30,7 @@ class EndedDetailFragment : Fragment(), View.OnClickListener {
     private lateinit var binding : FragmentEndedDetailBinding
     private val endedDetailVM : DetailEndedViewModel by viewModels()
     private val endedVM : EndedViewModel by activityViewModels()
-    private val chartsVM : ChartsViewModel by activityViewModels()
+    //private val chartsVM : ChartsViewModel by activityViewModels()
 
 
     private val args : EndedDetailFragmentArgs by navArgs()
@@ -48,7 +47,6 @@ class EndedDetailFragment : Fragment(), View.OnClickListener {
             if (bundle.getBoolean("deleteConfirm")) {
                 endedDetailVM.deleteCurrentBook()
                 //Notifico la cancellazione per il grafico dei charts
-                chartsVM.changeLoadedStatus()
             }
         }
 
@@ -82,7 +80,6 @@ class EndedDetailFragment : Fragment(), View.OnClickListener {
 
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Book>("endedModifiedBook")?.observe(viewLifecycleOwner) { changedBook ->
             endedDetailVM.onEndedBookChanged(changedBook)
-            endedVM.notifyArrayItemChanged(changedBook)
             findNavController().currentBackStackEntry?.savedStateHandle?.remove<Book>("endedModifiedBook")
         }
 
@@ -147,6 +144,7 @@ class EndedDetailFragment : Fragment(), View.OnClickListener {
         val deleteCompletedObserver = Observer<Boolean> { completed ->
             if (completed) {
                 endedVM.notifyArrayItemDelete()
+                //chartsVM.changeLoadedStatus()
                 findNavController().popBackStack()
             }
         }

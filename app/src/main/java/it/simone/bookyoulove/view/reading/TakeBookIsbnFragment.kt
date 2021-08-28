@@ -1,6 +1,6 @@
 package it.simone.bookyoulove.view.reading
 
-import android.annotation.SuppressLint
+
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
@@ -40,6 +40,7 @@ class TakeBookIsbnFragment : Fragment() {
 
     private val takeBookIsbnVM : TakeBookIsbnViewModel by viewModels()
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
@@ -57,7 +58,7 @@ class TakeBookIsbnFragment : Fragment() {
 
         setObserver()
 
-        cameraProviderFuture.addListener( Runnable {
+        cameraProviderFuture.addListener( {
             val cameraProvider = cameraProviderFuture.get()
             if (cameraProvider != null) bindPreview(cameraProvider)
         }, ContextCompat.getMainExecutor(requireContext()))
@@ -111,7 +112,7 @@ class TakeBookIsbnFragment : Fragment() {
                         .setBarcodeFormats(Barcode.FORMAT_EAN_13)
                         .build()
                 val isbnScanner = BarcodeScanning.getClient(scanningOptions)
-                val resultIsbn = isbnScanner.process(isbnImage)
+                isbnScanner.process(isbnImage)
                         .addOnSuccessListener { scannedIsbn ->
                             if (scannedIsbn.isNotEmpty()) {
                                 Log.i("Nicosanti", scannedIsbn[0]?.displayValue.toString())
@@ -121,7 +122,7 @@ class TakeBookIsbnFragment : Fragment() {
                         .addOnFailureListener {
                             throw IllegalStateException(it)
                         }
-                        .addOnCompleteListener { _ ->
+                        .addOnCompleteListener {
                             imageProxy.close()
                         }
             }
@@ -130,7 +131,7 @@ class TakeBookIsbnFragment : Fragment() {
     }
 }
 
-class TakeBookIsbnViewModel() : ViewModel() {
+class TakeBookIsbnViewModel : ViewModel() {
 
     val canExitWithIsbn = MutableLiveData<String>()
 

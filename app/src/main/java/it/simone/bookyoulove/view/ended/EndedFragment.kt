@@ -1,7 +1,6 @@
 package it.simone.bookyoulove.view.ended
 
 import android.content.pm.ActivityInfo
-import android.content.res.Configuration
 import android.os.Bundle
 import android.text.InputType
 import android.util.Log
@@ -16,7 +15,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.Snackbar
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.adapter.EndedAdapter
 import it.simone.bookyoulove.database.DAO.ShowedBookInfo
@@ -25,8 +23,7 @@ import it.simone.bookyoulove.view.SEARCH_BY_AUTHOR
 import it.simone.bookyoulove.view.SEARCH_BY_RATE
 import it.simone.bookyoulove.view.SEARCH_BY_TITLE
 import it.simone.bookyoulove.view.SEARCH_BY_YEAR
-import it.simone.bookyoulove.view.dialog.LoadingDialogFragment
-import it.simone.bookyoulove.viewmodel.EndedViewModel
+import it.simone.bookyoulove.viewmodel.ended.EndedViewModel
 
 
 class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListener, SearchView.OnQueryTextListener, AdapterView.OnItemSelectedListener {
@@ -46,6 +43,9 @@ class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListene
 
         if (savedInstanceState != null) {
             searchField = savedInstanceState.getString("searchField")!!
+        }
+        else {
+            endedVM.resetSearchField()
         }
 
         endedVM.getEndedList()
@@ -67,6 +67,8 @@ class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListene
                         getString(R.string.year_string)))
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.endedFragmentSearchBySpinner.adapter = spinnerAdapter
+
+        binding.endedFragmentSearchBySpinner.isEnabled = (searchField == "")
 
         binding.endedFragmentSearchBySpinner.onItemSelectedListener = this
 
@@ -95,19 +97,13 @@ class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListene
         endedVM.isAccessingDatabase.observe(viewLifecycleOwner, isAccessingDatabaseObserver)
 
         val currentReadListObserver = Observer<Array<ShowedBookInfo>> {
-            //In base ad orientameno del dispositivo cambio il numero di elementi mostrati su una riga, nel caso si stia usando una griglia
 
             val linearIndicator = PreferenceManager.getDefaultSharedPreferences(requireContext()).getBoolean("endedLinearLayout", false)
             if (linearIndicator) {
                 binding.endedRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-            } else {
-                if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-                    binding.endedRecyclerView.layoutManager = GridLayoutManager(requireContext(), resources.getInteger(R.integer.ended_grid_row_item_count_portr))
-                    //binding.endedRecyclerView.layoutParams = RecyclerView.LayoutParams(RecyclerView.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT)
-                } else {
-                    binding.endedRecyclerView.layoutManager = GridLayoutManager(requireContext(), resources.getInteger((R.integer.ended_grid_row_item_count_land)))
-                    //binding.endedRecyclerView.layoutParams = RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-                }
+            }
+            else {
+                binding.endedRecyclerView.layoutManager = GridLayoutManager(requireContext(), resources.getInteger(R.integer.ended_grid_row_item_count_portr))
             }
 
             endedBookArray = it
@@ -179,9 +175,5 @@ class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListene
     }
 
 
-    override fun onDetach() {
-        super.onDetach()
-        endedVM.resetSearchParams()
-    }
 }
 
