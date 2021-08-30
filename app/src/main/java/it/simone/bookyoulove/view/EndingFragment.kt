@@ -37,7 +37,7 @@ class EndingFragment : Fragment(), View.OnClickListener, RatingBar.OnRatingBarCh
     private val endingVM : EndingViewModel by viewModels()
     private val readingVM : ReadingViewModel by activityViewModels()
     private val endedVM : EndedViewModel by activityViewModels()
-    //private val chartsVM: ChartsViewModel by activityViewModels()
+    private val chartsVM: ChartsViewModel by activityViewModels()
 
     private val args : EndingFragmentArgs by navArgs()
 
@@ -99,7 +99,7 @@ class EndingFragment : Fragment(), View.OnClickListener, RatingBar.OnRatingBarCh
             if (canExit) {
                 readingVM.notifyBookTerminated()
                 endedVM.setEndedListChanged(true)
-                //chartsVM.changeLoadedStatus()        //Comunico il cambiamento nella lista di libri letti di modo che venga ricaricata da charts
+                chartsVM.changeLoadedStatus()        //Comunico il cambiamento nella lista di libri letti di modo che venga ricaricata da charts
                 findNavController().popBackStack()
             }
         }

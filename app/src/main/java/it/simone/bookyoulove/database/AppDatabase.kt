@@ -8,6 +8,9 @@ import it.simone.bookyoulove.database.DAO.BookDao
 import it.simone.bookyoulove.database.DAO.QuoteDao
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.database.entity.Quote
+import kotlin.reflect.KClass
+
+const val DATABASE_NAME = "book_database"
 
 @Database(entities = [Book::class, Quote::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
@@ -22,7 +25,7 @@ abstract class AppDatabase : RoomDatabase() {
             if (appDatabase == null) {
                 appDatabase = Room.databaseBuilder(context,
                         AppDatabase::class.java,
-                        "book_database").build()
+                        DATABASE_NAME).build()
             }
 
             return appDatabase as AppDatabase

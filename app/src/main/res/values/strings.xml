@@ -105,5 +105,16 @@
     <string name="capture_error_string">Error in Capturing Image</string>
     <string name="delete_book_dialog_title">Do you really want to delete this book??</string>
     <string name="delete_quote_dialog_title">Do you really want to delete this quote??</string>
+    <string name="upload_string">Upload</string>
+    <string name="download_string">Download</string>
+    <string name="login_string" translatable="false">Login</string>
+    <string name="logout_string" translatable="false">Logout</string>
+    <string name="no_user_found">No User Found</string>
+    <string name="signin_error_string">Login Error</string>
+    <string name="upload_completed_string">Upload Completed</string>
+    <string name="operation_wrong_string">Ops! Operation didn\'t have success!</string>
+    <string name="operation_completed_string">Operation Completed!!</string>
+    <string name="goto_google_drive_string">Go To Google Drive</string>
+    <string name="download_completed_string">Download Completed!! Please Restart The App</string>
 
 </resources>

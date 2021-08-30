@@ -26,14 +26,9 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="Google Drive">
         <Preference
-            android:key="googleDriveUpload"
-            android:title="Upload"
+            android:key="googleDriveEnter"
+            android:title="@string/goto_google_drive_string"
             app:enabled="true"
-            app:icon="@drawable/ic_round_cloud_upload_24" />
-        <Preference
-            android:key="googleDriveDownload"
-            android:title="Download"
-            app:enabled="true"
-            app:icon="@drawable/ic_round_cloud_download_24" />
+            app:icon="@drawable/ic_round_cloud_24" />
     </PreferenceCategory>
 </PreferenceScreen>

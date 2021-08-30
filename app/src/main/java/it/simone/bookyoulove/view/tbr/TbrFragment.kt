@@ -128,7 +128,7 @@ class TbrFragment : Fragment(), TbrAdapter.OnTbrItemClickedListener, SearchView.
             }
 
             R.id.tbrItemMenuDeleteItem -> {
-                val args = bundleOf("itemToDelete" to getString(R.string.book_string))
+                val args = bundleOf("itemToDelete" to getString(R.string.delete_book_dialog_title))
                 val deleteFragment = ConfirmDeleteDialogFragment()
                 deleteFragment.arguments = args
                 deleteFragment.show(childFragmentManager, "Delete Confirm")

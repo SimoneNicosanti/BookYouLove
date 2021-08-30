@@ -104,4 +104,13 @@
     <string name="capture_error_string">Errore Presa Immagine</string>
     <string name="delete_book_dialog_title">Vuoi davvero eliminare questo libro??</string>
     <string name="delete_quote_dialog_title">Vuoi davvero eliminare questa citazione??</string>
+    <string name="upload_string">Carica</string>
+    <string name="download_string">Scarica</string>
+    <string name="no_user_found">Nessun Utente Trovato</string>
+    <string name="signin_error_string">Errore di Login</string>
+    <string name="upload_completed_string">Caricamento Completato!!</string>
+    <string name="operation_wrong_string">Ops! L\'operazione non è riuscita!</string>
+    <string name="operation_completed_string">Operazione Completata!</string>
+    <string name="goto_google_drive_string">Vai a Google Drive</string>
+    <string name="download_completed_string">Download Completato!! Per Favore Riavvia l\'Applicazione!!</string>
 </resources>

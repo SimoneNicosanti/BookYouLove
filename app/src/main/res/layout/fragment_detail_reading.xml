@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="1dp"
-    tools:context=".view.reading.NewReadingBookFragment">
+    tools:context=".view.reading.DetailReadingFragment">
 
     <include
         android:id="@+id/detailReadingLoading"

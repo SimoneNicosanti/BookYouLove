@@ -146,7 +146,13 @@ class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListene
         binding.endedFragmentSearchBySpinner.isEnabled = (newText == "")
         val filterType : Int = binding.endedFragmentSearchBySpinner.selectedItemPosition
         searchField = newText ?: ""
-        endedVM.filterArray(newText, filterType)
+        if (filterType == SEARCH_BY_YEAR || filterType == SEARCH_BY_RATE) {
+            //evito overflow nel confronto se si inserisce un numero eccessivamente grande
+            if (newText?.length!! <= 4) endedVM.filterArray(newText, filterType)
+        }
+        else {
+            endedVM.filterArray(newText, filterType)
+        }
         return true
     }
 

@@ -36,7 +36,7 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
 
     private lateinit var binding : FragmentModifyEndedBinding
 
-    //private val chartsVM : ChartsViewModel by activityViewModels()
+    private val chartsVM : ChartsViewModel by activityViewModels()
     private val endedVM : EndedViewModel by activityViewModels()
     private val modifyEndedVM : ModifyEndedViewModel by viewModels()
 
@@ -162,7 +162,7 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
             if (args.modifyEndedBook != null) {
                 findNavController().previousBackStackEntry?.savedStateHandle?.set("endedModifiedBook", finalBook)
                 endedVM.notifyArrayItemChanged(finalBook)
-                //chartsVM.changeLoadedStatus()
+                chartsVM.changeLoadedStatus()
             }
             else {
                 TODO("Caso aggiunta diretta libro in stato ended")

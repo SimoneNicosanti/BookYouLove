@@ -30,7 +30,7 @@ class EndedDetailFragment : Fragment(), View.OnClickListener {
     private lateinit var binding : FragmentEndedDetailBinding
     private val endedDetailVM : DetailEndedViewModel by viewModels()
     private val endedVM : EndedViewModel by activityViewModels()
-    //private val chartsVM : ChartsViewModel by activityViewModels()
+    private val chartsVM : ChartsViewModel by activityViewModels()
 
 
     private val args : EndedDetailFragmentArgs by navArgs()
@@ -144,7 +144,7 @@ class EndedDetailFragment : Fragment(), View.OnClickListener {
         val deleteCompletedObserver = Observer<Boolean> { completed ->
             if (completed) {
                 endedVM.notifyArrayItemDelete()
-                //chartsVM.changeLoadedStatus()
+                chartsVM.changeLoadedStatus()
                 findNavController().popBackStack()
             }
         }

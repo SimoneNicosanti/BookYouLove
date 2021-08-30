@@ -13,30 +13,34 @@
         <action
             android:id="@+id/action_readingFragment_to_newReadingBookFragment"
             app:destination="@id/newReadingBookFragment"
-            app:enterAnim="@android:anim/slide_in_left"
-            app:exitAnim="@android:anim/slide_out_right"
-            app:popEnterAnim="@android:anim/slide_in_left"
-            app:popExitAnim="@android:anim/slide_out_right" />
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
         <action
             android:id="@+id/action_readingFragment_to_detailReadingFragment"
             app:destination="@id/detailReadingFragment"
-            app:enterAnim="@android:anim/slide_in_left"
-            app:exitAnim="@android:anim/slide_out_right"
-            app:popEnterAnim="@android:anim/slide_in_left"
-            app:popExitAnim="@android:anim/slide_out_right" />
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
         <action
             android:id="@+id/action_readingFragment_to_endingFragment"
             app:destination="@id/endingFragment"
-            app:enterAnim="@android:anim/slide_in_left"
-            app:exitAnim="@android:anim/slide_out_right"
-            app:popEnterAnim="@android:anim/slide_in_left"
-            app:popExitAnim="@android:anim/slide_out_right" />
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="it.simone.bookyoulove.view.SettingsFragment"
         android:label="@string/settings_string"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settingsFragment_to_googleDriveFragment"
+            app:destination="@id/googleDriveFragment2" />
+    </fragment>
     <fragment
         android:id="@+id/tbrFragment"
         android:name="it.simone.bookyoulove.view.tbr.TbrFragment"
@@ -44,10 +48,18 @@
         tools:layout="@layout/fragment_tbr" >
         <action
             android:id="@+id/action_tbrFragment_to_tbrModifyFragment"
-            app:destination="@id/tbrModifyFragment" />
+            app:destination="@id/tbrModifyFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
         <action
             android:id="@+id/action_tbrFragment_to_startingFragment"
-            app:destination="@id/startingFragment" />
+            app:destination="@id/startingFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/chartsFragment"
@@ -56,7 +68,11 @@
         tools:layout="@layout/fragment_charts" >
         <action
             android:id="@+id/action_chartsFragment_to_endedDetailFragment"
-            app:destination="@id/endedDetailFragment" />
+            app:destination="@id/endedDetailFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/newReadingBookFragment"
@@ -74,10 +90,18 @@
         tools:layout="@layout/fragment_ended" >
         <action
             android:id="@+id/action_endedFragment_to_endedDetailFragment"
-            app:destination="@id/endedDetailFragment" />
+            app:destination="@id/endedDetailFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
         <action
             android:id="@+id/action_endedFragment_to_modifyEndedFragment"
-            app:destination="@id/modifyEndedFragment" />
+            app:destination="@id/modifyEndedFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
     </fragment>
     <action
         android:id="@+id/action_global_readingFragment"
@@ -127,10 +151,10 @@
         <action
             android:id="@+id/action_detailReadingFragment_to_newReadingBookFragment"
             app:destination="@id/newReadingBookFragment"
-            app:enterAnim="@android:anim/slide_in_left"
-            app:exitAnim="@android:anim/slide_out_right"
-            app:popEnterAnim="@android:anim/slide_in_left"
-            app:popExitAnim="@android:anim/slide_out_right" />
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
         <argument
             android:name="detailReadingBookId"
             app:argType="long" />
@@ -142,10 +166,18 @@
         tools:layout="@layout/fragment_ended_detail" >
         <action
             android:id="@+id/action_endedDetailFragment_to_modifyEndedFragment"
-            app:destination="@id/modifyEndedFragment" />
+            app:destination="@id/modifyEndedFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
         <action
             android:id="@+id/action_endedDetailFragment_to_endedThoughtFragment"
-            app:destination="@id/endedThoughtFragment" />
+            app:destination="@id/endedThoughtFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
         <argument
             android:name="endedBookId"
             app:argType="long" />
@@ -187,7 +219,11 @@
         android:label="ModifyQuoteFragment" >
         <action
             android:id="@+id/action_modifyQuoteFragment_to_quoteWithCameraFragment"
-            app:destination="@id/quoteWithCameraFragment" />
+            app:destination="@id/quoteWithCameraFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
         <argument
             android:name="modifyQuote"
             app:argType="it.simone.bookyoulove.database.entity.Quote"
@@ -206,7 +242,11 @@
     </fragment>
     <action
         android:id="@+id/action_global_modifyQuoteFragment"
-        app:destination="@id/modifyQuoteFragment" />
+        app:destination="@id/modifyQuoteFragment"
+        app:enterAnim="@android:anim/fade_in"
+        app:exitAnim="@android:anim/fade_out"
+        app:popEnterAnim="@android:anim/fade_in"
+        app:popExitAnim="@android:anim/fade_out" />
     <fragment
         android:id="@+id/quoteWithCameraFragment"
         android:name="it.simone.bookyoulove.view.quotes.QuoteWithCameraFragment"
@@ -219,7 +259,11 @@
         tools:layout="@layout/fragment_quote_list" >
         <action
             android:id="@+id/action_quoteListFragment_to_quoteDetailFragment"
-            app:destination="@id/quoteDetailFragment" />
+            app:destination="@id/quoteDetailFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
         <argument
             android:name="bookId"
             app:argType="long" />
@@ -274,4 +318,9 @@
             android:name="startingBookId"
             app:argType="long" />
     </fragment>
+    <fragment
+        android:id="@+id/googleDriveFragment2"
+        android:name="it.simone.bookyoulove.view.GoogleDriveFragment"
+        android:label="fragment_google_drive"
+        tools:layout="@layout/fragment_google_drive" />
 </navigation>
