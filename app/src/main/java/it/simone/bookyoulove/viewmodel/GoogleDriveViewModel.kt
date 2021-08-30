@@ -1,5 +1,6 @@
 package it.simone.bookyoulove.viewmodel
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.webkit.MimeTypeMap
@@ -27,6 +28,8 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.io.*
 import java.lang.Exception
+import java.text.SimpleDateFormat
+import java.util.*
 
 const val GOOGLE_DRIVE_BACKUP_NAME = "BookYouLoveDatabaseBackup"
 const val GOOGLE_DRIVE_BACKUP_FOLDER = "appDataFolder"
@@ -105,6 +108,7 @@ class GoogleDriveViewModel(application: Application) : AndroidViewModel(applicat
         }
     }
 
+
     private fun createJsonQuoteArray(): JSONArray {
         val quoteArray = AppDatabase.getDatabaseInstance(myApp.applicationContext).quoteDao().loadAllQuotes()
 
@@ -113,7 +117,6 @@ class GoogleDriveViewModel(application: Application) : AndroidViewModel(applicat
             val jsonQuote = Gson().toJson(quote)
             jsonQuoteArray.put(JSONObject(jsonQuote))
         }
-
         return jsonQuoteArray
     }
 

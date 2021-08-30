@@ -29,7 +29,7 @@ class ChartsTotalViewModel : ViewModel() {
             val totalInfo = totalChartComputeInfo()
             totalChartData.value = TotalChartData(
                 currentDataArray.size,
-                totalInfo.getInt("totalPages"),
+                totalInfo.getLong("totalPages"),
                 totalInfo.getFloat(PAPER_SUPPORT),
                 totalInfo.getFloat(EBOOK_SUPPORT),
                 totalInfo.getFloat(AUDIOBOOK_SUPPORT),
@@ -39,14 +39,14 @@ class ChartsTotalViewModel : ViewModel() {
     }
 
     private suspend fun totalChartComputeInfo(): Bundle {
-        var totalPages = 0
+        var totalPages = 0L
         var totalPaperSupport = 0
         var totalEbookSupport = 0
         var totalAudiobookSupport = 0
         var totalFinalRate = 0F
         withContext(Dispatchers.Default) {
             for (info in currentDataArray) {
-                totalPages += info.pages
+                totalPages += info.pages.toLong()
                 if (info.support.paperSupport) totalPaperSupport += 1
                 if (info.support.ebookSupport) totalEbookSupport += 1
                 if (info.support.audiobookSupport) totalAudiobookSupport += 1
@@ -65,7 +65,7 @@ class ChartsTotalViewModel : ViewModel() {
 
 data class TotalChartData(
     var totalBooks : Int,
-    var totalPages : Int,
+    var totalPages : Long,
     var totalPaperSupport : Float,
     var totalEbookSupport : Float,
     var totalAudiobookSupport : Float,

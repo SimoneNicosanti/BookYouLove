@@ -12,6 +12,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
 import it.simone.bookyoulove.databinding.ActivityMainBinding
 import com.squareup.picasso.Picasso
 import it.simone.bookyoulove.R
@@ -138,6 +139,7 @@ class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItem
                 }
                 true
             }
+
             else -> false
         }
     }
