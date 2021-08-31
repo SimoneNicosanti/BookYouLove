@@ -15,14 +15,11 @@ import com.squareup.picasso.Picasso
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.databinding.FragmentEndedDetailBinding
+import it.simone.bookyoulove.utilsClass.DateFormatClass
 import it.simone.bookyoulove.view.dialog.ConfirmDeleteDialogFragment
 import it.simone.bookyoulove.viewmodel.charts.ChartsViewModel
 import it.simone.bookyoulove.viewmodel.ended.DetailEndedViewModel
 import it.simone.bookyoulove.viewmodel.ended.EndedViewModel
-import java.time.Month
-import java.time.format.TextStyle
-import java.util.*
-
 
 
 class EndedDetailFragment : Fragment(), View.OnClickListener {
@@ -121,16 +118,10 @@ class EndedDetailFragment : Fragment(), View.OnClickListener {
             binding.endedDetailEbookCheckBox.isChecked = currentBook.support?.ebookSupport ?: false
             binding.endedDetailAudiobookCheckBox.isChecked = currentBook.support?.audiobookSupport ?: false
 
-            val startDateText = "${currentBook.startDate?.startDay} ${Month.of(currentBook.startDate!!.startMonth).getDisplayName(TextStyle.FULL, Locale.getDefault()).capitalize(
-                Locale.ROOT
-            )
-            } ${currentBook.startDate?.startYear}"
+            val startDateText = DateFormatClass(requireContext()).computeStartDateString(currentBook.startDate)
             binding.endedDetailStartDateTextView.text = startDateText
 
-            val endDateText = "${currentBook.endDate?.endDay} ${Month.of(currentBook.endDate!!.endMonth).getDisplayName(TextStyle.FULL, Locale.getDefault()).capitalize(
-                Locale.ROOT
-            )
-            } ${currentBook.endDate?.endYear}"
+            val endDateText = DateFormatClass(requireContext()).computeEndDateString(currentBook.endDate)
             binding.endedDetailEndDateTextView.text = endDateText
 
             endedFinalThought = currentBook.finalThought

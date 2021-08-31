@@ -25,12 +25,10 @@ import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.database.entity.StartDate
 import it.simone.bookyoulove.databinding.FragmentNewReadingBookBinding
+import it.simone.bookyoulove.utilsClass.DateFormatClass
 import it.simone.bookyoulove.view.*
 import it.simone.bookyoulove.view.dialog.*
 import it.simone.bookyoulove.viewmodel.reading.*
-import java.time.Month
-import java.time.format.TextStyle
-import java.util.*
 
 
 class  NewReadingBookFragment : Fragment() , View.OnClickListener {
@@ -58,7 +56,7 @@ class  NewReadingBookFragment : Fragment() , View.OnClickListener {
         childFragmentManager.setFragmentResultListener("startDateKey", this) { _, bundle ->
             val startDateResult = StartDate(bundle.getInt("day"), bundle.getInt("month"), bundle.getInt("year"))
             newReadingVM.updateStartDate(startDateResult)
-            binding.newBookStartDateText.text = computeStartDateString(startDateResult)
+            binding.newBookStartDateText.text = DateFormatClass(requireContext()).computeStartDateString(startDateResult)
         }
 
         childFragmentManager.setFragmentResultListener("coverLinkKey",this)  { _, bundle ->
@@ -174,7 +172,7 @@ class  NewReadingBookFragment : Fragment() , View.OnClickListener {
             binding.newBookTitleInput.setText(currentBook.title)
             binding.newBookAuthorInput.setText(currentBook.author)
 
-            binding.newBookStartDateText.text = computeStartDateString(currentBook.startDate)
+            binding.newBookStartDateText.text = DateFormatClass(requireContext()).computeStartDateString(currentBook.startDate)
 
             binding.newBookPaperCheckbox.isChecked = currentBook.support?.paperSupport ?: false
             binding.newBookEbookCheckbox.isChecked = currentBook.support?.ebookSupport ?: false
@@ -244,14 +242,6 @@ class  NewReadingBookFragment : Fragment() , View.OnClickListener {
                 }
             }
         }
-    }
-
-
-    private fun computeStartDateString(startDate: StartDate?): String {
-        return "${startDate!!.startDay} ${
-            Month.of(startDate.startMonth).getDisplayName(
-                TextStyle.FULL, Locale.getDefault()).capitalize(Locale.getDefault())
-        } ${startDate.startYear}"
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

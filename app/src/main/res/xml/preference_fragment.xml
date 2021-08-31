@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/general_settings_string">
+
+        <ListPreference
+            android:defaultValue="dd-mm-yyyy"
+            android:entries="@array/date_format_array_entries"
+            android:entryValues="@array/date_format_array_values"
+            android:key="date_format"
+            android:title="@string/date_format_string"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
     <PreferenceCategory android:title="@string/read_settings_string">
 
         <SwitchPreference
@@ -8,7 +18,7 @@
             android:key="endedLinearLayout"
             android:title="@string/linear_setting_string" />
         <ListPreference
-            android:defaultValue="false"
+            android:defaultValue="end_date"
             android:entries="@array/ended_order_array_entries"
             android:entryValues="@array/ended_order_array_entry_values"
             android:key="endedOrderPreference"

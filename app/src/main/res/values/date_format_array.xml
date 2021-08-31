@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="date_format_array_entries">
+        <item>dd mm yyyy</item>
+        <item>mm dd yyyy</item>
+    </string-array>
+</resources>

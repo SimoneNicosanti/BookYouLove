@@ -18,7 +18,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/quotesListRecyclerView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
         android:foregroundGravity="center_horizontal"
         app:layoutManager="LinearLayoutManager"

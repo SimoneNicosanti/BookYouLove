@@ -21,15 +21,13 @@ import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.database.entity.EndDate
 import it.simone.bookyoulove.database.entity.StartDate
 import it.simone.bookyoulove.databinding.FragmentModifyEndedBinding
+import it.simone.bookyoulove.utilsClass.DateFormatClass
 import it.simone.bookyoulove.view.*
 import it.simone.bookyoulove.view.dialog.CoverLinkPickerFragment
 import it.simone.bookyoulove.view.dialog.DatePickerFragment
 import it.simone.bookyoulove.viewmodel.charts.ChartsViewModel
 import it.simone.bookyoulove.viewmodel.ended.EndedViewModel
 import it.simone.bookyoulove.viewmodel.ended.ModifyEndedViewModel
-import java.time.Month
-import java.time.format.TextStyle
-import java.util.*
 
 
 class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRatingBarChangeListener {
@@ -53,7 +51,7 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
             val newStartDate = StartDate(bundle.getInt("day"), bundle.getInt("month"), bundle.getInt("year"))
             currentStartDate = newStartDate
 
-            binding.modifyEndedStartDateText.text = findStartDateString(newStartDate)
+            binding.modifyEndedStartDateText.text = DateFormatClass(requireContext()).computeStartDateString(newStartDate)
 
             modifyEndedVM.modifyStartDate(newStartDate)
         })
@@ -62,7 +60,7 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
             val newEndDate = EndDate(bundle.getInt("day"), bundle.getInt("month"), bundle.getInt("year"))
             currentEndDate = newEndDate
 
-            binding.modifyEndedEndDateText.text = findEndDateString(newEndDate)
+            binding.modifyEndedEndDateText.text = DateFormatClass(requireContext()).computeEndDateString(newEndDate)
 
             modifyEndedVM.modifyEndDate(newEndDate)
         })
@@ -151,10 +149,10 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
             binding.modifyEndedAudiobookCheck.isChecked = currentBook.support?.audiobookSupport ?: false
 
             currentStartDate = currentBook.startDate!!
-            binding.modifyEndedStartDateText.text = findStartDateString(currentBook.startDate)
+            binding.modifyEndedStartDateText.text = DateFormatClass(requireContext()).computeStartDateString(currentBook.startDate)
 
             currentEndDate = currentBook.endDate!!
-            binding.modifyEndedEndDateText.text = findEndDateString(currentBook.endDate)
+            binding.modifyEndedEndDateText.text = DateFormatClass(requireContext()).computeEndDateString(currentBook.endDate)
         }
         modifyEndedVM.currentBook.observe(viewLifecycleOwner, currentBookObserver)
 
@@ -245,21 +243,6 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
             binding.endedModifyCharactersRate -> modifiedRate = 4
         }
         modifyEndedVM.modifyRate(rating, modifiedRate)
-    }
-
-
-    private fun findStartDateString(startDate : StartDate?) : String {
-        return "${startDate!!.startDay} ${
-            Month.of(startDate.startMonth).getDisplayName(
-                TextStyle.FULL, Locale.getDefault()).capitalize(Locale.getDefault())
-        } ${startDate.startYear}"
-    }
-
-    private fun findEndDateString(endDate: EndDate?) : String {
-        return "${endDate!!.endDay} ${
-            Month.of(endDate.endMonth).getDisplayName(
-                TextStyle.FULL, Locale.getDefault()).capitalize(Locale.getDefault())
-        } ${endDate.endYear}"
     }
 
 }

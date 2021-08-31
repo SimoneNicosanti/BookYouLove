@@ -116,5 +116,6 @@
     <string name="operation_completed_string">Operation Completed!!</string>
     <string name="goto_google_drive_string">Go To Google Drive</string>
     <string name="download_completed_string">Download Completed!! Please Restart The App</string>
-
+    <string name="general_settings_string">General Settings</string>
+    <string name="date_format_string">Date Format</string>
 </resources>

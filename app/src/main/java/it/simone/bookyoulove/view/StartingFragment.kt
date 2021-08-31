@@ -16,12 +16,10 @@ import androidx.navigation.fragment.navArgs
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.database.entity.StartDate
 import it.simone.bookyoulove.databinding.FragmentStartingBinding
+import it.simone.bookyoulove.utilsClass.DateFormatClass
 import it.simone.bookyoulove.view.dialog.DatePickerFragment
 import it.simone.bookyoulove.viewmodel.reading.ReadingViewModel
 import it.simone.bookyoulove.viewmodel.StartingViewModel
-import java.time.Month
-import java.time.format.TextStyle
-import java.util.*
 
 
 class StartingFragment : Fragment() , View.OnClickListener{
@@ -49,7 +47,7 @@ class StartingFragment : Fragment() , View.OnClickListener{
 
         childFragmentManager.setFragmentResultListener("startDateKey", this) {_ , bundle ->
             val newStartDate = StartDate(bundle.getInt("day"), bundle.getInt("month"), bundle.getInt("year"))
-            binding.startingStartDateTextView.text = computeDateString(newStartDate)
+            binding.startingStartDateTextView.text = DateFormatClass(requireContext()).computeStartDateString(newStartDate)
             startingVM.changeStartDate(newStartDate)
         }
 
@@ -83,20 +81,13 @@ class StartingFragment : Fragment() , View.OnClickListener{
         startingVM.canExitWithBook.observe(viewLifecycleOwner, canExitWithBookObserver)
 
         val currentBookObserver = Observer<Book> {
-            binding.startingStartDateTextView.text = computeDateString(it.startDate!!)
+            binding.startingStartDateTextView.text = DateFormatClass(requireContext()).computeStartDateString(it.startDate!!)
 
             binding.startingFragmentPaperCheckbox.isChecked = it.support!!.paperSupport
             binding.startingFragmentEbookCheckbox.isChecked = it.support!!.ebookSupport
             binding.startingFragmentAudiobookCheckbox.isChecked = it.support!!.audiobookSupport
         }
         startingVM.currentStartingBook.observe(viewLifecycleOwner, currentBookObserver)
-    }
-
-    private fun computeDateString(startDate: StartDate): String {
-        return "${startDate.startDay} ${
-            Month.of(startDate.startMonth).getDisplayName(
-                TextStyle.FULL, Locale.getDefault()).capitalize(Locale.getDefault())
-        } ${startDate.startYear}"
     }
 
     override fun onClick(v: View?) {

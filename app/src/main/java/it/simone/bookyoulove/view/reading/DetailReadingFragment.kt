@@ -11,14 +11,9 @@ import androidx.navigation.fragment.navArgs
 import com.squareup.picasso.Picasso
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.entity.Book
-import it.simone.bookyoulove.database.entity.StartDate
 import it.simone.bookyoulove.databinding.FragmentDetailReadingBinding
-import it.simone.bookyoulove.view.dialog.LoadingDialogFragment
+import it.simone.bookyoulove.utilsClass.DateFormatClass
 import it.simone.bookyoulove.viewmodel.reading.DetailReadingViewModel
-import it.simone.bookyoulove.viewmodel.reading.ReadingViewModel
-import java.time.Month
-import java.time.format.TextStyle
-import java.util.*
 
 
 class DetailReadingFragment : Fragment() {
@@ -74,7 +69,7 @@ class DetailReadingFragment : Fragment() {
             binding.detailReadingTitle.text = currentBook.title
             binding.detailReadingAuthor.text = currentBook.author
 
-            binding.detailReadingStartDateText.text = computeStartDateString(currentBook.startDate)
+            binding.detailReadingStartDateText.text = DateFormatClass(requireContext()).computeStartDateString(currentBook.startDate)
 
             binding.detailReadingPaperCheckbox.isChecked = currentBook.support?.paperSupport ?: false
             binding.detailReadingEbookCheckbox.isChecked = currentBook.support?.ebookSupport ?: false
@@ -123,14 +118,6 @@ class DetailReadingFragment : Fragment() {
 
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-
-    private fun computeStartDateString(startDate: StartDate?): CharSequence {
-        return "${startDate!!.startDay} ${
-            Month.of(startDate.startMonth).getDisplayName(
-                TextStyle.FULL, Locale.getDefault()).capitalize(Locale.getDefault())
-        } ${startDate.startYear}"
     }
 
 

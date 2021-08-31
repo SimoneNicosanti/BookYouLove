@@ -113,4 +113,6 @@
     <string name="operation_completed_string">Operazione Completata!</string>
     <string name="goto_google_drive_string">Vai a Google Drive</string>
     <string name="download_completed_string">Download Completato!! Per Favore Riavvia l\'Applicazione!!</string>
+    <string name="general_settings_string">Impostazioni Generali</string>
+    <string name="date_format_string">Formato Data</string>
 </resources>

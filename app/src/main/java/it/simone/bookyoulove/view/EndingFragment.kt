@@ -21,14 +21,12 @@ import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.database.entity.EndDate
 import it.simone.bookyoulove.database.entity.StartDate
 import it.simone.bookyoulove.databinding.FragmentEndingBinding
+import it.simone.bookyoulove.utilsClass.DateFormatClass
 import it.simone.bookyoulove.view.dialog.DatePickerFragment
 import it.simone.bookyoulove.viewmodel.charts.ChartsViewModel
 import it.simone.bookyoulove.viewmodel.ended.EndedViewModel
 import it.simone.bookyoulove.viewmodel.EndingViewModel
 import it.simone.bookyoulove.viewmodel.reading.ReadingViewModel
-import java.time.Month
-import java.time.format.TextStyle
-import java.util.*
 
 
 class EndingFragment : Fragment(), View.OnClickListener, RatingBar.OnRatingBarChangeListener {
@@ -49,7 +47,7 @@ class EndingFragment : Fragment(), View.OnClickListener, RatingBar.OnRatingBarCh
 
         childFragmentManager.setFragmentResultListener("endDateKey", this, { _, bundle ->
             val settedEndDate = EndDate(bundle.getInt("day"), bundle.getInt("month"), bundle.getInt("year"))
-            binding.endingEndDateText.text = computeEndDateString(settedEndDate)
+            binding.endingEndDateText.text = DateFormatClass(requireContext()).computeEndDateString(settedEndDate)
             endingVM.setEndDate(settedEndDate)
         })
 
@@ -90,7 +88,7 @@ class EndingFragment : Fragment(), View.OnClickListener, RatingBar.OnRatingBarCh
     private fun setObservers() {
 
         val terminateBookObserver = Observer<Book?> { terminateBook ->
-            binding.endingEndDateText.text = computeEndDateString(terminateBook.endDate!!)
+            binding.endingEndDateText.text = DateFormatClass(requireContext()).computeEndDateString(terminateBook.endDate!!)
             terminateStartDate = terminateBook.startDate!!
         }
         endingVM.terminateBook.observe(viewLifecycleOwner, terminateBookObserver)
@@ -117,14 +115,6 @@ class EndingFragment : Fragment(), View.OnClickListener, RatingBar.OnRatingBarCh
             }
         }
         endingVM.isAccessingDatabase.observe(viewLifecycleOwner, isAccessingDatabaseObserver)
-    }
-
-
-    private fun computeEndDateString(endDate: EndDate): String {
-        return "${endDate.endDay} ${
-            Month.of(endDate.endMonth).getDisplayName(
-                    TextStyle.FULL, Locale.getDefault()).capitalize(Locale.getDefault())
-        } ${endDate.endYear}"
     }
 
 

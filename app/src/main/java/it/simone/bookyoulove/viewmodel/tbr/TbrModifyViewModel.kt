@@ -115,7 +115,7 @@ class TbrModifyViewModel(application: Application) : AndroidViewModel(applicatio
         val googleBookApiUrl = GOOGLE_BOOK_API_WITH_ISBN_URL + scannedIsbn
         val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, googleBookApiUrl, null,
                 { response -> setNetworkResponseAsBook(response) },
-                { _ ->
+                {
                     isAccessing.value = false
                     internetAccessError.value = ISBN_INTERNET_ACCESS_ERROR
                 }
