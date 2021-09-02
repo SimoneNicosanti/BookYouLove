@@ -63,7 +63,7 @@
     </fragment>
     <fragment
         android:id="@+id/chartsFragment"
-        android:name="it.simone.bookyoulove.view.ChartsFragment"
+        android:name="it.simone.bookyoulove.view.charts.ChartsFragment"
         android:label="@string/charts_string"
         tools:layout="@layout/fragment_charts" >
         <action
@@ -181,6 +181,9 @@
         <argument
             android:name="endedBookId"
             app:argType="long" />
+        <argument android:name="endedDetailEntryPoint"
+            app:argType="integer"
+            android:defaultValue="0" />
     </fragment>
     <fragment
         android:id="@+id/modifyEndedFragment"

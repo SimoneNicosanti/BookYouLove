@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    tools:context=".dialog.LoadingDialogFragment">
+    tools:context=".view.dialog.LoadingDialogFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -22,7 +22,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/loadingDialogTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/loading_string"

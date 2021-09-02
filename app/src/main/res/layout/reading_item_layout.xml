@@ -24,6 +24,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:menu="@menu/reading_book_context_menu"
             app:subtitleTextAppearance="@style/CustomToolbarSubtitleTextStyle"
             app:titleTextAppearance="@style/CustomToolbarTitleTextStyle" />
 
@@ -32,6 +33,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="25dp"
+            android:contentDescription="@string/book_cover_string"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.495"

@@ -1,6 +1,5 @@
 package it.simone.bookyoulove.viewmodel
 
-import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.webkit.MimeTypeMap
@@ -15,7 +14,6 @@ import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
-import com.google.api.services.drive.model.File
 import com.google.gson.*
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.AppDatabase
@@ -28,8 +26,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.io.*
 import java.lang.Exception
-import java.text.SimpleDateFormat
-import java.util.*
+
 
 const val GOOGLE_DRIVE_BACKUP_NAME = "BookYouLoveDatabaseBackup"
 const val GOOGLE_DRIVE_BACKUP_FOLDER = "appDataFolder"
@@ -43,7 +40,7 @@ class GoogleDriveViewModel(application: Application) : AndroidViewModel(applicat
 
     val currentUser = MutableLiveData<GoogleSignInAccount?>()
 
-    val isAccessing = MutableLiveData(false)
+    val isAccessing = MutableLiveData<Boolean>()
     val operationCompleted = MutableLiveData("")
 
     fun getUser() {
@@ -68,7 +65,7 @@ class GoogleDriveViewModel(application: Application) : AndroidViewModel(applicat
                     jsonBackupObject.put("Book", jsonBookArray)
                     jsonBackupObject.put("Quote", jsonQuoteArray)
 
-                    val backupFile = java.io.File(myApp.applicationContext.filesDir, GOOGLE_DRIVE_BACKUP_NAME)
+                    val backupFile = File(myApp.applicationContext.filesDir, GOOGLE_DRIVE_BACKUP_NAME)
                     val fileWriter = FileWriter(backupFile)
                     fileWriter.write(jsonBackupObject.toString())
                     fileWriter.flush()
@@ -83,7 +80,7 @@ class GoogleDriveViewModel(application: Application) : AndroidViewModel(applicat
 
 
                     //Costruisco il nuovo file di Backup per google drive
-                    val driveBackup = File()
+                    val driveBackup = com.google.api.services.drive.model.File()
                     driveBackup.parents = listOf(GOOGLE_DRIVE_BACKUP_FOLDER)
                     driveBackup.name = GOOGLE_DRIVE_BACKUP_NAME
 
@@ -146,8 +143,6 @@ class GoogleDriveViewModel(application: Application) : AndroidViewModel(applicat
                                 .setAlt("media")
                                 .executeMediaAndDownloadTo(downloadedStream)
                         //Il contenuto viene emesso nel file in cui è scritto il database
-                        //downloadedStream.flush()
-
 
                         val jsonBackupObject = JSONObject(downloadedStream.toString())
 

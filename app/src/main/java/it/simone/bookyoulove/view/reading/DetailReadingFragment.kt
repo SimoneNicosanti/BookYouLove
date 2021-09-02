@@ -13,6 +13,7 @@ import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.databinding.FragmentDetailReadingBinding
 import it.simone.bookyoulove.utilsClass.DateFormatClass
+import it.simone.bookyoulove.view.setViewEnable
 import it.simone.bookyoulove.viewmodel.reading.DetailReadingViewModel
 
 
@@ -31,6 +32,7 @@ class DetailReadingFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setHasOptionsMenu(true)
         detailReadingVM.loadDetailReadingBook(args.detailReadingBookId)
     }
@@ -42,6 +44,7 @@ class DetailReadingFragment : Fragment() {
     ): View {
 
         binding = FragmentDetailReadingBinding.inflate(inflater, container, false)
+        setViewEnable(true, requireActivity())
 
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Book>("modifiedBook")?.observe(viewLifecycleOwner) {
             detailReadingVM.onReadingBookModified(it)
@@ -84,12 +87,12 @@ class DetailReadingFragment : Fragment() {
 
         val isAccessingDatabaseObserver = Observer<Boolean> { isAccessing ->
             if (isAccessing) {
-                requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                setViewEnable(false, requireActivity(), )
                 binding.detailReadingLoading.root.visibility = View.VISIBLE
             }
 
             else {
-                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                setViewEnable(true, requireActivity(), )
                 binding.detailReadingLoading.root.visibility = View.GONE
             }
         }

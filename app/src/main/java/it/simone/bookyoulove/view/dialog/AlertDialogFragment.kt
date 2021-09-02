@@ -2,7 +2,6 @@ package it.simone.bookyoulove.view.dialog
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import it.simone.bookyoulove.R
@@ -16,9 +15,9 @@ class AlertDialogFragment: DialogFragment() {
             val builder = AlertDialog.Builder(it)
             builder.setTitle(arguments?.getString("alertDialogTitleKey"))
 
-            builder.setPositiveButton(R.string.confirm_string, DialogInterface.OnClickListener {dialog, _ ->
+            builder.setPositiveButton(R.string.confirm_string) { dialog, _ ->
                 dialog.cancel()
-            })
+            }
             builder.create()
         }
 

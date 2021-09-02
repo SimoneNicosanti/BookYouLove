@@ -4,7 +4,7 @@
     <PreferenceCategory android:title="@string/general_settings_string">
 
         <ListPreference
-            android:defaultValue="dd-mm-yyyy"
+            android:defaultValue="mm-dd-yyyy"
             android:entries="@array/date_format_array_entries"
             android:entryValues="@array/date_format_array_values"
             android:key="date_format"

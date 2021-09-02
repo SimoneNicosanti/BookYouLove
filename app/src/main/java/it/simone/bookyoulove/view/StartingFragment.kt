@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -31,9 +30,11 @@ class StartingFragment : Fragment() , View.OnClickListener{
     private val readingVM : ReadingViewModel by activityViewModels()
     private val startingVM : StartingViewModel by viewModels()
 
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         binding = FragmentStartingBinding.inflate(inflater, container, false)
+        setViewEnable(true, requireActivity())
 
         startingVM.loadStartingBook(args.startingBookId)
 
@@ -62,12 +63,12 @@ class StartingFragment : Fragment() , View.OnClickListener{
     private fun setObservers() {
         val isAccessingObserver = Observer<Boolean> { isAccessing ->
             if (isAccessing) {
-                requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                setViewEnable(false, requireActivity(), )
                 binding.startingLoading.root.visibility = View.VISIBLE
             }
 
             else {
-                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                setViewEnable(true, requireActivity(), )
                 binding.startingLoading.root.visibility = View.GONE
             }
         }

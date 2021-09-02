@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.RatingBar
 import androidx.core.os.bundleOf
 import androidx.core.widget.doOnTextChanged
@@ -26,7 +25,6 @@ import it.simone.bookyoulove.view.*
 import it.simone.bookyoulove.view.dialog.CoverLinkPickerFragment
 import it.simone.bookyoulove.view.dialog.DatePickerFragment
 import it.simone.bookyoulove.viewmodel.charts.ChartsViewModel
-import it.simone.bookyoulove.viewmodel.ended.EndedViewModel
 import it.simone.bookyoulove.viewmodel.ended.ModifyEndedViewModel
 
 
@@ -35,7 +33,7 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
     private lateinit var binding : FragmentModifyEndedBinding
 
     private val chartsVM : ChartsViewModel by activityViewModels()
-    private val endedVM : EndedViewModel by activityViewModels()
+    //private val endedVM : EndedViewModel by activityViewModels()
     private val modifyEndedVM : ModifyEndedViewModel by viewModels()
 
 
@@ -87,6 +85,8 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
     ): View {
         // Inflate the layout for this fragment
         binding = FragmentModifyEndedBinding.inflate(inflater, container, false)
+
+        setViewEnable(true, requireActivity())
 
         binding.modifyEndedCoverImageView.setOnClickListener(this)
         binding.modifyEndedStartDateCard.setOnClickListener(this)
@@ -159,7 +159,7 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
         val canExitObserver = Observer<Book> { finalBook ->
             if (args.modifyEndedBook != null) {
                 findNavController().previousBackStackEntry?.savedStateHandle?.set("endedModifiedBook", finalBook)
-                endedVM.notifyArrayItemChanged(finalBook)
+                //endedVM.notifyArrayItemChanged(finalBook)
                 chartsVM.changeLoadedStatus()
             }
             else {
@@ -171,12 +171,12 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
 
         val isAccessingObserver = Observer<Boolean> {isAccessing ->
             if (isAccessing) {
-                requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                setViewEnable(false, requireActivity())
                 binding.modifyEndedLoading.root.visibility = View.VISIBLE
             }
 
             else {
-                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                setViewEnable(true, requireActivity())
                 binding.modifyEndedLoading.root.visibility = View.GONE
             }
         }

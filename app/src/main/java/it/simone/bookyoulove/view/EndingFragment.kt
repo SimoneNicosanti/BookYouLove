@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.ImageButton
 import android.widget.RatingBar
 import androidx.core.os.bundleOf
@@ -24,7 +23,6 @@ import it.simone.bookyoulove.databinding.FragmentEndingBinding
 import it.simone.bookyoulove.utilsClass.DateFormatClass
 import it.simone.bookyoulove.view.dialog.DatePickerFragment
 import it.simone.bookyoulove.viewmodel.charts.ChartsViewModel
-import it.simone.bookyoulove.viewmodel.ended.EndedViewModel
 import it.simone.bookyoulove.viewmodel.EndingViewModel
 import it.simone.bookyoulove.viewmodel.reading.ReadingViewModel
 
@@ -34,7 +32,6 @@ class EndingFragment : Fragment(), View.OnClickListener, RatingBar.OnRatingBarCh
     private lateinit var binding : FragmentEndingBinding
     private val endingVM : EndingViewModel by viewModels()
     private val readingVM : ReadingViewModel by activityViewModels()
-    private val endedVM : EndedViewModel by activityViewModels()
     private val chartsVM: ChartsViewModel by activityViewModels()
 
     private val args : EndingFragmentArgs by navArgs()
@@ -60,6 +57,7 @@ class EndingFragment : Fragment(), View.OnClickListener, RatingBar.OnRatingBarCh
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentEndingBinding.inflate(inflater, container, false)
+        setViewEnable(true, requireActivity())
 
         binding.endingFlipRateCardButton.setOnClickListener(this)
         binding.endingEndDateCard.setOnClickListener(this)
@@ -96,21 +94,21 @@ class EndingFragment : Fragment(), View.OnClickListener, RatingBar.OnRatingBarCh
         val canExitObserver = Observer<Boolean> { canExit ->
             if (canExit) {
                 readingVM.notifyBookTerminated()
-                endedVM.setEndedListChanged(true)
-                chartsVM.changeLoadedStatus()        //Comunico il cambiamento nella lista di libri letti di modo che venga ricaricata da charts
+                chartsVM.changeLoadedStatus()        //Comunico il cambiamento ai charts
                 findNavController().popBackStack()
+                //Non devo comunicare cambiamenti ad endedList perché la lista viene ricaricata in apertura
             }
         }
         endingVM.canExit.observe(viewLifecycleOwner, canExitObserver)
 
         val isAccessingDatabaseObserver = Observer<Boolean> { isAccessing ->
             if (isAccessing) {
-                requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                setViewEnable(false, requireActivity())
                 binding.endingLoading.root.visibility = View.VISIBLE
             }
 
             else {
-                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                setViewEnable(true, requireActivity())
                 binding.endingLoading.root.visibility = View.GONE
             }
         }

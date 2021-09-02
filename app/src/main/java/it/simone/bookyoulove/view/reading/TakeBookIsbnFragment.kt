@@ -28,6 +28,7 @@ import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.databinding.FragmentTakeBookIsbnBinding
+import it.simone.bookyoulove.view.setViewEnable
 import java.lang.IllegalStateException
 import java.util.concurrent.Executors
 
@@ -43,6 +44,7 @@ class TakeBookIsbnFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
     }
 
@@ -50,6 +52,7 @@ class TakeBookIsbnFragment : Fragment() {
                               savedInstanceState: Bundle?): View {
 
         binding = FragmentTakeBookIsbnBinding.inflate(inflater, container, false)
+        setViewEnable(true, requireActivity())
         return binding.root
     }
 

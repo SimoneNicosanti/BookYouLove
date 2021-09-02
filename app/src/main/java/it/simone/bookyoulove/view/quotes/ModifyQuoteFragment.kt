@@ -20,6 +20,7 @@ import com.google.common.util.concurrent.ListenableFuture
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.entity.Quote
 import it.simone.bookyoulove.databinding.FragmentModifyQuoteBinding
+import it.simone.bookyoulove.view.setViewEnable
 import it.simone.bookyoulove.viewmodel.quotes.ModifyQuoteViewModel
 
 
@@ -64,6 +65,8 @@ class ModifyQuoteFragment : Fragment(), View.OnClickListener {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentModifyQuoteBinding.inflate(inflater, container, false)
+        setViewEnable(true, requireActivity())
+
         setHasOptionsMenu(true)
 
         setObservers()
@@ -115,12 +118,12 @@ class ModifyQuoteFragment : Fragment(), View.OnClickListener {
 
         val isAccessingDatabaseObserver = Observer<Boolean> { isAccessing ->
             if (isAccessing) {
-                requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                setViewEnable(false, requireActivity(), )
                 binding.modifyQuoteLoading.root.visibility = View.VISIBLE
             }
 
             else {
-                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                setViewEnable(true, requireActivity(), )
                 binding.modifyQuoteLoading.root.visibility = View.GONE
             }
         }

@@ -8,6 +8,11 @@
         <item name="cardViewStyle">@style/CustomCardViewStyle</item>
     </style>
 
+    <style name="MaterialAlertDialog_rounded" parent="@style/ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">25dp</item>
+    </style>
+
     <style name="CustomButtonStyle" parent="Widget.MaterialComponents.Button">
         <item name="android:fontFamily">casual</item>
         <item name="android:textStyle">bold</item>

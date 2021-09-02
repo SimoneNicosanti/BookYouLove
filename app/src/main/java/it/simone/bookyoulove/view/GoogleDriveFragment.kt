@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -36,6 +35,7 @@ class GoogleDriveFragment : Fragment(), View.OnClickListener {
             savedInstanceState: Bundle?,
     ): View {
         binding = FragmentGoogleDriveBinding.inflate(inflater, container, false)
+        setViewEnable(true, requireActivity())
 
         binding.let {
             it.googleDriveLoginButton.setOnClickListener(this)
@@ -64,18 +64,17 @@ class GoogleDriveFragment : Fragment(), View.OnClickListener {
                 googleDriveDownloadButton.isEnabled = (it != null)
                 googleDriveLoginButton.isEnabled = (it == null)
             }
-
         }
         googleDriveVM.currentUser.observe(viewLifecycleOwner, currentUserObserver)
 
         val isAccessingObserver = Observer<Boolean> { isAccessing ->
             if (isAccessing) {
-                requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                setViewEnable(false, requireActivity())
                 binding.googleDriveLoading.root.visibility = View.VISIBLE
             }
 
             else {
-                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                setViewEnable(true, requireActivity())
                 binding.googleDriveLoading.root.visibility = View.GONE
             }
         }
@@ -102,6 +101,7 @@ class GoogleDriveFragment : Fragment(), View.OnClickListener {
                         .build()
                 val signInClient = GoogleSignIn.getClient(requireContext(), signInOptions)
 
+                @Suppress("DEPRECATION")
                 startActivityForResult(signInClient.signInIntent, GOOGLE_DRIVE_SIGN)
             }
 
@@ -114,7 +114,6 @@ class GoogleDriveFragment : Fragment(), View.OnClickListener {
                 signInClient.signOut().addOnSuccessListener {
                     googleDriveVM.getUser()
                 }
-
             }
 
             binding.googleDriveUploadButton -> {

@@ -20,7 +20,6 @@ class ReadingAdapter(private val showedReadingBookInfoArray : Array<ShowedBookIn
         else Picasso.get().load(R.drawable.book_cover_place_holder).into(holder.bookCoverImageView)
         holder.toolbar.title = showedReadingBookInfoArray[position].title
         holder.toolbar.subtitle = showedReadingBookInfoArray[position].author
-        holder.toolbar.inflateMenu(R.menu.reading_book_context_menu)
     }
 
     override fun getItemCount(): Int {

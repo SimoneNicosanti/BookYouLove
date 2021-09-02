@@ -4,7 +4,6 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
-import android.database.Cursor
 import android.net.Uri
 import android.util.Log
 import android.widget.*
@@ -55,14 +54,13 @@ class QuoteOfTheDayWidget : AppWidgetProvider() {
 
 class QuoteOfTheDayWidgetService : RemoteViewsService() {
     override fun onGetViewFactory(intent: Intent): RemoteViewsFactory {
-        return QuoteOfTheDayRemoteViewsFactory(this.applicationContext, intent)
+        return QuoteOfTheDayRemoteViewsFactory(this.applicationContext)
     }
 }
 
 
 class QuoteOfTheDayRemoteViewsFactory(
-        private val context : Context,
-        intent : Intent
+        private val context: Context
 ) : RemoteViewsService.RemoteViewsFactory {
 
     private var widgetQuote : Quote? = null
@@ -73,7 +71,7 @@ class QuoteOfTheDayRemoteViewsFactory(
     }
 
     override fun onDataSetChanged() {
-        //quoteCursor = context.contentResolver.query(QuotesProvider().URI_RANDOM, null, null, null, null)
+
         widgetQuote = myAppDatabase.quoteDao().loadRandomQuote()
         /*
             Devo per forza utilizzare l'istanza del DB in maniera diretta senza passare per il Provider.

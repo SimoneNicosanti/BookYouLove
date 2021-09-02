@@ -14,6 +14,7 @@ import it.simone.bookyoulove.database.DAO.ShowQuoteInfo
 import it.simone.bookyoulove.database.entity.Quote
 import it.simone.bookyoulove.databinding.FragmentQuoteDetailBinding
 import it.simone.bookyoulove.view.dialog.ConfirmDeleteDialogFragment
+import it.simone.bookyoulove.view.setViewEnable
 import it.simone.bookyoulove.viewmodel.quotes.QuoteDetailViewModel
 
 
@@ -30,6 +31,7 @@ class QuoteDetailFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         quoteDetailVM.getSingleQuote(args.quoteDetailQuoteId, args.quoteDetailBookId)
         setHasOptionsMenu(true)
 
@@ -48,6 +50,7 @@ class QuoteDetailFragment : Fragment() {
     ): View {
 
         binding = FragmentQuoteDetailBinding.inflate(inflater, container, false)
+        setViewEnable(true, requireActivity())
 
         setObservers()
 

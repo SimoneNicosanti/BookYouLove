@@ -1,4 +1,4 @@
-package it.simone.bookyoulove.view
+package it.simone.bookyoulove.view.charts
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
@@ -8,13 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.databinding.FragmentChartsBinding
-import it.simone.bookyoulove.view.charts.*
+import it.simone.bookyoulove.view.setViewEnable
 import it.simone.bookyoulove.viewmodel.charts.ChartsViewModel
 
 private const val CHARTS_FRAGMENTS_COUNT = 2
@@ -35,6 +34,9 @@ class ChartsFragment : Fragment() {
         binding = FragmentChartsBinding.inflate(inflater, container, false)
         setObservers()
         chartsVM.getAllChartsData()
+
+        setViewEnable(true, requireActivity())
+
         return binding.root
     }
 
@@ -65,12 +67,14 @@ class ChartsFragment : Fragment() {
     private fun setObservers() {
         val isAccessingDatabaseObserver = Observer<Boolean> {isAccessing ->
             if (isAccessing) {
-                requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                setViewEnable(false, requireActivity(), )
+                requireActivity().window?.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
                 binding.chartsLoading.root.visibility = View.VISIBLE
             }
 
             else {
-                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                setViewEnable(true, requireActivity(), )
+                requireActivity().window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
                 binding.chartsLoading.root.visibility = View.GONE
             }
         }

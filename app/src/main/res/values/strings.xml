@@ -118,4 +118,5 @@
     <string name="download_completed_string">Download Completed!! Please Restart The App</string>
     <string name="general_settings_string">General Settings</string>
     <string name="date_format_string">Date Format</string>
+    <string name="favorite_string">Favorite</string>
 </resources>

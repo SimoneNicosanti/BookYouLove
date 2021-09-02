@@ -15,6 +15,7 @@ import it.simone.bookyoulove.adapter.QuoteListAdapter
 import it.simone.bookyoulove.database.DAO.ShowQuoteInfo
 import it.simone.bookyoulove.database.entity.Quote
 import it.simone.bookyoulove.databinding.FragmentQuoteListBinding
+import it.simone.bookyoulove.view.setViewEnable
 import it.simone.bookyoulove.viewmodel.quotes.QuoteListViewModel
 
 
@@ -53,6 +54,7 @@ class QuoteListFragment : Fragment(), QuoteListAdapter.OnQuoteListHolderClick, S
                               savedInstanceState: Bundle?): View {
 
         binding = FragmentQuoteListBinding.inflate(inflater, container, false)
+        setViewEnable(true, requireActivity())
 
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>("quoteDeletedKey")?.observe(viewLifecycleOwner) {
             if (it) {
@@ -84,12 +86,12 @@ class QuoteListFragment : Fragment(), QuoteListAdapter.OnQuoteListHolderClick, S
 
         val isAccessingDatabaseObserver = Observer<Boolean> { isAccessing ->
             if (isAccessing) {
-                requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                setViewEnable(false, requireActivity(), )
                 binding.quoteListLoading.root.visibility = View.VISIBLE
             }
 
             else {
-                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                setViewEnable(true, requireActivity(), )
                 binding.quoteListLoading.root.visibility = View.GONE
             }
         }

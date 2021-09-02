@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.databinding.FragmentEndedThoughtBinding
+import it.simone.bookyoulove.view.setViewEnable
 import it.simone.bookyoulove.viewmodel.ended.EndedThoughtViewModel
 
 
@@ -29,8 +30,10 @@ class EndedThoughtFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         isEditing = savedInstanceState?.getBoolean("isEditing") ?: false
         setHasOptionsMenu(true)
+
     }
 
 
@@ -40,6 +43,7 @@ class EndedThoughtFragment : Fragment() {
 
         binding = FragmentEndedThoughtBinding.inflate(inflater, container, false)
 
+        setViewEnable(true, requireActivity())
 
         binding.endedThoughtTitleTextView.text = getString(R.string.final_thought_string)
         setUI(isEditing)

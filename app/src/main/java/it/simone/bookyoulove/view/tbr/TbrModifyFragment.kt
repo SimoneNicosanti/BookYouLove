@@ -25,6 +25,7 @@ import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.databinding.FragmentTbrModifyBinding
 import it.simone.bookyoulove.view.dialog.AlertDialogFragment
 import it.simone.bookyoulove.view.dialog.CoverLinkPickerFragment
+import it.simone.bookyoulove.view.setViewEnable
 import it.simone.bookyoulove.viewmodel.reading.ISBN_FIND_ITEM_ERROR
 import it.simone.bookyoulove.viewmodel.reading.ISBN_INTERNET_ACCESS_ERROR
 import it.simone.bookyoulove.viewmodel.reading.ISBN_NO_ERROR
@@ -68,6 +69,7 @@ class TbrModifyFragment : Fragment(), View.OnClickListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         binding = FragmentTbrModifyBinding.inflate(inflater, container, false)
+        setViewEnable(true, requireActivity())
 
         setObservers()
 
@@ -120,12 +122,12 @@ class TbrModifyFragment : Fragment(), View.OnClickListener {
 
         val isAccessingObserver = Observer<Boolean> {isAccessing ->
             if (isAccessing) {
-                requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                setViewEnable(false, requireActivity(), )
                 binding.tbrModifyLoading.root.visibility = View.VISIBLE
             }
 
             else {
-                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                setViewEnable(true, requireActivity(), )
                 binding.tbrModifyLoading.root.visibility = View.GONE
             }
         }

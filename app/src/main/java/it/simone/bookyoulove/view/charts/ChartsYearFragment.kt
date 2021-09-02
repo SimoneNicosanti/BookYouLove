@@ -11,6 +11,7 @@ import android.widget.EditText
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.charts.PieChart
@@ -23,6 +24,7 @@ import com.google.android.material.snackbar.Snackbar
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.databinding.FragmentChartsYearBinding
 import it.simone.bookyoulove.model.ChartsBookData
+import it.simone.bookyoulove.view.setViewEnable
 import it.simone.bookyoulove.viewmodel.charts.*
 import java.text.DateFormatSymbols
 import java.util.*
@@ -30,7 +32,9 @@ import kotlin.collections.ArrayList
 
 
 const val TEXT_DATA_SIZE = 10F
+const val ENDED_DETAIL_ENTRY_CODE = 1
 
+//Non posso inserire animazione sul constraintlayout perché entra in conflitto con l'animazione del ViewPager
 
 class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnChartValueSelectedListener {
 
@@ -42,16 +46,22 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
     private val chartsYearVM : ChartsYearViewModel by viewModels()
 
 
+
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         // Inflate the layout for this fragment
         binding = FragmentChartsYearBinding.inflate(inflater, container, false)
 
+        setViewEnable(true, requireActivity())
+
         val arrayAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, resources.getStringArray(R.array.charts_year_chart_type_array))
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         //Quando è impostato l'adapter viene chiamata la funzione onItemSelected che invoca l'aggiornamento delle statistiche
         binding.chartsYearChartTypeSpinner.adapter = arrayAdapter
+
         binding.chartsYearChartTypeSpinner.onItemSelectedListener = this
+        binding.chartsYearSpinner.onItemSelectedListener = this
 
         setObservers()
         return binding.root
@@ -70,8 +80,6 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
             arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             //Quando è impostato l'adapter viene chiamata la funzione onItemSelected che invoca l'aggiornamento delle statistiche
             binding.chartsYearSpinner.adapter = arrayAdapter
-
-            binding.chartsYearSpinner.onItemSelectedListener = this
         }
         chartsYearVM.currentYearList.observe(viewLifecycleOwner, currentYearListObserver)
 
@@ -97,7 +105,7 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
     private fun setPagesYearTotal(it: ChartsYearInfo) {
         var totalYearPages = 0F
         for (monthIndex in 0 until 12) totalYearPages += it.pagesPerMonth[monthIndex]
-        binding.chartsYearPagesInclude.chartsYearPagesTotalTextView.text = totalYearPages.toString()
+        binding.chartsYearPagesInclude.chartsYearPagesTotalTextView.text = totalYearPages.toLong().toString()
     }
 
     private fun setBooksYearTotal(it: ChartsYearInfo) {
@@ -301,7 +309,11 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
         if (e != null) {
             val x = e.x.toInt()
             val rateChartSnackbar = Snackbar.make(requireView(), booksOfTheYearArray[x].title, Snackbar.LENGTH_SHORT)
-
+            rateChartSnackbar.setAction(R.string.goto_string) {
+                val action = ChartsFragmentDirections.actionChartsFragmentToEndedDetailFragment(booksOfTheYearArray[x].bookId)
+                action.endedDetailEntryPoint = ENDED_DETAIL_ENTRY_CODE
+                findNavController().navigate(action)
+            }
             rateChartSnackbar.anchorView = requireActivity().findViewById(R.id.bottomNavigationView)
             rateChartSnackbar.show()
         }

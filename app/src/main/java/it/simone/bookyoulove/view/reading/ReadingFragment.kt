@@ -15,6 +15,7 @@ import it.simone.bookyoulove.adapter.ReadingAdapter
 import it.simone.bookyoulove.database.DAO.ShowedBookInfo
 import it.simone.bookyoulove.databinding.FragmentReadingBinding
 import it.simone.bookyoulove.view.dialog.LeavingReadingDialog
+import it.simone.bookyoulove.view.setViewEnable
 import it.simone.bookyoulove.viewmodel.reading.ReadingViewModel
 
 
@@ -36,6 +37,7 @@ class ReadingFragment : Fragment() , ReadingAdapter.OnReadingItemMenuItemClickLi
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
         binding = FragmentReadingBinding.inflate(inflater, container, false)
+        setViewEnable(true, requireActivity())
 
         setObservers()
 
@@ -80,12 +82,12 @@ class ReadingFragment : Fragment() , ReadingAdapter.OnReadingItemMenuItemClickLi
 
         val isAccessingDatabaseObserver = Observer<Boolean> { isAccessing ->
             if (isAccessing) {
-                requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                setViewEnable(false, requireActivity(), )
                 binding.loadingInclude.root.visibility = View.VISIBLE
             }
 
             else {
-                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                setViewEnable(true, requireActivity(), )
                 binding.loadingInclude.root.visibility = View.GONE
             }
         }

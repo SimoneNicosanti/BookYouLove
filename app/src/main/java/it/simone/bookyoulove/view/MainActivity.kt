@@ -1,24 +1,18 @@
 package it.simone.bookyoulove.view
 
+import android.app.Activity
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Gravity
-import android.view.MenuInflater
-import android.view.MenuItem
+import android.view.*
 import android.widget.PopupMenu
-import androidx.annotation.RequiresApi
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.snackbar.Snackbar
 import it.simone.bookyoulove.databinding.ActivityMainBinding
 import com.squareup.picasso.Picasso
 import it.simone.bookyoulove.R
-import it.simone.bookyoulove.view.ended.EndedFragmentDirections
-import it.simone.bookyoulove.view.quotes.QuoteListFragment
-import it.simone.bookyoulove.view.quotes.QuoteListFragmentDirections
 import it.simone.bookyoulove.view.reading.ReadingFragmentDirections
 
 const val START_DATE_SETTER = 0
@@ -51,6 +45,7 @@ class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItem
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
 
         Picasso.get().setIndicatorsEnabled(true)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -143,6 +138,9 @@ class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItem
             else -> false
         }
     }
+}
 
-
+fun setViewEnable(isEnabled : Boolean, activity: Activity) {
+    if (isEnabled) activity.window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+    else activity.window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
 }

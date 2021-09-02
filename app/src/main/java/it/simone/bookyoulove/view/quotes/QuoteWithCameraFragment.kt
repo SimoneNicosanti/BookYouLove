@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
@@ -28,6 +27,7 @@ import com.yalantis.ucrop.UCrop
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.databinding.FragmentQuoteWithCameraBinding
 import it.simone.bookyoulove.view.dialog.AlertDialogFragment
+import it.simone.bookyoulove.view.setViewEnable
 import kotlinx.coroutines.*
 import java.io.File
 import java.util.concurrent.Executors
@@ -45,7 +45,6 @@ class QuoteWithCameraFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
-
     }
 
 
@@ -55,6 +54,7 @@ class QuoteWithCameraFragment : Fragment() {
     ): View {
 
         binding = FragmentQuoteWithCameraBinding.inflate(inflater, container, false)
+        setViewEnable(true, requireActivity())
 
         return binding.root
     }
@@ -78,12 +78,12 @@ class QuoteWithCameraFragment : Fragment() {
 
         val isAccessingObserver = Observer<Boolean> { isAccessing ->
             if (isAccessing) {
-                requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                setViewEnable(false, requireActivity(), )
                 binding.quoteWithCameraLoading.root.visibility = View.VISIBLE
             }
 
             else {
-                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                setViewEnable(true, requireActivity(), )
                 binding.quoteWithCameraLoading.root.visibility = View.GONE
             }
         }

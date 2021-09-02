@@ -20,7 +20,7 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
     private val myAppDatabase = AppDatabase.getDatabaseInstance(application.applicationContext)
     private val endedModel = EndedModel(myAppDatabase)
     private val myApp : Application = application
-    private var sortType = ""
+    //private var sortType = ""
 
     //Lo preimposto in modo da non avere mai un null, ma al massimo un array vuoto
     private var loadedArray : Array<ShowedBookInfo> = arrayOf()
@@ -31,23 +31,22 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
 
     val isAccessingDatabase =  MutableLiveData(false)
     val currentReadList = MutableLiveData<Array<ShowedBookInfo>>()
-    private var changedEndedList = true
+    private var loadedOnce = false
 
     var currentSelectedPosition : Int = -1
 
     fun getEndedList() {
-        if(changedEndedList) {
-            //Se l'array è cambiato lo ricarico e lo riordino
+        if(!loadedOnce) {
             Log.d("Nicosanti", "Modificato")
             isAccessingDatabase.value = true
             viewModelScope.launch {
                 loadedArray = endedModel.loadEndedList(ENDED_BOOK_STATE)
                 isAccessingDatabase.value = false
-                changedEndedList = false
+                loadedOnce = true
                 sortBookArray(loadedArray)
             }
         }
-
+        /*
         else {
             //Se l'array è rimasto uguale allora eseguo SOLO il riordino se è cambiato il tipo di ordinamento
             val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(myApp.applicationContext)
@@ -60,13 +59,9 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
             else if (filterText == "") {
                 currentReadList.value = loadedArray
             }
-        }
+        }*/
     }
 
-
-    fun setEndedListChanged(changed : Boolean) {
-        changedEndedList = changed
-    }
 
 
     private fun sortBookArray(notSortedArray: Array<ShowedBookInfo>) {
@@ -77,7 +72,7 @@ class EndedViewModel(application: Application) : AndroidViewModel(application) {
             val sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(myApp.applicationContext)
             val order = sharedPreferences.getString("endedOrderPreference", "end_date")
-            sortType = order.toString()
+            //sortType = order
             loadedArray = when (order) {
                 "start_date" -> endedModel.sortByDate(notSortedArray, SORT_START_DATE)
                 "end_date" -> endedModel.sortByDate(notSortedArray, SORT_END_DATE)

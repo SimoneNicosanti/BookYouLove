@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
@@ -18,11 +19,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.adapter.EndedAdapter
 import it.simone.bookyoulove.database.DAO.ShowedBookInfo
+import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.databinding.FragmentEndedBinding
-import it.simone.bookyoulove.view.SEARCH_BY_AUTHOR
-import it.simone.bookyoulove.view.SEARCH_BY_RATE
-import it.simone.bookyoulove.view.SEARCH_BY_TITLE
-import it.simone.bookyoulove.view.SEARCH_BY_YEAR
+import it.simone.bookyoulove.view.*
 import it.simone.bookyoulove.viewmodel.ended.EndedViewModel
 
 
@@ -30,7 +29,7 @@ class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListene
 
     private lateinit var binding: FragmentEndedBinding
 
-    private val endedVM : EndedViewModel by activityViewModels()
+    private val endedVM : EndedViewModel by viewModels()
     private lateinit var endedBookArray : Array<ShowedBookInfo>
 
     private var mySearchView : SearchView? = null
@@ -60,6 +59,8 @@ class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListene
         // Inflate the layout for this fragment
         binding = FragmentEndedBinding.inflate(inflater, container, false)
 
+        setViewEnable(true, requireActivity())
+
         val spinnerAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item,
                 arrayOf(getString(R.string.title_string),
                         getString(R.string.author_string),
@@ -79,18 +80,30 @@ class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListene
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>("deleteKey")?.observe(viewLifecycleOwner) {
+            if (it) {
+                endedVM.notifyArrayItemDelete()
+                findNavController().currentBackStackEntry?.savedStateHandle?.remove<Boolean>("deleteKey")
+            }
+        }
+
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Book>("endedModifiedBookKey")?.observe(viewLifecycleOwner) {
+            endedVM.notifyArrayItemChanged(it)
+            findNavController().currentBackStackEntry?.savedStateHandle?.remove<Book>("endedModifiedBookKey")
+        }
     }
 
 
     private fun setObservers() {
         val isAccessingDatabaseObserver = Observer<Boolean> { isAccessing ->
             if (isAccessing) {
-                requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                setViewEnable(false, requireActivity(), )
                 binding.endedLoading.root.visibility = View.VISIBLE
             }
 
             else {
-                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                setViewEnable(true, requireActivity(), )
                 binding.endedLoading.root.visibility = View.GONE
             }
         }
@@ -158,7 +171,6 @@ class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListene
 
     override fun onRecyclerViewItemSelected(position: Int) {
         val selectedBook : ShowedBookInfo = endedBookArray[position]
-        //endedVM.setSelectedBook(selectedBook)
         endedVM.currentSelectedPosition = position
         val navController = findNavController()
         val action = EndedFragmentDirections.actionEndedFragmentToEndedDetailFragment(selectedBook.bookId)
@@ -179,7 +191,6 @@ class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListene
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
     }
-
 
 }
 

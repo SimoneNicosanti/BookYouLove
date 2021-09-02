@@ -86,6 +86,7 @@ class  NewReadingBookFragment : Fragment() , View.OnClickListener {
     ): View {
 
         binding = FragmentNewReadingBookBinding.inflate(inflater, container, false)
+        setViewEnable(true, requireActivity())
 
         binding.newBookCoverImageView.setOnClickListener(this)
         binding.newBookStartDateText.setOnClickListener(this)
@@ -135,12 +136,12 @@ class  NewReadingBookFragment : Fragment() , View.OnClickListener {
 
         val isAccessingDatabaseObserver = Observer<Boolean> { isAccessing ->
             if (isAccessing) {
-                requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                setViewEnable(false, requireActivity())
                 binding.modifyReadingLoading.root.visibility = View.VISIBLE
             }
 
             else {
-                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                setViewEnable(true, requireActivity())
                 binding.modifyReadingLoading.root.visibility = View.GONE
             }
         }

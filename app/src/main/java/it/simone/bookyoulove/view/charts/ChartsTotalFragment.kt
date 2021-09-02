@@ -17,6 +17,7 @@ import com.github.mikephil.charting.utils.ColorTemplate
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.databinding.FragmentChartsTotalBinding
 import it.simone.bookyoulove.model.ChartsBookData
+import it.simone.bookyoulove.view.setViewEnable
 import it.simone.bookyoulove.viewmodel.charts.ChartsTotalViewModel
 import it.simone.bookyoulove.viewmodel.charts.ChartsViewModel
 import it.simone.bookyoulove.viewmodel.charts.TotalChartData
@@ -30,6 +31,7 @@ class ChartsTotalFragment : Fragment() {
     private val chartsVM : ChartsViewModel by activityViewModels()
     private val chartsTotalVM : ChartsTotalViewModel by viewModels()
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,6 +40,8 @@ class ChartsTotalFragment : Fragment() {
         binding = FragmentChartsTotalBinding.inflate(inflater, container, false)
 
         setObservers()
+
+        setViewEnable(true, requireActivity())
 
         return binding.root
     }

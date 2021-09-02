@@ -16,6 +16,7 @@ import it.simone.bookyoulove.database.DAO.ShowedBookInfo
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.databinding.FragmentTbrBinding
 import it.simone.bookyoulove.view.dialog.ConfirmDeleteDialogFragment
+import it.simone.bookyoulove.view.setViewEnable
 import it.simone.bookyoulove.viewmodel.tbr.TbrViewModel
 
 
@@ -46,6 +47,7 @@ class TbrFragment : Fragment(), TbrAdapter.OnTbrItemClickedListener, SearchView.
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentTbrBinding.inflate(inflater, container, false)
+        setViewEnable(true, requireActivity())
 
         setObservers()
 
@@ -89,12 +91,12 @@ class TbrFragment : Fragment(), TbrAdapter.OnTbrItemClickedListener, SearchView.
 
         val isAccessingObserver = Observer<Boolean> { isAccessing ->
             if (isAccessing) {
-                requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                setViewEnable(false, requireActivity(), )
                 binding.tbrLoading.root.visibility = View.VISIBLE
             }
 
             else {
-                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                setViewEnable(true, requireActivity(), )
                 binding.tbrLoading.root.visibility = View.GONE
             }
         }

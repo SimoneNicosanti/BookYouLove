@@ -17,6 +17,7 @@ import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.databinding.FragmentEndedDetailBinding
 import it.simone.bookyoulove.utilsClass.DateFormatClass
 import it.simone.bookyoulove.view.dialog.ConfirmDeleteDialogFragment
+import it.simone.bookyoulove.view.setViewEnable
 import it.simone.bookyoulove.viewmodel.charts.ChartsViewModel
 import it.simone.bookyoulove.viewmodel.ended.DetailEndedViewModel
 import it.simone.bookyoulove.viewmodel.ended.EndedViewModel
@@ -26,7 +27,7 @@ class EndedDetailFragment : Fragment(), View.OnClickListener {
 
     private lateinit var binding : FragmentEndedDetailBinding
     private val endedDetailVM : DetailEndedViewModel by viewModels()
-    private val endedVM : EndedViewModel by activityViewModels()
+    //private val endedVM : EndedViewModel by activityViewModels()
     private val chartsVM : ChartsViewModel by activityViewModels()
 
 
@@ -40,10 +41,11 @@ class EndedDetailFragment : Fragment(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        setViewEnable(true, requireActivity())
+
         childFragmentManager.setFragmentResultListener("deleteKey", this) { _, bundle ->
             if (bundle.getBoolean("deleteConfirm")) {
                 endedDetailVM.deleteCurrentBook()
-                //Notifico la cancellazione per il grafico dei charts
             }
         }
 
@@ -77,6 +79,7 @@ class EndedDetailFragment : Fragment(), View.OnClickListener {
 
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Book>("endedModifiedBook")?.observe(viewLifecycleOwner) { changedBook ->
             endedDetailVM.onEndedBookChanged(changedBook)
+            findNavController().previousBackStackEntry?.savedStateHandle?.set("endedModifiedBookKey", changedBook)          //Comunico al precedente la modifica del libro
             findNavController().currentBackStackEntry?.savedStateHandle?.remove<Book>("endedModifiedBook")
         }
 
@@ -87,12 +90,12 @@ class EndedDetailFragment : Fragment(), View.OnClickListener {
 
         val isAccessingDatabaseObserver = Observer<Boolean> { isAccessing ->
             if (isAccessing) {
-                requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                setViewEnable(false, requireActivity(), )
                 binding.endedDetailLoading.root.visibility = View.VISIBLE
             }
 
             else {
-                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                setViewEnable(true, requireActivity(), )
                 binding.endedDetailLoading.root.visibility = View.GONE
             }
         }
@@ -134,8 +137,9 @@ class EndedDetailFragment : Fragment(), View.OnClickListener {
 
         val deleteCompletedObserver = Observer<Boolean> { completed ->
             if (completed) {
-                endedVM.notifyArrayItemDelete()
+                //endedVM.notifyArrayItemDelete()
                 chartsVM.changeLoadedStatus()
+                findNavController().previousBackStackEntry?.savedStateHandle?.set("deleteKey", true)        //Comunico la cancellazione alla lista degli Ended
                 findNavController().popBackStack()
             }
         }
@@ -146,6 +150,15 @@ class EndedDetailFragment : Fragment(), View.OnClickListener {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.ended_detail_fragment_menu, menu)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        //Nel caso in cui si entri in questo fragment partendo da ChartsFragment, non permetto all'utente di modificare il libro, ma solo di visualizzarlo
+        if (args.endedDetailEntryPoint != 0) {
+            menu.removeItem(R.id.endedDetailMenuEditItem)
+            menu.removeItem(R.id.endedDetailMenuDeleteItem)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
