@@ -29,20 +29,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <Button
-                android:id="@+id/button2"
-                android:layout_width="12dp"
-                android:layout_height="944dp"
-                android:text="Button"
-                android:visibility="invisible"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <ImageView
                 android:id="@+id/modifyEndedCoverImageView"
                 android:layout_width="@dimen/ended_modify_cover_width"
                 android:layout_height="@dimen/ended_modify_cover_height"
                 android:layout_marginVertical="@dimen/ended_modify_cover_margin_vert"
+                android:contentDescription="@string/book_cover_string"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -74,7 +66,10 @@
                         android:id="@+id/modifyEndedTitleText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/ended_modify_title_text_size" />
+                        android:hint="@string/title_string"
+                        android:inputType="text"
+                        android:textSize="@dimen/ended_modify_title_text_size"
+                        android:autofillHints="" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -104,6 +99,9 @@
                         android:id="@+id/modifyEndedAuthorText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:autofillHints=""
+                        android:hint="@string/author_string"
+                        android:inputType="text"
                         android:textSize="@dimen/ended_modify_title_text_size" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -246,7 +244,9 @@
                         android:id="@+id/modifyEndedPagesText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:autofillHints=""
                         android:gravity="center_horizontal"
+                        android:hint="@string/pages_string"
                         android:inputType="number"
                         android:maxLength="5" />
                 </LinearLayout>
@@ -297,13 +297,6 @@
                             android:isIndicator="false" />
                     </LinearLayout>
 
-                    <ImageButton
-                        android:id="@+id/endedDetailRateCardFlipButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_round_arrow_drop_up"
-                        android:visibility="gone" />
-
                     <LinearLayout
                         android:id="@+id/endedDetailOtherRatesLayout"
                         android:layout_width="match_parent"
@@ -339,7 +332,7 @@
 
                         <LinearLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="0dp"
                             android:layout_weight="1"
                             android:gravity="center"
                             android:orientation="horizontal"
@@ -349,7 +342,6 @@
                                 android:id="@+id/textView28"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
                                 android:paddingHorizontal="@dimen/ended_detail_other_rates_text_hor_padding"
                                 android:text="@string/emotions_string" />
 
@@ -358,7 +350,6 @@
                                 style="@android:style/Widget.Material.Light.RatingBar.Small"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
                                 android:isIndicator="false"
                                 android:numStars="5" />
                         </LinearLayout>

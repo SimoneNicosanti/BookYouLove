@@ -116,4 +116,9 @@
     <string name="general_settings_string">Impostazioni Generali</string>
     <string name="date_format_string">Formato Data</string>
     <string name="favorite_string">Preferito</string>
+    <string name="icon_string">Icona</string>
+    <string name="flip_string">Apri/Chiudi</string>
+    <string name="google_drive_logo_string">Logo Google Drive</string>
+    <string name="google_books_preview_string">Anteprima di Google Books</string>
+    <string name="take_string">Scatta</string>
 </resources>

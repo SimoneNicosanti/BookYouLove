@@ -34,6 +34,7 @@
                 android:layout_width="@dimen/new_book_cover_width"
                 android:layout_height="@dimen/new_book_cover_height"
                 android:layout_marginVertical="20dp"
+                android:contentDescription="@string/book_cover_string"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -318,13 +319,6 @@
                             android:isIndicator="true" />
                     </LinearLayout>
 
-                    <ImageButton
-                        android:id="@+id/endedDetailRateCardFlipButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_round_arrow_drop_up"
-                        android:visibility="gone" />
-
                     <LinearLayout
                         android:id="@+id/endedDetailOtherRatesLayout"
                         android:layout_width="match_parent"
@@ -360,7 +354,7 @@
 
                         <LinearLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="0dp"
                             android:layout_weight="1"
                             android:gravity="center"
                             android:orientation="horizontal"

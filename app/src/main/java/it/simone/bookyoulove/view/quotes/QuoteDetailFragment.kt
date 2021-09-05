@@ -10,7 +10,6 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import it.simone.bookyoulove.R
-import it.simone.bookyoulove.database.DAO.ShowQuoteInfo
 import it.simone.bookyoulove.database.entity.Quote
 import it.simone.bookyoulove.databinding.FragmentQuoteDetailBinding
 import it.simone.bookyoulove.view.dialog.ConfirmDeleteDialogFragment
@@ -98,7 +97,7 @@ class QuoteDetailFragment : Fragment() {
         return when(item.itemId) {
 
             R.id.quoteDetailMenuEditItem -> {
-                findNavController().navigate(QuoteListFragmentDirections.actionGlobalModifyQuoteFragment(requestedQuote.copy(date = requestedQuote.date.copy()), 0L, null, null))
+                findNavController().navigate(QuoteListFragmentDirections.actionGlobalModifyQuoteFragment(requestedQuote.copy(), 0L, null, null))
                 true
             }
 

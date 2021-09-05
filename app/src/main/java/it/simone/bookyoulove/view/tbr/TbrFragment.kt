@@ -17,16 +17,14 @@ import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.databinding.FragmentTbrBinding
 import it.simone.bookyoulove.view.dialog.ConfirmDeleteDialogFragment
 import it.simone.bookyoulove.view.setViewEnable
-import it.simone.bookyoulove.viewmodel.tbr.TbrViewModel
+import it.simone.bookyoulove.viewmodel.BookListViewModel
 
 
 class TbrFragment : Fragment(), TbrAdapter.OnTbrItemClickedListener, SearchView.OnQueryTextListener {
 
     private lateinit var binding : FragmentTbrBinding
 
-    private var tbrShowedBookInfoArray = arrayOf<ShowedBookInfo>()
-
-    private val tbrVM : TbrViewModel by viewModels()
+    private val tbrVM : BookListViewModel by viewModels()
 
     private lateinit var searchView : SearchView
 
@@ -37,7 +35,8 @@ class TbrFragment : Fragment(), TbrAdapter.OnTbrItemClickedListener, SearchView.
 
         if (savedInstanceState != null) searchField = savedInstanceState.getString("searchField").toString()
 
-        tbrVM.getTbrArray()
+        requireActivity().invalidateOptionsMenu()
+        tbrVM.getTbrList()
         setHasOptionsMenu(true)
     }
 
@@ -52,25 +51,26 @@ class TbrFragment : Fragment(), TbrAdapter.OnTbrItemClickedListener, SearchView.
         setObservers()
 
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Book>("newTbrBookKey")?.observe(viewLifecycleOwner) {
-            tbrVM.onNewTbrBookAdded(it)
+            tbrVM.notifyNewArrayItem(it)
             findNavController().currentBackStackEntry?.savedStateHandle?.remove<Book>("newTbrBookKey")
         }
 
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Book>("modifyTbrBookKey")?.observe(viewLifecycleOwner) {
-            tbrVM.onModifyTbrBook(it)
+            tbrVM.notifyArrayItemChanged(it)
             findNavController().currentBackStackEntry?.savedStateHandle?.remove<Book>("modifyTbrBookKey")
         }
 
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>("startedTbrBookKey")?.observe(viewLifecycleOwner) {
             if (it) {
-                tbrVM.onStartedBook()
+                //Iniziare un libro equivale a rimuoverlo dalla lista
+                tbrVM.notifyArrayItemDelete(false)
                 findNavController().currentBackStackEntry?.savedStateHandle?.remove<Boolean>("startedTbrBookKey")
             }
         }
 
         childFragmentManager.setFragmentResultListener("deleteKey", viewLifecycleOwner) { _, bundle ->
             if (bundle.getBoolean("deleteConfirm")) {
-                tbrVM.deleteTbrBook()
+                tbrVM.notifyArrayItemDelete(true)
             }
         }
         return binding.root
@@ -83,20 +83,19 @@ class TbrFragment : Fragment(), TbrAdapter.OnTbrItemClickedListener, SearchView.
 
     private fun setObservers() {
 
-        val currentTbrArrayObserver = Observer<Array<ShowedBookInfo>> {
+        val currentTbrArrayObserver = Observer<MutableList<ShowedBookInfo>> {
             binding.tbrListRecyclerView.adapter = TbrAdapter(it, this)
-            tbrShowedBookInfoArray = it
         }
-        tbrVM.currentTbrArray.observe(viewLifecycleOwner, currentTbrArrayObserver)
+        tbrVM.currentBookList.observe(viewLifecycleOwner, currentTbrArrayObserver)
 
         val isAccessingObserver = Observer<Boolean> { isAccessing ->
             if (isAccessing) {
-                setViewEnable(false, requireActivity(), )
+                setViewEnable(false, requireActivity())
                 binding.tbrLoading.root.visibility = View.VISIBLE
             }
 
             else {
-                setViewEnable(true, requireActivity(), )
+                setViewEnable(true, requireActivity())
                 binding.tbrLoading.root.visibility = View.GONE
             }
         }
@@ -121,11 +120,12 @@ class TbrFragment : Fragment(), TbrAdapter.OnTbrItemClickedListener, SearchView.
 
     override fun onTbrListItemToolbarMenuClicked(position: Int, item: MenuItem?) : Boolean{
 
-        tbrVM.setItemPosition(position)
+        val selectedItem = (binding.tbrListRecyclerView.adapter as TbrAdapter).tbrSet[position]
+        tbrVM.changeSelectedItem(selectedItem)
 
         return when (item?.itemId) {
             R.id.tbrItemMenuEditItem -> {
-                findNavController().navigate(TbrFragmentDirections.actionTbrFragmentToTbrModifyFragment(tbrShowedBookInfoArray[position].copy()))
+                findNavController().navigate(TbrFragmentDirections.actionTbrFragmentToTbrModifyFragment(selectedItem.copy()))
                 true
             }
 
@@ -138,7 +138,7 @@ class TbrFragment : Fragment(), TbrAdapter.OnTbrItemClickedListener, SearchView.
             }
 
             R.id.tbrItemMenuStartItem -> {
-                findNavController().navigate(TbrFragmentDirections.actionTbrFragmentToStartingFragment(tbrShowedBookInfoArray[position].bookId))
+                findNavController().navigate(TbrFragmentDirections.actionTbrFragmentToStartingFragment(selectedItem.bookId))
                 true
             }
             else -> false
@@ -150,6 +150,10 @@ class TbrFragment : Fragment(), TbrAdapter.OnTbrItemClickedListener, SearchView.
         super.onPrepareOptionsMenu(menu)
         searchView = menu.findItem(R.id.tbrFragmentMenuSearchItem).actionView as SearchView
 
+        //Mi serve a pulire la SearchView da eventuali ricerce residue in altri fragments
+        //searchView.setQuery("", false)
+
+        searchView.setOnQueryTextListener(this)
 
         if (searchField == "") {
             searchView.isIconified = true
@@ -158,8 +162,7 @@ class TbrFragment : Fragment(), TbrAdapter.OnTbrItemClickedListener, SearchView.
             searchView.isIconified = false
             searchView.setQuery(searchField, false)
         }
-        //Imposto il listener dopo aver restaurato lo stato della searchView: in questo modo non triggero la onQueryTextChange che invoca il filtro
-        searchView.setOnQueryTextListener(this)
+
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
@@ -169,7 +172,12 @@ class TbrFragment : Fragment(), TbrAdapter.OnTbrItemClickedListener, SearchView.
     override fun onQueryTextChange(newText: String?): Boolean {
         Log.d("Nicosanti", "Text Changed")
         searchField = newText ?: ""
-        tbrVM.onSearchQuery(newText)
+        //Mi assicuro che l'adapter sia valido prima di filtrare: Questo garantisce che non si invochi ricerca su residui di ricerche precedenti
+        binding.tbrListRecyclerView.adapter?.let {
+            it as TbrAdapter
+            it.filter.filter(newText)
+        }
+
         return true
     }
 

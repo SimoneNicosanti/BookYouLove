@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import it.simone.bookyoulove.database.AppDatabase
 import it.simone.bookyoulove.database.entity.Book
-import it.simone.bookyoulove.database.entity.EndDate
 import it.simone.bookyoulove.database.entity.Rate
 import it.simone.bookyoulove.model.EndingModel
 import kotlinx.coroutines.CoroutineScope
@@ -38,7 +37,7 @@ class EndingViewModel(application: Application) : AndroidViewModel(application) 
             odierna, quindi all'utente basta aprirlo per impostare la data di fine a quella del giorno corrente
 
          */
-        loadedBook.endDate = EndDate(loadedBook.startDate!!.startDay, loadedBook.startDate!!.startMonth, loadedBook.startDate!!.startYear)
+        loadedBook.endDate = loadedBook.startDate
         loadedBook.finalThought = ""
         terminateBook.value = loadedBook
     }
@@ -67,7 +66,7 @@ class EndingViewModel(application: Application) : AndroidViewModel(application) 
         terminateBook.value?.finalThought = text.toString()
     }
 
-    fun setEndDate(settedEndDate: EndDate) {
+    fun setEndDate(settedEndDate: Long) {
         terminateBook.value?.endDate = settedEndDate
     }
 

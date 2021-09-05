@@ -28,6 +28,7 @@
                 android:layout_height="285dp"
                 android:layout_marginHorizontal="@dimen/card_view_cover_margin"
                 android:layout_marginVertical="@dimen/card_view_cover_margin"
+                android:contentDescription="@string/book_cover_string"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

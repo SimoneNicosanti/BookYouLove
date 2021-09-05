@@ -35,8 +35,11 @@ class DatePickerFragment: DialogFragment(), DatePickerDialog.OnDateSetListener {
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         //Faccio +1 perché i mesi sono ritornati a partire da indice 0
+        //val returnBundle : Bundle = bundleOf("day" to dayOfMonth, "month" to month + 1, "year" to year)
         val returnKey: String = if (callMode == START_DATE_SETTER) "startDateKey" else "endDateKey"
-        val returnBundle : Bundle = bundleOf("day" to dayOfMonth, "month" to month + 1, "year" to year)
+        val cal = Calendar.getInstance(Locale.getDefault())
+        cal.set(year, month, dayOfMonth)
+        val returnBundle = bundleOf("dateMillis" to cal.timeInMillis)
 
         setFragmentResult(returnKey, returnBundle)
     }
@@ -48,8 +51,8 @@ class DatePickerFragment: DialogFragment(), DatePickerDialog.OnDateSetListener {
             Devo utilizzare il -1 perché la startDate è salvata con i mesi a partire da 1, mentre la Calendar li considera a partire da 0
          */
         val calendar = Calendar.getInstance()
-        if (callMode == END_DATE_SETTER && arguments?.getInt("minDay", -1) != -1) {
-            calendar.set(arguments?.getInt("minYear")!!, arguments?.getInt("minMonth")!! - 1, arguments?.getInt(("minDay"))!!)
+        if (callMode == END_DATE_SETTER && arguments?.getLong("minDateMillis", -1L) != -1L) {
+            calendar.timeInMillis = arguments?.getLong("minDateMillis")!!
             datePickerDialog.datePicker.minDate = calendar.timeInMillis
         }
     }
@@ -57,8 +60,8 @@ class DatePickerFragment: DialogFragment(), DatePickerDialog.OnDateSetListener {
 
     private fun setMaxDate(datePickerDialog: DatePickerDialog) {
         val calendar = Calendar.getInstance()
-        if (callMode == START_DATE_SETTER && arguments?.getInt("maxDay", -1) != -1) {
-            calendar.set(arguments?.getInt("maxYear")!!, arguments?.getInt("maxMonth")!! - 1, arguments?.getInt(("maxDay"))!!)
+        if (callMode == START_DATE_SETTER && arguments?.getLong("maxDateMillis", -1L) != -1L) {
+            calendar.timeInMillis = arguments?.getLong("maxDateMillis")!!
             datePickerDialog.datePicker.maxDate = calendar.timeInMillis
         }
     }

@@ -17,34 +17,32 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.entity.Book
-import it.simone.bookyoulove.database.entity.EndDate
-import it.simone.bookyoulove.database.entity.StartDate
 import it.simone.bookyoulove.databinding.FragmentEndingBinding
 import it.simone.bookyoulove.utilsClass.DateFormatClass
 import it.simone.bookyoulove.view.dialog.DatePickerFragment
+import it.simone.bookyoulove.viewmodel.BookListViewModel
 import it.simone.bookyoulove.viewmodel.charts.ChartsViewModel
 import it.simone.bookyoulove.viewmodel.EndingViewModel
-import it.simone.bookyoulove.viewmodel.reading.ReadingViewModel
 
 
 class EndingFragment : Fragment(), View.OnClickListener, RatingBar.OnRatingBarChangeListener {
 
     private lateinit var binding : FragmentEndingBinding
     private val endingVM : EndingViewModel by viewModels()
-    private val readingVM : ReadingViewModel by activityViewModels()
+    private val readingVM : BookListViewModel by activityViewModels()
     private val chartsVM: ChartsViewModel by activityViewModels()
 
     private val args : EndingFragmentArgs by navArgs()
 
-    private lateinit var terminateStartDate : StartDate
+    private var terminateStartDate : Long = 0L
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         childFragmentManager.setFragmentResultListener("endDateKey", this, { _, bundle ->
-            val settedEndDate = EndDate(bundle.getInt("day"), bundle.getInt("month"), bundle.getInt("year"))
-            binding.endingEndDateText.text = DateFormatClass(requireContext()).computeEndDateString(settedEndDate)
+            val settedEndDate = bundle.getLong("dateMillis")
+            binding.endingEndDateText.text = DateFormatClass(requireContext()).computeDateString(settedEndDate)
             endingVM.setEndDate(settedEndDate)
         })
 
@@ -86,14 +84,14 @@ class EndingFragment : Fragment(), View.OnClickListener, RatingBar.OnRatingBarCh
     private fun setObservers() {
 
         val terminateBookObserver = Observer<Book?> { terminateBook ->
-            binding.endingEndDateText.text = DateFormatClass(requireContext()).computeEndDateString(terminateBook.endDate!!)
+            binding.endingEndDateText.text = DateFormatClass(requireContext()).computeDateString(terminateBook.endDate!!)
             terminateStartDate = terminateBook.startDate!!
         }
         endingVM.terminateBook.observe(viewLifecycleOwner, terminateBookObserver)
 
         val canExitObserver = Observer<Boolean> { canExit ->
             if (canExit) {
-                readingVM.notifyBookTerminated()
+                readingVM.notifyArrayItemDelete(false)
                 chartsVM.changeLoadedStatus()        //Comunico il cambiamento ai charts
                 findNavController().popBackStack()
                 //Non devo comunicare cambiamenti ad endedList perché la lista viene ricaricata in apertura
@@ -134,11 +132,8 @@ class EndingFragment : Fragment(), View.OnClickListener, RatingBar.OnRatingBarCh
 
             binding.endingEndDateCard -> {
                 val datePickerFragment = DatePickerFragment()
-                val minDate = terminateStartDate
                 datePickerFragment.arguments = bundleOf("caller" to END_DATE_SETTER,
-                        "minDay" to minDate.startDay,
-                        "minMonth" to minDate.startMonth,
-                        "minYear" to minDate.startYear)
+                        "minDateMillis" to terminateStartDate)
                 datePickerFragment.show(childFragmentManager, "End Date Picker")
             }
 

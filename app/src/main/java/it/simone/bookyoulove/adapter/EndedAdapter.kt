@@ -3,22 +3,27 @@ package it.simone.bookyoulove.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.RatingBar
-import android.widget.TextView
+import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
+import it.simone.bookyoulove.filters.BookListFilter
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.DAO.ShowedBookInfo
+import it.simone.bookyoulove.view.SEARCH_BY_TITLE
 
 //https://www.youtube.com/watch?v=69C1ljfDvl0
 /*
     Rivedi Video youtube per capire bene quello che succede!!
  */
 
-class EndedAdapter(private val bookSet: Array<ShowedBookInfo>,
-                   private val onRecyclerViewItemSelectedListener : OnRecyclerViewItemSelectedListener,
-                   private val linearLayoutIndicator : Boolean) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class EndedAdapter(private val bookSetAll: MutableList<ShowedBookInfo>,
+                   private val onRecyclerViewItemSelectedListener: OnRecyclerViewItemSelectedListener,
+                   private val linearLayoutIndicator: Boolean) : RecyclerView.Adapter<RecyclerView.ViewHolder>() , Filterable {
+
+    var filterType : Int = SEARCH_BY_TITLE
+
+    val bookSet : MutableList<ShowedBookInfo> = ArrayList(bookSetAll).toMutableList()
+
 
     class GridViewHolder(view: View, private val onRecyclerViewItemSelectedListener: OnRecyclerViewItemSelectedListener) : RecyclerView.ViewHolder(view), View.OnClickListener {
         val coverImageView : ImageView = view.findViewById(R.id.readCoverImageView)
@@ -98,5 +103,9 @@ class EndedAdapter(private val bookSet: Array<ShowedBookInfo>,
 
     interface OnRecyclerViewItemSelectedListener {
         fun onRecyclerViewItemSelected(position: Int)
+    }
+
+    override fun getFilter(): Filter {
+        return BookListFilter(bookSetAll, bookSet, filterType, this)
     }
 }

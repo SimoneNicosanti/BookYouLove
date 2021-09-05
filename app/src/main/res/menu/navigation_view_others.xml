@@ -11,7 +11,7 @@
     <item
         android:id="@+id/navViewMenuGuessTheQuoteItem"
         android:icon="@drawable/ic_round_videogame_icon"
-        android:title="Guess The Quote" />
+        android:title="@string/guess_the_quote_string" />
     <item
         android:id="@+id/navViewMenuSettingsItem"
         android:icon="@drawable/ic_round_settings_bottom_bar"

@@ -16,17 +16,14 @@ import it.simone.bookyoulove.database.DAO.ShowedBookInfo
 import it.simone.bookyoulove.databinding.FragmentReadingBinding
 import it.simone.bookyoulove.view.dialog.LeavingReadingDialog
 import it.simone.bookyoulove.view.setViewEnable
-import it.simone.bookyoulove.viewmodel.reading.ReadingViewModel
-
+import it.simone.bookyoulove.viewmodel.BookListViewModel
 
 
 class ReadingFragment : Fragment() , ReadingAdapter.OnReadingItemMenuItemClickListener {
 
     private lateinit var binding: FragmentReadingBinding
 
-    private val readingVM: ReadingViewModel by activityViewModels()
-
-    private var bookArray : Array<ShowedBookInfo> = arrayOf()
+    private val readingVM: BookListViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,9 +41,11 @@ class ReadingFragment : Fragment() , ReadingAdapter.OnReadingItemMenuItemClickLi
         childFragmentManager.setFragmentResultListener("leavingKey", this) {_, bundle ->
             val moveToTbr = bundle.getBoolean("moveToTbr")
 
-            if (moveToTbr) readingVM.moveReadingBookToTbr()
-            else readingVM.deleteReadingBook()
+            if (moveToTbr) readingVM.notifyBookMove()
+            else readingVM.notifyArrayItemDelete(true)
         }
+
+        readingVM.getReadingList()
 
         return binding.root
     }
@@ -54,8 +53,6 @@ class ReadingFragment : Fragment() , ReadingAdapter.OnReadingItemMenuItemClickLi
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        readingVM.loadReadingBookList()
 
         requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
@@ -82,26 +79,26 @@ class ReadingFragment : Fragment() , ReadingAdapter.OnReadingItemMenuItemClickLi
 
         val isAccessingDatabaseObserver = Observer<Boolean> { isAccessing ->
             if (isAccessing) {
-                setViewEnable(false, requireActivity(), )
+                setViewEnable(false, requireActivity())
                 binding.loadingInclude.root.visibility = View.VISIBLE
             }
 
             else {
-                setViewEnable(true, requireActivity(), )
+                setViewEnable(true, requireActivity())
                 binding.loadingInclude.root.visibility = View.GONE
             }
         }
-        readingVM.isAccessingDatabase.observe(viewLifecycleOwner, isAccessingDatabaseObserver)
+        readingVM.isAccessing.observe(viewLifecycleOwner, isAccessingDatabaseObserver)
 
 
-        val currentListObserver = Observer<Array<ShowedBookInfo>> { newArray ->
+        val currentListObserver = Observer<MutableList<ShowedBookInfo>> { newArray ->
             val cardSlider : CardSliderViewPager = view?.findViewById(R.id.cardSlider)!! 
             if (newArray.isNotEmpty()) {
                 cardSlider.adapter = ReadingAdapter(newArray, this)
             }
 
             else {
-                val placeholderArray = arrayOf(ShowedBookInfo(
+                val placeholderArray = mutableListOf(ShowedBookInfo(
                     0,
                     title = getString(R.string.begin_read_string),
                     "",
@@ -112,48 +109,47 @@ class ReadingFragment : Fragment() , ReadingAdapter.OnReadingItemMenuItemClickLi
                     0))
                 cardSlider.adapter = ReadingAdapter(placeholderArray, this)
             }
-
-            bookArray = newArray
         }
-        readingVM.currentReadingBookArray.observe(viewLifecycleOwner, currentListObserver)
+        readingVM.currentBookList.observe(viewLifecycleOwner, currentListObserver)
     }
 
 
     override fun onReadingItemMenuItemClickListener(position: Int, item: MenuItem?): Boolean {
-
-        if (bookArray.isEmpty()) {
+        val cardSlider = requireView().findViewById<CardSliderViewPager>(R.id.cardSlider)
+        val selectedItem = (cardSlider.adapter as ReadingAdapter).readingBookSetAll[position]
+        if (selectedItem.bookId == 0L) {
+            //Significa che c'è il Place Holder
             val newSnackbar = Snackbar.make(requireView(), getString(R.string.reading_empty_list), Snackbar.LENGTH_SHORT)
             newSnackbar.setAnchorView(R.id.bottomNavigationView)
             newSnackbar.show()
             return true
         }
 
-        //Dico al VM l'indice nella lista dell'elemento selezionato
-        readingVM.setCurrentItemPosition(position)
+        //Dico al VM l'item della lista che è stato selezionato
+        readingVM.changeSelectedItem(selectedItem)
 
         return when (item?.itemId) {
 
             R.id.readingContextMenuTakeNoteItem -> {
                 findNavController().navigate(ReadingFragmentDirections.actionGlobalModifyQuoteFragment(
                     null,
-                    bookArray[position].bookId,
-                    bookArray[position].title,
-                    bookArray[position].author
+                    selectedItem.bookId,
+                    selectedItem.title,
+                    selectedItem.author
                 ))
                 true
             }
 
             R.id.readingContextMenuDetailItem -> {
 
-                val action = ReadingFragmentDirections.actionReadingFragmentToDetailReadingFragment(bookArray[position].bookId)
+                val action = ReadingFragmentDirections.actionReadingFragmentToDetailReadingFragment(selectedItem.bookId)
                 findNavController().navigate(action)
                 true
             }
 
             R.id.readingContextMenuTerminateItem -> {
-                val navController = findNavController()
-                val action = ReadingFragmentDirections.actionReadingFragmentToEndingFragment(bookArray[position].bookId)
-                navController.navigate(action)
+                val action = ReadingFragmentDirections.actionReadingFragmentToEndingFragment(selectedItem.bookId)
+                findNavController().navigate(action)
                 true
             }
 
@@ -163,7 +159,7 @@ class ReadingFragment : Fragment() , ReadingAdapter.OnReadingItemMenuItemClickLi
             }
 
             R.id.readingContextMenuQuotesListItem -> {
-                findNavController().navigate(ReadingFragmentDirections.actionGlobalQuoteListFragment(bookArray[position].bookId))
+                findNavController().navigate(ReadingFragmentDirections.actionGlobalQuoteListFragment(selectedItem.bookId))
                 true
             }
             else -> super.onOptionsItemSelected(item!!)

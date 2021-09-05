@@ -40,6 +40,7 @@
                 android:layout_marginHorizontal="@dimen/new_book_cover_margin"
                 android:layout_marginVertical="@dimen/new_book_cover_margin"
                 android:clickable="true"
+                android:contentDescription="@string/book_cover_string"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -71,7 +72,6 @@
                         android:id="@+id/detailReadingTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:singleLine="true"
                         android:textSize="18sp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -102,7 +102,6 @@
                         android:id="@+id/detailReadingAuthor"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:singleLine="true"
                         android:textSize="@dimen/reading_detail_title_text_size" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import it.simone.bookyoulove.database.AppDatabase
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.database.entity.BookSupport
-import it.simone.bookyoulove.database.entity.StartDate
 import it.simone.bookyoulove.view.AUDIOBOOK_SUPPORT
 import it.simone.bookyoulove.view.EBOOK_SUPPORT
 import it.simone.bookyoulove.view.PAPER_SUPPORT
@@ -42,7 +41,7 @@ class StartingViewModel(application: Application) : AndroidViewModel(application
 
     private fun prepareStartingBook(loadedBook: Book): Book {
         val cal = Calendar.getInstance()
-        loadedBook.startDate = StartDate(cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.YEAR))
+        loadedBook.startDate = cal.timeInMillis
         loadedBook.support = BookSupport(
             paperSupport = false,
             ebookSupport = false,
@@ -63,7 +62,7 @@ class StartingViewModel(application: Application) : AndroidViewModel(application
     }
 
 
-    fun changeStartDate(newStartDate: StartDate) {
+    fun changeStartDate(newStartDate: Long) {
         currentStartingBook.value!!.startDate = newStartDate
     }
 

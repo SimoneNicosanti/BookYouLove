@@ -6,7 +6,8 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
-import android.widget.*
+import android.widget.RemoteViews
+import android.widget.RemoteViewsService
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.AppDatabase
 import it.simone.bookyoulove.database.entity.Quote
@@ -32,7 +33,6 @@ class QuoteOfTheDayWidget : AppWidgetProvider() {
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.quoteOfTheDayWidgetListView)
             //Permette di aggiornare la visualizzazione delle informazioni
             appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
-
         }
 
         super.onUpdate(context, appWidgetManager, appWidgetIds)

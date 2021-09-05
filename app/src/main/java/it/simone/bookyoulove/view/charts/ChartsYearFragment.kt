@@ -1,15 +1,14 @@
 package it.simone.bookyoulove.view.charts
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.github.mikephil.charting.charts.BarChart
@@ -24,6 +23,7 @@ import com.google.android.material.snackbar.Snackbar
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.databinding.FragmentChartsYearBinding
 import it.simone.bookyoulove.model.ChartsBookData
+import it.simone.bookyoulove.model.ChartsYearInfo
 import it.simone.bookyoulove.view.setViewEnable
 import it.simone.bookyoulove.viewmodel.charts.*
 import java.text.DateFormatSymbols
@@ -43,8 +43,7 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
     private var booksOfTheYearArray = arrayListOf<ChartsBookData>()
 
     private val chartsVM : ChartsViewModel by activityViewModels()
-    private val chartsYearVM : ChartsYearViewModel by viewModels()
-
+    //private val chartsYearVM : ChartsYearViewModel by viewModels()
 
 
 
@@ -70,10 +69,10 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
 
     private fun setObservers() {
 
-        val currentChartsDataArrayObserver = Observer<Array<ChartsBookData>> {
-            chartsYearVM.setChartsDataArray(it)
+        val readyDataObserver = Observer<Boolean> {
+            if (it) chartsVM.getYearList()
         }
-        chartsVM.currentChartsDataArray.observe(viewLifecycleOwner, currentChartsDataArrayObserver)
+        chartsVM.readyArray.observe(viewLifecycleOwner, readyDataObserver)
 
         val currentYearListObserver = Observer<Array<Int>> {
             val arrayAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, it)
@@ -81,9 +80,9 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
             //Quando è impostato l'adapter viene chiamata la funzione onItemSelected che invoca l'aggiornamento delle statistiche
             binding.chartsYearSpinner.adapter = arrayAdapter
         }
-        chartsYearVM.currentYearList.observe(viewLifecycleOwner, currentYearListObserver)
+        chartsVM.currentYearList.observe(viewLifecycleOwner, currentYearListObserver)
 
-        val currentChartsYearInfoObserver = Observer<ChartsYearInfo> {
+        val yearChartDataObserver = Observer<ChartsYearInfo> {
 
             setBookPerMonthBarChart(it)
             setPagesPerMonthBarChart(it)
@@ -99,7 +98,7 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
 
             booksOfTheYearArray = it.booksOfTheYear
         }
-        chartsYearVM.currentChartsYearInfo.observe(viewLifecycleOwner, currentChartsYearInfoObserver)
+        chartsVM.yearChartData.observe(viewLifecycleOwner, yearChartDataObserver)
     }
 
     private fun setPagesYearTotal(it: ChartsYearInfo) {
@@ -281,7 +280,7 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
         when(parent) {
             binding.chartsYearSpinner -> {
                 val selectedYear = parent.getItemAtPosition(position) as Int
-                chartsYearVM.changeSelectedYear(selectedYear)
+                chartsVM.changeSelectedYear(selectedYear)
             }
 
             binding.chartsYearChartTypeSpinner -> {

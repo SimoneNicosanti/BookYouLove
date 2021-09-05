@@ -1,12 +1,11 @@
-package it.simone.bookyoulove.model.reading
+package it.simone.bookyoulove.model
 
 import it.simone.bookyoulove.database.AppDatabase
 import it.simone.bookyoulove.database.entity.Book
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class NewReadingBookModel(val myAppDatabase : AppDatabase){
-    //TODO("Potrei aggiungere richiesta di importare le citazioni vecchie se libro già letto")
+class ModifyBookModel(private val myAppDatabase: AppDatabase) {
 
     suspend fun loadAuthorArrayFromDatabase() : Array<String> {
         val authorArray : Array<String>
@@ -45,10 +44,11 @@ class NewReadingBookModel(val myAppDatabase : AppDatabase){
     suspend fun updateReadingBookInDatabase(bookToUpdate: Book) {
         withContext(Dispatchers.IO) {
             myAppDatabase.bookDao().updateBooks(bookToUpdate)
+            changeQuotesInfoInDatabase(bookToUpdate)
         }
     }
 
-    suspend fun changeQuotesInfoInDatabase(changedBook : Book) {
+    private suspend fun changeQuotesInfoInDatabase(changedBook : Book) {
 
         withContext(Dispatchers.IO) {
             val oldQuotesArray = myAppDatabase.quoteDao().loadQuotesByBook(changedBook.bookId)
@@ -61,5 +61,4 @@ class NewReadingBookModel(val myAppDatabase : AppDatabase){
             }
         }
     }
-
 }

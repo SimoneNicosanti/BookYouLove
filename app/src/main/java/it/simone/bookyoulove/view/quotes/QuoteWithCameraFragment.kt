@@ -22,7 +22,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
-import com.google.mlkit.vision.text.TextRecognizerOptions
+import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import com.yalantis.ucrop.UCrop
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.databinding.FragmentQuoteWithCameraBinding
@@ -78,12 +78,12 @@ class QuoteWithCameraFragment : Fragment() {
 
         val isAccessingObserver = Observer<Boolean> { isAccessing ->
             if (isAccessing) {
-                setViewEnable(false, requireActivity(), )
+                setViewEnable(false, requireActivity())
                 binding.quoteWithCameraLoading.root.visibility = View.VISIBLE
             }
 
             else {
-                setViewEnable(true, requireActivity(), )
+                setViewEnable(true, requireActivity())
                 binding.quoteWithCameraLoading.root.visibility = View.GONE
             }
         }

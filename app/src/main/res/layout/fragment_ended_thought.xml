@@ -30,17 +30,20 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/final_thought_string"
-                android:textSize="@dimen/ended_thought_title_size" />
+                android:textSize="16sp" />
 
             <EditText
                 android:id="@+id/endedThoughtEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
+                android:autofillHints=""
                 android:background="@android:color/transparent"
                 android:foregroundGravity="top"
                 android:gravity="clip_horizontal"
                 android:hapticFeedbackEnabled="false"
+                android:hint="@string/final_thought_string"
+                android:inputType="text"
                 android:isScrollContainer="true"
                 android:scrollbars="vertical"
                 android:textSize="@dimen/ended_thought_text_size"

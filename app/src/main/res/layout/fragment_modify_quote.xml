@@ -64,6 +64,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autofillHints=""
+                        android:hint="@string/quote_chapter_string"
                         android:inputType="text" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -96,6 +97,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
+                        android:hint="@string/quote_page_string"
                         android:importantForAutofill="no"
                         android:inputType="number"
                         android:maxLength="5" />
@@ -131,6 +133,7 @@
                         android:layout_height="wrap_content"
                         android:autofillHints=""
                         android:background="@android:color/transparent"
+                        android:hint="@string/quote_text_string"
                         android:inputType="textMultiLine|text"
                         android:scrollbars="vertical"
                         android:singleLine="false" />
@@ -163,7 +166,9 @@
                         android:id="@+id/modifyQuoteThoughtEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:autofillHints=""
                         android:background="@android:color/transparent"
+                        android:hint="@string/quote_thought_string"
                         android:inputType="textMultiLine|text" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

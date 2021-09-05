@@ -18,15 +18,14 @@ import it.simone.bookyoulove.databinding.FragmentEndedDetailBinding
 import it.simone.bookyoulove.utilsClass.DateFormatClass
 import it.simone.bookyoulove.view.dialog.ConfirmDeleteDialogFragment
 import it.simone.bookyoulove.view.setViewEnable
+import it.simone.bookyoulove.viewmodel.DetailBookViewModel
 import it.simone.bookyoulove.viewmodel.charts.ChartsViewModel
-import it.simone.bookyoulove.viewmodel.ended.DetailEndedViewModel
-import it.simone.bookyoulove.viewmodel.ended.EndedViewModel
 
 
 class EndedDetailFragment : Fragment(), View.OnClickListener {
 
     private lateinit var binding : FragmentEndedDetailBinding
-    private val endedDetailVM : DetailEndedViewModel by viewModels()
+    private val endedDetailVM : DetailBookViewModel by viewModels()
     //private val endedVM : EndedViewModel by activityViewModels()
     private val chartsVM : ChartsViewModel by activityViewModels()
 
@@ -49,7 +48,7 @@ class EndedDetailFragment : Fragment(), View.OnClickListener {
             }
         }
 
-        endedDetailVM.loadEndedDetailBook(args.endedBookId)
+        endedDetailVM.loadDetailBook(args.endedBookId)
 
         setHasOptionsMenu(true)
     }
@@ -78,7 +77,7 @@ class EndedDetailFragment : Fragment(), View.OnClickListener {
         }
 
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Book>("endedModifiedBook")?.observe(viewLifecycleOwner) { changedBook ->
-            endedDetailVM.onEndedBookChanged(changedBook)
+            endedDetailVM.onBookModified(changedBook)
             findNavController().previousBackStackEntry?.savedStateHandle?.set("endedModifiedBookKey", changedBook)          //Comunico al precedente la modifica del libro
             findNavController().currentBackStackEntry?.savedStateHandle?.remove<Book>("endedModifiedBook")
         }
@@ -90,12 +89,12 @@ class EndedDetailFragment : Fragment(), View.OnClickListener {
 
         val isAccessingDatabaseObserver = Observer<Boolean> { isAccessing ->
             if (isAccessing) {
-                setViewEnable(false, requireActivity(), )
+                setViewEnable(false, requireActivity())
                 binding.endedDetailLoading.root.visibility = View.VISIBLE
             }
 
             else {
-                setViewEnable(true, requireActivity(), )
+                setViewEnable(true, requireActivity())
                 binding.endedDetailLoading.root.visibility = View.GONE
             }
         }
@@ -121,15 +120,13 @@ class EndedDetailFragment : Fragment(), View.OnClickListener {
             binding.endedDetailEbookCheckBox.isChecked = currentBook.support?.ebookSupport ?: false
             binding.endedDetailAudiobookCheckBox.isChecked = currentBook.support?.audiobookSupport ?: false
 
-            val startDateText = DateFormatClass(requireContext()).computeStartDateString(currentBook.startDate)
+            val startDateText = DateFormatClass(requireContext()).computeDateString(currentBook.startDate)
             binding.endedDetailStartDateTextView.text = startDateText
 
-            val endDateText = DateFormatClass(requireContext()).computeEndDateString(currentBook.endDate)
+            val endDateText = DateFormatClass(requireContext()).computeDateString(currentBook.endDate)
             binding.endedDetailEndDateTextView.text = endDateText
 
             endedFinalThought = currentBook.finalThought
-
-            //setRadarChart(currentBook.rate!!)
 
             endedDetailBook = currentBook
         }
@@ -176,8 +173,6 @@ class EndedDetailFragment : Fragment(), View.OnClickListener {
             R.id.endedDetailMenuEditItem -> {
                 val navController = findNavController()
                 val action = EndedDetailFragmentDirections.actionEndedDetailFragmentToModifyEndedFragment(endedDetailBook.copy(
-                        startDate = endedDetailBook.startDate?.copy(),
-                        endDate = endedDetailBook.endDate?.copy(),
                         support = endedDetailBook.support?.copy(),
                         rate = endedDetailBook.rate?.copy()
                 ))

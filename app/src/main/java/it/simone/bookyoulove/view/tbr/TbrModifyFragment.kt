@@ -6,14 +6,13 @@ import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.Fragment
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -23,13 +22,14 @@ import com.squareup.picasso.Picasso
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.databinding.FragmentTbrModifyBinding
+import it.simone.bookyoulove.model.ISBN_FIND_ITEM_ERROR
+import it.simone.bookyoulove.model.ISBN_INTERNET_ACCESS_ERROR
+import it.simone.bookyoulove.model.ISBN_NO_ERROR
+import it.simone.bookyoulove.view.TBR_BOOK_STATE
 import it.simone.bookyoulove.view.dialog.AlertDialogFragment
 import it.simone.bookyoulove.view.dialog.CoverLinkPickerFragment
 import it.simone.bookyoulove.view.setViewEnable
-import it.simone.bookyoulove.viewmodel.reading.ISBN_FIND_ITEM_ERROR
-import it.simone.bookyoulove.viewmodel.reading.ISBN_INTERNET_ACCESS_ERROR
-import it.simone.bookyoulove.viewmodel.reading.ISBN_NO_ERROR
-import it.simone.bookyoulove.viewmodel.tbr.TbrModifyViewModel
+import it.simone.bookyoulove.viewmodel.ModifyBookViewModel
 
 
 class TbrModifyFragment : Fragment(), View.OnClickListener {
@@ -38,14 +38,11 @@ class TbrModifyFragment : Fragment(), View.OnClickListener {
 
     private val args : TbrModifyFragmentArgs by navArgs()
 
-    private val tbrModifyVM : TbrModifyViewModel by viewModels()
+    private val tbrModifyVM : ModifyBookViewModel by viewModels()
 
     private var requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
         if (isGranted) {
             takeIsbnWithCamera()
-        }
-        else {
-            Toast.makeText(requireContext(), "Permesso Negato", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -58,8 +55,11 @@ class TbrModifyFragment : Fragment(), View.OnClickListener {
         if (args.tbrModifyShowedBookInfo != null) {
             tbrModifyVM.getTbrModifyBook(args.tbrModifyShowedBookInfo!!.bookId)
         }
+        else {
+            tbrModifyVM.prepareNewBook(TBR_BOOK_STATE)
+        }
 
-        tbrModifyVM.loadAuthorList()
+        tbrModifyVM.loadAuthorArray()
 
         setHasOptionsMenu(true)
 
@@ -74,15 +74,15 @@ class TbrModifyFragment : Fragment(), View.OnClickListener {
         setObservers()
 
         binding.tbrModifyTitleEditText.doOnTextChanged { text, _, _, _ ->
-            tbrModifyVM.changeTitleText(text)
+            tbrModifyVM.modifyTitle(text)
         }
 
         binding.tbrModifyAuthorEditText.doOnTextChanged {text, _ , _ , _ ->
-            tbrModifyVM.changeAuthorText(text)
+            tbrModifyVM.modifyAuthor(text)
         }
 
         binding.tbrModifyPagesEditText.doOnTextChanged {text , _ , _ , _ ->
-            tbrModifyVM.changePages(text)
+            tbrModifyVM.modifyPages(text.toString())
         }
 
         binding.tbrModifySaveButton.setOnClickListener(this)
@@ -98,12 +98,12 @@ class TbrModifyFragment : Fragment(), View.OnClickListener {
 
             else Picasso.get().load(R.drawable.book_cover_place_holder).into(binding.tbrModifyCoverImageView)
 
-            tbrModifyVM.changeCoverLink(coverLink!!)
+            tbrModifyVM.modifyCover(coverLink!!)
         }
 
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<String>("scannedIsbnKey")?.observe(viewLifecycleOwner) { scannedIsbn ->
             findNavController().currentBackStackEntry?.savedStateHandle?.remove<String>("scannedIsbnKey")
-            tbrModifyVM.findBookByIsbn(scannedIsbn)
+            tbrModifyVM.askBookByIsbn(scannedIsbn)
         }
 
         return binding.root
@@ -122,19 +122,19 @@ class TbrModifyFragment : Fragment(), View.OnClickListener {
 
         val isAccessingObserver = Observer<Boolean> {isAccessing ->
             if (isAccessing) {
-                setViewEnable(false, requireActivity(), )
+                setViewEnable(false, requireActivity())
                 binding.tbrModifyLoading.root.visibility = View.VISIBLE
             }
 
             else {
-                setViewEnable(true, requireActivity(), )
+                setViewEnable(true, requireActivity())
                 binding.tbrModifyLoading.root.visibility = View.GONE
             }
         }
         tbrModifyVM.isAccessing.observe(viewLifecycleOwner, isAccessingObserver)
 
         val authorArrayObserver = Observer<Array<String>> {
-            val authorAdapter = ArrayAdapter<String>(requireContext(), android.R.layout.simple_dropdown_item_1line, it)
+            val authorAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, it)
             binding.tbrModifyAuthorEditText.setAdapter(authorAdapter)
         }
         tbrModifyVM.currentAuthorArray.observe(viewLifecycleOwner, authorArrayObserver)
@@ -152,7 +152,7 @@ class TbrModifyFragment : Fragment(), View.OnClickListener {
 
             else Picasso.get().load(R.drawable.book_cover_place_holder).into(binding.tbrModifyCoverImageView)
         }
-        tbrModifyVM.currentTbrBook.observe(viewLifecycleOwner, currentBookObserver)
+        tbrModifyVM.currentBook.observe(viewLifecycleOwner, currentBookObserver)
 
         val canExitWithBookObserver = Observer<Book> {
             val exitKey : String = if (args.tbrModifyShowedBookInfo == null) {
@@ -191,7 +191,7 @@ class TbrModifyFragment : Fragment(), View.OnClickListener {
 
             binding.tbrModifySaveButton -> {
                 if (binding.tbrModifyTitleEditText.text.toString() != "" && binding.tbrModifyAuthorEditText.text.toString() != "") {
-                    tbrModifyVM.saveTbrBook()
+                    tbrModifyVM.addNewBook()
                 }
 
                 else {
@@ -226,6 +226,5 @@ class TbrModifyFragment : Fragment(), View.OnClickListener {
     private fun takeIsbnWithCamera() {
         findNavController().navigate(TbrModifyFragmentDirections.actionGlobalTakeBookIsbnFragment())
     }
-
 
 }

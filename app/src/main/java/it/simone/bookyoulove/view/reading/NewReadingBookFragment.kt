@@ -23,20 +23,23 @@ import com.google.common.util.concurrent.ListenableFuture
 import com.squareup.picasso.Picasso
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.entity.Book
-import it.simone.bookyoulove.database.entity.StartDate
 import it.simone.bookyoulove.databinding.FragmentNewReadingBookBinding
+import it.simone.bookyoulove.model.ISBN_FIND_ITEM_ERROR
+import it.simone.bookyoulove.model.ISBN_INTERNET_ACCESS_ERROR
+import it.simone.bookyoulove.model.ISBN_NO_ERROR
 import it.simone.bookyoulove.utilsClass.DateFormatClass
 import it.simone.bookyoulove.view.*
 import it.simone.bookyoulove.view.dialog.*
-import it.simone.bookyoulove.viewmodel.reading.*
+import it.simone.bookyoulove.viewmodel.BookListViewModel
+import it.simone.bookyoulove.viewmodel.ModifyBookViewModel
 
 
 class  NewReadingBookFragment : Fragment() , View.OnClickListener {
 
     private lateinit var binding: FragmentNewReadingBookBinding
 
-    private val newReadingVM: NewReadingBookViewModel by viewModels()
-    private val readingVM: ReadingViewModel by activityViewModels()
+    private val newReadingVM: ModifyBookViewModel by viewModels()
+    private val readingVM: BookListViewModel by activityViewModels()
 
     private val args : NewReadingBookFragmentArgs by navArgs()
 
@@ -54,9 +57,9 @@ class  NewReadingBookFragment : Fragment() , View.OnClickListener {
         super.onCreate(savedInstanceState)
 
         childFragmentManager.setFragmentResultListener("startDateKey", this) { _, bundle ->
-            val startDateResult = StartDate(bundle.getInt("day"), bundle.getInt("month"), bundle.getInt("year"))
-            newReadingVM.updateStartDate(startDateResult)
-            binding.newBookStartDateText.text = DateFormatClass(requireContext()).computeStartDateString(startDateResult)
+            val startDateResult = bundle.getLong("dateMillis")
+            newReadingVM.modifyStartDate(startDateResult)
+            binding.newBookStartDateText.text = DateFormatClass(requireContext()).computeDateString(startDateResult)
         }
 
         childFragmentManager.setFragmentResultListener("coverLinkKey",this)  { _, bundle ->
@@ -66,12 +69,15 @@ class  NewReadingBookFragment : Fragment() , View.OnClickListener {
                 R.drawable.cover_not_found).into(binding.newBookCoverImageView)
             else Picasso.get().load(R.drawable.book_cover_place_holder).into(binding.newBookCoverImageView)
 
-            newReadingVM.updateCoverLink(coverLinkResult!!)
+            newReadingVM.modifyCover(coverLinkResult!!)
         }
 
 
         if (args.readingModifyBook != null) {
             newReadingVM.setBookToModify(args.readingModifyBook!!)
+        }
+        else {
+            newReadingVM.prepareNewBook(READING_BOOK_STATE)
         }
         newReadingVM.loadAuthorArray()
 
@@ -98,20 +104,20 @@ class  NewReadingBookFragment : Fragment() , View.OnClickListener {
         setObservers()
 
         binding.newBookTitleInput.doOnTextChanged { text, _, _, _ ->
-            newReadingVM.updateTitle(text)
+            newReadingVM.modifyTitle(text)
         }
         binding.newBookAuthorInput.doOnTextChanged { text, _, _, _ ->
-            newReadingVM.updateAuthor(text)
+            newReadingVM.modifyAuthor(text)
         }
 
         binding.newBookPagesInput.doOnTextChanged { text, _, _, _ ->
-            newReadingVM.updatePages(text.toString())
+            newReadingVM.modifyPages(text.toString())
         }
 
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<String>("scannedIsbnKey")?.observe(viewLifecycleOwner) { scannedIsbn ->
             //Snackbar.make(requireView(), scannedIsbn, Snackbar.LENGTH_LONG).show()
             findNavController().currentBackStackEntry?.savedStateHandle?.remove<String>("scannedIsbnKey")
-            newReadingVM.findBookByIsbn(scannedIsbn)
+            newReadingVM.askBookByIsbn(scannedIsbn)
         }
 
         return binding.root
@@ -145,19 +151,19 @@ class  NewReadingBookFragment : Fragment() , View.OnClickListener {
                 binding.modifyReadingLoading.root.visibility = View.GONE
             }
         }
-        newReadingVM.isAccessingDatabase.observe(viewLifecycleOwner, isAccessingDatabaseObserver)
+        newReadingVM.isAccessing.observe(viewLifecycleOwner, isAccessingDatabaseObserver)
 
         val exitObserver = Observer<Book> { finalBook ->
             Log.d("Nicosanti", "Final Book")
             if (args.readingModifyBook != null) {
                 //Chiamato da Detail
                 //readingVM.readingUpdated(true)
-                readingVM.notifyReadingBookModified(finalBook)
+                readingVM.notifyArrayItemChanged(finalBook)
                 findNavController().previousBackStackEntry?.savedStateHandle?.set("modifiedBook", finalBook)
             }
             else {
                 //Chiamato da Reading
-                readingVM.notifyNewReadingBook(finalBook)
+                readingVM.notifyNewArrayItem(finalBook)
             }
             //Torno indietro dopo salvataggio
             findNavController().popBackStack()
@@ -173,7 +179,7 @@ class  NewReadingBookFragment : Fragment() , View.OnClickListener {
             binding.newBookTitleInput.setText(currentBook.title)
             binding.newBookAuthorInput.setText(currentBook.author)
 
-            binding.newBookStartDateText.text = DateFormatClass(requireContext()).computeStartDateString(currentBook.startDate)
+            binding.newBookStartDateText.text = DateFormatClass(requireContext()).computeDateString(currentBook.startDate)
 
             binding.newBookPaperCheckbox.isChecked = currentBook.support?.paperSupport ?: false
             binding.newBookEbookCheckbox.isChecked = currentBook.support?.ebookSupport ?: false
@@ -221,7 +227,7 @@ class  NewReadingBookFragment : Fragment() , View.OnClickListener {
                 val ebookSupport = binding.newBookEbookCheckbox.isChecked
                 val audiobookSupport = binding.newBookAudiobookCheckbox.isChecked
                 val supportMap = mapOf(PAPER_SUPPORT to paperSupport, EBOOK_SUPPORT to ebookSupport, AUDIOBOOK_SUPPORT to audiobookSupport)
-                newReadingVM.updateSupport(supportMap)
+                newReadingVM.modifySupport(supportMap)
             }
 
 

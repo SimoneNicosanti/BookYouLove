@@ -1,6 +1,6 @@
 package it.simone.bookyoulove.database.entity
 
-import androidx.room.Embedded
+
 import androidx.room.Entity
 import java.io.Serializable
 
@@ -18,5 +18,5 @@ data class Quote (
     var quotePage : Int,
     var quoteChapter : String,
     var quoteThought : String,
-    @Embedded var date : StartDate
+    var date : Long
 ) : Serializable

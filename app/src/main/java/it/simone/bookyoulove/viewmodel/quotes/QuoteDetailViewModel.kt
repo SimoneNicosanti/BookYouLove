@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import it.simone.bookyoulove.database.AppDatabase
 import it.simone.bookyoulove.database.entity.Quote
-import it.simone.bookyoulove.database.entity.StartDate
 import it.simone.bookyoulove.model.quotes.QuoteDetailModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -30,7 +29,7 @@ class QuoteDetailViewModel(application : Application) : AndroidViewModel(applica
             quotePage = 0,
             quoteChapter = "",
             quoteThought = "",
-            date = StartDate(0,0,0)
+            date = 0L
     ))
 
     fun getSingleQuote(quoteId: Long, bookId: Long) {
@@ -51,6 +50,6 @@ class QuoteDetailViewModel(application : Application) : AndroidViewModel(applica
 
 
     fun onQuoteModified(modifiedQuote: Quote?) {
-        currentQuote.value = modifiedQuote
+        modifiedQuote?.let { currentQuote.value = modifiedQuote }
     }
 }

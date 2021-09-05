@@ -3,7 +3,6 @@ package it.simone.bookyoulove.database.DAO
 import android.database.Cursor
 import androidx.room.*
 import it.simone.bookyoulove.database.entity.Quote
-import it.simone.bookyoulove.database.entity.StartDate
 import java.io.Serializable
 
 
@@ -53,5 +52,5 @@ data class ShowQuoteInfo (
         @ColumnInfo(name = "bookAuthor") var bookAuthor : String,
 
         @ColumnInfo(name = "favourite") var favourite : Boolean,
-        @Embedded var date : StartDate
+        var date : Long
 ) : Serializable

@@ -118,12 +118,12 @@ class ModifyQuoteFragment : Fragment(), View.OnClickListener {
 
         val isAccessingDatabaseObserver = Observer<Boolean> { isAccessing ->
             if (isAccessing) {
-                setViewEnable(false, requireActivity(), )
+                setViewEnable(false, requireActivity())
                 binding.modifyQuoteLoading.root.visibility = View.VISIBLE
             }
 
             else {
-                setViewEnable(true, requireActivity(), )
+                setViewEnable(true, requireActivity())
                 binding.modifyQuoteLoading.root.visibility = View.GONE
             }
         }

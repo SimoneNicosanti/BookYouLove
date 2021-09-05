@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.PieData
@@ -16,11 +15,9 @@ import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.utils.ColorTemplate
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.databinding.FragmentChartsTotalBinding
-import it.simone.bookyoulove.model.ChartsBookData
+import it.simone.bookyoulove.model.TotalChartData
 import it.simone.bookyoulove.view.setViewEnable
-import it.simone.bookyoulove.viewmodel.charts.ChartsTotalViewModel
 import it.simone.bookyoulove.viewmodel.charts.ChartsViewModel
-import it.simone.bookyoulove.viewmodel.charts.TotalChartData
 import java.util.*
 
 
@@ -29,7 +26,7 @@ class ChartsTotalFragment : Fragment() {
     private lateinit var binding : FragmentChartsTotalBinding
 
     private val chartsVM : ChartsViewModel by activityViewModels()
-    private val chartsTotalVM : ChartsTotalViewModel by viewModels()
+    //private val chartsTotalVM : ChartsTotalViewModel by viewModels()
 
 
     override fun onCreateView(
@@ -48,10 +45,11 @@ class ChartsTotalFragment : Fragment() {
 
 
     private fun setObservers() {
-        val currentBookDataArrayObserver = Observer<Array<ChartsBookData>> { newArray ->
-            chartsTotalVM.setDataArray(newArray)
+
+        val readyDataObserver = Observer<Boolean> {
+            if (it) chartsVM.getChartsTotalInfo()
         }
-        chartsVM.currentChartsDataArray.observe(viewLifecycleOwner, currentBookDataArrayObserver)
+        chartsVM.readyArray.observe(viewLifecycleOwner, readyDataObserver)
 
         val chartsTotalInfoObserver = Observer<TotalChartData> {
             binding.chartsTotalTotalBooksTextView.text = it.totalBooks.toString()
@@ -77,7 +75,7 @@ class ChartsTotalFragment : Fragment() {
             }
 
         }
-        chartsTotalVM.totalChartData.observe(viewLifecycleOwner, chartsTotalInfoObserver)
+        chartsVM.totalChartData.observe(viewLifecycleOwner, chartsTotalInfoObserver)
     }
 
 

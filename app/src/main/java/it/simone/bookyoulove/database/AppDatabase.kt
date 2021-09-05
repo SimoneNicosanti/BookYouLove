@@ -8,7 +8,6 @@ import it.simone.bookyoulove.database.DAO.BookDao
 import it.simone.bookyoulove.database.DAO.QuoteDao
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.database.entity.Quote
-import kotlin.reflect.KClass
 
 const val DATABASE_NAME = "book_database"
 

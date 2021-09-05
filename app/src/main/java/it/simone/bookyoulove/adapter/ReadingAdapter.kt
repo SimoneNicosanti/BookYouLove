@@ -11,19 +11,20 @@ import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.DAO.ShowedBookInfo
 
 
-class ReadingAdapter(private val showedReadingBookInfoArray : Array<ShowedBookInfo>, private val onReadingItemMenuItemClickListener: OnReadingItemMenuItemClickListener) : CardSliderAdapter<ReadingAdapter.BookViewHolder>() {
+class ReadingAdapter(val readingBookSetAll: MutableList<ShowedBookInfo>,
+                     private val onReadingItemMenuItemClickListener: OnReadingItemMenuItemClickListener) : CardSliderAdapter<ReadingAdapter.BookViewHolder>() {
 
     override fun bindVH(holder: BookViewHolder, position: Int) {
 
-        if (showedReadingBookInfoArray[position].coverName != "") Picasso.get().load(showedReadingBookInfoArray[position].coverName)
+        if (readingBookSetAll[position].coverName != "") Picasso.get().load(readingBookSetAll[position].coverName)
                 .placeholder(R.drawable.book_cover_place_holder).error(R.drawable.cover_not_found).into(holder.bookCoverImageView)
         else Picasso.get().load(R.drawable.book_cover_place_holder).into(holder.bookCoverImageView)
-        holder.toolbar.title = showedReadingBookInfoArray[position].title
-        holder.toolbar.subtitle = showedReadingBookInfoArray[position].author
+        holder.toolbar.title = readingBookSetAll[position].title
+        holder.toolbar.subtitle = readingBookSetAll[position].author
     }
 
     override fun getItemCount(): Int {
-        return showedReadingBookInfoArray.size
+        return readingBookSetAll.size
     }
 
     override fun onCreateViewHolder(

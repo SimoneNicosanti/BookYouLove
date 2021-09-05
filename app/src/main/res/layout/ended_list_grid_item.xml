@@ -26,7 +26,7 @@
                 android:layout_height="@dimen/read_grid_cover_height"
                 android:layout_marginHorizontal="@dimen/card_view_cover_margin"
                 android:layout_marginVertical="@dimen/card_view_cover_margin"
-                android:contentDescription="TODO"
+                android:contentDescription="@string/book_cover_string"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

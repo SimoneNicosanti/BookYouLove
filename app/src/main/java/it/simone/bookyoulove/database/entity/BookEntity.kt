@@ -8,19 +8,6 @@ import java.io.Serializable
 
 // Per poter rendere Serializable Book devo rendere tali anche tutte le classi interne
 
-data class StartDate (
-        @ColumnInfo var startDay: Int,
-        @ColumnInfo var startMonth: Int,
-        @ColumnInfo var startYear: Int
-) : Serializable
-
-
-data class EndDate (
-    @ColumnInfo var endDay: Int,
-    @ColumnInfo var endMonth: Int,
-    @ColumnInfo var endYear: Int
-) : Serializable
-
 
 data class Rate (
     var totalRate : Float,
@@ -45,8 +32,8 @@ data class Book (
     var title : String,
     var author : String,
 
-    @Embedded var startDate: StartDate?,
-    @Embedded var endDate: EndDate?,
+    var startDate: Long?,
+    var endDate: Long?,
     @Embedded var support : BookSupport?,
 
     var coverName: String,
@@ -54,8 +41,6 @@ data class Book (
     var pages: Int?,
 
     @Embedded var rate: Rate?,
-
-    //var labels: String?,
 
     var finalThought : String,
 

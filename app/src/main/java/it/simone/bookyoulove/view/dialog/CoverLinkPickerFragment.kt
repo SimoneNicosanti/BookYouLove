@@ -26,19 +26,19 @@ class CoverLinkPickerFragment : DialogFragment() {
             builder.setTitle(R.string.cover_link_picker_msg_sting)
             builder.setView(binding.root)
 
-            builder.setPositiveButton(R.string.confirm_string,
-            DialogInterface.OnClickListener {dialog, _ ->
+            builder.setPositiveButton(R.string.confirm_string
+            ) { dialog, _ ->
                 if (binding.coverLinkPickerInput.text.toString() != "") {
                     val settedLink = binding.coverLinkPickerInput.text.toString()
                     setFragmentResult("coverLinkKey", bundleOf("settedCoverLink" to settedLink))
                 }
                 dialog.cancel()
-            })
+            }
 
-            builder.setNegativeButton(R.string.back_string,
-            DialogInterface.OnClickListener {dialog, _ ->
+            builder.setNegativeButton(R.string.back_string
+            ) { dialog, _ ->
                 dialog.cancel()
-            })
+            }
 
             builder.create()
         }

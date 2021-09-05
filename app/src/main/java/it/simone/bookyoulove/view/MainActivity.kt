@@ -36,6 +36,9 @@ const val SEARCH_BY_TITLE = 0
 const val SEARCH_BY_AUTHOR = 1
 const val SEARCH_BY_RATE = 2
 const val SEARCH_BY_YEAR = 3
+const val SEARCH_BY_TITLE_OR_AUTHOR = 4
+
+const val TAG = "BookYouLove"
 
 
 class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItemSelectedListener, PopupMenu.OnMenuItemClickListener{

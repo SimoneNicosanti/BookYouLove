@@ -14,7 +14,7 @@ import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.databinding.FragmentDetailReadingBinding
 import it.simone.bookyoulove.utilsClass.DateFormatClass
 import it.simone.bookyoulove.view.setViewEnable
-import it.simone.bookyoulove.viewmodel.reading.DetailReadingViewModel
+import it.simone.bookyoulove.viewmodel.DetailBookViewModel
 
 
 class DetailReadingFragment : Fragment() {
@@ -22,8 +22,7 @@ class DetailReadingFragment : Fragment() {
 
     private lateinit var binding : FragmentDetailReadingBinding
 
-    private val detailReadingVM : DetailReadingViewModel by viewModels()
-    //private val readingVM : ReadingViewModel by activityViewModels()
+    private val detailReadingVM : DetailBookViewModel by viewModels()
 
     private val args : DetailReadingFragmentArgs by navArgs()
 
@@ -34,7 +33,7 @@ class DetailReadingFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         setHasOptionsMenu(true)
-        detailReadingVM.loadDetailReadingBook(args.detailReadingBookId)
+        detailReadingVM.loadDetailBook(args.detailReadingBookId)
     }
 
 
@@ -47,7 +46,7 @@ class DetailReadingFragment : Fragment() {
         setViewEnable(true, requireActivity())
 
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Book>("modifiedBook")?.observe(viewLifecycleOwner) {
-            detailReadingVM.onReadingBookModified(it)
+            detailReadingVM.onBookModified(it)
             findNavController().currentBackStackEntry?.savedStateHandle?.remove<Book>("modifiedBook")
             //readingVM.notifyReadingBookModified(it)
         }
@@ -72,7 +71,7 @@ class DetailReadingFragment : Fragment() {
             binding.detailReadingTitle.text = currentBook.title
             binding.detailReadingAuthor.text = currentBook.author
 
-            binding.detailReadingStartDateText.text = DateFormatClass(requireContext()).computeStartDateString(currentBook.startDate)
+            binding.detailReadingStartDateText.text = DateFormatClass(requireContext()).computeDateString(currentBook.startDate)
 
             binding.detailReadingPaperCheckbox.isChecked = currentBook.support?.paperSupport ?: false
             binding.detailReadingEbookCheckbox.isChecked = currentBook.support?.ebookSupport ?: false
@@ -87,12 +86,12 @@ class DetailReadingFragment : Fragment() {
 
         val isAccessingDatabaseObserver = Observer<Boolean> { isAccessing ->
             if (isAccessing) {
-                setViewEnable(false, requireActivity(), )
+                setViewEnable(false, requireActivity())
                 binding.detailReadingLoading.root.visibility = View.VISIBLE
             }
 
             else {
-                setViewEnable(true, requireActivity(), )
+                setViewEnable(true, requireActivity())
                 binding.detailReadingLoading.root.visibility = View.GONE
             }
         }
@@ -110,9 +109,7 @@ class DetailReadingFragment : Fragment() {
         return when (item.itemId) {
             R.id.detailReadingMenuEdit -> {
                 val navController = findNavController()
-                val action = DetailReadingFragmentDirections.actionDetailReadingFragmentToNewReadingBookFragment(detailBook.copy(
-                        startDate = detailBook.startDate!!.copy(),
-                        support = detailBook.support!!.copy()))
+                val action = DetailReadingFragmentDirections.actionDetailReadingFragmentToNewReadingBookFragment(detailBook.copy(support = detailBook.support!!.copy()))
                 //Anche se effettuo la copia le strutture interne sono passate per riferimento e non vengono copiate, quindi le copio a mano
                 //Trovato con bug
                 navController.navigate(action)

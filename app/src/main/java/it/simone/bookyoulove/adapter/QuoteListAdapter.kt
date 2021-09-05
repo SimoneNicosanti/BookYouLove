@@ -1,15 +1,24 @@
 package it.simone.bookyoulove.adapter
 
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import it.simone.bookyoulove.filters.QuoteListFilter
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.DAO.ShowQuoteInfo
+import java.util.*
 
-class QuoteListAdapter(private val quotesArray: Array<ShowQuoteInfo>, private val onQuoteListHolderClick: OnQuoteListHolderClick) : RecyclerView.Adapter<QuoteListAdapter.QuotesViewHolder>() {
+class QuoteListAdapter(private val quoteSetAll: MutableList<ShowQuoteInfo>,
+                       private val onQuoteListHolderClick: OnQuoteListHolderClick) : RecyclerView.Adapter<QuoteListAdapter.QuotesViewHolder>(), Filterable {
+
+    val quoteSet : MutableList<ShowQuoteInfo> = ArrayList(quoteSetAll).toMutableList()
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuotesViewHolder {
 
@@ -18,16 +27,16 @@ class QuoteListAdapter(private val quotesArray: Array<ShowQuoteInfo>, private va
     }
 
     override fun onBindViewHolder(holder: QuotesViewHolder, position: Int) {
-        holder.quoteText.text = quotesArray[position].quoteText
-        holder.quoteBookTitle.text = quotesArray[position].bookTitle
-        holder.quoteBookAuthor.text = quotesArray[position].bookAuthor
+        holder.quoteText.text = quoteSet[position].quoteText
+        holder.quoteBookTitle.text = quoteSet[position].bookTitle
+        holder.quoteBookAuthor.text = quoteSet[position].bookAuthor
 
-        if (quotesArray[position].favourite) holder.quoteBookFavoriteButton.setImageResource(R.drawable.ic_round_modify_quote_favorite_on)
+        if (quoteSet[position].favourite) holder.quoteBookFavoriteButton.setImageResource(R.drawable.ic_round_modify_quote_favorite_on)
         else holder.quoteBookFavoriteButton.setImageResource(R.drawable.ic_round_modify_quote_favorite_off)
     }
 
     override fun getItemCount(): Int {
-        return quotesArray.size
+        return quoteSet.size
     }
 
     class QuotesViewHolder(quoteView: View, private val onQuoteListHolderClick: OnQuoteListHolderClick) : RecyclerView.ViewHolder(quoteView) , View.OnClickListener{
@@ -50,5 +59,9 @@ class QuoteListAdapter(private val quotesArray: Array<ShowQuoteInfo>, private va
 
     interface OnQuoteListHolderClick {
         fun onQuoteListHolderClickedListener(view : View, position : Int)
+    }
+
+    override fun getFilter(): Filter {
+        return QuoteListFilter(quoteSetAll, quoteSet, this)
     }
 }

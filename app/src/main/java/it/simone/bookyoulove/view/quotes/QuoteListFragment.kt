@@ -27,11 +27,7 @@ class QuoteListFragment : Fragment(), QuoteListAdapter.OnQuoteListHolderClick, S
 
     private val quoteListVM : QuoteListViewModel by viewModels()
 
-    private lateinit var quoteArray : Array<ShowQuoteInfo>
-
     private var searchField : String = ""
-
-    private var quoteListFragmentMenu : Menu? = null
 
 
 
@@ -78,20 +74,19 @@ class QuoteListFragment : Fragment(), QuoteListAdapter.OnQuoteListHolderClick, S
     }
 
     private fun setObservers() {
-        val currentQuotesArrayObserver = Observer<Array<ShowQuoteInfo>> { newQuotesArray ->
+        val currentQuotesArrayObserver = Observer<MutableList<ShowQuoteInfo>> { newQuotesArray ->
             binding.quotesListRecyclerView.adapter = QuoteListAdapter(newQuotesArray, this)
-            quoteArray = newQuotesArray
         }
         quoteListVM.currentQuotesArray.observe(viewLifecycleOwner, currentQuotesArrayObserver)
 
         val isAccessingDatabaseObserver = Observer<Boolean> { isAccessing ->
             if (isAccessing) {
-                setViewEnable(false, requireActivity(), )
+                setViewEnable(false, requireActivity())
                 binding.quoteListLoading.root.visibility = View.VISIBLE
             }
 
             else {
-                setViewEnable(true, requireActivity(), )
+                setViewEnable(true, requireActivity())
                 binding.quoteListLoading.root.visibility = View.GONE
             }
         }
@@ -105,9 +100,10 @@ class QuoteListFragment : Fragment(), QuoteListAdapter.OnQuoteListHolderClick, S
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
-        quoteListFragmentMenu = menu
 
         val mySearchView = menu.findItem(R.id.quotesListMenuSearchItem).actionView as SearchView
+
+        mySearchView.setOnQueryTextListener(this)
 
         if (searchField != "") {
             mySearchView.isIconified = false
@@ -117,30 +113,27 @@ class QuoteListFragment : Fragment(), QuoteListAdapter.OnQuoteListHolderClick, S
             mySearchView.isIconified = true
         }
 
-        mySearchView.setOnQueryTextListener(this)
-
     }
 
 
     override fun onQuoteListHolderClickedListener(view: View, position: Int) {
-
-        quoteListVM.setCurrentPosition(position)
+        val selectedQuote = (binding.quotesListRecyclerView.adapter as QuoteListAdapter).quoteSet[position]
+        quoteListVM.changeSelectedQuote(selectedQuote)
         findNavController().navigate(QuoteListFragmentDirections.actionQuoteListFragmentToQuoteDetailFragment(
-                quoteArray[position].quoteId,
-                quoteArray[position].bookId))
+                selectedQuote.quoteId,
+                selectedQuote.bookId))
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
-        /*
-            Non mi serve metterlo : Quando cambia configurazione l'array ricevuto è già quello filtrato,
-            quindi non ho bisogno di fare la submit quando
-         */
         return true
     }
 
     override fun onQueryTextChange(newText: String?): Boolean {
-        searchField = newText!!
-        quoteListVM.searchByContents(newText)
+        searchField = newText ?: ""
+        binding.quotesListRecyclerView.adapter?.let {
+            it as QuoteListAdapter
+            it.filter.filter(newText)
+        }
         return true
     }
 

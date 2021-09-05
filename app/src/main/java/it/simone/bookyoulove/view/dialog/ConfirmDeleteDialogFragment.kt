@@ -2,13 +2,11 @@ package it.simone.bookyoulove.view.dialog
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.DialogInterface
 import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import it.simone.bookyoulove.R
-import java.lang.IllegalStateException
 
 class ConfirmDeleteDialogFragment: DialogFragment() {
 

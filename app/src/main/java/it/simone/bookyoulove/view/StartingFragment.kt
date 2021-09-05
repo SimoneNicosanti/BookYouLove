@@ -13,11 +13,10 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import it.simone.bookyoulove.database.entity.Book
-import it.simone.bookyoulove.database.entity.StartDate
 import it.simone.bookyoulove.databinding.FragmentStartingBinding
 import it.simone.bookyoulove.utilsClass.DateFormatClass
 import it.simone.bookyoulove.view.dialog.DatePickerFragment
-import it.simone.bookyoulove.viewmodel.reading.ReadingViewModel
+import it.simone.bookyoulove.viewmodel.BookListViewModel
 import it.simone.bookyoulove.viewmodel.StartingViewModel
 
 
@@ -27,7 +26,7 @@ class StartingFragment : Fragment() , View.OnClickListener{
 
     private val args : StartingFragmentArgs by navArgs()
 
-    private val readingVM : ReadingViewModel by activityViewModels()
+    private val readingVM : BookListViewModel by activityViewModels()
     private val startingVM : StartingViewModel by viewModels()
 
 
@@ -47,8 +46,8 @@ class StartingFragment : Fragment() , View.OnClickListener{
         binding.startingFragmentAudiobookCheckbox.setOnClickListener(this)
 
         childFragmentManager.setFragmentResultListener("startDateKey", this) {_ , bundle ->
-            val newStartDate = StartDate(bundle.getInt("day"), bundle.getInt("month"), bundle.getInt("year"))
-            binding.startingStartDateTextView.text = DateFormatClass(requireContext()).computeStartDateString(newStartDate)
+            val newStartDate = bundle.getLong("dateMillis")
+            binding.startingStartDateTextView.text = DateFormatClass(requireContext()).computeDateString(newStartDate)
             startingVM.changeStartDate(newStartDate)
         }
 
@@ -63,26 +62,26 @@ class StartingFragment : Fragment() , View.OnClickListener{
     private fun setObservers() {
         val isAccessingObserver = Observer<Boolean> { isAccessing ->
             if (isAccessing) {
-                setViewEnable(false, requireActivity(), )
+                setViewEnable(false, requireActivity())
                 binding.startingLoading.root.visibility = View.VISIBLE
             }
 
             else {
-                setViewEnable(true, requireActivity(), )
+                setViewEnable(true, requireActivity())
                 binding.startingLoading.root.visibility = View.GONE
             }
         }
         startingVM.isAccessing.observe(viewLifecycleOwner, isAccessingObserver)
 
         val canExitWithBookObserver = Observer<Book> {
-            readingVM.notifyNewReadingBook(it)
+            readingVM.notifyNewArrayItem(it)
             findNavController().previousBackStackEntry?.savedStateHandle?.set("startedTbrBookKey", true)
             findNavController().popBackStack()
         }
         startingVM.canExitWithBook.observe(viewLifecycleOwner, canExitWithBookObserver)
 
         val currentBookObserver = Observer<Book> {
-            binding.startingStartDateTextView.text = DateFormatClass(requireContext()).computeStartDateString(it.startDate!!)
+            binding.startingStartDateTextView.text = DateFormatClass(requireContext()).computeDateString(it.startDate!!)
 
             binding.startingFragmentPaperCheckbox.isChecked = it.support!!.paperSupport
             binding.startingFragmentEbookCheckbox.isChecked = it.support!!.ebookSupport

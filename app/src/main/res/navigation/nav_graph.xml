@@ -39,7 +39,11 @@
         tools:layout="@layout/fragment_settings" >
         <action
             android:id="@+id/action_settingsFragment_to_googleDriveFragment"
-            app:destination="@id/googleDriveFragment2" />
+            app:destination="@id/googleDriveFragment2"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/tbrFragment"
@@ -146,8 +150,7 @@
         app:popUpTo="@id/readingFragment" />
     <fragment
         android:id="@+id/detailReadingFragment"
-        android:name="it.simone.bookyoulove.view.reading.DetailReadingFragment"
-        android:label="DetailReadingFragment" >
+        android:name="it.simone.bookyoulove.view.reading.DetailReadingFragment">
         <action
             android:id="@+id/action_detailReadingFragment_to_newReadingBookFragment"
             app:destination="@id/newReadingBookFragment"
@@ -218,8 +221,7 @@
     </fragment>
     <fragment
         android:id="@+id/modifyQuoteFragment"
-        android:name="it.simone.bookyoulove.view.quotes.ModifyQuoteFragment"
-        android:label="ModifyQuoteFragment" >
+        android:name="it.simone.bookyoulove.view.quotes.ModifyQuoteFragment">
         <action
             android:id="@+id/action_modifyQuoteFragment_to_quoteWithCameraFragment"
             app:destination="@id/quoteWithCameraFragment"

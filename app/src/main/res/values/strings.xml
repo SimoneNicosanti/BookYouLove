@@ -12,7 +12,7 @@
     <string name="finish_string">Finish</string>
     <string name="leave_string">Leave</string>
     <string name="take_note_string">Take Note</string>
-    //
+
     <string name="new_reading_book_string">New Reading Book</string>
     <string name="cover_link_picker_msg_sting">Enter Cover Link</string>
     <string name="link_string" translatable="false">Link</string>
@@ -119,4 +119,11 @@
     <string name="general_settings_string">General Settings</string>
     <string name="date_format_string">Date Format</string>
     <string name="favorite_string">Favorite</string>
+    <string name="icon_string">Icon</string>
+    <string name="flip_string">Flip/Flop</string>
+    <string name="google_drive_logo_string">Google Drive Logo</string>
+    <string name="google_drive_name" translatable="false">Google Drive</string>
+    <string name="google_books_preview_string">Google Books Preview</string>
+    <string name="take_string">Take</string>
+    <string name="guess_the_quote_string" translatable="false">Guess The Quote</string>
 </resources>

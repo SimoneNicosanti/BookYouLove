@@ -4,27 +4,32 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toolbar
+import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.DAO.ShowedBookInfo
+import it.simone.bookyoulove.filters.BookListFilter
+import it.simone.bookyoulove.view.SEARCH_BY_TITLE_OR_AUTHOR
+import java.util.ArrayList
 
-class TbrAdapter(private val tbrArray : Array<ShowedBookInfo>, private val onTbrItemClickedListener: OnTbrItemClickedListener) : RecyclerView.Adapter<TbrAdapter.TbrViewHolder>() {
+class TbrAdapter(private val tbrSetAll : MutableList<ShowedBookInfo>,
+                 private val onTbrItemClickedListener: OnTbrItemClickedListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TbrAdapter.TbrViewHolder {
+    val tbrSet = ArrayList(tbrSetAll).toMutableList()
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val tbrView = LayoutInflater.from(parent.context).inflate(R.layout.tbr_item, parent, false)
         return TbrViewHolder(tbrView, onTbrItemClickedListener)
     }
 
-    override fun onBindViewHolder(holder: TbrViewHolder, position: Int) {
-        holder.titleTextView.text = tbrArray[position].title
-        holder.authorTextView.text = tbrArray[position].author
-        holder.pagesTextView.text = tbrArray[position].pages.toString() 
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        holder as TbrViewHolder
+        holder.titleTextView.text = tbrSet[position].title
+        holder.authorTextView.text = tbrSet[position].author
+        holder.pagesTextView.text = tbrSet[position].pages.toString()
 
-        if (tbrArray[position].coverName != "") Picasso.get().load(tbrArray[position].coverName)
+        if (tbrSet[position].coverName != "") Picasso.get().load(tbrSet[position].coverName)
                                                         .placeholder(R.drawable.book_cover_place_holder).error(R.drawable.cover_not_found)
                                                         .into(holder.coverImageView)
 
@@ -32,7 +37,7 @@ class TbrAdapter(private val tbrArray : Array<ShowedBookInfo>, private val onTbr
     }
 
     override fun getItemCount(): Int {
-        return tbrArray.size
+        return tbrSet.size
     }
 
     class TbrViewHolder(tbrView : View, private val onTbrItemClickedListener : OnTbrItemClickedListener) : RecyclerView.ViewHolder(tbrView), androidx.appcompat.widget.Toolbar.OnMenuItemClickListener {
@@ -55,5 +60,9 @@ class TbrAdapter(private val tbrArray : Array<ShowedBookInfo>, private val onTbr
 
     interface OnTbrItemClickedListener {
         fun onTbrListItemToolbarMenuClicked(position : Int, item : MenuItem?): Boolean
+    }
+
+    override fun getFilter(): Filter {
+        return BookListFilter(tbrSetAll, tbrSet, SEARCH_BY_TITLE_OR_AUTHOR, this)
     }
 }

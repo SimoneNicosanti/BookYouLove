@@ -5,7 +5,6 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import it.simone.bookyoulove.database.AppDatabase
 import it.simone.bookyoulove.database.entity.Quote
-import it.simone.bookyoulove.database.entity.StartDate
 import it.simone.bookyoulove.model.quotes.ModifyQuoteModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -26,9 +25,7 @@ class ModifyQuoteViewModel(application: Application) : AndroidViewModel(applicat
 
     init {
         val cal = Calendar.getInstance()
-        val day = cal.get(Calendar.DAY_OF_MONTH)
-        val month = cal.get(Calendar.MONTH) + 1
-        val year = cal.get(Calendar.YEAR)
+
         currentQuote.value = Quote(
                 quoteId = 0L,
                 bookId = 0L,
@@ -40,7 +37,7 @@ class ModifyQuoteViewModel(application: Application) : AndroidViewModel(applicat
                 quotePage = 0,
                 quoteChapter = "",
                 quoteThought = "",
-                date = StartDate(startDay = day, startMonth = month, startYear = year))
+                date = cal.timeInMillis)
     }
 
 

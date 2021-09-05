@@ -26,6 +26,12 @@ class ChartsFragment : Fragment() {
     private val chartsVM : ChartsViewModel by activityViewModels()
 
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        chartsVM.getAllChartsData()
+    }
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -33,7 +39,6 @@ class ChartsFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentChartsBinding.inflate(inflater, container, false)
         setObservers()
-        chartsVM.getAllChartsData()
 
         setViewEnable(true, requireActivity())
 
@@ -67,18 +72,18 @@ class ChartsFragment : Fragment() {
     private fun setObservers() {
         val isAccessingDatabaseObserver = Observer<Boolean> {isAccessing ->
             if (isAccessing) {
-                setViewEnable(false, requireActivity(), )
+                setViewEnable(false, requireActivity())
                 requireActivity().window?.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
                 binding.chartsLoading.root.visibility = View.VISIBLE
             }
 
             else {
-                setViewEnable(true, requireActivity(), )
+                setViewEnable(true, requireActivity())
                 requireActivity().window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
                 binding.chartsLoading.root.visibility = View.GONE
             }
         }
-        chartsVM.isAccessingDatabase.observe(viewLifecycleOwner, isAccessingDatabaseObserver)
+        chartsVM.isAccessing.observe(viewLifecycleOwner, isAccessingDatabaseObserver)
     }
 }
 

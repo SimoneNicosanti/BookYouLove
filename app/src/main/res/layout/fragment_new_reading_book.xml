@@ -40,6 +40,7 @@
                 android:layout_marginHorizontal="@dimen/new_book_cover_margin"
                 android:layout_marginVertical="@dimen/new_book_cover_margin"
                 android:clickable="true"
+                android:contentDescription="@string/book_cover_string"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -72,7 +73,10 @@
                         android:id="@+id/newBookTitleInput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:singleLine="true" />
+                        android:autofillHints=""
+                        android:hint="@string/title_string"
+                        android:inputType="text"
+                        android:singleLine="false" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -102,7 +106,9 @@
                         android:id="@+id/newBookAuthorInput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:singleLine="true" />
+                        android:hint="@string/author_string"
+                        android:inputType="textMultiLine"
+                        android:singleLine="false" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -127,6 +133,8 @@
                         android:id="@+id/textView6"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:foregroundGravity="center"
                         android:gravity="center"
                         android:text="@string/start_date_string" />
 
@@ -224,8 +232,10 @@
                         android:id="@+id/newBookPagesInput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:autofillHints=""
                         android:clickable="true"
                         android:gravity="center"
+                        android:hint="@string/pages_string"
                         android:inputType="number"
                         android:isScrollContainer="true"
                         android:maxLength="5"

@@ -91,6 +91,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@null"
+                        android:contentDescription="@string/flip_string"
                         android:src="@drawable/ic_round_arrow_drop_up" />
 
                     <LinearLayout
@@ -278,8 +279,10 @@
                         android:id="@+id/endingFinalThoughtInput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:autofillHints=""
                         android:background="@android:color/transparent"
                         android:hapticFeedbackEnabled="false"
+                        android:hint="@string/final_thought_string"
                         android:inputType="textMultiLine"
                         android:isScrollContainer="false"
                         android:singleLine="false" />
