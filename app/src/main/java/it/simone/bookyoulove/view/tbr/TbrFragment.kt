@@ -26,8 +26,6 @@ class TbrFragment : Fragment(), TbrAdapter.OnTbrItemClickedListener, SearchView.
 
     private val tbrVM : BookListViewModel by viewModels()
 
-    private lateinit var searchView : SearchView
-
     private var searchField : String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -148,7 +146,7 @@ class TbrFragment : Fragment(), TbrAdapter.OnTbrItemClickedListener, SearchView.
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
-        searchView = menu.findItem(R.id.tbrFragmentMenuSearchItem).actionView as SearchView
+        val searchView = menu.findItem(R.id.tbrFragmentMenuSearchItem).actionView as SearchView
 
         //Mi serve a pulire la SearchView da eventuali ricerce residue in altri fragments
         //searchView.setQuery("", false)

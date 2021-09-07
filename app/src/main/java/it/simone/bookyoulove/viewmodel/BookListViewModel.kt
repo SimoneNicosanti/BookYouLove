@@ -5,14 +5,14 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
+import it.simone.bookyoulove.Constants.ENDED_BOOK_STATE
+import it.simone.bookyoulove.Constants.READING_BOOK_STATE
+import it.simone.bookyoulove.Constants.TBR_BOOK_STATE
 import it.simone.bookyoulove.database.AppDatabase
 import it.simone.bookyoulove.database.DAO.ShowedBookInfo
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.model.BookList
 import it.simone.bookyoulove.model.BookListModel
-import it.simone.bookyoulove.view.ENDED_BOOK_STATE
-import it.simone.bookyoulove.view.READING_BOOK_STATE
-import it.simone.bookyoulove.view.TBR_BOOK_STATE
 import kotlinx.coroutines.launch
 
 

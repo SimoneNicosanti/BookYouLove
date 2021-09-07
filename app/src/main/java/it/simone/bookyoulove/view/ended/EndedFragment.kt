@@ -15,6 +15,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import it.simone.bookyoulove.Constants.SEARCH_BY_AUTHOR
+import it.simone.bookyoulove.Constants.SEARCH_BY_RATE
+import it.simone.bookyoulove.Constants.SEARCH_BY_TITLE
+import it.simone.bookyoulove.Constants.SEARCH_BY_YEAR
+import it.simone.bookyoulove.Constants.TAG
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.adapter.EndedAdapter
 import it.simone.bookyoulove.database.DAO.ShowedBookInfo

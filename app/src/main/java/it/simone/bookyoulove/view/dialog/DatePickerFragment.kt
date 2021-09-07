@@ -7,8 +7,8 @@ import android.widget.DatePicker
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
-import it.simone.bookyoulove.view.END_DATE_SETTER
-import it.simone.bookyoulove.view.START_DATE_SETTER
+import it.simone.bookyoulove.Constants.END_DATE_SETTER
+import it.simone.bookyoulove.Constants.START_DATE_SETTER
 import java.util.*
 
 class DatePickerFragment: DialogFragment(), DatePickerDialog.OnDateSetListener {

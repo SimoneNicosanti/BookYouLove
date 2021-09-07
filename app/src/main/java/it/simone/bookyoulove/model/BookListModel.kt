@@ -1,8 +1,8 @@
 package it.simone.bookyoulove.model
 
+import it.simone.bookyoulove.Constants.TBR_BOOK_STATE
 import it.simone.bookyoulove.database.AppDatabase
 import it.simone.bookyoulove.database.DAO.ShowedBookInfo
-import it.simone.bookyoulove.view.TBR_BOOK_STATE
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

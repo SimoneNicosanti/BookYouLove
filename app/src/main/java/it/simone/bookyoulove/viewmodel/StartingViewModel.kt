@@ -4,13 +4,13 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import it.simone.bookyoulove.Constants.AUDIOBOOK_SUPPORT
+import it.simone.bookyoulove.Constants.EBOOK_SUPPORT
+import it.simone.bookyoulove.Constants.PAPER_SUPPORT
+import it.simone.bookyoulove.Constants.READING_BOOK_STATE
 import it.simone.bookyoulove.database.AppDatabase
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.database.entity.BookSupport
-import it.simone.bookyoulove.view.AUDIOBOOK_SUPPORT
-import it.simone.bookyoulove.view.EBOOK_SUPPORT
-import it.simone.bookyoulove.view.PAPER_SUPPORT
-import it.simone.bookyoulove.view.READING_BOOK_STATE
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

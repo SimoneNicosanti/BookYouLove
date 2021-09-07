@@ -7,4 +7,9 @@
         android:icon="@drawable/ic_round_qr_code_scanner"
         android:title="@string/scan_string"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/tbrModifyFragmentMenuSearchOnlineItem"
+        android:icon="@drawable/ic_round_network_search"
+        android:title="@string/search_online_string"
+        app:showAsAction="ifRoom" />
 </menu>

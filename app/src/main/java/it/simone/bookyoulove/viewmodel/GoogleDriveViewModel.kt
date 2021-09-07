@@ -17,7 +17,7 @@ import it.simone.bookyoulove.model.GoogleDriveModel
 import kotlinx.coroutines.launch
 
 
-const val GOOGLE_DRIVE_BACKUP_NAME = "BookYouLoveDatabaseBackup"
+
 
 class GoogleDriveViewModel(application: Application) : AndroidViewModel(application) {
 

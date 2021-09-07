@@ -16,7 +16,7 @@ import it.simone.bookyoulove.databinding.FragmentChartsBinding
 import it.simone.bookyoulove.view.setViewEnable
 import it.simone.bookyoulove.viewmodel.charts.ChartsViewModel
 
-private const val CHARTS_FRAGMENTS_COUNT = 2
+
 
 
 class ChartsFragment : Fragment() {
@@ -38,9 +38,10 @@ class ChartsFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         binding = FragmentChartsBinding.inflate(inflater, container, false)
+        setViewEnable(true, requireActivity())
         setObservers()
 
-        setViewEnable(true, requireActivity())
+
 
         return binding.root
     }
@@ -88,6 +89,10 @@ class ChartsFragment : Fragment() {
 }
 
 class ChartsCollectionAdapter(chartsFragment: Fragment) : FragmentStateAdapter(chartsFragment) {
+
+    companion object {
+        private const val CHARTS_FRAGMENTS_COUNT = 2
+    }
 
     override fun getItemCount(): Int {
         return CHARTS_FRAGMENTS_COUNT

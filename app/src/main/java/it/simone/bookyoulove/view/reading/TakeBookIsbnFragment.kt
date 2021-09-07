@@ -5,7 +5,6 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
 import android.util.Size
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +15,8 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -28,8 +29,8 @@ import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.databinding.FragmentTakeBookIsbnBinding
+import it.simone.bookyoulove.view.dialog.AlertDialogFragment
 import it.simone.bookyoulove.view.setViewEnable
-import java.lang.IllegalStateException
 import java.util.concurrent.Executors
 
 
@@ -70,10 +71,16 @@ class TakeBookIsbnFragment : Fragment() {
     }
 
     private fun setObserver() {
-        val canExitWithIsbnObserver = Observer<String> { finalIsbn ->
-            if (finalIsbn != "") {
+        val canExitWithIsbnObserver = Observer<String?> { finalIsbn ->
+            if (finalIsbn != "" && finalIsbn != null) {
                 findNavController().previousBackStackEntry?.savedStateHandle?.set("scannedIsbnKey", finalIsbn)
                 findNavController().popBackStack()
+            }
+            else if (finalIsbn == null){
+                val alertDialog = AlertDialogFragment()
+                val args = bundleOf("alertDialogTitleKey" to getString(R.string.scan_isdn_error_string))
+                alertDialog.arguments = args
+                alertDialog.show(childFragmentManager, "")
             }
         }
         takeBookIsbnVM.canExitWithIsbn.observe(viewLifecycleOwner, canExitWithIsbnObserver)
@@ -123,10 +130,11 @@ class TakeBookIsbnFragment : Fragment() {
                             }
                         }
                         .addOnFailureListener {
-                            throw IllegalStateException(it)
+                            //takeBookIsbnVM.setScannedIsbn("")
+                            takeBookIsbnVM.setScannedIsbn(null)
                         }
                         .addOnCompleteListener {
-                            imageProxy.close()
+                            if (it.isSuccessful) imageProxy.close()
                         }
             }
         }
@@ -136,9 +144,9 @@ class TakeBookIsbnFragment : Fragment() {
 
 class TakeBookIsbnViewModel : ViewModel() {
 
-    val canExitWithIsbn = MutableLiveData<String>()
+    val canExitWithIsbn = MutableLiveData<String?>()
 
-    fun setScannedIsbn(finalIsbn : String) {
+    fun setScannedIsbn(finalIsbn : String?) {
         canExitWithIsbn.value = finalIsbn
     }
 }

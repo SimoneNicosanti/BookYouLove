@@ -16,14 +16,6 @@ class LoadingDialogFragment : DialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        // Inflate the layout for this fragment
-        // Make Dialog Incancellable: This dialog is used in order to wait a long time operation
-        /*
-        callback = requireActivity().onBackPressedDispatcher.addCallback {
-            requireParentFragment().findNavController().popBackStack()
-            dialog?.dismiss()
-        }
-        callback.isEnabled = true*/
 
         isCancelable = false
         binding = FragmentLoadingDialogFragmentBinding.inflate(inflater, container, false)

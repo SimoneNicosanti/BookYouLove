@@ -5,12 +5,16 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.android.volley.toolbox.Volley
+import it.simone.bookyoulove.Constants.AUDIOBOOK_SUPPORT
+import it.simone.bookyoulove.Constants.EBOOK_SUPPORT
+import it.simone.bookyoulove.Constants.PAPER_SUPPORT
+import it.simone.bookyoulove.Constants.READING_BOOK_STATE
+import it.simone.bookyoulove.Constants.TBR_BOOK_STATE
 import it.simone.bookyoulove.database.AppDatabase
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.database.entity.BookSupport
 import it.simone.bookyoulove.model.GoogleBooksApi
 import it.simone.bookyoulove.model.ModifyBookModel
-import it.simone.bookyoulove.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,8 +22,7 @@ import kotlinx.coroutines.withContext
 import java.util.*
 
 
-
-class ModifyBookViewModel(application: Application) : AndroidViewModel(application) {
+class ModifyBookViewModel(application: Application) : AndroidViewModel(application), GoogleBooksApi.OnGoogleBooksApiRequestTerminated {
 
     private val myAppDatabase = AppDatabase.getDatabaseInstance(application.applicationContext)
     private val modifyBookModel = ModifyBookModel(myAppDatabase)
@@ -103,7 +106,7 @@ class ModifyBookViewModel(application: Application) : AndroidViewModel(applicati
         CoroutineScope(Dispatchers.Main).launch {
             if (currentBook.value!!.bookId != 0L) {
                 //Sto in caso di modifica di un libro precedente
-                modifyBookModel.updateReadingBookInDatabase(currentBook.value!!)
+                modifyBookModel.updateBookInDatabase(currentBook.value!!)
             }
 
             else {
@@ -183,4 +186,27 @@ class ModifyBookViewModel(application: Application) : AndroidViewModel(applicati
             }
         }
     }
+
+
+    override fun onNetworkBookReceived(
+        networkBook: GoogleBooksApi.NetworkBook?,
+        responseCode: Int) {
+        isAccessing.value = false
+        if (networkBook == null) {
+            internetAccessError.value = responseCode
+        }
+        else {
+            currentBook.value!!.title = networkBook.title
+            currentBook.value!!.author = networkBook.authors
+            currentBook.value!!.pages = networkBook.pageCount
+            currentBook.value!!.coverName = networkBook.thumbnail
+
+            currentBook.value = currentBook.value
+        }
+    }
+
+    override fun onNetworkBookArrayReceived(
+        networkBookList: MutableList<GoogleBooksApi.NetworkBook>,
+        responseCode: Int
+    ) {}
 }

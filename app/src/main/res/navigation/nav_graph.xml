@@ -328,4 +328,10 @@
         android:name="it.simone.bookyoulove.view.GoogleDriveFragment"
         android:label="fragment_google_drive"
         tools:layout="@layout/fragment_google_drive" />
+    <fragment
+        android:id="@+id/googleBooksSearch"
+        android:name="it.simone.bookyoulove.view.GoogleBooksSearchFragment"
+        android:label="fragment_google_books_search"
+        tools:layout="@layout/fragment_google_books_search" />
+    <action android:id="@+id/action_global_googleBooksSearch" app:destination="@id/googleBooksSearch" />
 </navigation>

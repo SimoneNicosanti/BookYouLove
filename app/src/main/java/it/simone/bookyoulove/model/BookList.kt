@@ -2,6 +2,10 @@ package it.simone.bookyoulove.model
 
 
 
+import it.simone.bookyoulove.Constants.SORT_BY_AUTHOR
+import it.simone.bookyoulove.Constants.SORT_BY_TITLE
+import it.simone.bookyoulove.Constants.SORT_END_DATE
+import it.simone.bookyoulove.Constants.SORT_START_DATE
 import it.simone.bookyoulove.database.DAO.ShowedBookInfo
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.view.*

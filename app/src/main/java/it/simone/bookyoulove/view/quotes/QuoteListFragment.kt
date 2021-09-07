@@ -60,7 +60,7 @@ class QuoteListFragment : Fragment(), QuoteListAdapter.OnQuoteListHolderClick, S
         }
 
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Quote>("modifiedQuoteInfo")?.observe(viewLifecycleOwner) {
-            quoteListVM.onModifiedQuote(it)
+            quoteListVM.onQuoteModified(it)
             findNavController().currentBackStackEntry?.savedStateHandle?.remove<Quote>("modifiedQuoteInfo")
         }
 

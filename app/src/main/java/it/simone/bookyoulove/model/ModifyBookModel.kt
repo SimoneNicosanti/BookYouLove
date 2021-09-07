@@ -41,7 +41,7 @@ class ModifyBookModel(private val myAppDatabase: AppDatabase) {
         return maxBookId + 1L
     }
 
-    suspend fun updateReadingBookInDatabase(bookToUpdate: Book) {
+    suspend fun updateBookInDatabase(bookToUpdate: Book) {
         withContext(Dispatchers.IO) {
             myAppDatabase.bookDao().updateBooks(bookToUpdate)
             changeQuotesInfoInDatabase(bookToUpdate)

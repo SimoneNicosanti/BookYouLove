@@ -1,8 +1,8 @@
 package it.simone.bookyoulove.model
 
+import it.simone.bookyoulove.Constants.ENDED_BOOK_STATE
 import it.simone.bookyoulove.database.AppDatabase
 import it.simone.bookyoulove.database.entity.Book
-import it.simone.bookyoulove.view.ENDED_BOOK_STATE
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

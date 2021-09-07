@@ -2,12 +2,12 @@ package it.simone.bookyoulove.filters
 
 import android.widget.Filter
 import androidx.recyclerview.widget.RecyclerView
+import it.simone.bookyoulove.Constants.SEARCH_BY_AUTHOR
+import it.simone.bookyoulove.Constants.SEARCH_BY_RATE
+import it.simone.bookyoulove.Constants.SEARCH_BY_TITLE
+import it.simone.bookyoulove.Constants.SEARCH_BY_YEAR
 import it.simone.bookyoulove.database.DAO.ShowedBookInfo
 import it.simone.bookyoulove.utilsClass.DateUtils
-import it.simone.bookyoulove.view.SEARCH_BY_AUTHOR
-import it.simone.bookyoulove.view.SEARCH_BY_RATE
-import it.simone.bookyoulove.view.SEARCH_BY_TITLE
-import it.simone.bookyoulove.view.SEARCH_BY_YEAR
 import java.util.*
 
 

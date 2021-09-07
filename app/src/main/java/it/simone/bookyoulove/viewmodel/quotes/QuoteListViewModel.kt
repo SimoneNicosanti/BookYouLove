@@ -61,7 +61,7 @@ class QuoteListViewModel(application : Application) : AndroidViewModel(applicati
         quoteList.setSelectedQuote(selectedQuote)
     }
 
-    fun onModifiedQuote(modifiedQuote: Quote) {
+    fun onQuoteModified(modifiedQuote: Quote) {
         isAccessingDatabase.value = true
         viewModelScope.launch {
             quoteList.onModifiedQuote(modifiedQuote)

@@ -15,6 +15,11 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.squareup.picasso.Picasso
+import it.simone.bookyoulove.Constants.AUDIOBOOK_SUPPORT
+import it.simone.bookyoulove.Constants.EBOOK_SUPPORT
+import it.simone.bookyoulove.Constants.END_DATE_SETTER
+import it.simone.bookyoulove.Constants.PAPER_SUPPORT
+import it.simone.bookyoulove.Constants.START_DATE_SETTER
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.databinding.FragmentModifyEndedBinding
@@ -31,7 +36,6 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
     private lateinit var binding : FragmentModifyEndedBinding
 
     private val chartsVM : ChartsViewModel by activityViewModels()
-    //private val endedVM : EndedViewModel by activityViewModels()
     private val modifyEndedVM : ModifyBookViewModel by viewModels()
 
 
@@ -90,7 +94,6 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
         binding.modifyEndedPaperCheck.setOnClickListener(this)
         binding.modifyEndedEbookCheck.setOnClickListener(this)
         binding.modifyEndedAudiobookCheck.setOnClickListener(this)
-        //binding.modifyEndedPagesCard.setOnClickListener(this)
         binding.modifyEndedSaveButton.setOnClickListener(this)
 
         binding.endedModifyTotalRate.onRatingBarChangeListener = this
@@ -155,7 +158,6 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
         val canExitObserver = Observer<Book> { finalBook ->
             if (args.modifyEndedBook != null) {
                 findNavController().previousBackStackEntry?.savedStateHandle?.set("endedModifiedBook", finalBook)
-                //endedVM.notifyArrayItemChanged(finalBook)
                 chartsVM.changeLoadedStatus()
             }
             else {

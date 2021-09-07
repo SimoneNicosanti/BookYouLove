@@ -5,10 +5,12 @@ import android.webkit.MimeTypeMap
 import com.google.api.client.http.FileContent
 import com.google.api.services.drive.Drive
 import com.google.gson.Gson
+import it.simone.bookyoulove.Constants.GOOGLE_DRIVE_BACKUP_NAME
 import it.simone.bookyoulove.database.AppDatabase
 import it.simone.bookyoulove.database.entity.Book
+import it.simone.bookyoulove.database.entity.BookSupport
 import it.simone.bookyoulove.database.entity.Quote
-import it.simone.bookyoulove.viewmodel.GOOGLE_DRIVE_BACKUP_NAME
+import it.simone.bookyoulove.database.entity.Rate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
@@ -18,6 +20,7 @@ import java.io.File
 import java.io.FileWriter
 
 const val GOOGLE_DRIVE_BACKUP_FOLDER = "appDataFolder"
+//https://www.section.io/engineering-education/backup-services-with-google-drive-api-in-android/
 
 class GoogleDriveModel(private val driveService : Drive, private val myApp : Application) {
 
@@ -68,7 +71,7 @@ class GoogleDriveModel(private val driveService : Drive, private val myApp : App
 
         val jsonQuoteArray = JSONArray()
         for (quote in quoteArray) {
-            val jsonQuote = Gson().toJson(quote)
+            val jsonQuote = Gson().toJson(BackupQuote().fromQuote(quote))
             jsonQuoteArray.put(JSONObject(jsonQuote))
         }
         return jsonQuoteArray
@@ -79,7 +82,7 @@ class GoogleDriveModel(private val driveService : Drive, private val myApp : App
 
         val jsonBookArray = JSONArray()
         for (book in bookArray) {
-            val jsonBook = Gson().toJson(book)
+            val jsonBook = Gson().toJson(BackupBook().fromBook(book))
             jsonBookArray.put(JSONObject(jsonBook))
         }
 
@@ -111,7 +114,8 @@ class GoogleDriveModel(private val driveService : Drive, private val myApp : App
     private fun restoreBookInfo(jsonBookArray: JSONArray) {
         val appDatabase = AppDatabase.getDatabaseInstance(myApp.applicationContext)
         for (index in 0 until jsonBookArray.length()) {
-            val restoredBook = Gson().fromJson(jsonBookArray.getJSONObject(index).toString(), Book::class.java)
+            val backupBook = Gson().fromJson(jsonBookArray.getJSONObject(index).toString(), BackupBook::class.java)
+            val restoredBook = backupBook.toBook()
             appDatabase.bookDao().insertBooks(restoredBook)
         }
     }
@@ -119,7 +123,8 @@ class GoogleDriveModel(private val driveService : Drive, private val myApp : App
     private fun restoreQuoteInfo(jsonQuoteArray: JSONArray) {
         val addDatabase = AppDatabase.getDatabaseInstance(myApp.applicationContext)
         for (index in 0 until jsonQuoteArray.length()) {
-            val restoredQuote = Gson().fromJson(jsonQuoteArray.getJSONObject(index).toString(), Quote::class.java)
+            val backupQuote = Gson().fromJson(jsonQuoteArray.getJSONObject(index).toString(), BackupQuote::class.java)
+            val restoredQuote = backupQuote.toQuote()
             addDatabase.quoteDao().insertQuote(restoredQuote)
         }
     }
@@ -134,4 +139,95 @@ class GoogleDriveModel(private val driveService : Drive, private val myApp : App
         }
         return ""
     }
+
+    //è necessario utilizzare queste classi di supporto perché Json non supporta completamente i Long
+    data class BackupBook (
+            var bookIdString : String = "",
+            var title : String = "",
+            var author : String = "",
+            var startDateString: String? = null,
+            var endDateString: String? = null,
+            var support : BookSupport? = null,
+            var coverName: String = "",
+            var pages: Int? = null,
+            var rate: Rate? = null,
+            var finalThought : String = "",
+            var readState: Int = 0
+    ) {
+        fun fromBook(book : Book) : BackupBook {
+            bookIdString = book.bookId.toString()
+            title = book.title
+            author = book.author
+            startDateString = (if (book.startDate != null) book.startDate.toString() else null)
+            endDateString = (if  (book.endDate != null) book.endDate.toString() else null)
+            support = book.support
+            coverName = book.coverName
+            pages = book.pages
+            rate = book.rate
+            finalThought = book.finalThought
+            readState = book.readState
+
+            return this
+        }
+
+        fun toBook() : Book {
+            return Book(
+                    bookIdString.toLong(),
+                    title,
+                    author,
+                    if (startDateString != null) startDateString!!.toLong() else null,
+                    if (endDateString != null) endDateString!!.toLong() else null,
+                    support,
+                    coverName,
+                    pages,
+                    rate,
+                    finalThought,
+                    readState)
+        }
+    }
+
+    data class BackupQuote (
+            var quoteIdString : String = "",
+            var bookIdString : String = "",
+            var quoteText : String = "",
+            var bookTitle : String = "",
+            var bookAuthor : String = "",
+            var favourite : Boolean = false,
+            var toWidget : Boolean = false,
+            var quotePage : Int = 0,
+            var quoteChapter : String = "",
+            var quoteThought : String = "",
+            var dateString : String = ""
+    ) {
+        fun fromQuote(quote : Quote) : BackupQuote {
+            quoteIdString = quote.quoteId.toString()
+            bookIdString = quote.bookId.toString()
+            quoteText = quote.quoteText
+            bookTitle = quote.bookTitle
+            bookAuthor = quote.bookAuthor
+            favourite = quote.favourite
+            toWidget = quote.toWidget
+            quoteChapter = quote.quoteChapter
+            quoteThought = quote.quoteThought
+            dateString = quote.date.toString()
+
+            return this
+        }
+
+        fun toQuote() : Quote {
+            return Quote(
+                    quoteIdString.toLong(),
+                    bookIdString.toLong(),
+                    quoteText,
+                    bookTitle,
+                    bookAuthor,
+                    favourite,
+                    toWidget,
+                    quotePage,
+                    quoteChapter,
+                    quoteThought,
+                    dateString.toLong())
+        }
+    }
+
 }

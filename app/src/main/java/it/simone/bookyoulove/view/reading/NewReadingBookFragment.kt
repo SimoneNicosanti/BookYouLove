@@ -6,7 +6,8 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.CheckBox
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
@@ -21,15 +22,24 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import com.google.common.util.concurrent.ListenableFuture
 import com.squareup.picasso.Picasso
+import it.simone.bookyoulove.Constants.AUDIOBOOK_SUPPORT
+import it.simone.bookyoulove.Constants.EBOOK_SUPPORT
+import it.simone.bookyoulove.Constants.ISBN_FIND_ITEM_ERROR
+import it.simone.bookyoulove.Constants.ISBN_INTERNET_ACCESS_ERROR
+import it.simone.bookyoulove.Constants.ISBN_NO_ERROR
+import it.simone.bookyoulove.Constants.PAPER_SUPPORT
+import it.simone.bookyoulove.Constants.READING_BOOK_STATE
+import it.simone.bookyoulove.Constants.START_DATE_SETTER
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.databinding.FragmentNewReadingBookBinding
-import it.simone.bookyoulove.model.ISBN_FIND_ITEM_ERROR
-import it.simone.bookyoulove.model.ISBN_INTERNET_ACCESS_ERROR
-import it.simone.bookyoulove.model.ISBN_NO_ERROR
+import it.simone.bookyoulove.model.GoogleBooksApi
 import it.simone.bookyoulove.utilsClass.DateFormatClass
-import it.simone.bookyoulove.view.*
-import it.simone.bookyoulove.view.dialog.*
+import it.simone.bookyoulove.view.dialog.AlertDialogFragment
+import it.simone.bookyoulove.view.dialog.CoverLinkPickerFragment
+import it.simone.bookyoulove.view.dialog.DatePickerFragment
+import it.simone.bookyoulove.view.setViewEnable
+import it.simone.bookyoulove.view.tbr.TbrModifyFragmentDirections
 import it.simone.bookyoulove.viewmodel.BookListViewModel
 import it.simone.bookyoulove.viewmodel.ModifyBookViewModel
 
@@ -116,8 +126,13 @@ class  NewReadingBookFragment : Fragment() , View.OnClickListener {
 
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<String>("scannedIsbnKey")?.observe(viewLifecycleOwner) { scannedIsbn ->
             //Snackbar.make(requireView(), scannedIsbn, Snackbar.LENGTH_LONG).show()
-            findNavController().currentBackStackEntry?.savedStateHandle?.remove<String>("scannedIsbnKey")
             newReadingVM.askBookByIsbn(scannedIsbn)
+            findNavController().currentBackStackEntry?.savedStateHandle?.remove<String>("scannedIsbnKey")
+        }
+
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<GoogleBooksApi.NetworkBook>("selectedGoogleBook")?.observe(viewLifecycleOwner) { selectedNetworkBook ->
+            newReadingVM.onNetworkBookReceived(selectedNetworkBook, ISBN_NO_ERROR)
+            findNavController().currentBackStackEntry?.savedStateHandle?.remove<GoogleBooksApi.NetworkBook>("selectedGoogleBook")
         }
 
         return binding.root
@@ -260,6 +275,10 @@ class  NewReadingBookFragment : Fragment() , View.OnClickListener {
         return when (item.itemId) {
             R.id.modifyReadingMenuScanItem -> {
                 requestPermissionForCamera()
+                true
+            }
+            R.id.modifyReadingMenuSearchOnlineItem -> {
+                findNavController().navigate(TbrModifyFragmentDirections.actionGlobalGoogleBooksSearch())
                 true
             }
             else -> super.onOptionsItemSelected(item)

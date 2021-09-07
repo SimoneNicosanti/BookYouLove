@@ -6,16 +6,13 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
-import it.simone.bookyoulove.filters.BookListFilter
+import it.simone.bookyoulove.Constants.SEARCH_BY_TITLE
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.DAO.ShowedBookInfo
-import it.simone.bookyoulove.view.SEARCH_BY_TITLE
+import it.simone.bookyoulove.filters.BookListFilter
+
 
 //https://www.youtube.com/watch?v=69C1ljfDvl0
-/*
-    Rivedi Video youtube per capire bene quello che succede!!
- */
-
 class EndedAdapter(private val bookSetAll: MutableList<ShowedBookInfo>,
                    private val onRecyclerViewItemSelectedListener: OnRecyclerViewItemSelectedListener,
                    private val linearLayoutIndicator: Boolean) : RecyclerView.Adapter<RecyclerView.ViewHolder>() , Filterable {

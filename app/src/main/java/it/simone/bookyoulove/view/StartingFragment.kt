@@ -12,6 +12,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import it.simone.bookyoulove.Constants.AUDIOBOOK_SUPPORT
+import it.simone.bookyoulove.Constants.EBOOK_SUPPORT
+import it.simone.bookyoulove.Constants.PAPER_SUPPORT
+import it.simone.bookyoulove.Constants.START_DATE_SETTER
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.databinding.FragmentStartingBinding
 import it.simone.bookyoulove.utilsClass.DateFormatClass

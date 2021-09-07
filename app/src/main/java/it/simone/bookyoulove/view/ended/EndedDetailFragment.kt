@@ -26,7 +26,6 @@ class EndedDetailFragment : Fragment(), View.OnClickListener {
 
     private lateinit var binding : FragmentEndedDetailBinding
     private val endedDetailVM : DetailBookViewModel by viewModels()
-    //private val endedVM : EndedViewModel by activityViewModels()
     private val chartsVM : ChartsViewModel by activityViewModels()
 
 

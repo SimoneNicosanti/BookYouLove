@@ -4,14 +4,18 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Filter
+import android.widget.Filterable
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
+import it.simone.bookyoulove.Constants.SEARCH_BY_TITLE_OR_AUTHOR
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.DAO.ShowedBookInfo
 import it.simone.bookyoulove.filters.BookListFilter
-import it.simone.bookyoulove.view.SEARCH_BY_TITLE_OR_AUTHOR
-import java.util.ArrayList
+import java.util.*
+
 
 class TbrAdapter(private val tbrSetAll : MutableList<ShowedBookInfo>,
                  private val onTbrItemClickedListener: OnTbrItemClickedListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {

@@ -19,13 +19,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.common.util.concurrent.ListenableFuture
 import com.squareup.picasso.Picasso
+import it.simone.bookyoulove.Constants.ISBN_FIND_ITEM_ERROR
+import it.simone.bookyoulove.Constants.ISBN_INTERNET_ACCESS_ERROR
+import it.simone.bookyoulove.Constants.ISBN_NO_ERROR
+import it.simone.bookyoulove.Constants.TBR_BOOK_STATE
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.databinding.FragmentTbrModifyBinding
-import it.simone.bookyoulove.model.ISBN_FIND_ITEM_ERROR
-import it.simone.bookyoulove.model.ISBN_INTERNET_ACCESS_ERROR
-import it.simone.bookyoulove.model.ISBN_NO_ERROR
-import it.simone.bookyoulove.view.TBR_BOOK_STATE
+import it.simone.bookyoulove.model.GoogleBooksApi
 import it.simone.bookyoulove.view.dialog.AlertDialogFragment
 import it.simone.bookyoulove.view.dialog.CoverLinkPickerFragment
 import it.simone.bookyoulove.view.setViewEnable
@@ -102,8 +103,12 @@ class TbrModifyFragment : Fragment(), View.OnClickListener {
         }
 
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<String>("scannedIsbnKey")?.observe(viewLifecycleOwner) { scannedIsbn ->
-            findNavController().currentBackStackEntry?.savedStateHandle?.remove<String>("scannedIsbnKey")
             tbrModifyVM.askBookByIsbn(scannedIsbn)
+            findNavController().currentBackStackEntry?.savedStateHandle?.remove<String>("scannedIsbnKey")
+        }
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<GoogleBooksApi.NetworkBook>("selectedGoogleBook")?.observe(viewLifecycleOwner) { selectedNetworkBook ->
+            tbrModifyVM.onNetworkBookReceived(selectedNetworkBook, ISBN_NO_ERROR)
+            findNavController().currentBackStackEntry?.savedStateHandle?.remove<GoogleBooksApi.NetworkBook>("selectedGoogleBook")
         }
 
         return binding.root
@@ -207,11 +212,17 @@ class TbrModifyFragment : Fragment(), View.OnClickListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return if (item.itemId == R.id.tbrModifyFragmentMenuScanItem) {
-            requestPermissionForCamera()
-            true
+        return when (item.itemId) {
+            R.id.tbrModifyFragmentMenuScanItem -> {
+                requestPermissionForCamera()
+                true
+            }
+            R.id.tbrModifyFragmentMenuSearchOnlineItem -> {
+                findNavController().navigate(TbrModifyFragmentDirections.actionGlobalGoogleBooksSearch())
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
-        else super.onOptionsItemSelected(item)
     }
 
     private fun requestPermissionForCamera() {

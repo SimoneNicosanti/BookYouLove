@@ -2,10 +2,10 @@ package it.simone.bookyoulove.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
+import it.simone.bookyoulove.Constants.ENDED_BOOK_STATE
 import it.simone.bookyoulove.database.AppDatabase
 import it.simone.bookyoulove.database.entity.BookSupport
 import it.simone.bookyoulove.database.entity.Rate
-import it.simone.bookyoulove.view.ENDED_BOOK_STATE
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

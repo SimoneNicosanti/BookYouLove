@@ -1,14 +1,17 @@
 package it.simone.bookyoulove.model
 
 import android.util.Log
+import it.simone.bookyoulove.Constants.CHARACTER_RATE
+import it.simone.bookyoulove.Constants.EMOTIONS_RATE
+import it.simone.bookyoulove.Constants.PLOT_RATE
+import it.simone.bookyoulove.Constants.STYLE_RATE
+import it.simone.bookyoulove.Constants.TAG
+import it.simone.bookyoulove.Constants.TOTAL_RATE
 import it.simone.bookyoulove.utilsClass.DateUtils
-import it.simone.bookyoulove.view.TAG
-import it.simone.bookyoulove.viewmodel.charts.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.time.YearMonth
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class ChartsYearInfoModel(private val infoSet : Array<ChartsBookData>, yearSet : Array<Int>) {

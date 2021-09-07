@@ -20,6 +20,11 @@ import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.android.material.snackbar.Snackbar
+import it.simone.bookyoulove.Constants.CHARACTER_RATE
+import it.simone.bookyoulove.Constants.EMOTIONS_RATE
+import it.simone.bookyoulove.Constants.ENDED_DETAIL_ENTRY_CODE_FROM_CHARTS
+import it.simone.bookyoulove.Constants.PLOT_RATE
+import it.simone.bookyoulove.Constants.STYLE_RATE
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.databinding.FragmentChartsYearBinding
 import it.simone.bookyoulove.model.ChartsBookData
@@ -31,19 +36,23 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-const val TEXT_DATA_SIZE = 10F
-const val ENDED_DETAIL_ENTRY_CODE = 1
+
+
 
 //Non posso inserire animazione sul constraintlayout perché entra in conflitto con l'animazione del ViewPager
 
 class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnChartValueSelectedListener {
+
+    companion object {
+        const val TEXT_DATA_SIZE = 10F
+    }
 
     private lateinit var binding : FragmentChartsYearBinding
 
     private var booksOfTheYearArray = arrayListOf<ChartsBookData>()
 
     private val chartsVM : ChartsViewModel by activityViewModels()
-    //private val chartsYearVM : ChartsYearViewModel by viewModels()
+
 
 
 
@@ -310,7 +319,7 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
             val rateChartSnackbar = Snackbar.make(requireView(), booksOfTheYearArray[x].title, Snackbar.LENGTH_SHORT)
             rateChartSnackbar.setAction(R.string.goto_string) {
                 val action = ChartsFragmentDirections.actionChartsFragmentToEndedDetailFragment(booksOfTheYearArray[x].bookId)
-                action.endedDetailEntryPoint = ENDED_DETAIL_ENTRY_CODE
+                action.endedDetailEntryPoint = ENDED_DETAIL_ENTRY_CODE_FROM_CHARTS
                 findNavController().navigate(action)
             }
             rateChartSnackbar.anchorView = requireActivity().findViewById(R.id.bottomNavigationView)

@@ -10,11 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
-const val TOTAL_RATE = "total"
-const val STYLE_RATE = "style"
-const val EMOTIONS_RATE = "emotions"
-const val PLOT_RATE = "plot"
-const val CHARACTER_RATE = "character"
+
 
 class ChartsViewModel(application : Application) : AndroidViewModel(application) {
 
@@ -44,7 +40,6 @@ class ChartsViewModel(application : Application) : AndroidViewModel(application)
                 loadedOnce = true
                 isAccessing.value = false
                 readyArray.value = true
-                //readyArray.value = false
             }
         }
     }
