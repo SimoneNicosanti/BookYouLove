@@ -128,4 +128,5 @@
     <string name="guess_the_quote_string" translatable="false">Guess The Quote</string>
     <string name="search_online_string">Search Online</string>
     <string name="scan_isdn_error_string">Error Scanning ISBN!! Please Try Restart!!</string>
+    <string name="search_favorite_string">Search Favorite</string>
 </resources>

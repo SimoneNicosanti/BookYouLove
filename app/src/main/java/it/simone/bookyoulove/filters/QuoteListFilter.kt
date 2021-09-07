@@ -7,14 +7,22 @@ import java.util.*
 
 class QuoteListFilter(private val quoteSetAll: MutableList<ShowQuoteInfo>,
                       private val quoteSet: MutableList<ShowQuoteInfo>,
-                      private val adapter: QuoteListAdapter
-): Filter() {
+                      private val adapter: QuoteListAdapter,
+                      private val favoriteSearch : Boolean): Filter() {
 
 
     override fun performFiltering(queryField: CharSequence?): FilterResults {
-
-        val filteredList : MutableList<ShowQuoteInfo> = if (queryField == null || queryField == "") quoteSetAll
-        else quoteSetAll.filter { it.quoteText.toLowerCase(Locale.ROOT).contains(queryField.toString().toLowerCase(Locale.getDefault())) } as MutableList<ShowQuoteInfo>
+        val filteredList: MutableList<ShowQuoteInfo>
+        if (!favoriteSearch) {
+                filteredList = if (queryField == null || queryField == "") quoteSetAll
+                else quoteSetAll.filter {
+                    it.quoteText.toLowerCase(Locale.ROOT)
+                        .contains(queryField.toString().toLowerCase(Locale.getDefault()))
+                } as MutableList<ShowQuoteInfo>
+        }
+        else {
+            filteredList = quoteSetAll.filter {it.favourite} as MutableList<ShowQuoteInfo>
+        }
 
         val filterResult = FilterResults()
         filterResult.values = filteredList

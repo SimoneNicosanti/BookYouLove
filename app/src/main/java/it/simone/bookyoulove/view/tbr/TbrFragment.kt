@@ -155,6 +155,7 @@ class TbrFragment : Fragment(), TbrAdapter.OnTbrItemClickedListener, SearchView.
 
         if (searchField == "") {
             searchView.isIconified = true
+            searchView.clearFocus()
         }
         else {
             searchView.isIconified = false

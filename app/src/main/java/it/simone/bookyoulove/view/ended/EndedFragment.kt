@@ -146,6 +146,7 @@ class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListene
 
         if (searchField == "") {
             mySearchView?.isIconified = true
+            mySearchView?.clearFocus()
         }
         else {
             mySearchView?.isIconified = false

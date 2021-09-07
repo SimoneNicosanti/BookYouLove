@@ -28,7 +28,7 @@ class QuoteListFragment : Fragment(), QuoteListAdapter.OnQuoteListHolderClick, S
     private val quoteListVM : QuoteListViewModel by viewModels()
 
     private var searchField : String = ""
-
+    private var searchFavorite = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,7 +41,10 @@ class QuoteListFragment : Fragment(), QuoteListAdapter.OnQuoteListHolderClick, S
             quoteListVM.getQuotesByBookId(args.bookId)
         }
 
-        if (savedInstanceState != null) searchField = savedInstanceState.getString("searchField").toString()
+        if (savedInstanceState != null) {
+            searchField = savedInstanceState.getString("searchField").toString()
+            searchFavorite = savedInstanceState.getBoolean("searchFavorite")
+        }
 
         setHasOptionsMenu(true)
     }
@@ -111,8 +114,31 @@ class QuoteListFragment : Fragment(), QuoteListAdapter.OnQuoteListHolderClick, S
         }
         else {
             mySearchView.isIconified = true
+            mySearchView.clearFocus()
         }
 
+        val favoriteSearchItem = menu.findItem(R.id.quotesListMenuSearchFavoriteItem)
+
+        if (searchFavorite) {
+            favoriteSearchItem.isChecked = false
+            onOptionsItemSelected(favoriteSearchItem)
+        }
+
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.quotesListMenuSearchFavoriteItem) {
+            item.isChecked = !item.isChecked
+            searchFavorite = item.isChecked
+            item.setIcon(if (item.isChecked) R.drawable.ic_round_modify_quote_favorite_on else R.drawable.ic_round_modify_quote_favorite_off)
+            binding.quotesListRecyclerView.adapter?.let {
+                it as QuoteListAdapter
+                it.favoriteSearch = item.isChecked
+                if (item.isChecked) it.filter.filter("")
+                else it.filter.filter(searchField)
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 
@@ -140,5 +166,6 @@ class QuoteListFragment : Fragment(), QuoteListAdapter.OnQuoteListHolderClick, S
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString("searchField", searchField)
+        outState.putBoolean("searchFavorite", searchFavorite)
     }
 }

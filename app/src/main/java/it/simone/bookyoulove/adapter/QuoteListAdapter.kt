@@ -19,6 +19,8 @@ class QuoteListAdapter(private val quoteSetAll: MutableList<ShowQuoteInfo>,
 
     val quoteSet : MutableList<ShowQuoteInfo> = ArrayList(quoteSetAll).toMutableList()
 
+    var favoriteSearch = false
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuotesViewHolder {
 
@@ -62,6 +64,6 @@ class QuoteListAdapter(private val quoteSetAll: MutableList<ShowQuoteInfo>,
     }
 
     override fun getFilter(): Filter {
-        return QuoteListFilter(quoteSetAll, quoteSet, this)
+        return QuoteListFilter(quoteSetAll, quoteSet, this, favoriteSearch)
     }
 }

@@ -8,4 +8,10 @@
         android:title="@string/search_string"
         app:actionViewClass="android.widget.SearchView"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/quotesListMenuSearchFavoriteItem"
+        android:checkable="true"
+        android:icon="@drawable/ic_round_modify_quote_favorite_off"
+        android:title="@string/search_favorite_string"
+        app:showAsAction="always" />
 </menu>
