@@ -13,18 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/CustomTheme.BookYouLove">
 
-        <receiver android:name=".ReadingBooksWidget">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="it.simone.bookyoulove.TAKE_QUOTE_FROM_WIDGET_INTENT" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/reading_books_widget_info" />
-        </receiver>
-
-        <receiver android:name=".view.QuoteOfTheDayWidget">
+        <receiver android:name=".widgets.QuoteOfTheDayWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="it.simone.bookyoulove.QUOTE_OF_THE_DAY_FAVOURITE_SWITCH_INTENT" />
@@ -36,12 +25,8 @@
         </receiver>
 
         <service
-            android:name=".view.QuoteOfTheDayWidgetService"
+            android:name=".widgets.QuoteOfTheDayWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
-
-        <service
-            android:name=".ReadingBooksWidgetService"
-            android:permission="android.permission.BIND_REMOTEVIEWS"/>
 
         <provider
             android:name=".providers.QuotesProvider"

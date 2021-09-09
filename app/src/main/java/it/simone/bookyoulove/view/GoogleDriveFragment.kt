@@ -22,7 +22,6 @@ import it.simone.bookyoulove.databinding.FragmentGoogleDriveBinding
 import it.simone.bookyoulove.view.dialog.AlertDialogFragment
 import it.simone.bookyoulove.viewmodel.GoogleDriveViewModel
 
-const val GOOGLE_DRIVE_SIGN = 250
 
 class GoogleDriveFragment : Fragment(), View.OnClickListener {
 
@@ -31,7 +30,7 @@ class GoogleDriveFragment : Fragment(), View.OnClickListener {
     private val googleDriveVM : GoogleDriveViewModel by viewModels()
 
     private val registerForSignInResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        onActivityResult(result.resultCode, result.data)
+        onGoogleSignInActivity(result.resultCode, result.data)
     }
 
     override fun onCreateView(
@@ -132,7 +131,7 @@ class GoogleDriveFragment : Fragment(), View.OnClickListener {
     }
 
     //Non è un override: la onActivityResult è deprecata!!
-    private fun onActivityResult(resultCode: Int, data: Intent?) {
+    private fun onGoogleSignInActivity(resultCode: Int, data: Intent?) {
         if (resultCode == RESULT_OK) {
             googleDriveVM.getUser()
         }

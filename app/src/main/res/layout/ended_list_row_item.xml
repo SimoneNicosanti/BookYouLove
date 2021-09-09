@@ -24,8 +24,8 @@
 
             <ImageView
                 android:id="@id/linearEndedCoverImageView"
-                android:layout_width="199dp"
-                android:layout_height="285dp"
+                android:layout_width="150dp"
+                android:layout_height="225dp"
                 android:layout_marginHorizontal="@dimen/card_view_cover_margin"
                 android:layout_marginVertical="@dimen/card_view_cover_margin"
                 android:contentDescription="@string/book_cover_string"
@@ -39,8 +39,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="5dp"
-                android:layout_marginVertical="50dp"
+                android:layout_marginVertical="25dp"
                 android:gravity="center"
+                android:lines="2"
                 android:maxLines="2"
                 android:singleLine="false"
                 android:textSize="18sp"
@@ -54,8 +55,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="5dp"
-                android:layout_marginVertical="50dp"
+                android:layout_marginVertical="25dp"
+                android:lines="2"
                 android:textSize="18sp"
+                app:layout_constraintBottom_toTopOf="@+id/linearEndedRate"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/linearEndedCoverImageView"
                 app:layout_constraintTop_toBottomOf="@+id/linearEndedTitle" />
@@ -65,11 +68,11 @@
                 style="@style/Widget.AppCompat.RatingBar.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="50dp"
+                android:layout_marginVertical="25dp"
                 android:isIndicator="true"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/linearEndedCoverImageView"
-                app:layout_constraintTop_toBottomOf="@+id/linearEndedAuthor" />
+                app:layout_constraintStart_toEndOf="@+id/linearEndedCoverImageView" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

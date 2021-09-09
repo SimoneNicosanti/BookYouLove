@@ -1,5 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:padding="@dimen/widget_margin"
     android:scrollbars="vertical|none"
@@ -11,6 +12,8 @@
         android:layout_height="wrap_content"
         android:background="@drawable/quote_of_the_day_widget_shape_primary"
         android:divider="@null"
-        android:dividerHeight="0dp" />
+        android:dividerHeight="0dp">
+
+    </ListView>
 
 </RelativeLayout>

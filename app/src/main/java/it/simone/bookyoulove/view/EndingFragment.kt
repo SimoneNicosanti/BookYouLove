@@ -2,7 +2,6 @@ package it.simone.bookyoulove.view
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +9,7 @@ import android.widget.ImageButton
 import android.widget.RatingBar
 import androidx.core.os.bundleOf
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -22,8 +22,8 @@ import it.simone.bookyoulove.databinding.FragmentEndingBinding
 import it.simone.bookyoulove.utilsClass.DateFormatClass
 import it.simone.bookyoulove.view.dialog.DatePickerFragment
 import it.simone.bookyoulove.viewmodel.BookListViewModel
-import it.simone.bookyoulove.viewmodel.charts.ChartsViewModel
 import it.simone.bookyoulove.viewmodel.EndingViewModel
+import it.simone.bookyoulove.viewmodel.charts.ChartsViewModel
 
 
 class EndingFragment : Fragment(), View.OnClickListener, RatingBar.OnRatingBarChangeListener {
@@ -48,7 +48,6 @@ class EndingFragment : Fragment(), View.OnClickListener, RatingBar.OnRatingBarCh
             binding.endingEndDateText.text = DateFormatClass(requireContext()).computeDateString(settedEndDate)
             endingVM.setEndDate(settedEndDate)
         })
-
         endingVM.loadEndingBook(args.endingBookid)
     }
 

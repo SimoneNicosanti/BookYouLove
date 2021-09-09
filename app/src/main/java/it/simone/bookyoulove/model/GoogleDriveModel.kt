@@ -22,6 +22,8 @@ import java.io.FileWriter
 const val GOOGLE_DRIVE_BACKUP_FOLDER = "appDataFolder"
 //https://www.section.io/engineering-education/backup-services-with-google-drive-api-in-android/
 
+
+//@Suppress("BlockingMethodInNonBlockingContext")
 class GoogleDriveModel(private val driveService : Drive, private val myApp : Application) {
 
     suspend fun uploadBackupOnGoogleDrive() {
