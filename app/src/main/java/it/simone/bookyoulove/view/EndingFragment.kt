@@ -37,6 +37,8 @@ class EndingFragment : Fragment(), View.OnClickListener, RatingBar.OnRatingBarCh
 
     private var terminateStartDate : Long = 0L
 
+    private var isFlipped = false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,6 +58,8 @@ class EndingFragment : Fragment(), View.OnClickListener, RatingBar.OnRatingBarCh
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentEndingBinding.inflate(inflater, container, false)
+
+        savedInstanceState?.let { isFlipped = savedInstanceState.getBoolean("isFlipped") }
         setViewEnable(true, requireActivity())
 
         binding.endingFlipRateCardButton.setOnClickListener(this)
@@ -69,6 +73,11 @@ class EndingFragment : Fragment(), View.OnClickListener, RatingBar.OnRatingBarCh
 
         binding.endingFinalThoughtInput.doOnTextChanged { text, _, _, _ ->
             endingVM.setFinalThought(text)
+        }
+
+        if (isFlipped) {
+            binding.otherRatesLinearLayout.visibility = View.VISIBLE
+            binding.endingFlipRateCardButton.setImageResource(R.drawable.ic_round_arrow_drop_down)
         }
 
         setObservers()
@@ -120,7 +129,8 @@ class EndingFragment : Fragment(), View.OnClickListener, RatingBar.OnRatingBarCh
         when (view) {
 
             binding.endingFlipRateCardButton -> {
-                if (!endingVM.isFlipped) {
+                isFlipped = !isFlipped
+                if (isFlipped) {
                     binding.otherRatesLinearLayout.visibility = View.VISIBLE
                     (view as ImageButton).setImageResource(R.drawable.ic_round_arrow_drop_down)
                 }
@@ -128,7 +138,6 @@ class EndingFragment : Fragment(), View.OnClickListener, RatingBar.OnRatingBarCh
                     binding.otherRatesLinearLayout.visibility = View.GONE
                     (view as ImageButton).setImageResource(R.drawable.ic_round_arrow_drop_up)
                 }
-                endingVM.isFlipped = !endingVM.isFlipped
             }
 
             binding.endingEndDateCard -> {
@@ -154,5 +163,10 @@ class EndingFragment : Fragment(), View.OnClickListener, RatingBar.OnRatingBarCh
             binding.endingPlotRate -> endingVM.modifyPlotRate(rating)
             binding.endingCharactersRate -> endingVM.modifyCharactersRate(rating)
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean("isFlipped", isFlipped)
     }
 }

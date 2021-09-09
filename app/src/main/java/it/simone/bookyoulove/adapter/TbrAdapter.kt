@@ -14,6 +14,7 @@ import it.simone.bookyoulove.Constants.SEARCH_BY_TITLE_OR_AUTHOR
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.DAO.ShowedBookInfo
 import it.simone.bookyoulove.filters.BookListFilter
+import it.simone.bookyoulove.utilsClass.MyPicasso
 import java.util.*
 
 
@@ -33,11 +34,7 @@ class TbrAdapter(private val tbrSetAll : MutableList<ShowedBookInfo>,
         holder.authorTextView.text = tbrSet[position].author
         holder.pagesTextView.text = tbrSet[position].pages.toString()
 
-        if (tbrSet[position].coverName != "") Picasso.get().load(tbrSet[position].coverName)
-                                                        .placeholder(R.drawable.book_cover_place_holder).error(R.drawable.cover_not_found)
-                                                        .into(holder.coverImageView)
-
-        else Picasso.get().load(R.drawable.book_cover_place_holder).into(holder.coverImageView)
+        MyPicasso().putImageIntoView(tbrSet[position].coverName, holder.coverImageView)
     }
 
     override fun getItemCount(): Int {

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/quoteOfTheDayRoot"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
@@ -9,20 +11,27 @@
         android:id="@+id/quoteOfTheDayWidgetTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp" />
+        android:layout_margin="5dp"
+        android:fontFamily="casual"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/quoteOfTheDayWidgetAuthor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp" />
+        android:layout_margin="5dp"
+        android:fontFamily="casual"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/quoteOfTheDayQuoteText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
+        android:background="@drawable/quote_of_the_day_widget_shape_secondary"
+        android:elevation="@dimen/baseCardElevation"
         android:fontFamily="casual"
+        android:padding="10dp"
         android:textSize="18sp" />
 
 </LinearLayout>

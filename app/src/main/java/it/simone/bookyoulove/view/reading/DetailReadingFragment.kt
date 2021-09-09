@@ -13,6 +13,7 @@ import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.databinding.FragmentDetailReadingBinding
 import it.simone.bookyoulove.utilsClass.DateFormatClass
+import it.simone.bookyoulove.utilsClass.MyPicasso
 import it.simone.bookyoulove.view.setViewEnable
 import it.simone.bookyoulove.viewmodel.DetailBookViewModel
 
@@ -64,9 +65,7 @@ class DetailReadingFragment : Fragment() {
 
         val currentBookObserver = Observer<Book> { currentBook ->
             Log.d("Nicosanti", "Detail Reading Current")
-            if (currentBook.coverName != "") Picasso.get().load(currentBook.coverName).placeholder(R.drawable.book_cover_place_holder).error(
-                R.drawable.cover_not_found).into(binding.detailReadingCoverImageView)
-            else Picasso.get().load(R.drawable.book_cover_place_holder).into(binding.detailReadingCoverImageView)
+            MyPicasso().putImageIntoView(currentBook.coverName, binding.detailReadingCoverImageView)
 
             binding.detailReadingTitle.text = currentBook.title
             binding.detailReadingAuthor.text = currentBook.author

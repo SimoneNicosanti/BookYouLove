@@ -16,6 +16,7 @@ import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.databinding.FragmentEndedDetailBinding
 import it.simone.bookyoulove.utilsClass.DateFormatClass
+import it.simone.bookyoulove.utilsClass.MyPicasso
 import it.simone.bookyoulove.view.dialog.ConfirmDeleteDialogFragment
 import it.simone.bookyoulove.view.setViewEnable
 import it.simone.bookyoulove.viewmodel.DetailBookViewModel
@@ -104,8 +105,7 @@ class EndedDetailFragment : Fragment(), View.OnClickListener {
             binding.endedDetailTitle.text = currentBook.title
             binding.endedDetailAuthor.text = currentBook.author
 
-            if (currentBook.coverName != "") Picasso.get().load(currentBook.coverName).placeholder(R.drawable.book_cover_place_holder).error(R.drawable.cover_not_found).into(binding.endedDetailCoverImageView)
-            else Picasso.get().load(R.drawable.book_cover_place_holder).into(binding.endedDetailCoverImageView)
+            MyPicasso().putImageIntoView(currentBook.coverName, binding.endedDetailCoverImageView)
 
             binding.endedDetailPagesTextView.text = currentBook.pages.toString()
 

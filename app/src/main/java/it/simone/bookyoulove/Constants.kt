@@ -38,4 +38,7 @@ object Constants {
     const val GOOGLE_DRIVE_BACKUP_NAME = "BookYouLoveDatabaseBackup"
 
     const val ENDED_DETAIL_ENTRY_CODE_FROM_CHARTS = 1
+
+    const val QUOTE_OF_THE_DAY_FAVORITE_SWITCH_INTENT = "it.simone.bookyoulove.QUOTE_OF_THE_DAY_FAVOURITE_SWITCH_INTENT"
+    const val QUOTE_FROM_WIDGET_INTENT = "it.simone.bookyoulove.TAKE_QUOTE_FROM_WIDGET_INTENT"
 }

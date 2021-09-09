@@ -130,7 +130,6 @@ class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListene
 
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        menu.clear()
         inflater.inflate(R.menu.ended_fragment_menu, menu)
     }
 

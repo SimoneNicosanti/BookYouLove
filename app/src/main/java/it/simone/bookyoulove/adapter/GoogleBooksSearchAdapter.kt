@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.model.GoogleBooksApi
+import it.simone.bookyoulove.utilsClass.MyPicasso
 
 
 class GoogleBooksSearchAdapter(val networkBookList : MutableList<GoogleBooksApi.NetworkBook>,
@@ -22,13 +23,8 @@ class GoogleBooksSearchAdapter(val networkBookList : MutableList<GoogleBooksApi.
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         holder as NetworkBookListViewHolder
-        if (networkBookList[position].thumbnail != "") Picasso.get()
-            .load(networkBookList[position].thumbnail)
-            .placeholder(R.drawable.book_cover_place_holder)
-            .error(R.drawable.cover_not_found)
-            .into(holder.coverImageView)
 
-        else Picasso.get().load(R.drawable.book_cover_place_holder).into(holder.coverImageView)
+        MyPicasso().putImageIntoView(networkBookList[position].thumbnail, holder.coverImageView)
 
         holder.titleTextView.text = networkBookList[position].title
         holder.authorTextView.text = networkBookList[position].authors

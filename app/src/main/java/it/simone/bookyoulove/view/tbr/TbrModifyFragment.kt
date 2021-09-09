@@ -27,6 +27,7 @@ import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.databinding.FragmentTbrModifyBinding
 import it.simone.bookyoulove.model.GoogleBooksApi
+import it.simone.bookyoulove.utilsClass.MyPicasso
 import it.simone.bookyoulove.view.dialog.AlertDialogFragment
 import it.simone.bookyoulove.view.dialog.CoverLinkPickerFragment
 import it.simone.bookyoulove.view.setViewEnable
@@ -92,12 +93,7 @@ class TbrModifyFragment : Fragment(), View.OnClickListener {
         childFragmentManager.setFragmentResultListener("coverLinkKey", this) { _, bundle ->
             val coverLink = bundle.getString("settedCoverLink")
 
-            if (coverLink != "") Picasso.get().load(coverLink)
-                .placeholder(R.drawable.book_cover_place_holder)
-                .error(R.drawable.cover_not_found)
-                .into(binding.tbrModifyCoverImageView)
-
-            else Picasso.get().load(R.drawable.book_cover_place_holder).into(binding.tbrModifyCoverImageView)
+            coverLink?.let { MyPicasso().putImageIntoView(it, binding.tbrModifyCoverImageView)}
 
             tbrModifyVM.modifyCover(coverLink!!)
         }
@@ -150,12 +146,7 @@ class TbrModifyFragment : Fragment(), View.OnClickListener {
             binding.tbrModifyAuthorEditText.setText(it.author)
             binding.tbrModifyPagesEditText.setText(it.pages.toString())
 
-            if (it.coverName != "") Picasso.get().load(it.coverName)
-                .placeholder(R.drawable.book_cover_place_holder)
-                .error(R.drawable.cover_not_found)
-                .into(binding.tbrModifyCoverImageView)
-
-            else Picasso.get().load(R.drawable.book_cover_place_holder).into(binding.tbrModifyCoverImageView)
+            MyPicasso().putImageIntoView(it.coverName, binding.tbrModifyCoverImageView)
         }
         tbrModifyVM.currentBook.observe(viewLifecycleOwner, currentBookObserver)
 

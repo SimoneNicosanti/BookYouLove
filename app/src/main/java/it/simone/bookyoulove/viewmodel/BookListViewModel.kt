@@ -1,6 +1,7 @@
 package it.simone.bookyoulove.viewmodel
 
 import android.app.Application
+import android.app.PendingIntent
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope

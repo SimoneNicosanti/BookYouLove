@@ -9,16 +9,15 @@ import com.github.islamkhsh.CardSliderAdapter
 import com.squareup.picasso.Picasso
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.DAO.ShowedBookInfo
+import it.simone.bookyoulove.utilsClass.MyPicasso
 
 
 class ReadingAdapter(val readingBookSetAll: MutableList<ShowedBookInfo>,
                      private val onReadingItemMenuItemClickListener: OnReadingItemMenuItemClickListener) : CardSliderAdapter<ReadingAdapter.BookViewHolder>() {
 
     override fun bindVH(holder: BookViewHolder, position: Int) {
+        MyPicasso().putImageIntoView(readingBookSetAll[position].coverName, holder.bookCoverImageView)
 
-        if (readingBookSetAll[position].coverName != "") Picasso.get().load(readingBookSetAll[position].coverName)
-                .placeholder(R.drawable.book_cover_place_holder).error(R.drawable.cover_not_found).into(holder.bookCoverImageView)
-        else Picasso.get().load(R.drawable.book_cover_place_holder).into(holder.bookCoverImageView)
         holder.toolbar.title = readingBookSetAll[position].title
         holder.toolbar.subtitle = readingBookSetAll[position].author
     }

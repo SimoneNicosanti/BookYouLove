@@ -131,7 +131,7 @@ class ModifyQuoteFragment : Fragment(), View.OnClickListener {
 
         val canExitWithQuoteObserver = Observer<Quote> {finalQuote ->
             if (args.modifyQuote != null) {
-                //Chiamato da detail --> Devo comunicare la modifica del testo per permettere il reload
+                //Chiamato da detail --> Devo comunicare la modifica del testo
                 findNavController().previousBackStackEntry?.savedStateHandle?.set("modifiedQuote", finalQuote)
             }
 

@@ -11,4 +11,7 @@
     <color name="light_blue_200">#64edf3</color>
     <color name="light_blue_600">#15bac0</color>
     <color name="light_blue_900">#008990</color>
+
+    <color name="widget_primary">#bbdefb</color>
+    <color name="widget_secondary">#fbd8bb</color>
 </resources>

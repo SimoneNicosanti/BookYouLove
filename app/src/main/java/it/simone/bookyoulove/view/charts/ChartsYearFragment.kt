@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.charts.PieChart
@@ -36,9 +37,6 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-
-
-
 //Non posso inserire animazione sul constraintlayout perché entra in conflitto con l'animazione del ViewPager
 
 class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnChartValueSelectedListener {
@@ -53,13 +51,15 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
 
     private val chartsVM : ChartsViewModel by activityViewModels()
 
-
+    private var yearSpinnerPosition = 0
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         // Inflate the layout for this fragment
         binding = FragmentChartsYearBinding.inflate(inflater, container, false)
+
+        savedInstanceState?.let {yearSpinnerPosition = it.getInt("yearSpinnerPosition")}
 
         setViewEnable(true, requireActivity())
 
@@ -149,7 +149,8 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
             legend.textColor = editTextColor
             setVisibleXRangeMaximum(10F)
 
-            animateXY(1000, 1000)
+            //animateXY(1000, 1000)
+            animateXY(1000,1000)
             setScaleEnabled(false)
 
             description?.isEnabled = false
@@ -163,6 +164,8 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
                 setDrawGridLines(false)
             }
             data.setValueTextColor(editTextColor)
+            isHighlightPerDragEnabled = false
+            isHighlightPerTapEnabled = true
 
             axisRight?.isEnabled = false
             invalidate()
@@ -243,6 +246,7 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
             //pagesPerMonthBarChart.setBackgroundColor(resources.getColor(R.color.white))
             setScaleEnabled(false)
             description?.isEnabled = false
+            legend.isEnabled = false
             animateXY(1000, 1000)
             invalidate()
         }
@@ -278,6 +282,7 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
             axisLeft.textColor = color
             data.setValueTextColor(color)
             data.setValueTextSize(TEXT_DATA_SIZE)
+            legend.isEnabled = false
             animateXY(1000,1000)
             invalidate()
         }
@@ -293,6 +298,7 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
             }
 
             binding.chartsYearChartTypeSpinner -> {
+                yearSpinnerPosition = position
                 binding.run {
                     chartsYearBooksInclude.root.visibility = View.GONE
                     chartsYearPagesInclude.root.visibility = View.GONE
@@ -330,4 +336,8 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
     override fun onNothingSelected() {
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("yearSpinnerPosition", yearSpinnerPosition)
+    }
 }

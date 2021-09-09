@@ -24,6 +24,7 @@ import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.databinding.FragmentModifyEndedBinding
 import it.simone.bookyoulove.utilsClass.DateFormatClass
+import it.simone.bookyoulove.utilsClass.MyPicasso
 import it.simone.bookyoulove.view.*
 import it.simone.bookyoulove.view.dialog.CoverLinkPickerFragment
 import it.simone.bookyoulove.view.dialog.DatePickerFragment
@@ -67,9 +68,7 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
         childFragmentManager.setFragmentResultListener("coverLinkKey", this, {_, bundle ->
             val newLink = bundle.getString("settedCoverLink")
 
-            if (newLink != "") Picasso.get().load(newLink).placeholder(R.drawable.book_cover_place_holder).error(
-                R.drawable.cover_not_found).into(binding.modifyEndedCoverImageView)
-            else Picasso.get().load(R.drawable.book_cover_place_holder).into(binding.modifyEndedCoverImageView)
+            newLink?.let {MyPicasso().putImageIntoView(it, binding.modifyEndedCoverImageView)}
 
             modifyEndedVM.modifyCover(newLink!!)
         })
@@ -131,9 +130,7 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
             binding.modifyEndedTitleText.setText(currentBook.title)
             binding.modifyEndedAuthorText.setText(currentBook.author)
 
-            if (currentBook.coverName != "") Picasso.get().load(currentBook.coverName).placeholder(R.drawable.book_cover_place_holder).error(
-                R.drawable.cover_not_found).into(binding.modifyEndedCoverImageView)
-            else Picasso.get().load(R.drawable.book_cover_place_holder).into(binding.modifyEndedCoverImageView)
+            MyPicasso().putImageIntoView(currentBook.coverName, binding.modifyEndedCoverImageView)
 
             binding.modifyEndedPagesText.setText(currentBook.pages.toString())
 

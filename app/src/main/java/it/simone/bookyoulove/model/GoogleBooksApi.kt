@@ -1,12 +1,14 @@
 package it.simone.bookyoulove.model
 
 
+import android.util.Log
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonObjectRequest
 import it.simone.bookyoulove.Constants.ISBN_FIND_ITEM_ERROR
 import it.simone.bookyoulove.Constants.ISBN_INTERNET_ACCESS_ERROR
 import it.simone.bookyoulove.Constants.ISBN_NO_ERROR
+import it.simone.bookyoulove.Constants.TAG
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -108,6 +110,8 @@ class GoogleBooksApi(private val googleBooksApiTerminatedListener: OnGoogleBooks
                 // Se non comincia con https comincia con http. Poiché i server di google non ammettono richieste http sostituisco il prefisso
                 thumbnailLink = "https" + thumbnailLink.removePrefix("http")
                 //Purtroppo non ci sono link che danno una qualità di immagine migliore
+                //thumbnailLink = thumbnailLink.replace("zoom=1", "zoom=0")
+                //Log.d(TAG, thumbnailLink)
             }
 
             networkBook.thumbnail = thumbnailLink.toString()

@@ -14,7 +14,6 @@ import kotlinx.coroutines.launch
 
 class EndingViewModel(application: Application) : AndroidViewModel(application) {
 
-    var isFlipped = false
     private var loadedOnce = false
     private val myAppDatabase = AppDatabase.getDatabaseInstance(application.applicationContext)
     private val endingModel = EndingModel(myAppDatabase)

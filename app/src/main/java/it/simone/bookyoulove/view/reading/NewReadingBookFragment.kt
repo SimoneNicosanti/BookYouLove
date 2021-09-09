@@ -35,6 +35,7 @@ import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.databinding.FragmentNewReadingBookBinding
 import it.simone.bookyoulove.model.GoogleBooksApi
 import it.simone.bookyoulove.utilsClass.DateFormatClass
+import it.simone.bookyoulove.utilsClass.MyPicasso
 import it.simone.bookyoulove.view.dialog.AlertDialogFragment
 import it.simone.bookyoulove.view.dialog.CoverLinkPickerFragment
 import it.simone.bookyoulove.view.dialog.DatePickerFragment
@@ -74,10 +75,7 @@ class  NewReadingBookFragment : Fragment() , View.OnClickListener {
 
         childFragmentManager.setFragmentResultListener("coverLinkKey",this)  { _, bundle ->
             val coverLinkResult : String? = bundle.getString("settedCoverLink")
-
-            if (coverLinkResult != "") Picasso.get().load(coverLinkResult).placeholder(R.drawable.book_cover_place_holder).error(
-                R.drawable.cover_not_found).into(binding.newBookCoverImageView)
-            else Picasso.get().load(R.drawable.book_cover_place_holder).into(binding.newBookCoverImageView)
+            coverLinkResult?.let { MyPicasso().putImageIntoView(it, binding.newBookCoverImageView)}
 
             newReadingVM.modifyCover(coverLinkResult!!)
         }
@@ -187,9 +185,7 @@ class  NewReadingBookFragment : Fragment() , View.OnClickListener {
 
 
         val currentBookObserver = Observer<Book> { currentBook ->
-            if (currentBook.coverName != "") Picasso.get().load(currentBook.coverName).placeholder(R.drawable.book_cover_place_holder).error(
-                R.drawable.cover_not_found).into(binding.newBookCoverImageView)
-            else Picasso.get().load(R.drawable.book_cover_place_holder).into(binding.newBookCoverImageView)
+            MyPicasso().putImageIntoView(currentBook.coverName, binding.newBookCoverImageView)
 
             binding.newBookTitleInput.setText(currentBook.title)
             binding.newBookAuthorInput.setText(currentBook.author)

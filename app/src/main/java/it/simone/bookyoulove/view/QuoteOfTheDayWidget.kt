@@ -1,5 +1,6 @@
 package it.simone.bookyoulove.view
 
+import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
@@ -8,9 +9,17 @@ import android.net.Uri
 import android.util.Log
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
+import android.widget.Toast
+import com.google.android.material.snackbar.Snackbar
+import it.simone.bookyoulove.Constants.QUOTE_OF_THE_DAY_FAVORITE_SWITCH_INTENT
+import it.simone.bookyoulove.Constants.TAG
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.AppDatabase
 import it.simone.bookyoulove.database.entity.Quote
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class QuoteOfTheDayWidget : AppWidgetProvider() {
@@ -28,6 +37,12 @@ class QuoteOfTheDayWidget : AppWidgetProvider() {
             val remoteViews = RemoteViews(context.packageName, R.layout.quote_of_the_day_widget).apply {
                 setRemoteAdapter(R.id.quoteOfTheDayWidgetListView, intent)
             }
+
+            val switchFavoritePendingIntent = Intent(context, QuoteOfTheDayWidget::class.java).run {
+                action = QUOTE_OF_THE_DAY_FAVORITE_SWITCH_INTENT
+                PendingIntent.getBroadcast(context, 0, this, PendingIntent.FLAG_CANCEL_CURRENT)
+            }
+            remoteViews.setPendingIntentTemplate(R.id.quoteOfTheDayWidgetListView, switchFavoritePendingIntent)
 
             //Chiamo prima la notify che invoca la onDataSetChanged (Ricarico nuova quote) e la imposta come quella visualizzata
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.quoteOfTheDayWidgetListView)
@@ -47,6 +62,26 @@ class QuoteOfTheDayWidget : AppWidgetProvider() {
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {
+
+        if (context != null && intent != null && intent.action == QUOTE_OF_THE_DAY_FAVORITE_SWITCH_INTENT) {
+
+            CoroutineScope(Dispatchers.Default).launch {
+                val appDatabase = AppDatabase.getDatabaseInstance(context)
+                val quoteId = intent.extras?.getLong("quoteId", 0)!!
+                val bookId = intent.extras?.getLong("bookId", 0)!!
+                val clickedQuote = appDatabase.quoteDao().loadSingleQuote(quoteId, bookId)
+                clickedQuote.favourite = !clickedQuote.favourite
+                appDatabase.quoteDao().updateQuote(clickedQuote)
+
+                withContext(Dispatchers.Main) {
+                    val showText = if (clickedQuote.favourite) context.getText(R.string.favorite_string)
+                                    else context.getText(R.string.not_favorite_string)
+                    Toast.makeText(context, showText, Toast.LENGTH_LONG).show()
+                }
+
+                Log.d(TAG, "Eseguito intent")
+            }
+        }
         super.onReceive(context, intent)
     }
 }
@@ -62,6 +97,10 @@ class QuoteOfTheDayWidgetService : RemoteViewsService() {
 class QuoteOfTheDayRemoteViewsFactory(
         private val context: Context
 ) : RemoteViewsService.RemoteViewsFactory {
+
+    companion object {
+        const val SWITCH_FAVORITE_CODE = 0
+    }
 
     private var widgetQuote : Quote? = null
 
@@ -92,7 +131,7 @@ class QuoteOfTheDayRemoteViewsFactory(
     }
 
     override fun getViewAt(position: Int): RemoteViews {
-        return RemoteViews(context.packageName, R.layout.quote_of_the_day_widget_quote_text).apply {
+        val quoteOfTheDayRemoteView =  RemoteViews(context.packageName, R.layout.quote_of_the_day_widget_quote_text).apply {
 
             if (widgetQuote != null) {
                 setTextViewText(R.id.quoteOfTheDayQuoteText, widgetQuote!!.quoteText)
@@ -106,6 +145,17 @@ class QuoteOfTheDayRemoteViewsFactory(
                 setTextViewText(R.id.quoteOfTheDayWidgetAuthor, "Umberto Eco")
             }
         }
+
+
+        widgetQuote?.let {
+            val switchFavoriteIntent = Intent()
+            switchFavoriteIntent.putExtra("quoteId", widgetQuote!!.quoteId)
+            switchFavoriteIntent.putExtra("bookId", widgetQuote!!.bookId)
+            switchFavoriteIntent.putExtra("remoteViewPosition", position)
+            quoteOfTheDayRemoteView.setOnClickFillInIntent(R.id.quoteOfTheDayRoot, switchFavoriteIntent)
+        }
+
+        return quoteOfTheDayRemoteView
     }
 
     override fun getLoadingView(): RemoteViews? {
@@ -123,7 +173,6 @@ class QuoteOfTheDayRemoteViewsFactory(
     override fun hasStableIds(): Boolean {
         return true
     }
-
 }
 
 

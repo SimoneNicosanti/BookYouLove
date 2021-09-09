@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -29,6 +30,9 @@ class GoogleDriveFragment : Fragment(), View.OnClickListener {
 
     private val googleDriveVM : GoogleDriveViewModel by viewModels()
 
+    private val registerForSignInResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        onActivityResult(result.resultCode, result.data)
+    }
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -101,8 +105,9 @@ class GoogleDriveFragment : Fragment(), View.OnClickListener {
                         .build()
                 val signInClient = GoogleSignIn.getClient(requireContext(), signInOptions)
 
-                @Suppress("DEPRECATION")
-                startActivityForResult(signInClient.signInIntent, GOOGLE_DRIVE_SIGN)
+                //@Suppress("DEPRECATION")
+                //startActivityForResult(signInClient.signInIntent, GOOGLE_DRIVE_SIGN)
+                registerForSignInResult.launch(signInClient.signInIntent)
             }
 
             binding.googleDriveLogoutButton -> {
@@ -126,10 +131,9 @@ class GoogleDriveFragment : Fragment(), View.OnClickListener {
         }
     }
 
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-
-        if (resultCode == RESULT_OK && requestCode == GOOGLE_DRIVE_SIGN) {
+    //Non è un override: la onActivityResult è deprecata!!
+    private fun onActivityResult(resultCode: Int, data: Intent?) {
+        if (resultCode == RESULT_OK) {
             googleDriveVM.getUser()
         }
         else {

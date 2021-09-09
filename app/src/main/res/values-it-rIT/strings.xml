@@ -124,4 +124,6 @@
     <string name="search_online_string">Ricerca Online</string>
     <string name="scan_isdn_error_string">Errore nella scansione dell\'ISBN!! Per Favore Riavviare!!</string>
     <string name="search_favorite_string">Ricerca Preferiti</string>
+    <string name="share_with_string">Condividi Con</string>
+    <string name="not_favorite_string">Non Favorito</string>
 </resources>

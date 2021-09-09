@@ -10,6 +10,7 @@ import it.simone.bookyoulove.Constants.SEARCH_BY_TITLE
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.DAO.ShowedBookInfo
 import it.simone.bookyoulove.filters.BookListFilter
+import it.simone.bookyoulove.utilsClass.MyPicasso
 
 
 //https://www.youtube.com/watch?v=69C1ljfDvl0
@@ -71,19 +72,13 @@ class EndedAdapter(private val bookSetAll: MutableList<ShowedBookInfo>,
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder , position: Int) {
 
         if (holder is GridViewHolder) {
-            if (bookSet[position].coverName != "") Picasso.get().load(bookSet[position].coverName)
-                .placeholder(R.drawable.book_cover_place_holder).error(R.drawable.cover_not_found)
-                .into(holder.coverImageView)
-            else Picasso.get().load(R.drawable.book_cover_place_holder).into(holder.coverImageView)
+            MyPicasso().putImageIntoView(bookSet[position].coverName, holder.coverImageView)
 
             holder.titleTextView.text = bookSet[position].title
         }
 
         else if (holder is LinearViewHolder){
-            if (bookSet[position].coverName != "") Picasso.get().load(bookSet[position].coverName)
-                .placeholder(R.drawable.book_cover_place_holder).error(R.drawable.cover_not_found)
-                .into(holder.coverImageView)
-            else Picasso.get().load(R.drawable.book_cover_place_holder).into(holder.coverImageView)
+            MyPicasso().putImageIntoView(bookSet[position].coverName, holder.coverImageView)
 
             holder.titleTextView.text = bookSet[position].title
             holder.ratingBar.rating = bookSet[position].totalRate!!

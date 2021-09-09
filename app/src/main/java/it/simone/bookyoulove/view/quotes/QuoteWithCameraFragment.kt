@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
@@ -41,6 +42,10 @@ class QuoteWithCameraFragment : Fragment() {
     private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
 
     private val quoteWithCameraVM: QuoteWithCameraViewModel by viewModels()
+
+    private val registerForUCropResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        onActivityResult(it.resultCode, it.data)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -146,12 +151,13 @@ class QuoteWithCameraFragment : Fragment() {
                         Executors.newSingleThreadExecutor(),
                         object : ImageCapture.OnImageSavedCallback {
 
-                            @Suppress("DEPRECATION")
+                            //@Suppress("DEPRECATION")
                             override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
 
                                 val uCrop = UCrop.of(Uri.fromFile(inputFile),
                                         Uri.fromFile(outputFile))
-                                startActivityForResult(uCrop.getIntent(requireContext()), UCrop.REQUEST_CROP)
+                                //startActivityForResult(uCrop.getIntent(requireContext()), UCrop.REQUEST_CROP)
+                                registerForUCropResult.launch(uCrop.getIntent(requireContext()))
                             }
 
                             override fun onError(exception: ImageCaptureException) {
@@ -160,15 +166,14 @@ class QuoteWithCameraFragment : Fragment() {
                                 alertDialog.arguments = args
                                 alertDialog.show(childFragmentManager, "Capture Image Error Dialog")
                             }
-
                         }
                 )
             }
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP && data != null) {
+    private fun onActivityResult(resultCode: Int, data: Intent?) {
+        if (resultCode == RESULT_OK && data != null) {
             val resultUri : Uri = UCrop.getOutput(data)!!
             quoteWithCameraVM.scanText(resultUri)
         }
@@ -202,14 +207,12 @@ class QuoteWithCameraViewModel(application: Application) : AndroidViewModel(appl
 
                 recognizer.process(image)
                     .addOnSuccessListener { visionText ->
-                        viewModelScope.launch {
+                        viewModelScope.launch(Dispatchers.Default) {
                             var scannedQuote = ""
-                            withContext(Dispatchers.Default) {
-                                for (block in visionText.textBlocks) {
-                                    for (line in block.lines) {
-                                        for (element in line.elements) {
-                                            scannedQuote = scannedQuote + " " + element.text
-                                        }
+                            for (block in visionText.textBlocks) {
+                                for (line in block.lines) {
+                                    for (element in line.elements) {
+                                        scannedQuote = scannedQuote + " " + element.text
                                     }
                                 }
                             }

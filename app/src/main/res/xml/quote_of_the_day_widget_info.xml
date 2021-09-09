@@ -4,6 +4,7 @@
     android:initialLayout="@layout/quote_of_the_day_widget"
     android:minWidth="40dp"
     android:minHeight="40dp"
+    android:previewImage="@drawable/quote_of_the_day_widget_preview"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="1800000"
     android:widgetCategory="home_screen|keyguard">

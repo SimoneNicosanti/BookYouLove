@@ -1,5 +1,6 @@
 package it.simone.bookyoulove.view.quotes
 
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.*
@@ -107,6 +108,15 @@ class QuoteDetailFragment : Fragment() {
                 val confirmDeleteDialog = ConfirmDeleteDialogFragment()
                 confirmDeleteDialog.arguments = arguments
                 confirmDeleteDialog.show(childFragmentManager, "Delete Confirm")
+                true
+            }
+
+            R.id.quoteDetailMenuShareItem -> {
+                val shareIntent = Intent(Intent.ACTION_SEND)
+                shareIntent.type = "text/plain"
+                val shareBody = "❝${requestedQuote.quoteText}❞, ${requestedQuote.bookTitle}, ${requestedQuote.bookAuthor}"
+                shareIntent.putExtra(Intent.EXTRA_TEXT, shareBody)
+                startActivity(Intent.createChooser(shareIntent, getString(R.string.share_with_string)))
                 true
             }
 

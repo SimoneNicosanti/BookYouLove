@@ -2,20 +2,18 @@ package it.simone.bookyoulove.view
 
 import android.app.Activity
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.*
 import android.widget.PopupMenu
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.*
+import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import it.simone.bookyoulove.databinding.ActivityMainBinding
 import com.squareup.picasso.Picasso
 import it.simone.bookyoulove.R
+import it.simone.bookyoulove.databinding.ActivityMainBinding
 import it.simone.bookyoulove.view.reading.ReadingFragmentDirections
-
-
 
 
 class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItemSelectedListener, PopupMenu.OnMenuItemClickListener{
@@ -26,22 +24,28 @@ class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItem
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
         Picasso.get().setIndicatorsEnabled(true)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
         val navController = navHostFragment.navController
         binding.bottomNavigationView.setupWithNavController(navController)
 
+        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+        }
+
         binding.bottomNavigationView.setOnNavigationItemSelectedListener(this)
+
     }
 
 
     //@RequiresApi(Build.VERSION_CODES.Q)
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         val navController = findNavController(R.id.navHostFragment)
+
         return when(item.itemId) {
             R.id.navViewMenuReadingItem -> {
                 //La navigazione è eseguita SOLO se la destinazione corrente è diversa da quella in cui si vuole andare
@@ -81,7 +85,7 @@ class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItem
                 popupMenu.show()
                 true
             }
-            else -> true
+            else -> false
         }
     }
 
