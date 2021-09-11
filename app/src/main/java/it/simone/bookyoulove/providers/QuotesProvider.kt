@@ -10,7 +10,7 @@ import java.lang.IllegalArgumentException
 
 
 private const val AUTHORITY = "it.simone.bookyoulove.providers"
-private const val TABLE_NAME = "QuotesTable"
+private const val TABLE_NAME = "Quotes"
 private const val CODE_GET_RANDOM_QUOTE = 0
 
 class QuotesProvider : ContentProvider() {
@@ -19,7 +19,7 @@ class QuotesProvider : ContentProvider() {
         addURI(AUTHORITY, "$TABLE_NAME/random", CODE_GET_RANDOM_QUOTE)
     }
 
-    val URI_RANDOM: Uri = Uri.parse("content://$AUTHORITY/$TABLE_NAME/random")
+    //val URI_RANDOM: Uri = Uri.parse("content://$AUTHORITY/$TABLE_NAME/random")
 
 
     private lateinit var myAppDatabase : AppDatabase

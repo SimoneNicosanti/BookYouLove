@@ -14,7 +14,6 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
-import it.simone.bookyoulove.utilsClass.MyNotificationClass
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.databinding.ActivityMainBinding
 import it.simone.bookyoulove.view.reading.ReadingFragmentDirections
@@ -27,8 +26,6 @@ class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItem
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        MyNotificationClass(this).cancelAllNotification()
 
         //Picasso.get().setIndicatorsEnabled(true)
 

@@ -1,6 +1,8 @@
 package it.simone.bookyoulove.model
 
 
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonObjectRequest
@@ -23,6 +25,8 @@ class GoogleBooksApi(private val googleBooksApiTerminatedListener: OnGoogleBooks
         const val GOOGLE_BOOK_API_MAX_RESULT = "&maxResults=40" //Massimo numero di risultati che possono essere ricevuti
     }
 
+    private val coroutineScope = if (googleBooksApiTerminatedListener is AndroidViewModel) googleBooksApiTerminatedListener.viewModelScope else CoroutineScope(Dispatchers.Default)
+
     fun findBookByTitle(titleQuery : String) {
         val urlTitle = titleQuery.replace(" ", "+")
         val googleBooksApiUrl = GOOGLE_BOOK_API_WITH_TITLE_URL + urlTitle + GOOGLE_BOOK_API_MAX_RESULT
@@ -34,7 +38,7 @@ class GoogleBooksApi(private val googleBooksApiTerminatedListener: OnGoogleBooks
     }
 
     private fun getNetworkBookArray(response: JSONObject?) {
-        CoroutineScope(Dispatchers.Default).launch {
+        coroutineScope.launch(Dispatchers.Default) {
             val networkBookList = mutableListOf<NetworkBook>()
             if (response != null && response.getInt("totalItems") != 0) {
                 val responseArray = response.getJSONArray("items")
@@ -76,7 +80,7 @@ class GoogleBooksApi(private val googleBooksApiTerminatedListener: OnGoogleBooks
 
     private fun setNetworkResponseAsBook(requestResponse: JSONObject?) {
 
-        CoroutineScope(Dispatchers.Default).launch {
+        coroutineScope.launch {
             if (requestResponse != null && requestResponse.getInt("totalItems") != 0) {
                 val networkBook = NetworkBook()
 
