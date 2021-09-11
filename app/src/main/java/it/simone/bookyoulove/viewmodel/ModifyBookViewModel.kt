@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.android.volley.toolbox.Volley
 import it.simone.bookyoulove.Constants.AUDIOBOOK_SUPPORT
 import it.simone.bookyoulove.Constants.EBOOK_SUPPORT
 import it.simone.bookyoulove.Constants.PAPER_SUPPORT
@@ -15,6 +14,7 @@ import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.database.entity.BookSupport
 import it.simone.bookyoulove.model.GoogleBooksApi
 import it.simone.bookyoulove.model.ModifyBookModel
+import it.simone.bookyoulove.utilsClass.MyVolleyQueue
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -29,7 +29,7 @@ class ModifyBookViewModel(application: Application) : AndroidViewModel(applicati
 
     private var loadedOnce = false
     private var authorsLoadedOnce = false
-    private val modifyBookRequestQueue = Volley.newRequestQueue(application.applicationContext)
+    private val modifyBookRequestQueue = MyVolleyQueue.getVolleyQueue(application.applicationContext)
 
     val currentBook = MutableLiveData<Book>()
     val isAccessing = MutableLiveData(false)

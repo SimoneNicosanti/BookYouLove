@@ -1,4 +1,4 @@
-package it.simone.bookyoulove.model
+package it.simone.bookyoulove.model.charts
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

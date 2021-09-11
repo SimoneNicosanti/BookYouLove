@@ -14,7 +14,6 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
-import com.squareup.picasso.Picasso
 import it.simone.bookyoulove.MyNotificationClass
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.databinding.ActivityMainBinding
@@ -31,7 +30,7 @@ class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItem
 
         MyNotificationClass(this).cancelAllNotification()
 
-        Picasso.get().setIndicatorsEnabled(true)
+        //Picasso.get().setIndicatorsEnabled(true)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

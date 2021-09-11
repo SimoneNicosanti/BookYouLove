@@ -4,10 +4,10 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.android.volley.toolbox.Volley
 import it.simone.bookyoulove.Constants.ISBN_NO_ERROR
 import it.simone.bookyoulove.Constants.TAG
 import it.simone.bookyoulove.model.GoogleBooksApi
+import it.simone.bookyoulove.utilsClass.MyVolleyQueue
 
 class GoogleBooksSearchViewModel(application: Application) : AndroidViewModel(application),
     GoogleBooksApi.OnGoogleBooksApiRequestTerminated {
@@ -17,7 +17,7 @@ class GoogleBooksSearchViewModel(application: Application) : AndroidViewModel(ap
     val currentResponseCode = MutableLiveData<Int>()
 
 
-    private val requestQueue = Volley.newRequestQueue(application.applicationContext)
+    private val requestQueue = MyVolleyQueue.getVolleyQueue(application.applicationContext)
 
     fun askBooksByTitle(query: String) {
         isAccessing.value = true

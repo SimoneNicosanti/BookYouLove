@@ -1,4 +1,4 @@
-package it.simone.bookyoulove.model
+package it.simone.bookyoulove.model.charts
 
 import androidx.room.ColumnInfo
 import androidx.room.Embedded

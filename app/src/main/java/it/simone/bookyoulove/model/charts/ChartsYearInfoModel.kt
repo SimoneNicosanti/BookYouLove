@@ -1,4 +1,4 @@
-package it.simone.bookyoulove.model
+package it.simone.bookyoulove.model.charts
 
 import android.util.Log
 import it.simone.bookyoulove.Constants.CHARACTER_RATE

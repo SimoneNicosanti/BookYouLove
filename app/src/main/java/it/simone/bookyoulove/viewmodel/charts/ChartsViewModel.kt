@@ -5,7 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import it.simone.bookyoulove.database.AppDatabase
-import it.simone.bookyoulove.model.*
+import it.simone.bookyoulove.model.charts.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*

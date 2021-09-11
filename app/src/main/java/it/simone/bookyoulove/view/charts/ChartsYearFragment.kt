@@ -27,8 +27,8 @@ import it.simone.bookyoulove.Constants.PLOT_RATE
 import it.simone.bookyoulove.Constants.STYLE_RATE
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.databinding.FragmentChartsYearBinding
-import it.simone.bookyoulove.model.ChartsBookData
-import it.simone.bookyoulove.model.ChartsYearInfo
+import it.simone.bookyoulove.model.charts.ChartsBookData
+import it.simone.bookyoulove.model.charts.ChartsYearInfo
 import it.simone.bookyoulove.viewmodel.charts.ChartsViewModel
 import java.text.DateFormatSymbols
 import java.util.*

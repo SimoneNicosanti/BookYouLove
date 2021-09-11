@@ -15,7 +15,7 @@ import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.utils.ColorTemplate
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.databinding.FragmentChartsTotalBinding
-import it.simone.bookyoulove.model.TotalChartData
+import it.simone.bookyoulove.model.charts.TotalChartData
 import it.simone.bookyoulove.viewmodel.charts.ChartsViewModel
 import java.util.*
 import kotlin.math.roundToLong

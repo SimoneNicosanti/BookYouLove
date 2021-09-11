@@ -2,7 +2,7 @@ package it.simone.bookyoulove.database.DAO
 
 import androidx.room.*
 import it.simone.bookyoulove.database.entity.Book
-import it.simone.bookyoulove.model.ChartsBookData
+import it.simone.bookyoulove.model.charts.ChartsBookData
 
 
 
