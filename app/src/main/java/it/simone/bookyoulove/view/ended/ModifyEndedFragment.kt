@@ -2,19 +2,18 @@ package it.simone.bookyoulove.view.ended
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RatingBar
 import androidx.core.os.bundleOf
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.squareup.picasso.Picasso
 import it.simone.bookyoulove.Constants.AUDIOBOOK_SUPPORT
 import it.simone.bookyoulove.Constants.EBOOK_SUPPORT
 import it.simone.bookyoulove.Constants.END_DATE_SETTER
@@ -25,9 +24,9 @@ import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.databinding.FragmentModifyEndedBinding
 import it.simone.bookyoulove.utilsClass.DateFormatClass
 import it.simone.bookyoulove.utilsClass.MyPicasso
-import it.simone.bookyoulove.view.*
 import it.simone.bookyoulove.view.dialog.CoverLinkPickerFragment
 import it.simone.bookyoulove.view.dialog.DatePickerFragment
+import it.simone.bookyoulove.view.setViewEnable
 import it.simone.bookyoulove.viewmodel.ModifyBookViewModel
 import it.simone.bookyoulove.viewmodel.charts.ChartsViewModel
 

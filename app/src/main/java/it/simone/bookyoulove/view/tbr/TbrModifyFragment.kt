@@ -18,7 +18,6 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.common.util.concurrent.ListenableFuture
-import com.squareup.picasso.Picasso
 import it.simone.bookyoulove.Constants.ISBN_FIND_ITEM_ERROR
 import it.simone.bookyoulove.Constants.ISBN_INTERNET_ACCESS_ERROR
 import it.simone.bookyoulove.Constants.ISBN_NO_ERROR

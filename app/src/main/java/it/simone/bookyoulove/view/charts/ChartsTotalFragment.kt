@@ -8,7 +8,6 @@ import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.viewpager2.widget.ViewPager2
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
@@ -17,7 +16,6 @@ import com.github.mikephil.charting.utils.ColorTemplate
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.databinding.FragmentChartsTotalBinding
 import it.simone.bookyoulove.model.TotalChartData
-import it.simone.bookyoulove.view.setViewEnable
 import it.simone.bookyoulove.viewmodel.charts.ChartsViewModel
 import java.util.*
 import kotlin.math.roundToLong

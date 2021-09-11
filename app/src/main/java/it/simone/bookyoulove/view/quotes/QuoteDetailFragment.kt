@@ -14,7 +14,6 @@ import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.entity.Quote
 import it.simone.bookyoulove.databinding.FragmentQuoteDetailBinding
 import it.simone.bookyoulove.view.dialog.ConfirmDeleteDialogFragment
-import it.simone.bookyoulove.view.setViewEnable
 import it.simone.bookyoulove.viewmodel.quotes.QuoteDetailViewModel
 
 

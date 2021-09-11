@@ -21,7 +21,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import com.google.common.util.concurrent.ListenableFuture
-import com.squareup.picasso.Picasso
 import it.simone.bookyoulove.Constants.AUDIOBOOK_SUPPORT
 import it.simone.bookyoulove.Constants.EBOOK_SUPPORT
 import it.simone.bookyoulove.Constants.ISBN_FIND_ITEM_ERROR

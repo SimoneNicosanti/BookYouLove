@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
-import com.squareup.picasso.Picasso
 import it.simone.bookyoulove.Constants.SEARCH_BY_TITLE
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.DAO.ShowedBookInfo

@@ -30,7 +30,6 @@ import com.google.mlkit.vision.common.InputImage
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.databinding.FragmentTakeBookIsbnBinding
 import it.simone.bookyoulove.view.dialog.AlertDialogFragment
-import it.simone.bookyoulove.view.setViewEnable
 import java.util.concurrent.Executors
 
 

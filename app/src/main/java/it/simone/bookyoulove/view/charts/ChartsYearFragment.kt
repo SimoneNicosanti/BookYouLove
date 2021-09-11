@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.charts.PieChart
@@ -30,8 +29,7 @@ import it.simone.bookyoulove.R
 import it.simone.bookyoulove.databinding.FragmentChartsYearBinding
 import it.simone.bookyoulove.model.ChartsBookData
 import it.simone.bookyoulove.model.ChartsYearInfo
-import it.simone.bookyoulove.view.setViewEnable
-import it.simone.bookyoulove.viewmodel.charts.*
+import it.simone.bookyoulove.viewmodel.charts.ChartsViewModel
 import java.text.DateFormatSymbols
 import java.util.*
 import kotlin.collections.ArrayList

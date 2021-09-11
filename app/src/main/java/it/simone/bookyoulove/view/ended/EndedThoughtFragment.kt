@@ -12,7 +12,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.databinding.FragmentEndedThoughtBinding
-import it.simone.bookyoulove.view.setViewEnable
 import it.simone.bookyoulove.viewmodel.ended.EndedThoughtViewModel
 
 

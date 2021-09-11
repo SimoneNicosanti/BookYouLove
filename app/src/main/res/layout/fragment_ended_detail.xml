@@ -364,7 +364,6 @@
                                 android:id="@+id/textView28"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
                                 android:paddingHorizontal="@dimen/ended_detail_other_rates_text_hor_padding"
                                 android:text="@string/emotions_string" />
 
@@ -373,7 +372,6 @@
                                 style="@android:style/Widget.Material.Light.RatingBar.Small"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
                                 android:isIndicator="true"
                                 android:numStars="5" />
                         </LinearLayout>

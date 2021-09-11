@@ -3,9 +3,11 @@ package it.simone.bookyoulove.view
 import android.app.Activity
 import android.os.Build
 import android.os.Bundle
-import android.view.*
+import android.view.Gravity
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.WindowManager
 import android.widget.PopupMenu
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
