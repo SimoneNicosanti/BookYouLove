@@ -18,6 +18,9 @@ interface QuoteDao {
     @Delete
     fun deleteQuote(vararg deleteQuote : Quote)
 
+    @Query ("DELETE FROM Quote")
+    fun deleteAllQuotes()
+
     @Query("SELECT * FROM Quote")
     fun loadAllQuotes() : Array<Quote>
 

@@ -5,24 +5,29 @@ import android.os.Build
 import android.os.Bundle
 import android.view.*
 import android.widget.PopupMenu
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
+import it.simone.bookyoulove.MyNotificationClass
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.databinding.ActivityMainBinding
 import it.simone.bookyoulove.view.reading.ReadingFragmentDirections
 
 
-class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItemSelectedListener, PopupMenu.OnMenuItemClickListener{
+class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItemSelectedListener, PopupMenu.OnMenuItemClickListener {
 
     private lateinit var binding: ActivityMainBinding
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        MyNotificationClass(this).cancelAllNotification()
 
         Picasso.get().setIndicatorsEnabled(true)
 
@@ -34,7 +39,14 @@ class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItem
         val navController = navHostFragment.navController
         binding.bottomNavigationView.setupWithNavController(navController)
 
-        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            val fragmentMap = mapOf(
+                    R.id.readingFragment to 0,
+                    R.id.endedFragment to 1,
+                    R.id.tbrFragment to 2
+            )
+
+            if (destination.id in fragmentMap.keys) binding.bottomNavigationView.menu.getItem(fragmentMap[destination.id]!!).isChecked = true
         }
 
         binding.bottomNavigationView.setOnNavigationItemSelectedListener(this)
@@ -71,7 +83,6 @@ class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItem
                 }
                 true
             }
-
 
             R.id.navViewOthersItem -> {
                 val popupMenu = PopupMenu(this, binding.bottomNavigationView)
@@ -119,9 +130,23 @@ class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItem
                 true
             }
 
+            R.id.navViewMenuGuessTheQuoteItem -> {
+                val mySnackbar = Snackbar.make(binding.root, getString(R.string.coming_soon_string), Snackbar.LENGTH_SHORT)
+                mySnackbar.anchorView = binding.bottomNavigationView
+                mySnackbar.show()
+                true
+            }
+
             else -> false
         }
     }
+
+
+    override fun onBackPressed() {
+        setViewEnable(true, this)
+        super.onBackPressed()
+    }
+
 }
 
 fun setViewEnable(isEnabled : Boolean, activity: Activity) {

@@ -59,7 +59,7 @@ class QuoteWithCameraFragment : Fragment() {
     ): View {
 
         binding = FragmentQuoteWithCameraBinding.inflate(inflater, container, false)
-        setViewEnable(true, requireActivity())
+        //setViewEnable(true, requireActivity())
 
         return binding.root
     }

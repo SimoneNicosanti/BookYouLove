@@ -58,10 +58,9 @@ class ChartsYearFragment : Fragment(), AdapterView.OnItemSelectedListener, OnCha
                               savedInstanceState: Bundle?): View {
         // Inflate the layout for this fragment
         binding = FragmentChartsYearBinding.inflate(inflater, container, false)
+        //setViewEnable(true, requireActivity())
 
         savedInstanceState?.let {yearSpinnerPosition = it.getInt("yearSpinnerPosition")}
-
-        setViewEnable(true, requireActivity())
 
         val arrayAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, resources.getStringArray(R.array.charts_year_chart_type_array))
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)

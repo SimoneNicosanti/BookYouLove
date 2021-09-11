@@ -8,6 +8,7 @@ import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.viewpager2.widget.ViewPager2
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
@@ -19,6 +20,7 @@ import it.simone.bookyoulove.model.TotalChartData
 import it.simone.bookyoulove.view.setViewEnable
 import it.simone.bookyoulove.viewmodel.charts.ChartsViewModel
 import java.util.*
+import kotlin.math.roundToLong
 
 
 class ChartsTotalFragment : Fragment() {
@@ -35,10 +37,9 @@ class ChartsTotalFragment : Fragment() {
     ): View {
 
         binding = FragmentChartsTotalBinding.inflate(inflater, container, false)
+        //setViewEnable(true, requireActivity())
 
         setObservers()
-
-        setViewEnable(true, requireActivity())
 
         return binding.root
     }
@@ -54,6 +55,8 @@ class ChartsTotalFragment : Fragment() {
         val chartsTotalInfoObserver = Observer<TotalChartData> {
             binding.chartsTotalTotalBooksTextView.text = it.totalBooks.toString()
             binding.chartsTotalTotalPagesTextView.text = it.totalPages.toString()
+            binding.chartsTotalAverageTimePerBookTextView.text = it.averageReadingDays.roundToLong().toString()
+            binding.chartsTotalAveragePagesPerBookTextView.text = it.averageBookPages.roundToLong().toString()
 
             val supportPieEntries = ArrayList<PieEntry>()
             supportPieEntries.add(PieEntry(it.totalPaperSupport, getString(R.string.paper_string)))
@@ -73,7 +76,6 @@ class ChartsTotalFragment : Fragment() {
                 animateXY(1000,1000)
                 invalidate()
             }
-
         }
         chartsVM.totalChartData.observe(viewLifecycleOwner, chartsTotalInfoObserver)
     }

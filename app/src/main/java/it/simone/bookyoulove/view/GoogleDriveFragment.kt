@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -20,7 +21,10 @@ import com.google.api.services.drive.DriveScopes
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.databinding.FragmentGoogleDriveBinding
 import it.simone.bookyoulove.view.dialog.AlertDialogFragment
+import it.simone.bookyoulove.view.dialog.ConfirmDeleteDialogFragment
+import it.simone.bookyoulove.viewmodel.BookListViewModel
 import it.simone.bookyoulove.viewmodel.GoogleDriveViewModel
+import it.simone.bookyoulove.viewmodel.charts.ChartsViewModel
 
 
 class GoogleDriveFragment : Fragment(), View.OnClickListener {
@@ -28,9 +32,25 @@ class GoogleDriveFragment : Fragment(), View.OnClickListener {
     private lateinit var binding : FragmentGoogleDriveBinding
 
     private val googleDriveVM : GoogleDriveViewModel by viewModels()
+    private val readingVM : BookListViewModel by activityViewModels()
+    private val chartsVM : ChartsViewModel by activityViewModels()
 
     private val registerForSignInResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         onGoogleSignInActivity(result.resultCode, result.data)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        childFragmentManager.setFragmentResultListener("deleteKey", this) { _, bundle ->
+            val confirm = bundle.getBoolean("deleteConfirm", false)
+            if (confirm) {
+                googleDriveVM.downloadBackup()
+                //Notifico il cambiamento di stato ai due VM che sono legati all'activity
+                chartsVM.changeLoadedStatus()
+                readingVM.changeLoadedStatus()
+            }
+        }
     }
 
     override fun onCreateView(
@@ -38,7 +58,7 @@ class GoogleDriveFragment : Fragment(), View.OnClickListener {
             savedInstanceState: Bundle?,
     ): View {
         binding = FragmentGoogleDriveBinding.inflate(inflater, container, false)
-        setViewEnable(true, requireActivity())
+        //setViewEnable(true, requireActivity())
 
         binding.let {
             it.googleDriveLoginButton.setOnClickListener(this)
@@ -104,8 +124,6 @@ class GoogleDriveFragment : Fragment(), View.OnClickListener {
                         .build()
                 val signInClient = GoogleSignIn.getClient(requireContext(), signInOptions)
 
-                //@Suppress("DEPRECATION")
-                //startActivityForResult(signInClient.signInIntent, GOOGLE_DRIVE_SIGN)
                 registerForSignInResult.launch(signInClient.signInIntent)
             }
 
@@ -125,7 +143,10 @@ class GoogleDriveFragment : Fragment(), View.OnClickListener {
             }
 
             binding.googleDriveDownloadButton -> {
-                googleDriveVM.downloadBackup()
+                val deleteDialogFragment = ConfirmDeleteDialogFragment()
+                val args = bundleOf("itemToDelete" to resources.getString(R.string.confirm_restore_title_string), "deleteMessageKey" to resources.getString(R.string.confirm_restore_message_string))
+                deleteDialogFragment.arguments = args
+                deleteDialogFragment.show(childFragmentManager, "")
             }
         }
     }

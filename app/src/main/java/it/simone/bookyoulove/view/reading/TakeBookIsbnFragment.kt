@@ -53,7 +53,7 @@ class TakeBookIsbnFragment : Fragment() {
                               savedInstanceState: Bundle?): View {
 
         binding = FragmentTakeBookIsbnBinding.inflate(inflater, container, false)
-        setViewEnable(true, requireActivity())
+        //setViewEnable(true, requireActivity())
         return binding.root
     }
 

@@ -44,7 +44,7 @@ class DetailReadingFragment : Fragment() {
     ): View {
 
         binding = FragmentDetailReadingBinding.inflate(inflater, container, false)
-        setViewEnable(true, requireActivity())
+        //setViewEnable(true, requireActivity())
 
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Book>("modifiedBook")?.observe(viewLifecycleOwner) {
             detailReadingVM.onBookModified(it)

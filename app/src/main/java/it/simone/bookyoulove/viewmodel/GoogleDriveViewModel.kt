@@ -17,8 +17,6 @@ import it.simone.bookyoulove.model.GoogleDriveModel
 import kotlinx.coroutines.launch
 
 
-
-
 class GoogleDriveViewModel(application: Application) : AndroidViewModel(application) {
 
     private var driveService : Drive? = null

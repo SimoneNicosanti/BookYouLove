@@ -131,4 +131,7 @@ class BookListViewModel(application: Application) : AndroidViewModel(application
         bookList.setItem(item)
     }
 
+    fun changeLoadedStatus() {
+        loadedOnce = false
+    }
 }

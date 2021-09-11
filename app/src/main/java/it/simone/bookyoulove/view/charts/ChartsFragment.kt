@@ -38,7 +38,7 @@ class ChartsFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         binding = FragmentChartsBinding.inflate(inflater, container, false)
-        setViewEnable(true, requireActivity())
+        //setViewEnable(true, requireActivity())
         setObservers()
 
 

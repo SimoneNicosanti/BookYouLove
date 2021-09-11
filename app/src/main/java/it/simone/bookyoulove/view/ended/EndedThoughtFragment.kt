@@ -43,7 +43,7 @@ class EndedThoughtFragment : Fragment() {
 
         binding = FragmentEndedThoughtBinding.inflate(inflater, container, false)
 
-        setViewEnable(true, requireActivity())
+        //setViewEnable(true, requireActivity())
 
         binding.endedThoughtTitleTextView.text = getString(R.string.final_thought_string)
         setUI(isEditing)

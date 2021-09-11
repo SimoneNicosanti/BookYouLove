@@ -50,7 +50,7 @@ class QuoteDetailFragment : Fragment() {
     ): View {
 
         binding = FragmentQuoteDetailBinding.inflate(inflater, container, false)
-        setViewEnable(true, requireActivity())
+        //setViewEnable(true, requireActivity())
 
         setObservers()
 

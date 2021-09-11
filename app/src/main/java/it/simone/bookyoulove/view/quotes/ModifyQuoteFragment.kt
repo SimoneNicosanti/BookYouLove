@@ -65,7 +65,7 @@ class ModifyQuoteFragment : Fragment(), View.OnClickListener {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentModifyQuoteBinding.inflate(inflater, container, false)
-        setViewEnable(true, requireActivity())
+        //setViewEnable(true, requireActivity())
 
         setHasOptionsMenu(true)
 
@@ -88,7 +88,9 @@ class ModifyQuoteFragment : Fragment(), View.OnClickListener {
 
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<String>("scannedQuoteKey")?.observe(viewLifecycleOwner) {
             //Triggera la doOnTextChange che salva la quote nell'istanza di quote salvata in VM
-            binding.modifyQuoteQuoteEditText.setText(it)
+            val currentText = binding.modifyQuoteQuoteEditText.text.toString()
+            val finalText = currentText + it
+            binding.modifyQuoteQuoteEditText.setText(finalText)
             findNavController().currentBackStackEntry?.savedStateHandle?.remove<String>("scannedQuoteKey")
         }
 

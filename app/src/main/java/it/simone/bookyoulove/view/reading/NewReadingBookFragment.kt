@@ -100,7 +100,7 @@ class  NewReadingBookFragment : Fragment() , View.OnClickListener {
     ): View {
 
         binding = FragmentNewReadingBookBinding.inflate(inflater, container, false)
-        setViewEnable(true, requireActivity())
+        //setViewEnable(true, requireActivity())
 
         binding.newBookCoverImageView.setOnClickListener(this)
         binding.newBookStartDateText.setOnClickListener(this)

@@ -17,6 +17,8 @@ class ConfirmDeleteDialogFragment: DialogFragment() {
             val builder = AlertDialog.Builder(it)
             builder.setTitle(arguments?.getString("itemToDelete"))
 
+            builder.setMessage(arguments?.getString("deleteMessageKey", null))
+
             builder.setPositiveButton(R.string.confirm_string) { dialog, _ ->
                 setFragmentResult("deleteKey", bundleOf("deleteConfirm" to true))
                 dialog.cancel()

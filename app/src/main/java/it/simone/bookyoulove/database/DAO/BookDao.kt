@@ -15,16 +15,15 @@ interface BookDao {
     @Delete
     fun deleteBooks(vararg book: Book) : Int
 
+    @Query ("DELETE FROM Book ")
+    fun deleteAllBooks()
+
     @Update
     fun updateBooks(vararg updatedBook: Book)
 
 
     @Query("SELECT * FROM Book")
     fun loadAllBooks() : Array<Book>
-
-    /*  This function looks for a Book with given title and author. It give back a list of Book and the length
-        of this list says the next read time I should use for the next time
-     */
 
     @Query("SELECT * FROM Book WHERE totalRate > :requestedRate")
     fun loadBookByRate(requestedRate: Float) : Array<Book>

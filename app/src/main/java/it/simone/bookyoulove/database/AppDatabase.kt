@@ -9,7 +9,7 @@ import it.simone.bookyoulove.database.DAO.QuoteDao
 import it.simone.bookyoulove.database.entity.Book
 import it.simone.bookyoulove.database.entity.Quote
 
-const val DATABASE_NAME = "book_database"
+const val DATABASE_NAME = "BookYouLoveDatabase"
 
 @Database(entities = [Book::class, Quote::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
@@ -26,7 +26,6 @@ abstract class AppDatabase : RoomDatabase() {
                         AppDatabase::class.java,
                         DATABASE_NAME).build()
             }
-
             return appDatabase as AppDatabase
         }
     }

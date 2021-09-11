@@ -37,7 +37,7 @@ class StartingFragment : Fragment() , View.OnClickListener{
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         binding = FragmentStartingBinding.inflate(inflater, container, false)
-        setViewEnable(true, requireActivity())
+        //setViewEnable(true, requireActivity())
 
         startingVM.loadStartingBook(args.startingBookId)
 

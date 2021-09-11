@@ -12,17 +12,17 @@ class QuoteListFilter(private val quoteSetAll: MutableList<ShowQuoteInfo>,
 
 
     override fun performFiltering(queryField: CharSequence?): FilterResults {
-        val filteredList: MutableList<ShowQuoteInfo>
-        if (!favoriteSearch) {
-                filteredList = if (queryField == null || queryField == "") quoteSetAll
-                else quoteSetAll.filter {
-                    it.quoteText.toLowerCase(Locale.ROOT)
-                        .contains(queryField.toString().toLowerCase(Locale.getDefault()))
-                } as MutableList<ShowQuoteInfo>
-        }
-        else {
-            filteredList = quoteSetAll.filter {it.favourite} as MutableList<ShowQuoteInfo>
-        }
+
+        val filteredList : MutableList<ShowQuoteInfo> =
+                if (!favoriteSearch) {
+                    if (queryField == null || queryField == "") quoteSetAll
+                    else quoteSetAll.filter {
+                        it.quoteText.toLowerCase(Locale.ROOT).contains(queryField.toString().toLowerCase(Locale.getDefault()))
+                    } as MutableList<ShowQuoteInfo>
+                }
+                else {
+                    quoteSetAll.filter {it.favourite} as MutableList<ShowQuoteInfo>
+                }
 
         val filterResult = FilterResults()
         filterResult.values = filteredList

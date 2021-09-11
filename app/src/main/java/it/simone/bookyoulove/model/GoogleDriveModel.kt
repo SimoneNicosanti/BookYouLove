@@ -115,6 +115,7 @@ class GoogleDriveModel(private val driveService : Drive, private val myApp : App
 
     private fun restoreBookInfo(jsonBookArray: JSONArray) {
         val appDatabase = AppDatabase.getDatabaseInstance(myApp.applicationContext)
+        appDatabase.bookDao().deleteAllBooks()
         for (index in 0 until jsonBookArray.length()) {
             val backupBook = Gson().fromJson(jsonBookArray.getJSONObject(index).toString(), BackupBook::class.java)
             val restoredBook = backupBook.toBook()
@@ -123,11 +124,12 @@ class GoogleDriveModel(private val driveService : Drive, private val myApp : App
     }
 
     private fun restoreQuoteInfo(jsonQuoteArray: JSONArray) {
-        val addDatabase = AppDatabase.getDatabaseInstance(myApp.applicationContext)
+        val appDatabase = AppDatabase.getDatabaseInstance(myApp.applicationContext)
+        appDatabase.quoteDao().deleteAllQuotes()
         for (index in 0 until jsonQuoteArray.length()) {
             val backupQuote = Gson().fromJson(jsonQuoteArray.getJSONObject(index).toString(), BackupQuote::class.java)
             val restoredQuote = backupQuote.toQuote()
-            addDatabase.quoteDao().insertQuote(restoredQuote)
+            appDatabase.quoteDao().insertQuote(restoredQuote)
         }
     }
 

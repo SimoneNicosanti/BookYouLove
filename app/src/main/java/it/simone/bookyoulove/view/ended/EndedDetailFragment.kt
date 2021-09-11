@@ -40,7 +40,7 @@ class EndedDetailFragment : Fragment(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setViewEnable(true, requireActivity())
+        //setViewEnable(true, requireActivity())
 
         childFragmentManager.setFragmentResultListener("deleteKey", this) { _, bundle ->
             if (bundle.getBoolean("deleteConfirm")) {

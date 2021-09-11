@@ -44,7 +44,7 @@ class TbrFragment : Fragment(), TbrAdapter.OnTbrItemClickedListener, SearchView.
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentTbrBinding.inflate(inflater, container, false)
-        setViewEnable(true, requireActivity())
+        //setViewEnable(true, requireActivity())
 
         setObservers()
 

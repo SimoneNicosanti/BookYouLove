@@ -12,6 +12,7 @@ import android.widget.RemoteViewsService
 import android.widget.Toast
 import it.simone.bookyoulove.Constants.QUOTE_OF_THE_DAY_FAVORITE_SWITCH_INTENT
 import it.simone.bookyoulove.Constants.TAG
+import it.simone.bookyoulove.MyNotificationClass
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.AppDatabase
 import it.simone.bookyoulove.database.entity.Quote
@@ -22,6 +23,11 @@ import kotlinx.coroutines.withContext
 
 
 class QuoteOfTheDayWidget : AppWidgetProvider() {
+
+    companion object {
+        const val HEART = "\uD83D\uDC96"
+        const val BROKEN_HEART = "\uD83D\uDC94"
+    }
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         // There may be multiple widgets active, so update all of them
@@ -79,30 +85,17 @@ class QuoteOfTheDayWidget : AppWidgetProvider() {
                 clickedQuote.favourite = !clickedQuote.favourite
                 appDatabase.quoteDao().updateQuote(clickedQuote)
 
-                //Aggiorno il layout principale del widget
-                /*
                 withContext(Dispatchers.Main) {
-                    val appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
-
-                    RemoteViews(context.packageName, R.layout.quote_of_the_day_widget).run {
-                        setImageViewResource(R.id.quoteOfTheDayFavoriteButton,
-                                if (clickedQuote.favourite) R.drawable.ic_round_modify_quote_favorite_on
-                                else R.drawable.ic_round_modify_quote_favorite_off)
-                        AppWidgetManager.getInstance(context).updateAppWidget(appWidgetId, this)
-                    }
-
-                }*/
-                withContext(Dispatchers.Main) {
-                    val toastString = if (clickedQuote.favourite) context.resources.getString(R.string.favorite_string)
-                                        else context.resources.getString(R.string.not_favorite_string)
+                    val toastString = if (clickedQuote.favourite) context.resources.getString(R.string.favorite_string) + HEART
+                                        else context.resources.getString(R.string.not_favorite_string) + BROKEN_HEART
                     Toast.makeText(context, toastString, Toast.LENGTH_SHORT).show()
+
+                    MyNotificationClass(context).quoteOfTheDayChangeQuoteStateNotification(toastString, clickedQuote)
                 }
             }
         }
         super.onReceive(context, intent)
-
     }
-
 }
 
 
@@ -124,11 +117,9 @@ class QuoteOfTheDayRemoteViewsFactory(
     private val appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
 
     override fun onCreate() {
-        Log.d(TAG, "Create")
     }
 
     override fun onDataSetChanged() {
-        Log.d(TAG, "Changed")
 
         widgetQuote = myAppDatabase.quoteDao().loadRandomQuote()
         /*
@@ -150,36 +141,21 @@ class QuoteOfTheDayRemoteViewsFactory(
     }
 
     override fun getViewAt(position: Int): RemoteViews {
-        Log.d(TAG, "View at")
+        Log.d(TAG, "Get View At")
         val quoteOfTheDayItemRemoteView =  RemoteViews(context.packageName, R.layout.quote_of_the_day_widget_quote_text).apply {
 
             if (widgetQuote != null) {
                 setTextViewText(R.id.quoteOfTheDayQuoteText, widgetQuote!!.quoteText)
                 setTextViewText(R.id.quoteOfTheDayWidgetTitle, widgetQuote!!.bookTitle)
                 setTextViewText(R.id.quoteOfTheDayWidgetAuthor, widgetQuote!!.bookAuthor)
-
-                //Imposto il preferito nella RemoteView principale
-                /*
-                RemoteViews(context.packageName, R.layout.quote_of_the_day_widget).apply {
-                    setImageViewResource(R.id.quoteOfTheDayFavoriteButton,
-                            if (widgetQuote!!.favourite) R.drawable.ic_round_modify_quote_favorite_on
-                            else R.drawable.ic_round_modify_quote_favorite_off)
-                    AppWidgetManager.getInstance(context).updateAppWidget(appWidgetId, this)
-                }*/
             }
 
             else {
                 setTextViewText(R.id.quoteOfTheDayQuoteText, context.getString(R.string.placeholder_quote))
-                setTextViewText(R.id.quoteOfTheDayWidgetAuthor, "")
+                setTextViewText(R.id.quoteOfTheDayWidgetTitle, "")
                 setTextViewText(R.id.quoteOfTheDayWidgetAuthor, "Umberto Eco")
-                /*
-                RemoteViews(context.packageName, R.layout.quote_of_the_day_widget).apply {
-                    setImageViewResource(R.id.quoteOfTheDayFavoriteButton, R.drawable.ic_round_modify_quote_favorite_off)
-                    AppWidgetManager.getInstance(context).updateAppWidget(appWidgetId, this)
-                }*/
             }
         }
-
 
         widgetQuote?.let {
             //Imposto l'intent per il click dell'item: Questo intent va a riempire il pending intent impostato per tutti gli items nella onUpdate
@@ -189,8 +165,6 @@ class QuoteOfTheDayRemoteViewsFactory(
             switchFavoriteIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
             quoteOfTheDayItemRemoteView.setOnClickFillInIntent(R.id.quoteOfTheDayItemRoot, switchFavoriteIntent)
         }
-
-
 
         return quoteOfTheDayItemRemoteView
     }

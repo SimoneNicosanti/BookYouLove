@@ -59,8 +59,7 @@ class EndedFragment : Fragment(), EndedAdapter.OnRecyclerViewItemSelectedListene
     ): View {
         // Inflate the layout for this fragment
         binding = FragmentEndedBinding.inflate(inflater, container, false)
-
-        setViewEnable(true, requireActivity())
+        //setViewEnable(true, requireActivity())
 
         val spinnerAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item,
                 arrayOf(getString(R.string.title_string),

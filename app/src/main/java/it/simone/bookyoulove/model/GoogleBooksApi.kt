@@ -1,14 +1,12 @@
 package it.simone.bookyoulove.model
 
 
-import android.util.Log
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonObjectRequest
 import it.simone.bookyoulove.Constants.ISBN_FIND_ITEM_ERROR
 import it.simone.bookyoulove.Constants.ISBN_INTERNET_ACCESS_ERROR
 import it.simone.bookyoulove.Constants.ISBN_NO_ERROR
-import it.simone.bookyoulove.Constants.TAG
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,15 +15,12 @@ import org.json.JSONObject
 import java.io.Serializable
 
 
-
-
 class GoogleBooksApi(private val googleBooksApiTerminatedListener: OnGoogleBooksApiRequestTerminated, private val volleyRequestQueue: RequestQueue) {
 
     companion object {
         const val GOOGLE_BOOK_API_WITH_ISBN_URL = "https://www.googleapis.com/books/v1/volumes?q=isbn:"
         const val GOOGLE_BOOK_API_WITH_TITLE_URL = "https://www.googleapis.com/books/v1/volumes?q=intitle:"
         const val GOOGLE_BOOK_API_MAX_RESULT = "&maxResults=40" //Massimo numero di risultati che possono essere ricevuti
-
     }
 
     fun findBookByTitle(titleQuery : String) {

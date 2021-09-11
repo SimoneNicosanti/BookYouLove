@@ -39,6 +39,7 @@ class GoogleBooksSearchFragment : Fragment() , GoogleBooksSearchAdapter.OnNetwor
             savedInstanceState: Bundle?,
     ): View {
         binding = FragmentGoogleBooksSearchBinding.inflate(inflater, container, false)
+        //setViewEnable(true, requireActivity())
 
         binding.googleBooksSearchSearchView.setQuery(queryText, false)
         binding.googleBooksSearchSearchView.setOnQueryTextListener(this)

@@ -85,7 +85,7 @@ class ModifyEndedFragment : Fragment(), View.OnClickListener, RatingBar.OnRating
         // Inflate the layout for this fragment
         binding = FragmentModifyEndedBinding.inflate(inflater, container, false)
 
-        setViewEnable(true, requireActivity())
+        //setViewEnable(true, requireActivity())
 
         binding.modifyEndedCoverImageView.setOnClickListener(this)
         binding.modifyEndedStartDateCard.setOnClickListener(this)

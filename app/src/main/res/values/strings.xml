@@ -132,4 +132,11 @@
     <string name="share_with_string">Share</string>
     <string name="not_favorite_string">Not Favorite</string>
     <string name="new_quote_for_you_string">New Quote For You!!</string>
+    <string name="average_time_per_book">Average Days Per Book</string>
+    <string name="average_pages_per_book">Average Pages Per Book</string>
+    <string name="notify_change_quote_favorite_state">Changed Quote State To</string>
+    <string name="change_state_notification_string">Change State Notification</string>
+    <string name="coming_soon_string">Coming Soon!!</string>
+    <string name="confirm_restore_title_string">Are you sure you want to restore??</string>
+    <string name="confirm_restore_message_string">All current data will be deleted to restore a previous state saved in Google Drive!!</string>
 </resources>

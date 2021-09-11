@@ -26,7 +26,7 @@ class QuotesProvider : ContentProvider() {
 
     override fun onCreate(): Boolean {
         myAppDatabase = AppDatabase.getDatabaseInstance(context!!)
-       return true
+        return true
     }
 
 

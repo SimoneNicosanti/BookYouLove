@@ -9,7 +9,6 @@ import java.util.*
 
 class QuoteList(private var loadedArray : MutableList<ShowQuoteInfo>) {
 
-
     private var currentSelectedQuote: ShowQuoteInfo? = null
 
     operator fun get(position : Int): ShowQuoteInfo {

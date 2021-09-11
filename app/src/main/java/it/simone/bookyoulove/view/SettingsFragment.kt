@@ -14,7 +14,7 @@ import it.simone.bookyoulove.R
 class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceClickListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        setViewEnable(true, requireActivity())
+        //setViewEnable(true, requireActivity())
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 

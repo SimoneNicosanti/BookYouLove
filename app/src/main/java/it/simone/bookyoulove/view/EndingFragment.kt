@@ -57,9 +57,9 @@ class EndingFragment : Fragment(), View.OnClickListener, RatingBar.OnRatingBarCh
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentEndingBinding.inflate(inflater, container, false)
+        //setViewEnable(true, requireActivity())
 
         savedInstanceState?.let { isFlipped = savedInstanceState.getBoolean("isFlipped") }
-        setViewEnable(true, requireActivity())
 
         binding.endingFlipRateCardButton.setOnClickListener(this)
         binding.endingEndDateCard.setOnClickListener(this)

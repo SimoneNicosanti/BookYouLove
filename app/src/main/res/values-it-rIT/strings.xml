@@ -127,4 +127,11 @@
     <string name="share_with_string">Condividi Con</string>
     <string name="not_favorite_string">Non Preferito</string>
     <string name="new_quote_for_you_string">C\'è una nuova citazione per te!!</string>
+    <string name="average_time_per_book">Media Giorni Per Libro</string>
+    <string name="average_pages_per_book">Media Pagine Per Libro</string>
+    <string name="notify_change_quote_favorite_state">Cambiato Stato Della Citazione In</string>
+    <string name="change_state_notification_string">Notifica di Cambio Stato</string>
+    <string name="coming_soon_string">Prossimamente!!</string>
+    <string name="confirm_restore_title_string">Sei sicuro di voler restaurare??</string>
+    <string name="confirm_restore_message_string">Tutti i dati correnti verranno eliminati per restaurare uno stato precedente salvato su Google Drive!!</string>
 </resources>

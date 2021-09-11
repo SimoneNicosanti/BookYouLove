@@ -16,14 +16,14 @@ class ChartsTotalModel(private val infoSet : Array<ChartsBookData>) {
         var totalPaperSupport = 0
         var totalEbookSupport = 0
         var totalAudiobookSupport = 0
-        var totalFinalRate = 0F
+        var totalTimeMillis = 0L
         withContext(Dispatchers.Default) {
             for (info in infoSet) {
                 totalPages += info.pages.toLong()
                 if (info.support.paperSupport) totalPaperSupport += 1
                 if (info.support.ebookSupport) totalEbookSupport += 1
                 if (info.support.audiobookSupport) totalAudiobookSupport += 1
-                totalFinalRate += info.rate.totalRate
+                totalTimeMillis += (info.endDate - info.startDate + 1L)
             }
         }
         val totalSupport = totalPaperSupport + totalEbookSupport + totalAudiobookSupport
@@ -34,7 +34,8 @@ class ChartsTotalModel(private val infoSet : Array<ChartsBookData>) {
                 (if (totalSupport != 0) (totalPaperSupport / totalSupport.toFloat()) * 100 else 0).toFloat(),
                 (if (totalSupport != 0) (totalEbookSupport / totalSupport.toFloat()) * 100 else 0).toFloat(),
                 (if (totalSupport != 0) (totalAudiobookSupport / totalSupport.toFloat()) * 100 else 0).toFloat(),
-                (if (infoSet.isNotEmpty()) totalFinalRate / infoSet.size else 0F)
+                if (infoSet.isNotEmpty()) (totalTimeMillis.toFloat() / (infoSet.size * 1000 * 60 * 60 * 24)) + 1 else 0F,
+                if (infoSet.isNotEmpty()) (totalPages.toFloat() / infoSet.size) else 0F
         )
 
     }
@@ -46,5 +47,6 @@ data class TotalChartData(
         var totalPaperSupport : Float,
         var totalEbookSupport : Float,
         var totalAudiobookSupport : Float,
-        var totalFinalRateAverage : Float
+        var averageReadingDays : Float,
+        var averageBookPages : Float
 )

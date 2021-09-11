@@ -2,14 +2,12 @@ package it.simone.bookyoulove.view.dialog
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.DialogInterface
 import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.databinding.FragmentCoverLinkPickerBinding
-import java.lang.IllegalStateException
 
 
 class CoverLinkPickerFragment : DialogFragment() {
@@ -28,11 +26,9 @@ class CoverLinkPickerFragment : DialogFragment() {
 
             builder.setPositiveButton(R.string.confirm_string
             ) { dialog, _ ->
-                if (binding.coverLinkPickerInput.text.toString() != "") {
-                    val settedLink = binding.coverLinkPickerInput.text.toString()
-                    setFragmentResult("coverLinkKey", bundleOf("settedCoverLink" to settedLink))
-                }
-                dialog.cancel()
+                val settedLink = if (binding.coverLinkPickerInput.text != null) binding.coverLinkPickerInput.text.toString() else ""
+                setFragmentResult("coverLinkKey", bundleOf("settedCoverLink" to settedLink))
+                dialog?.cancel()
             }
 
             builder.setNegativeButton(R.string.back_string
