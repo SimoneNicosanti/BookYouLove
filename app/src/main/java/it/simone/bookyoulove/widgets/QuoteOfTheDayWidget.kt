@@ -12,14 +12,11 @@ import android.widget.RemoteViewsService
 import android.widget.Toast
 import it.simone.bookyoulove.Constants.QUOTE_OF_THE_DAY_FAVORITE_SWITCH_INTENT
 import it.simone.bookyoulove.Constants.TAG
-import it.simone.bookyoulove.MyNotificationClass
+import it.simone.bookyoulove.utilsClass.MyNotificationClass
 import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.AppDatabase
 import it.simone.bookyoulove.database.entity.Quote
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 
 class QuoteOfTheDayWidget : AppWidgetProvider() {
@@ -90,12 +87,18 @@ class QuoteOfTheDayWidget : AppWidgetProvider() {
                                         else context.resources.getString(R.string.not_favorite_string) + BROKEN_HEART
                     Toast.makeText(context, toastString, Toast.LENGTH_SHORT).show()
 
-                    MyNotificationClass(context).quoteOfTheDayChangeQuoteStateNotification(toastString, clickedQuote)
+                    MyNotificationClass(context).run{
+                        val widgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
+                        quoteOfTheDayChangeQuoteStateNotificationCancel(widgetId)       //Cancello Precedente
+                        quoteOfTheDayChangeQuoteStateNotification(toastString, clickedQuote, widgetId)
+                    }
                 }
             }
         }
         super.onReceive(context, intent)
     }
+
+
 }
 
 
@@ -164,6 +167,14 @@ class QuoteOfTheDayRemoteViewsFactory(
             switchFavoriteIntent.putExtra("bookId", widgetQuote!!.bookId)
             switchFavoriteIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
             quoteOfTheDayItemRemoteView.setOnClickFillInIntent(R.id.quoteOfTheDayItemRoot, switchFavoriteIntent)
+
+            //Prima di inviare una nuova notifica cancello quella precedente inviata dallo stesso widget
+            MyNotificationClass(context).run {
+                cancelNewQuoteNotification(appWidgetId)
+                quoteOfTheDayNewQuoteNotification(widgetQuote!!.quoteText, appWidgetId)
+            }
+
+
         }
 
         return quoteOfTheDayItemRemoteView
