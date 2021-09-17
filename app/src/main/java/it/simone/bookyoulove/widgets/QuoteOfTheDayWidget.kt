@@ -168,7 +168,6 @@ class QuoteOfTheDayRemoteViewsFactory(
             switchFavoriteIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
             quoteOfTheDayItemRemoteView.setOnClickFillInIntent(R.id.quoteOfTheDayItemRoot, switchFavoriteIntent)
 
-            //Prima di inviare una nuova notifica cancello quella precedente inviata dallo stesso widget
             MyNotificationClass(context).run {
                 cancelNewQuoteNotification(appWidgetId)
                 quoteOfTheDayNewQuoteNotification(widgetQuote!!.quoteText, appWidgetId)

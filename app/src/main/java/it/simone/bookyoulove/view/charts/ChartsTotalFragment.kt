@@ -57,9 +57,9 @@ class ChartsTotalFragment : Fragment() {
             binding.chartsTotalAveragePagesPerBookTextView.text = it.averageBookPages.roundToLong().toString()
 
             val supportPieEntries = ArrayList<PieEntry>()
-            supportPieEntries.add(PieEntry(it.totalPaperSupport, getString(R.string.paper_string)))
-            supportPieEntries.add(PieEntry(it.totalEbookSupport, getString(R.string.ebook_string)))
-            supportPieEntries.add(PieEntry(it.totalAudiobookSupport, getString(R.string.audiobook_string)))
+            if (it.totalPaperSupport != 0F) supportPieEntries.add(PieEntry(it.totalPaperSupport, getString(R.string.paper_string)))
+            if (it.totalEbookSupport != 0F)supportPieEntries.add(PieEntry(it.totalEbookSupport, getString(R.string.ebook_string)))
+            if (it.totalAudiobookSupport != 0F)supportPieEntries.add(PieEntry(it.totalAudiobookSupport, getString(R.string.audiobook_string)))
 
             val set = PieDataSet(supportPieEntries, "")
             set.colors = ColorTemplate.MATERIAL_COLORS.toList()
