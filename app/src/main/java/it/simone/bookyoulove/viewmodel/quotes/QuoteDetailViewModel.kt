@@ -32,11 +32,11 @@ class QuoteDetailViewModel(application : Application) : AndroidViewModel(applica
             date = 0L
     ))
 
-    fun getSingleQuote(quoteId: Long, bookId: Long) {
+    fun getSingleQuote(quoteId: Long) {
         //isAccessing
         if (!loadedOnce) {
             viewModelScope.launch {
-                currentQuote.value = quoteDetailModel.loadSingleQuotFromDatabase(quoteId, bookId)
+                currentQuote.value = quoteDetailModel.loadSingleQuotFromDatabase(quoteId)
                 loadedOnce = true
             }
         }

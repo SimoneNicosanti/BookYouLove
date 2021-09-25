@@ -1,6 +1,7 @@
 package it.simone.bookyoulove.view
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.Gravity
@@ -132,6 +133,9 @@ class MainActivity : AppCompatActivity() , BottomNavigationView.OnNavigationItem
                 val mySnackbar = Snackbar.make(binding.root, getString(R.string.coming_soon_string), Snackbar.LENGTH_SHORT)
                 mySnackbar.anchorView = binding.bottomNavigationView
                 mySnackbar.show()
+
+                //val guessTheQuoteIntent = Intent(this, GuessTheQuoteActivity::class.java)
+                //startActivity(guessTheQuoteIntent)
                 true
             }
 

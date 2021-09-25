@@ -41,4 +41,8 @@ object Constants {
 
     const val QUOTE_OF_THE_DAY_FAVORITE_SWITCH_INTENT = "it.simone.bookyoulove.QUOTE_OF_THE_DAY_FAVOURITE_SWITCH_INTENT"
     const val QUOTE_FROM_WIDGET_INTENT = "it.simone.bookyoulove.TAKE_QUOTE_FROM_WIDGET_INTENT"
+
+    const val GENRE_LABEL = 0
+    const val TOPIC_LABEL = 1
+    const val SAGA_LABEL = 2
 }

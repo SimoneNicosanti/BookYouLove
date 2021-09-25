@@ -13,6 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/CustomTheme.BookYouLove">
 
+        <activity
+            android:name=".view.GuessTheQuoteActivity"
+            android:screenOrientation="portrait" />
+
         <receiver android:name=".widgets.QuoteOfTheDayWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -37,13 +41,14 @@
         <activity
             android:name=".view.MainActivity"
             android:windowSoftInputMode="adjustPan">
+
             <!-- Permette di evitare che la bottomBar vada sopra la tastiera -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
@@ -52,11 +57,9 @@
         <meta-data
             android:name="com.google.mlkit.vision.DEPENDENCIES"
             android:value="ocr,barcode" />
-
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-
     </application>
 
 </manifest>

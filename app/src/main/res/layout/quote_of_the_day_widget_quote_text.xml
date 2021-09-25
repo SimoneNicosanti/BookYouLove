@@ -25,6 +25,14 @@
         android:fontFamily="casual"
         android:textStyle="bold" />
 
+    <ImageButton
+        android:id="@+id/quoteOfheDayWidgetFavoriteIndicator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:clickable="false"
+        app:srcCompat="@drawable/ic_round_modify_quote_favorite_off" />
+
     <TextView
         android:id="@+id/quoteOfTheDayQuoteText"
         android:layout_width="match_parent"

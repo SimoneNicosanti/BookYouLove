@@ -31,7 +31,7 @@ class QuoteDetailFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        quoteDetailVM.getSingleQuote(args.quoteDetailQuoteId, args.quoteDetailBookId)
+        quoteDetailVM.getSingleQuote(args.quoteDetailQuoteId)
         setHasOptionsMenu(true)
 
         childFragmentManager.setFragmentResultListener("deleteKey", this) { _, bundle ->

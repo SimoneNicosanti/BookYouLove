@@ -145,9 +145,7 @@ class QuoteListFragment : Fragment(), QuoteListAdapter.OnQuoteListHolderClick, S
     override fun onQuoteListHolderClickedListener(view: View, position: Int) {
         val selectedQuote = (binding.quotesListRecyclerView.adapter as QuoteListAdapter).quoteSet[position]
         quoteListVM.changeSelectedQuote(selectedQuote)
-        findNavController().navigate(QuoteListFragmentDirections.actionQuoteListFragmentToQuoteDetailFragment(
-                selectedQuote.quoteId,
-                selectedQuote.bookId))
+        findNavController().navigate(QuoteListFragmentDirections.actionQuoteListFragmentToQuoteDetailFragment(selectedQuote.quoteId))
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {

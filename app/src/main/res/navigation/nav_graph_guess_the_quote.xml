@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_guess_the_quote"
+    app:startDestination="@id/guessTheQuoteOpenFragment">
+
+    <fragment
+        android:id="@+id/guessTheQuoteOpenFragment"
+        android:name="it.simone.bookyoulove.GuessTheQuoteOpenFragment"
+        android:label="fragment_guess_the_quote_open"
+        tools:layout="@layout/fragment_guess_the_quote_open" >
+        <action
+            android:id="@+id/action_guessTheQuoteOpenFragment_to_guessTheQuotePlayFragment"
+            app:destination="@id/guessTheQuotePlayFragment" />
+        <action
+            android:id="@+id/action_guessTheQuoteOpenFragment_to_guessTheQuoteHistoryFragment"
+            app:destination="@id/guessTheQuoteHistoryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/guessTheQuotePlayFragment"
+        android:name="it.simone.bookyoulove.GuessTheQuotePlayFragment"
+        android:label="fragment_guess_the_quote_play"
+        tools:layout="@layout/fragment_guess_the_quote_play" >
+        <action
+            android:id="@+id/action_guessTheQuotePlayFragment_to_guessTheQuoteGameDetailFragment"
+            app:destination="@id/guessTheQuoteGameDetailFragment"
+            app:popUpTo="@id/guessTheQuoteOpenFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/guessTheQuoteGameDetailFragment"
+        android:name="it.simone.bookyoulove.GuessTheQuoteGameDetailFragment"
+        android:label="fragment_guess_the_quote_game_detail"
+        tools:layout="@layout/fragment_guess_the_quote_game_detail" />
+    <fragment
+        android:id="@+id/guessTheQuoteHistoryFragment"
+        android:name="it.simone.bookyoulove.GuessTheQuoteHistoryFragment"
+        android:label="fragment_guess_the_quote_history"
+        tools:layout="@layout/fragment_guess_the_quote_history" >
+        <action
+            android:id="@+id/action_guessTheQuoteHistoryFragment_to_guessTheQuoteGameDetailFragment"
+            app:destination="@id/guessTheQuoteGameDetailFragment" />
+    </fragment>
+</navigation>

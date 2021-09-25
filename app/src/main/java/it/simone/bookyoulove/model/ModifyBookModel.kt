@@ -28,17 +28,15 @@ class ModifyBookModel(private val myAppDatabase: AppDatabase) {
     }
 
     private suspend fun computeNewBookId(): Long {
-        var maxBookId = 0L
+        var maxBookId : Long?
         withContext(Dispatchers.IO) {
-            val allBooksArray = myAppDatabase.bookDao().loadAllBooks()
+            val allBooksArray = myAppDatabase.bookDao().loadBookKeys()
             withContext(Dispatchers.Default) {
-                for (book in allBooksArray) {
-                    if (book.bookId > maxBookId) maxBookId = book.bookId
-                }
+                maxBookId = allBooksArray.maxOrNull()
             }
         }
 
-        return maxBookId + 1L
+        return (maxBookId ?: 0L) + 1L
     }
 
     suspend fun updateBookInDatabase(bookToUpdate: Book) {

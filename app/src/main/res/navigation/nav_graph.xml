@@ -288,9 +288,6 @@
         <argument
             android:name="quoteDetailQuoteId"
             app:argType="long" />
-        <argument
-            android:name="quoteDetailBookId"
-            app:argType="long" />
     </fragment>
     <fragment
         android:id="@+id/takeBookIsbnFragment"

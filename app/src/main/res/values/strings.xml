@@ -139,4 +139,7 @@
     <string name="coming_soon_string">Coming Soon!!</string>
     <string name="confirm_restore_title_string">Are you sure you want to restore??</string>
     <string name="confirm_restore_message_string">All current data will be deleted to restore a previous state saved in Google Drive!!</string>
+    <string name="pay_string">Play</string>
+    <string name="history_string">History</string>
+    <string name="gtq_open_alert_string">Need Three Endede Book and Ten Quotes To Play!!</string>
 </resources>

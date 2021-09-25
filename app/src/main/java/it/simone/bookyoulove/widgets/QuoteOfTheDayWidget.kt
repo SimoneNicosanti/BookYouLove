@@ -17,6 +17,7 @@ import it.simone.bookyoulove.R
 import it.simone.bookyoulove.database.AppDatabase
 import it.simone.bookyoulove.database.entity.Quote
 import kotlinx.coroutines.*
+import java.util.*
 
 
 class QuoteOfTheDayWidget : AppWidgetProvider() {
@@ -31,6 +32,7 @@ class QuoteOfTheDayWidget : AppWidgetProvider() {
         Log.i(TAG, "Updating")
 
         for (appWidgetId in appWidgetIds) {
+
             //Creazione intent per riempire l'adapter
             val intent = Intent(context, QuoteOfTheDayWidgetService::class.java).apply {
                 putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
@@ -55,6 +57,7 @@ class QuoteOfTheDayWidget : AppWidgetProvider() {
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.quoteOfTheDayWidgetListView)
             //Permette di aggiornare la visualizzazione delle informazioni
             appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
+
         }
 
         super.onUpdate(context, appWidgetManager, appWidgetIds)
@@ -77,8 +80,7 @@ class QuoteOfTheDayWidget : AppWidgetProvider() {
             CoroutineScope(Dispatchers.Default).launch {
                 val appDatabase = AppDatabase.getDatabaseInstance(context)
                 val quoteId = intent.extras?.getLong("quoteId", 0)!!
-                val bookId = intent.extras?.getLong("bookId", 0)!!
-                val clickedQuote = appDatabase.quoteDao().loadSingleQuote(quoteId, bookId)
+                val clickedQuote = appDatabase.quoteDao().loadSingleQuote(quoteId)
                 clickedQuote.favourite = !clickedQuote.favourite
                 appDatabase.quoteDao().updateQuote(clickedQuote)
 
@@ -97,7 +99,6 @@ class QuoteOfTheDayWidget : AppWidgetProvider() {
         }
         super.onReceive(context, intent)
     }
-
 
 }
 
@@ -123,17 +124,18 @@ class QuoteOfTheDayRemoteViewsFactory(
     }
 
     override fun onDataSetChanged() {
+        //widgetQuote = myAppDatabase.quoteDao().loadRandomQuote()
 
-        widgetQuote = myAppDatabase.quoteDao().loadRandomQuote()
-        /*
-            Devo per forza utilizzare l'istanza del DB in maniera diretta senza passare per il Provider.
-            Infatti mi serve accedere al DB in maniera Sincrona, per fare in modo che quando il quoteCursor
-            è caricato poi venga visualizzata la quote caricata. Dovendo accedere al DB non posso farlo con
-            il Main Thread e dovei quindi lanciare una Coroutine, che però non mi garantisce sincronia a meno di
-            fare join e quindi rendere la funzione suspend.
-            Invece la onDataSetChanged è fatta proprio per eseguire operazioni lunghe (come accesso a DB) in maniera
-            sincrona
-         */
+        val idsList = myAppDatabase.quoteDao().loadQuoteKeys()
+
+        widgetQuote = if (idsList.isNotEmpty()) {
+            val time = Calendar.getInstance(Locale.getDefault()).timeInMillis
+            val index = time % idsList.size
+            val quoteId = idsList[index.toInt()]
+
+            myAppDatabase.quoteDao().loadSingleQuote(quoteId)
+        }
+        else null
     }
 
     override fun onDestroy() {
@@ -151,6 +153,9 @@ class QuoteOfTheDayRemoteViewsFactory(
                 setTextViewText(R.id.quoteOfTheDayQuoteText, widgetQuote!!.quoteText)
                 setTextViewText(R.id.quoteOfTheDayWidgetTitle, widgetQuote!!.bookTitle)
                 setTextViewText(R.id.quoteOfTheDayWidgetAuthor, widgetQuote!!.bookAuthor)
+                setImageViewResource(R.id.quoteOfheDayWidgetFavoriteIndicator,
+                if (widgetQuote!!.favourite) R.drawable.ic_round_modify_quote_favorite_on
+                else R.drawable.ic_round_modify_quote_favorite_off)
             }
 
             else {
@@ -166,7 +171,7 @@ class QuoteOfTheDayRemoteViewsFactory(
             switchFavoriteIntent.putExtra("quoteId", widgetQuote!!.quoteId)
             switchFavoriteIntent.putExtra("bookId", widgetQuote!!.bookId)
             switchFavoriteIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-            quoteOfTheDayItemRemoteView.setOnClickFillInIntent(R.id.quoteOfTheDayItemRoot, switchFavoriteIntent)
+            //quoteOfTheDayItemRemoteView.setOnClickFillInIntent(R.id.quoteOfTheDayItemRoot, switchFavoriteIntent)
 
             MyNotificationClass(context).run {
                 cancelNewQuoteNotification(appWidgetId)

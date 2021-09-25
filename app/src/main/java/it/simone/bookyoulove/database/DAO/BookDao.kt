@@ -25,6 +25,9 @@ interface BookDao {
     @Query("SELECT * FROM Book")
     fun loadAllBooks() : Array<Book>
 
+    @Query("SELECT bookId FROM Book")
+    fun loadBookKeys() : Array<Long>
+
     @Query("SELECT * FROM Book WHERE totalRate > :requestedRate")
     fun loadBookByRate(requestedRate: Float) : Array<Book>
 

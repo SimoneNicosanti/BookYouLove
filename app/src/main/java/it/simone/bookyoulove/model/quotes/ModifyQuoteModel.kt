@@ -8,25 +8,23 @@ import kotlinx.coroutines.withContext
 class ModifyQuoteModel(private val myAppDatabase: AppDatabase) {
 
     suspend fun insertQuoteInDatabase(quoteToAdd: Quote) {
-        quoteToAdd.quoteId = computeNewQuoteId(quoteToAdd.bookId)
+        quoteToAdd.quoteId = computeNewQuoteId()
         withContext(Dispatchers.IO) {
             myAppDatabase.quoteDao().insertQuote(quoteToAdd)
         }
     }
 
-    private suspend fun computeNewQuoteId(bookId: Long): Long {
-        var maxQuoteId = 0L
+    private suspend fun computeNewQuoteId(): Long {
+        val maxQuoteId : Long?
 
         withContext(Dispatchers.IO) {
-            val bookQuotesArray : Array<Quote> = myAppDatabase.quoteDao().loadQuotesByBook(bookId)
+            val quotesKeysArray : Array<Long> = myAppDatabase.quoteDao().loadQuoteKeys()
             withContext(Dispatchers.Default) {
-                for (quote in bookQuotesArray) {
-                    if (quote.quoteId > maxQuoteId) maxQuoteId = quote.quoteId
-                }
+               maxQuoteId = quotesKeysArray.maxOrNull()
             }
         }
 
-        return maxQuoteId + 1
+        return (maxQuoteId ?: 0L) + 1L
     }
 
 

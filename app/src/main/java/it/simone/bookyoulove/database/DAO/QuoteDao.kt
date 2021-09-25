@@ -24,14 +24,17 @@ interface QuoteDao {
     @Query("SELECT * FROM Quote")
     fun loadAllQuotes() : Array<Quote>
 
+    @Query("SELECT quoteId FROM Quote")
+    fun loadQuoteKeys() : Array<Long>
+
     @Query("SELECT * FROM Quote")
     fun loadAllShowQuoteInfo() : Array<ShowQuoteInfo>
 
     @Query("SELECT * FROM Quote WHERE bookId LIKE :requestedBookId")
     fun loadShowQuoteInfoByBook(requestedBookId: Long) : Array<ShowQuoteInfo>
 
-    @Query("SELECT * FROM Quote WHERE quoteId LIKE :requestedQuoteId AND bookId LIKE :requestedBookId")
-    fun loadSingleQuote(requestedQuoteId : Long, requestedBookId: Long) : Quote
+    @Query("SELECT * FROM Quote WHERE quoteId LIKE :requestedQuoteId")
+    fun loadSingleQuote(requestedQuoteId : Long) : Quote
 
     @Query("SELECT * FROM Quote WHERE bookId LIKE :requestedBookId")
     fun loadQuotesByBook(requestedBookId: Long) : Array<Quote>

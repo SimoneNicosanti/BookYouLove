@@ -7,10 +7,10 @@ import kotlinx.coroutines.withContext
 
 class QuoteDetailModel(private val myAppDatabase: AppDatabase) {
 
-    suspend fun loadSingleQuotFromDatabase(quoteId : Long, bookId : Long): Quote {
+    suspend fun loadSingleQuotFromDatabase(quoteId : Long): Quote {
         val loadedQuote : Quote
         withContext(Dispatchers.IO) {
-            loadedQuote = myAppDatabase.quoteDao().loadSingleQuote(quoteId, bookId)
+            loadedQuote = myAppDatabase.quoteDao().loadSingleQuote(quoteId)
         }
         return loadedQuote
     }
